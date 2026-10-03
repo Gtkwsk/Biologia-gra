@@ -762,7 +762,7 @@ export default [
         poprawka: 'niektóre protisty',
         opcje: ['niektóre protisty', 'sinice'],
         karta: 'organizm-cudzozywny',
-        wyjasnienie: 'Cudzożywne są zwierzęta, grzyby, większość bakterii i niektóre protisty. Większość organizmów samożywnych to rośliny.',
+        wyjasnienie: 'Cudzożywne są zwierzęta, grzyby, większość bakterii i niektóre protisty. Większość organizmów samożywnych to rośliny, a sinice to bakterie samożywne.',
       },
       '. Związki złożone z pokarmu są rozkładane na związki proste podczas ',
       {
@@ -784,7 +784,7 @@ export default [
         poprawka: 'padlinożercy',
         opcje: ['padlinożercy', 'roślinożercy'],
         karta: 'padlinozerca',
-        wyjasnienie: 'Sępy to padlinożercy: żywią się ciałami martwych zwierząt. Drapieżniki polują na ofiary i je zabijają.',
+        wyjasnienie: 'Sępy to padlinożercy: żywią się ciałami martwych zwierząt. Drapieżniki polują na ofiary i je zabijają. Padlinożercy i drapieżniki to dwie grupy mięsożerców.',
       },
       '. Niedźwiedź brunatny je ryby, rośliny, grzyby i ptasie jaja, więc jest ',
       {
@@ -826,7 +826,7 @@ export default [
       {
         slowo: 'jelicie',
         karta: 'tasiemiec-uzbrojony',
-        wyjasnienie: 'Tasiemiec uzbrojony to pasożyt wewnętrzny: żyje w jelicie człowieka i przyczepia się do jego ściany przyssawkami i haczykami.',
+        wyjasnienie: 'Tasiemiec uzbrojony to pasożyt wewnętrzny: żyje w jelicie człowieka i przyczepia się do ściany jelita przyssawkami i haczykami.',
       },
       ' człowieka. Jemioła pospolita ma chlorofil, ale wodę i sole mineralne pobiera od żywiciela, więc jest ',
       {

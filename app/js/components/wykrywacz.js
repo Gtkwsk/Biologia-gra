@@ -1,5 +1,5 @@
 // „Wykrywacz bzdur” (SPEC.md, sekcja 5, typ 2, wariant): Profesor Pomyłka wygłasza wykład
-// z bzdurami; gracz stuka podkreślone słowa, które uważa za bzdury, i wybiera poprawkę.
+// z bzdurami; gracz stuka słowa w ramkach, które uważa za bzdury, i wybiera poprawkę.
 // Poprawiona bzdura zostaje w tekście przekreślona obok poprawki. Logika: wykrywacz-logika.js.
 
 import { h, ikona } from '../core/dom.js';
@@ -35,7 +35,7 @@ export function utworzWykrywacz(kontener, { zadanie, onKoniec }) {
   komunikat.pokaz({
     rodzaj: 'info',
     tytul: `W wykładzie ${sa ? 'są' : 'jest'} ${W.bzdury(liczba)}.`,
-    tekst: 'Stuknij podkreślone słowo, które jest bzdurą, i wybierz poprawkę.',
+    tekst: 'Bzdury kryją się tylko w słowach w ramkach. Stuknij bzdurę i wybierz poprawkę.',
   });
 
   function slowoEl(s, i) {
@@ -47,8 +47,11 @@ export function utworzWykrywacz(kontener, { zadanie, onKoniec }) {
         h('ins', {}, s.poprawka),
       ]);
     }
+    // Po poprawieniu wszystkich bzdur pozostałe słowa są prawdziwe: gra je tak oznacza.
+    const koniec = W.czyKoniec(wyklad, st);
+    const prawdziwe = stan.stan === 'prawdziwe' || (koniec && stan.stan === 'nowe');
     const klasy = ['wykrywacz__slowo'];
-    if (stan.stan === 'prawdziwe') klasy.push('wykrywacz__slowo--prawdziwe');
+    if (prawdziwe) klasy.push('wykrywacz__slowo--prawdziwe');
     if (stan.stan === 'znalezione') klasy.push('wykrywacz__slowo--bzdura');
     if (stan.podpowiedz) klasy.push('wykrywacz__slowo--podpowiedz');
     return h(
@@ -57,10 +60,10 @@ export function utworzWykrywacz(kontener, { zadanie, onKoniec }) {
         type: 'button',
         class: klasy.join(' '),
         'data-slowo': i,
-        disabled: stan.stan !== 'nowe' || st.wybrane !== null,
+        disabled: koniec || stan.stan !== 'nowe' || st.wybrane !== null,
         onclick: () => przejdz(W.stuknij(wyklad, st, i)),
       },
-      [stan.stan === 'prawdziwe' ? ikona('dobrze', 'wykrywacz__znak') : null, s.slowo].filter(Boolean),
+      [prawdziwe ? ikona('dobrze', 'wykrywacz__znak') : null, s.slowo].filter(Boolean),
     );
   }
 

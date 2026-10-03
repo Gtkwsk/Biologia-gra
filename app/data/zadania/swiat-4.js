@@ -911,7 +911,7 @@ export default [
         poprawka: 'dwutlenku węgla',
         opcje: ['dwutlenku węgla', 'azotu'],
         karta: 'dwutlenek-wegla',
-        wyjasnienie: 'W szklarniach zwiększa się stężenie dwutlenku węgla, co zwiększa intensywność fotosyntezy.',
+        wyjasnienie: 'W szklarniach zwiększa się stężenie dwutlenku węgla, co zwiększa intensywność fotosyntezy. Zwiększa się je tylko do korzystnego poziomu, bo nadmiar dwutlenku węgla też zmniejsza intensywność fotosyntezy.',
       },
       '. W doświadczeniu z moczarką kanadyjską próbą badawczą była gałązka w wodzie ',
       {
@@ -937,7 +937,7 @@ export default [
         poprawka: 'chemicznej',
         opcje: ['chemicznej', 'cieplnej'],
         karta: 'chemosynteza',
-        wyjasnienie: 'W chemosyntezie niektóre samożywne bakterie wytwarzają pokarm bez udziału światła, wykorzystując energię chemiczną.',
+        wyjasnienie: 'W chemosyntezie niektóre samożywne bakterie wytwarzają pokarm bez udziału światła, wykorzystując energię chemiczną. Bakterie z dna oceanu żyją przy źródłach gorącej wody, ale pokarm wytwarzają dzięki energii chemicznej, a nie cieplnej.',
       },
       '. To się nazywa chemosynteza.',
     ],

@@ -811,7 +811,11 @@ export default [
         wyjasnienie: 'Oddychanie komórkowe zachodzi w każdej żywej komórce. Płuca służą do wymiany gazowej.',
       },
       '. W oddychaniu tlenowym glukoza jest rozkładana do dwutlenku węgla i ',
-      { slowo: 'wody', karta: 'oddychanie-tlenowe', wyjasnienie: 'Zapis słowny oddychania tlenowego: glukoza + tlen → dwutlenek węgla + woda + energia.' },
+      {
+        slowo: 'wody',
+        karta: 'oddychanie-tlenowe',
+        wyjasnienie: 'W oddychaniu tlenowym glukoza jest rozkładana do dwutlenku węgla i wody. Zapis słowny: glukoza + tlen → dwutlenek węgla + woda + energia.',
+      },
       '. Główne etapy oddychania tlenowego zachodzą w ',
       {
         slowo: 'chloroplastach',
@@ -863,7 +867,11 @@ export default [
         wyjasnienie: 'W fermentacji glukoza jest rozkładana tylko częściowo, dlatego uwalnia się znacznie mniej energii niż w oddychaniu tlenowym.',
       },
       ' energii niż w oddychaniu tlenowym. Drożdże przeprowadzają fermentację alkoholową, w której powstają alkohol etylowy i ',
-      { slowo: 'dwutlenek węgla', karta: 'fermentacja-alkoholowa', wyjasnienie: 'Fermentacja alkoholowa: glukoza → alkohol etylowy + dwutlenek węgla + energia.' },
+      {
+        slowo: 'dwutlenek węgla',
+        karta: 'fermentacja-alkoholowa',
+        wyjasnienie: 'W fermentacji alkoholowej z glukozy powstają alkohol etylowy i dwutlenek węgla. Zapis słowny: glukoza → alkohol etylowy + dwutlenek węgla + energia.',
+      },
       '. Ten gaz ',
       { slowo: 'spulchnia', karta: 'drozdze', wyjasnienie: 'Dwutlenek węgla z fermentacji drożdży spulchnia ciasto.' },
       ' ciasto drożdżowe. W mięśniach przy długim, bardzo intensywnym wysiłku i niedoborze tlenu powstaje ',
