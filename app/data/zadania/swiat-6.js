@@ -704,6 +704,51 @@ export default [
     zrodlo: '2.6',
   },
   {
+    id: 's6-boss-pf-produkty-2',
+    swiat: 6,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz? Popraw fałszywe zdania o produktach oddychania tlenowego i fermentacji.',
+    zdania: [
+      {
+        tekst: 'Jednym z produktów oddychania tlenowego jest woda.',
+        prawda: true,
+        karta: 'oddychanie-tlenowe',
+        wyjasnienie: 'Glukoza + tlen → dwutlenek węgla + woda + energia.',
+      },
+      {
+        tekst: 'Kwas mlekowy powstaje w fermentacji alkoholowej.',
+        prawda: false,
+        karta: 'kwas-mlekowy',
+        poprawne: 'Kwas mlekowy powstaje w fermentacji mlekowej.',
+        bledne: ['Kwas mlekowy powstaje w oddychaniu tlenowym.', 'Kwas mlekowy powstaje w fotosyntezie.'],
+        wyjasnienie: 'W fermentacji alkoholowej powstają alkohol etylowy i dwutlenek węgla, a kwas mlekowy powstaje w fermentacji mlekowej.',
+      },
+      {
+        tekst: 'Dwutlenek węgla powstaje zarówno w oddychaniu tlenowym, jak i w fermentacji alkoholowej.',
+        prawda: true,
+        karta: 'dwutlenek-wegla',
+        wyjasnienie: 'Oddychanie tlenowe: dwutlenek węgla i woda. Fermentacja alkoholowa: alkohol etylowy i dwutlenek węgla.',
+      },
+      {
+        tekst: 'W mięśniach człowieka przy niedoborze tlenu powstaje alkohol etylowy.',
+        prawda: false,
+        karta: 'fermentacja-mlekowa',
+        poprawne: 'W mięśniach człowieka przy niedoborze tlenu powstaje kwas mlekowy.',
+        bledne: ['W mięśniach człowieka przy niedoborze tlenu powstaje tlen.', 'W mięśniach człowieka przy niedoborze tlenu powstają alkohol etylowy i dwutlenek węgla.'],
+        wyjasnienie: 'Przy niedoborze tlenu w mięśniach szkieletowych zachodzi fermentacja mlekowa: glukoza → kwas mlekowy + energia.',
+      },
+      {
+        tekst: 'Drożdże, przeprowadzając fermentację alkoholową, wytwarzają dwutlenek węgla.',
+        prawda: true,
+        karta: 'drozdze',
+        wyjasnienie: 'Dwutlenek węgla z fermentacji drożdży spulchnia ciasto, a w doświadczeniu z wodą wapienną powoduje jej mętnienie.',
+      },
+    ],
+    wyjasnienie:
+      'Oddychanie tlenowe: dwutlenek węgla i woda. Fermentacja alkoholowa (np. u drożdży): alkohol etylowy i dwutlenek węgla. Fermentacja mlekowa (np. w mięśniach przy niedoborze tlenu): kwas mlekowy.',
+    zrodlo: '2.6',
+  },
+  {
     id: 's6-boss-pf-1',
     swiat: 6,
     typ: 'prawda-falsz',

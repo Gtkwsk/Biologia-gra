@@ -3,6 +3,7 @@
 // Komunikat: { rodzaj, tytul, tekst?, dodatek? } – dodatek to element DOM pod tekstem (np. lupy).
 
 import { h, ikona, wyczysc } from '../core/dom.js';
+import { graj } from '../core/dzwieki.js';
 
 function tresc(k) {
   return h('div', { class: 'komunikat__tresc' }, [
@@ -17,6 +18,7 @@ export function utworzKomunikat() {
   return {
     el,
     pokaz(k) {
+      if (k.rodzaj === 'dobrze' || k.rodzaj === 'zle') graj(k.rodzaj);
       wyczysc(el);
       el.dataset.rodzaj = k.rodzaj;
       el.append(ikona(k.rodzaj, 'komunikat__ikona'), tresc(k));
@@ -27,6 +29,7 @@ export function utworzKomunikat() {
     pokazListe(lista) {
       wyczysc(el);
       el.dataset.rodzaj = lista.some((k) => k.rodzaj === 'zle') ? 'zle' : 'dobrze';
+      graj(el.dataset.rodzaj);
       el.append(
         h(
           'ul',

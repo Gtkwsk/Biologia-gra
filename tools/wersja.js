@@ -3,6 +3,8 @@
 //
 // Wersja to skrót zawartości wszystkich plików gry. Zmiana dowolnego pliku zmienia
 // wersję, a więc i sw.js, dzięki czemu urządzenia pobierają nową wersję gry.
+// js/wersja.js zawiera też listę części słuchowiska z katalogu audio/ (czesc-N.mp3): gra
+// pokazuje odtwarzacz tylko przy nich. Nagrania nie trafiają do pamięci offline.
 // Test tests/wersja.test.js pilnuje, żeby sw.js i js/wersja.js były aktualne.
 
 import { createHash } from 'node:crypto';
@@ -34,8 +36,20 @@ export async function plikiAplikacji(katalog = KATALOG_APP) {
   return wynik.sort();
 }
 
-export async function obliczWersje(pliki, katalog = KATALOG_APP) {
+// Numery części słuchowiska, dla których jest plik audio/czesc-N.mp3.
+export async function nagrania(katalog = KATALOG_APP) {
+  const wpisy = await readdir(path.join(katalog, 'audio')).catch(() => []);
+  return wpisy
+    .map((n) => /^czesc-([1-6])\.mp3$/.exec(n)?.[1])
+    .filter(Boolean)
+    .map(Number)
+    .sort((a, b) => a - b);
+}
+
+export async function obliczWersje(pliki, katalog = KATALOG_APP, dodatek = '') {
   const skrot = createHash('sha256');
+  // Lista nagrań wchodzi do skrótu: dodanie nagrania zmienia wersję gry.
+  skrot.update(dodatek);
   for (const p of pliki.filter((p) => !POZA_SKROTEM.has(p))) {
     skrot.update(p);
     skrot.update('\0');
@@ -52,15 +66,19 @@ export function trescSW(szablon, wersja, pliki) {
     .replace(/const PLIKI = \[[\s\S]*?\];/, `const PLIKI = [\n${lista}\n];`);
 }
 
-export function trescWersjiJs(wersja) {
-  return `// Plik generowany: node tools/wersja.js\nexport const WERSJA = '${wersja}';\n`;
+export function trescWersjiJs(wersja, numery = []) {
+  return (
+    `// Plik generowany: node tools/wersja.js\nexport const WERSJA = '${wersja}';\n` +
+    `// Części słuchowiska z plikiem audio/czesc-N.mp3.\nexport const NAGRANIA = [${numery.join(', ')}];\n`
+  );
 }
 
 export async function oczekiwanePliki() {
   const pliki = await plikiAplikacji();
-  const wersja = await obliczWersje(pliki);
+  const numery = await nagrania();
+  const wersja = await obliczWersje(pliki, KATALOG_APP, numery.length ? `nagrania:${numery.join(',')}` : '');
   const sw = trescSW(await readFile(path.join(KATALOG_APP, 'sw.js'), 'utf8'), wersja, pliki);
-  return { wersja, pliki, sw, wersjaJs: trescWersjiJs(wersja) };
+  return { wersja, pliki, sw, wersjaJs: trescWersjiJs(wersja, numery), nagrania: numery };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

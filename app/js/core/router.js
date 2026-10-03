@@ -8,6 +8,8 @@
 // #/baza                     baza
 // #/atlas                    atlas kart
 // #/mikroskop                mikroskop
+// #/sprawdzian               próbny sprawdzian
+// #/laboratorium             domowe laboratorium
 // #/rodzic                   panel rodzica
 
 export function parsujAdres(hash = '') {
@@ -28,7 +30,7 @@ export function parsujAdres(hash = '') {
     if (c === 'misja' && d && czesci.length === 4) return { ekran: 'misja', swiat: Number(b), misja: d };
     if (c === 'boss' && czesci.length === 3) return { ekran: 'boss', swiat: Number(b) };
   }
-  if (czesci.length === 1 && ['podsumowanie', 'baza', 'atlas', 'mikroskop', 'rodzic'].includes(a)) return { ekran: a };
+  if (czesci.length === 1 && ['podsumowanie', 'baza', 'atlas', 'mikroskop', 'sprawdzian', 'laboratorium', 'rodzic'].includes(a)) return { ekran: a };
   return { ekran: 'nieznany' };
 }
 

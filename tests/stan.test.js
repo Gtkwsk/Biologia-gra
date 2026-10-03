@@ -11,6 +11,10 @@ import {
   ustawImie,
   BladStanu,
   WERSJA_SCHEMATU,
+  MAKS_SPRAWDZIANOW,
+  ustawDzwiek,
+  zapiszSprawdzian,
+  oznaczDoswiadczenie,
 } from '../app/js/core/stan.js';
 import { dzisiaj } from '../app/js/core/daty.js';
 
@@ -148,4 +152,59 @@ test('czas zadania liczony najwyżej do 15 minut', () => {
 test('dzień zapisywany jako lokalna data RRRR-MM-DD', () => {
   assert.equal(dzisiaj(new Date(2026, 0, 5, 23, 59)), '2026-01-05');
   assert.equal(dzisiaj(new Date(2026, 9, 25, 0, 30)), '2026-10-25');
+});
+
+test('migracja z wersji 2 dodaje wyniki sprawdzianów, laboratorium i włączone dźwięki', () => {
+  const v2 = {
+    wersja: 2,
+    utworzono: DZIEN,
+    ustawienia: { imie: 'Mikołaj', odblokujWszystkie: false },
+    odblokowane: [2, 3],
+    bossowie: [2],
+    zadania: {},
+    pomylki: {},
+    karty: { cytozol: { odRazu: 1, typy: ['luki'], boss: false } },
+    czasMs: 1000,
+  };
+  const s = odczytajStan(v2, DZIEN);
+  assert.equal(s.wersja, WERSJA_SCHEMATU);
+  assert.deepEqual(s.sprawdziany, []);
+  assert.deepEqual(s.laboratorium, {});
+  assert.equal(s.ustawienia.dzwiek, true);
+  assert.deepEqual(s.karty, v2.karty);
+  assert.deepEqual(s.odblokowane, [2, 3]);
+});
+
+test('normalizacja odrzuca złe wyniki sprawdzianu i złe daty laboratorium', () => {
+  const s = normalizuj(
+    {
+      ustawienia: { dzwiek: false },
+      sprawdziany: [
+        { dzien: DZIEN, zadania: [{ punkt: 1, zdobyte: 5, maks: 2 }, { punkt: 2, zdobyte: -1, maks: 3 }, { punkt: 'x', zdobyte: 1, maks: 1 }] },
+        { dzien: 'wczoraj', zadania: [{ punkt: 1, zdobyte: 1, maks: 1 }] },
+        { dzien: DZIEN, zadania: [] },
+      ],
+      laboratorium: { chleb: DZIEN, seler: 'dziś', balonik: 5 },
+    },
+    DZIEN,
+  );
+  assert.equal(s.ustawienia.dzwiek, false);
+  assert.deepEqual(s.sprawdziany, [{ dzien: DZIEN, zadania: [{ punkt: 1, zdobyte: 2, maks: 2 }, { punkt: 2, zdobyte: 0, maks: 3 }] }]);
+  assert.deepEqual(s.laboratorium, { chleb: DZIEN });
+});
+
+test('zapis sprawdzianu pamięta ograniczoną liczbę ostatnich wyników', () => {
+  let s = nowyStan(DZIEN);
+  for (let i = 0; i < MAKS_SPRAWDZIANOW + 3; i++) s = zapiszSprawdzian(s, { dzien: DZIEN, zadania: [{ punkt: 1, zdobyte: i % 2, maks: 1 }] });
+  assert.equal(s.sprawdziany.length, MAKS_SPRAWDZIANOW);
+  assert.equal(s.sprawdziany.at(-1).zadania[0].zdobyte, (MAKS_SPRAWDZIANOW + 2) % 2);
+});
+
+test('doświadczenie oznaczone raz zachowuje pierwszą datę; oznaczenie można cofnąć', () => {
+  let s = oznaczDoswiadczenie(nowyStan(DZIEN), 'chleb', DZIEN);
+  s = oznaczDoswiadczenie(s, 'chleb', '2026-10-10');
+  assert.deepEqual(s.laboratorium, { chleb: DZIEN });
+  s = oznaczDoswiadczenie(s, 'chleb', DZIEN, false);
+  assert.deepEqual(s.laboratorium, {});
+  assert.equal(ustawDzwiek(s, false).ustawienia.dzwiek, false);
 });

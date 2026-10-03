@@ -489,7 +489,12 @@
   border-radius: var(--promien);
 }
 
+/* Ten sam wygląd niezależnie od poziomu nagłówka (h2, h3, h4). */
 .ciekawostka__naglowek {
+  margin: 0 0 0.5em;
+  font-family: var(--font-tytul);
+  font-weight: 400;
+  line-height: 1.15;
   font-size: var(--r-2);
   color: var(--blekit);
 }
@@ -686,6 +691,12 @@
 
 .panel-sekcja h2 {
   font-size: var(--r-2);
+}
+
+/* Uwaga pod raportem (np. orientacyjny wynik próbnego sprawdzianu). */
+.panel-uwaga {
+  font-size: var(--r-0);
+  color: var(--atrament-jasny);
 }
 
 .tabela-przewijana {
@@ -1337,4 +1348,241 @@ li[data-odblokowany='false'] .mikroskop__szczebel {
 .trofeum__znak .ikona {
   width: 24px;
   height: 24px;
+}
+
+/* ---------- Próbny sprawdzian ---------- */
+
+.stanowisko[data-stanowisko='sprawdzian'] .stanowisko__znak {
+  background: #fff3c4;
+  border-radius: 4px 18px 4px 4px;
+}
+
+.ekran--sprawdzian .pasek__prawa {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sprawdzian-karta__rekord {
+  font-weight: 700;
+}
+
+.sprawdzian__punkty-zadania {
+  margin: 0.25rem 0 0;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.sprawdzian-wynik {
+  text-align: left;
+}
+
+.sprawdzian__tabela {
+  background: var(--bialy);
+  border-radius: 8px;
+}
+
+.sprawdzian__tabela tr[data-pelne='true'] .sprawdzian__wynik-pkt {
+  font-weight: 700;
+  color: var(--chlorofil);
+}
+
+.sprawdzian__tabela tr[data-pelne='false'] .sprawdzian__wynik-pkt {
+  font-weight: 700;
+  color: var(--eozyna);
+}
+
+.sprawdzian__wynik-pkt {
+  white-space: nowrap;
+}
+
+.sprawdzian__cwicz {
+  display: block;
+  margin-top: 0.2rem;
+  font-weight: 700;
+  color: var(--blekit);
+}
+
+/* ---------- Domowe laboratorium ---------- */
+
+.ekran--laboratorium {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.lab-dom__licznik {
+  font-weight: 700;
+}
+
+.lab-dom__lista {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lab-dom__doswiadczenie {
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 var(--okular);
+}
+
+.lab-dom__doswiadczenie[data-zrobione='true'] {
+  border-color: var(--chlorofil);
+  box-shadow: 0 4px 0 var(--chlorofil);
+}
+
+.lab-dom__naglowek {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.lab-dom__naglowek::-webkit-details-marker {
+  display: none;
+}
+
+.lab-dom__naglowek::after {
+  content: '';
+  flex: 0 0 auto;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-left: auto;
+  border-right: 3px solid var(--okular);
+  border-bottom: 3px solid var(--okular);
+  transform: rotate(45deg);
+}
+
+.lab-dom__doswiadczenie[open] .lab-dom__naglowek::after {
+  transform: rotate(225deg);
+}
+
+.lab-dom__rysunek {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+}
+
+.lab-dom__tytul {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.lab-dom__nazwa {
+  font-family: var(--font-tytul);
+  font-size: var(--r-2);
+}
+
+.lab-dom__swiat {
+  font-size: var(--r-0);
+  color: var(--atrament-jasny);
+}
+
+.lab-dom__pieczatka {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15em 0.6em;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--bialy);
+  background: var(--chlorofil);
+  border-radius: 6px;
+}
+
+.lab-dom__pieczatka .ikona {
+  width: 1em;
+  height: 1em;
+}
+
+.lab-dom__tresc {
+  padding: 0 1.25rem 1.25rem;
+}
+
+.lab-dom__tresc h3 {
+  margin: 1rem 0 0.35rem;
+  font-size: var(--r-1);
+}
+
+.lab-dom__bezpieczenstwo {
+  margin: 0.25rem 0 0;
+  padding: 0.6em 0.8em;
+  background: var(--eozyna-jasna);
+  border-left: 5px solid var(--eozyna);
+  border-radius: 0 var(--promien) var(--promien) 0;
+}
+
+.lab-dom__data {
+  margin: 0;
+  font-weight: 700;
+  color: var(--chlorofil);
+}
+
+/* ---------- Słuchowisko na wstępie świata ---------- */
+
+.sluchowisko {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid var(--okular);
+  border-radius: 10px;
+}
+
+.sluchowisko__tytul {
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+  color: var(--atrament);
+}
+
+.sluchowisko__odtwarzacz {
+  display: block;
+  width: 100%;
+}
+
+/* ---------- Przewodnik po świecie (uczony ze słuchowiska) ---------- */
+
+.przewodnik__postac {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.przewodnik__rysunek {
+  flex: 0 0 auto;
+  width: 88px;
+  height: 88px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 50%;
+}
+
+.przewodnik__podpis {
+  display: grid;
+  gap: 0.1rem;
+  margin: 0;
+}
+
+.przewodnik__etykieta {
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.przewodnik__imie {
+  font-family: var(--font-tytul);
+  font-size: var(--r-2);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.przewodnik__kim {
+  font-size: var(--r-0);
 }

@@ -15,7 +15,9 @@
 // - światy: misje, bossowie (co najmniej trzy typy zadań), co najmniej trzy mechaniki,
 // - organizmy: nazwy i kategorie z tabeli w TRESCI.md, sekcja 7,
 // - procesy: zapisy słowne dosłownie z TRESCI.md, substraty i produkty zgodne z zapisem,
-// - tabela porównawcza oddychania tlenowego i fermentacji zgodna z tabelą w TRESCI.md, sekcja 2.6.
+// - tabela porównawcza oddychania tlenowego i fermentacji zgodna z tabelą w TRESCI.md, sekcja 2.6,
+// - próbny sprawdzian: punkty zakresu i suma punktów z TRESCI.md, sekcja 8, pule wariantów,
+// - domowe laboratorium: kroki, bezpieczeństwo, karty atlasu i ciekawostki.
 
 import { readFile, access } from 'node:fs/promises';
 import path from 'node:path';
@@ -227,6 +229,8 @@ export function walidujDane(dane, kontekst) {
     procesy = [],
     porownanie = null,
     pokarm = null,
+    sprawdzian = null,
+    laboratorium = null,
   } = dane;
   const {
     sekcje,
@@ -308,6 +312,15 @@ export function walidujDane(dane, kontekst) {
       }
     }
     ciekawostka(`${gdzie}.ciekawostka`, s.ciekawostka);
+    // Przewodnik (SPEC.md, sekcja 4.4): uczony, o którym jest ciekawostka świata.
+    if (s.przewodnik !== undefined) {
+      const p = s.przewodnik;
+      const gp = `${gdzie}.przewodnik`;
+      if (!niepustyTekst(p?.imie) || !niepustyTekst(p?.kim)) blad(gp, 'przewodnik wymaga imienia i opisu (kim)');
+      if (!ID_RYSUNKOW.includes(p?.rysunek)) blad(gp, `nie ma rysunku „${p?.rysunek}”`);
+      const nazwisko = (p?.imie ?? '').split(' ').at(-1);
+      if (!s.ciekawostka?.includes(nazwisko)) blad(gp, 'ciekawostka świata nie mówi o przewodniku');
+    }
     const typyMisji = new Set((s.misje || []).flatMap((m) => (m.zadania || []).map((id) => zadaniePoId.get(id)?.typ)).filter(Boolean));
     if (typyMisji.size < 3) blad(gdzie, `misje mają ${typyMisji.size} typy zadań, wymagane co najmniej 3 (SPEC.md, sekcja 9)`);
     // Boss (SPEC.md, sekcje 4.3 i 9)
@@ -1213,6 +1226,57 @@ export function walidujDane(dane, kontekst) {
     }
   }
 
+  // Próbny sprawdzian: punkty zakresu z TRESCI.md, sekcja 8, w kolejności; suma punktów jak
+  // w nagłówku sekcji; w pulach tylko formaty sprawdzianu i co najmniej pięć wariantów.
+  if (sprawdzian) {
+    const sekcja8 = tekstTresci.split(/^## 8\./m)[1]?.split(/^## 9\./m)[0] ?? '';
+    const naglowek = tekstTresci.match(/Zakres sprawdzianu[^\n]*\((\d+)-(\d+) pkt\)/);
+    const liczbaPunktow = sekcja8.match(/^\d+\. /gm)?.length ?? 0;
+    if (sprawdzian.length !== liczbaPunktow) blad('sprawdzian', `zadań ${sprawdzian.length}, a punktów zakresu w TRESCI.md ${liczbaPunktow}`);
+    const suma = sprawdzian.reduce((s, p) => s + (Number.isInteger(p.punkty) ? p.punkty : 0), 0);
+    if (naglowek && suma !== Number(naglowek[2])) blad('sprawdzian', `suma punktów ${suma}, a w TRESCI.md ${naglowek[2]}`);
+    sprawdzian.forEach((p, i) => {
+      const g = `sprawdzian[${p.punkt}]`;
+      if (p.punkt !== i + 1) blad(g, 'punkty zakresu muszą iść po kolei od 1');
+      if (!niepustyTekst(p.nazwa)) blad(g, 'brak nazwy');
+      if (!Number.isInteger(p.punkty) || p.punkty < 1) blad(g, 'punkty: liczba całkowita od 1');
+      const sw = swiaty.find((x) => x.id === p.misja?.swiat);
+      if (!sw?.misje?.some((m) => m.id === p.misja?.id)) blad(g, `nieznana misja „${p.misja?.id}” w świecie ${p.misja?.swiat}`);
+      // misjeKart: karta atlasu → misja w świecie tematu (odnośniki do misji kart z błędem)
+      for (const [k, idMisji] of Object.entries(p.misjeKart ?? {})) {
+        if (!katalog.has(k)) blad(`${g}.misjeKart`, `nieznana karta atlasu „${k}”`);
+        if (!sw?.misje?.some((m) => m.id === idMisji)) blad(`${g}.misjeKart`, `nieznana misja „${idMisji}” w świecie ${p.misja?.swiat}`);
+      }
+      const pula = p.pula || [];
+      if (new Set(pula).size !== pula.length) blad(g, 'powtórzone zadanie w puli');
+      if (new Set(pula).size < 5) blad(g, `wariantów ${new Set(pula).size}, a potrzeba co najmniej pięciu (TRESCI.md, sekcja 8)`);
+      for (const id of pula) {
+        const z = zadania.find((x) => x.id === id);
+        if (!z) blad(g, `nieznane zadanie „${id}”`);
+        else if (MECHANIKI.includes(z.typ)) blad(g, `„${id}” to mechanika (${z.typ}), a sprawdzian ma tylko formaty sprawdzianu`);
+      }
+    });
+  }
+
+  // Domowe laboratorium (SPEC.md, sekcja 4.5): kroki i uwagi pełnymi zdaniami, karta atlasu,
+  // ciekawostka dosłownie z TRESCI.md, sekcja 6.
+  if (laboratorium) {
+    unikalne(laboratorium, 'laboratorium');
+    for (const d of laboratorium) {
+      const g = `laboratorium[${d.id}]`;
+      if (!niepustyTekst(d.nazwa)) blad(g, 'brak nazwy');
+      if (!swiaty.some((s) => s.id === d.swiat)) blad(g, `nieznany świat ${d.swiat}`);
+      if (!katalog.has(d.karta)) blad(g, `nieznana karta atlasu „${d.karta}”`);
+      for (const pole of ['potrzebne', 'kroki']) {
+        if (!Array.isArray(d[pole]) || !d[pole].length || !d[pole].every(niepustyTekst)) blad(g, `${pole}: potrzebna lista niepustych tekstów`);
+      }
+      for (const k of d.kroki || []) if (!pelneZdanie(k)) blad(g, `krok „${k}” musi być pełnym zdaniem`);
+      for (const pole of ['bezpieczenstwo', 'obserwacja', 'wyjasnienie']) if (!pelneZdanie(d[pole])) blad(g, `${pole}: potrzebne pełne zdanie`);
+      if (d.wymaga !== undefined && d.wymaga !== 'mikroskop') blad(g, 'wymaga: dozwolone tylko „mikroskop”');
+      ciekawostka(`${g}.ciekawostka`, d.ciekawostka);
+    }
+  }
+
   // Terminy spoza TRESCI.md we wszystkich tekstach
   const doPrzeszukania = [
     ['swiaty', swiaty],
@@ -1225,6 +1289,8 @@ export function walidujDane(dane, kontekst) {
     ['organizmy', organizmy || []],
     ['procesy', procesy],
     ['porownanie', porownanie ? [porownanie] : []],
+    ['sprawdzian', sprawdzian || []],
+    ['laboratorium', laboratorium || []],
   ];
   for (const [nazwa, lista] of doPrzeszukania) {
     for (const [sciezka, tekst] of teksty(lista, nazwa)) {
@@ -1271,6 +1337,8 @@ export async function wczytajWszystko() {
     procesy: await modul('procesy.js'),
     porownanie: await modul('porownanie.js'),
     pokarm: await modul('pokarm.js'),
+    sprawdzian: await modul('sprawdzian.js'),
+    laboratorium: await modul('laboratorium.js'),
   };
   const svg = new Map();
   const pliki = [...(dane.schematy || []).map((s) => s.plik), ...(dane.typyKomorek || []).map((t) => t.rysunek)].filter(Boolean);

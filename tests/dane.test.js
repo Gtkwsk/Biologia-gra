@@ -252,3 +252,39 @@ test('wykrywa las, w którym szczątki nigdy się nie gromadzą', async () => {
   for (const e of dane.zadania.find((x) => x.id === 's5-las-1').etapy) e.sprzatacze = true;
   zawiera(walidujDane(dane, kontekst), 'żaden etap nie pokazuje gromadzenia się szczątków');
 });
+
+test('wykrywa w próbnym sprawdzianie złą sumę punktów i mechanikę w puli', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.sprawdzian[0].punkty += 1;
+  dane.sprawdzian[1].pula.push('s5-lancuchy-1');
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'suma punktów 30, a w TRESCI.md 29');
+  zawiera(bledy, '„s5-lancuchy-1” to mechanika');
+});
+
+test('wykrywa w próbnym sprawdzianie mapę kart z nieznaną kartą albo misją spoza świata tematu', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.sprawdzian[10].misjeKart = { pasozyt: 's4-przepis', smok: 's5-pasozyty' };
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'nieznana misja „s4-przepis” w świecie 5');
+  zawiera(bledy, 'nieznana karta atlasu „smok”');
+});
+
+test('wykrywa w domowym laboratorium ciekawostkę spoza TRESCI.md i krok bez kropki', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.laboratorium[0].ciekawostka = 'Chleb jest pyszny.';
+  dane.laboratorium[0].kroki.push('żuj dalej');
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'laboratorium[chleb].ciekawostka');
+  zawiera(bledy, 'krok „żuj dalej” musi być pełnym zdaniem');
+});
+
+test('wykrywa przewodnika bez rysunku i ciekawostkę, która nie mówi o przewodniku', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const sw2 = dane.swiaty.find((s) => s.id === 2);
+  sw2.przewodnik = { ...sw2.przewodnik, rysunek: 'przewodnik-nieznany' };
+  dane.swiaty.find((s) => s.id === 6).przewodnik.imie = 'Antoni van Leeuwenhoek';
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'nie ma rysunku „przewodnik-nieznany”');
+  zawiera(bledy, 'ciekawostka świata nie mówi o przewodniku');
+});

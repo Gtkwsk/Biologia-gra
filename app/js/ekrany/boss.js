@@ -7,7 +7,9 @@ import { zapiszWynik, zaliczBossa } from '../core/stan.js';
 import { dzisiaj } from '../core/daty.js';
 import { kartyZBledem, kartyOdRazu } from '../core/karty.js';
 import * as B from '../core/boss.js';
+import { sprawdzianDostepny } from '../core/sprawdzian.js';
 import { zaladujZadanie } from '../components/zadania.js';
+import { graj } from '../core/dzwieki.js';
 import { pasek, soczewka, ekranNiedostepny } from './wspolne.js';
 
 const NAZWY_TYPOW = {
@@ -90,9 +92,9 @@ export function render(kontener, ctx, cel) {
           pokonany ? h('p', { class: 'boss-karta__pokonany' }, 'Ten boss jest już pokonany. Rewanż to dobre powtórzenie.') : null,
           h('ul', { class: 'boss-karta__zasady' }, [
             h('li', {}, [serca(B.SERCA), ' Masz trzy serca. Wyzwanie z błędem kosztuje jedno serce.']),
-            h('li', {}, 'Bez podpowiedzi, za to bez limitu czasu. Najpierw ułóż wszystko, potem „Sprawdź”.'),
+            h('li', {}, 'Bez podpowiedzi, za to bez limitu czasu. Gdy zadanie ma przycisk „Sprawdź”, najpierw ułóż wszystko, potem go stuknij.'),
             h('li', {}, `Wyzwania: ${wyzwania.map(nazwaTypu).join(', ')}.`),
-            h('li', {}, 'Każde podejście ma nowe warianty zadań.'),
+            h('li', {}, 'W każdym podejściu zadania są losowane od nowa.'),
           ]),
           h('button', { type: 'button', class: 'przycisk przycisk--dalej', onclick: pokazWyzwanie }, 'Zaczynamy'),
         ]),
@@ -193,7 +195,7 @@ export function render(kontener, ctx, cel) {
           h('h1', {}, 'Tym razem wygrał boss.'),
           h('p', {}, `Wyzwania ukończone bez błędu: ${podejscie.wyniki.filter((w) => w.poprawne === w.wszystkie).length} z ${podejscie.wyniki.length}.`),
           bledy.length ? h('p', {}, [h('strong', {}, 'Do poćwiczenia: '), bledy.map(nazwaKarty).join(', '), '.']) : null,
-          h('p', {}, 'Następne podejście ma nowe warianty zadań. Można też najpierw wrócić do misji.'),
+          h('p', {}, 'W następnym podejściu zadania zostaną wylosowane od nowa. Można też najpierw wrócić do misji.'),
           h('div', { class: 'przyciski' }, [
             h('button', { type: 'button', class: 'przycisk przycisk--dalej', onclick: pokazWstep }, 'Spróbuj ponownie'),
             h('a', { class: 'przycisk przycisk--jasny', href: `#/swiat/${sw.id}` }, 'Misje świata'),
@@ -202,7 +204,12 @@ export function render(kontener, ctx, cel) {
       );
       return;
     }
-    const przed = { mikroskop: B.poziomMikroskopu(ctx.stan), otwarte: otwarteSwiaty(ctx.dane.swiaty, ctx.stan) };
+    graj('wygrana');
+    const przed = {
+      mikroskop: B.poziomMikroskopu(ctx.stan),
+      otwarte: otwarteSwiaty(ctx.dane.swiaty, ctx.stan),
+      sprawdzian: sprawdzianDostepny(ctx.dane.swiaty, ctx.stan),
+    };
     const pierwszeZwyciestwo = !ctx.stan.bossowie.includes(sw.id);
     ctx.zmien((stan) => zaliczBossa(stan, sw.id));
     const poziom = B.poziomMikroskopu(ctx.stan);
@@ -213,6 +220,9 @@ export function render(kontener, ctx, cel) {
         ? h('li', {}, [h('strong', {}, 'Mikroskop ulepszony: '), `${B.POZIOMY_MIKROSKOPU[poziom].nazwa.toLowerCase()}, powiększenie ${B.POZIOMY_MIKROSKOPU[poziom].powiekszenie}.`])
         : null,
       ...noweSwiaty.map((s) => h('li', {}, [h('strong', {}, 'Otwarty nowy świat: '), `${s.tytul}.`])),
+      !przed.sprawdzian && sprawdzianDostepny(ctx.dane.swiaty, ctx.stan)
+        ? h('li', {}, [h('strong', {}, 'Otwarty próbny sprawdzian: '), 'czeka w bazie.'])
+        : null,
       zlote.length ? h('li', {}, [h('strong', {}, 'Złote karty w atlasie: '), zlote.map(nazwaKarty).join(', '), '.']) : null,
     ].filter(Boolean);
     ekran.append(
@@ -225,6 +235,7 @@ export function render(kontener, ctx, cel) {
         bledy.length ? h('p', {}, [h('strong', {}, 'Do poćwiczenia: '), bledy.map(nazwaKarty).join(', '), '.']) : null,
         h('div', { class: 'przyciski' }, [
           poziom > przed.mikroskop ? h('a', { class: 'przycisk przycisk--dalej', href: '#/mikroskop' }, 'Do mikroskopu') : null,
+          !przed.sprawdzian && sprawdzianDostepny(ctx.dane.swiaty, ctx.stan) ? h('a', { class: 'przycisk przycisk--dalej', href: '#/sprawdzian' }, 'Próbny sprawdzian') : null,
           h('a', { class: 'przycisk przycisk--jasny', href: '#/' }, 'Mapa wyprawy'),
         ]),
       ]),

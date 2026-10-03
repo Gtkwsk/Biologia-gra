@@ -3,8 +3,10 @@
 
 import { h, wyczysc } from '../core/dom.js';
 import { otwarteSwiaty, statusSwiata, zadaniaSwiata } from '../core/swiaty.js';
-import { doEksportu, zImportu, ustawImie, ustawOdblokujWszystkie } from '../core/stan.js';
-import { dzisiaj } from '../core/daty.js';
+import { doEksportu, zImportu, ustawImie, ustawOdblokujWszystkie, ustawDzwiek } from '../core/stan.js';
+import { dzisiaj, dataSlownie } from '../core/daty.js';
+import { sprawdzianDostepny, sumaPunktow, podsumuj, najslabszePunkty, liczbaPunktow } from '../core/sprawdzian.js';
+import { graj } from '../core/dzwieki.js';
 import { WERSJA } from '../wersja.js';
 import { pasek, powiadom } from './wspolne.js';
 
@@ -129,6 +131,16 @@ function panel(ekran, ctx) {
     },
     [h('label', { for: 'imie' }, 'Imię gracza'), h('div', { class: 'ustawienie__wiersz' }, [poleImienia, h('button', { type: 'submit', class: 'przycisk przycisk--maly' }, 'Zapisz')])],
   );
+  const przelacznikDzwieku = h('input', {
+    id: 'dzwiek',
+    type: 'checkbox',
+    checked: stan.ustawienia.dzwiek,
+    onchange: (e) => {
+      ctx.zmien((st) => ustawDzwiek(st, e.target.checked));
+      graj('dobrze');
+      odswiez();
+    },
+  });
   const przelacznik = h('input', {
     id: 'odblokuj',
     type: 'checkbox',
@@ -138,6 +150,57 @@ function panel(ekran, ctx) {
       odswiez();
     },
   });
+
+  // Próbny sprawdzian: ostatnie wyniki, tematy ostatniego podejścia i najsłabsze tematy
+  const { sprawdzian } = ctx.dane;
+  const maksSprawdzianu = sumaPunktow(sprawdzian);
+  const nazwaTematu = (n) => sprawdzian.find((p) => p.punkt === n)?.nazwa ?? `temat ${n}`;
+  const ostatni = stan.sprawdziany.at(-1);
+  const najslabsze = najslabszePunkty(stan.sprawdziany).slice(0, 4);
+  const sekcjaSprawdzianu = h('section', { class: 'panel-sekcja' }, [
+    h('h2', {}, 'Próbny sprawdzian'),
+    ...(ostatni
+      ? [
+          h('p', {}, `Podejścia: ${stan.sprawdziany.length}. Ostatnie wyniki (od najnowszego): ${stan.sprawdziany
+            .slice(-5)
+            .reverse()
+            .map((s) => `${podsumuj(s).zdobyte} z ${podsumuj(s).maks} (${dataSlownie(s.dzien)})`)
+            .join('; ')}.`),
+          h('h3', {}, 'Ostatnie podejście'),
+          h('div', { class: 'tabela-przewijana' }, [
+            h('table', { class: 'tabela' }, [
+              h('thead', {}, h('tr', {}, [h('th', { scope: 'col' }, 'Temat sprawdzianu'), h('th', { scope: 'col' }, 'Punkty')])),
+              h('tbody', {}, ostatni.zadania.map((z) => h('tr', {}, [h('th', { scope: 'row' }, `${z.punkt}. ${nazwaTematu(z.punkt)}`), h('td', {}, `${z.zdobyte} z ${z.maks}`)]))),
+            ]),
+          ]),
+          najslabsze.length
+            ? h('p', {}, [
+                h('strong', {}, 'Najsłabsze tematy w ostatnich podejściach (najwyżej trzech; część zdobytych punktów): '),
+                `${najslabsze.map((p) => `${p.punkt}. ${nazwaTematu(p.punkt)}: ${Math.round(p.czesc * 100)}%`).join('; ')}.`,
+              ])
+            : h('p', {}, 'W ostatnich podejściach wszystkie tematy bez straty punktów.'),
+        ]
+      : [
+          h(
+            'p',
+            {},
+            sprawdzianDostepny(ctx.dane.swiaty, stan)
+              ? `Próbny sprawdzian (${liczbaPunktow(maksSprawdzianu)}) nie był jeszcze rozwiązywany. Wejście: Baza, „Próbny sprawdzian”.`
+              : `Próbny sprawdzian (${liczbaPunktow(maksSprawdzianu)}) otworzy się po pokonaniu bossów wszystkich światów albo po włączeniu odblokowania w ustawieniach.`,
+          ),
+        ]),
+    h('p', { class: 'panel-uwaga' }, 'Rozkład punktów na zadania jest przyjęty w grze, bez wzoru z podręcznika, więc wynik jest orientacyjny.'),
+  ]);
+
+  // Domowe laboratorium
+  const zrobione = ctx.dane.laboratorium.filter((d) => stan.laboratorium[d.id]);
+  const sekcjaLaboratorium = h('section', { class: 'panel-sekcja' }, [
+    h('h2', {}, 'Domowe laboratorium'),
+    h('p', {}, `Doświadczenia oznaczone jako zrobione z dorosłym: ${zrobione.length} z ${ctx.dane.laboratorium.length}.`),
+    zrobione.length
+      ? h('ul', { class: 'lista-opisow' }, zrobione.map((d) => h('li', {}, [h('strong', {}, d.nazwa), `: ${dataSlownie(stan.laboratorium[d.id])}`])))
+      : null,
+  ]);
 
   // Kopia postępu
   const plik = h('input', {
@@ -222,6 +285,7 @@ function panel(ekran, ctx) {
       ]),
       h('p', {}, `Czas w wyzwaniach: ${minuty(stan.czasMs)}.`),
     ]),
+    sekcjaSprawdzianu,
     h('section', { class: 'panel-sekcja' }, [
       h('h2', {}, 'Najczęstsze pomyłki'),
       pomylki.length
@@ -231,11 +295,13 @@ function panel(ekran, ctx) {
     h('section', { class: 'panel-sekcja' }, [
       h('h2', {}, 'Ustawienia'),
       formImie,
+      h('div', { class: 'ustawienie ustawienie--przelacznik' }, [przelacznikDzwieku, h('label', { for: 'dzwiek' }, 'Dźwięki w grze (krótkie sygnały po odpowiedziach i na końcu zadań)')]),
       h('div', { class: 'ustawienie ustawienie--przelacznik' }, [
         przelacznik,
-        h('label', { for: 'odblokuj' }, 'Odblokuj wszystkie gotowe światy (bez pokonywania bossów)'),
+        h('label', { for: 'odblokuj' }, 'Odblokowanie wszystkich gotowych światów i próbnego sprawdzianu (bez pokonywania bossów)'),
       ]),
     ]),
+    sekcjaLaboratorium,
     h('section', { class: 'panel-sekcja' }, [
       h('h2', {}, 'Kopia postępu'),
       h('p', {}, 'Postęp jest zapisany tylko na tym urządzeniu. Kopia w pliku pozwala go przenieść albo odtworzyć.'),
