@@ -13,10 +13,10 @@ import { utworzRysunek } from './podpisywanie.js';
 import { utworzPrzeciaganie } from './przeciaganie.js';
 import { utworzKomunikat } from './komunikat.js';
 import { rysunekKarty } from './rysunki.js';
-import { wymieszaj, zWielkiej } from './podpisywanie-logika.js';
+import { wymieszaj, zWielkiej, elementWTypie } from './podpisywanie-logika.js';
 import * as K from './konstruktor-logika.js';
 
-// Części, które mają wszystkie komórki (TRESCI.md, sekcja 2.3).
+// Części, które mają wszystkie cztery rodzaje komórek (TRESCI.md, sekcja 2.3).
 const WSPOLNE = ['blona-komorkowa', 'cytozol', 'rybosomy'];
 
 export function utworzKonstruktor(kontener, { zadanie, dane, czesci, rysunki, onKoniec }) {
@@ -100,7 +100,7 @@ export function utworzKonstruktor(kontener, { zadanie, dane, czesci, rysunki, on
     odswiezLicznik();
     komunikat.pokaz({
       rodzaj: 'info',
-      tytul: `Zbuduj: ${t.nazwa}.`,
+      tytul: `Zbuduj ${t.biernik}.`,
       tekst: 'Przeciągnij na plan każdą część, którą ma ta komórka. Gdy skończysz, stuknij „Gotowe”.',
     });
   }
@@ -147,12 +147,12 @@ export function utworzKonstruktor(kontener, { zadanie, dane, czesci, rysunki, on
       przedwczesne += 1;
       const ile = brak.length === 1 ? 'jednej części' : `${brak.length} części`;
       const podpowiedz = brak.some((id) => WSPOLNE.includes(id))
-        ? 'Wszystkie komórki mają błonę komórkową, cytozol i rybosomy.'
+        ? 'Wszystkie cztery rodzaje komórek mają błonę komórkową, cytozol i rybosomy.'
         : 'Co jeszcze ma ta komórka: jądro komórkowe, mitochondria, wakuole, ścianę komórkową, chloroplasty?';
       komunikat.pokaz(
         przedwczesne === 1
           ? { rodzaj: 'zle', tytul: `Brakuje jeszcze ${ile}.`, tekst: podpowiedz }
-          : { rodzaj: 'zle', tytul: `Brakuje ${wyliczenie(brak.map((id) => elementPoId.get(id).brak))}.`, tekst: 'Dodaj te części i stuknij „Gotowe”.' },
+          : { rodzaj: 'zle', tytul: `Brakuje ${wyliczenie(brak.map((id) => elementWTypie(elementPoId.get(id), t.id).brak))}.`, tekst: 'Dodaj te części i stuknij „Gotowe”.' },
       );
       return;
     }
@@ -163,7 +163,7 @@ export function utworzKonstruktor(kontener, { zadanie, dane, czesci, rysunki, on
     const odRazu = bledy === 0 && przedwczesne === 0;
     if (odRazu) poprawne += 1;
     karty.push({ karta: idKartyTypu(t.id), odRazu, poprawnie: true });
-    komunikat.pokaz({ rodzaj: 'dobrze', tytul: `Zbudowane: ${t.nazwa}!`, tekst: `${zWielkiej(t.nazwa)} to ${t.opis}.` });
+    komunikat.pokaz({ rodzaj: 'dobrze', tytul: `${zWielkiej(t.nazwa)} zbudowana!`, tekst: `${zWielkiej(t.nazwa)} to ${t.opis}.` });
     gotowe.hidden = true;
     dalej.textContent = indeks === plany.length - 1 ? 'Gotowe' : 'Następny plan';
     dalej.hidden = false;

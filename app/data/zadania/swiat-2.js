@@ -71,7 +71,7 @@ export default [
     etykiety: 'nazwy',
     pary: [
       { karta: 'mitochondrium', opis: 'szukamy elektrowni, która dostarczy energii całej komórce' },
-      { karta: 'rybosomy', opis: 'szukamy warsztatów, które będą wytwarzać białka' },
+      { karta: 'rybosomy', opis: 'szukamy warsztatów w postaci drobnych ziarenek, które będą wytwarzać białka' },
       { karta: 'blona-komorkowa', opis: 'szukamy straży granicznej, która oddzieli komórkę od otoczenia i będzie transportować substancje do wnętrza i na zewnątrz' },
       { karta: 'aparat-golgiego', opis: 'szukamy sortowni, która będzie przekształcać i transportować białka' },
       { karta: 'siateczka-srodplazmatyczna', opis: 'szukamy sieci kanalików, która będzie wytwarzać i transportować białka i tłuszcze' },
@@ -93,7 +93,7 @@ export default [
       { karta: 'mitochondrium', opis: 'dostarczanie komórce energii' },
       { karta: 'jadro-komorkowe', opis: 'kierowanie wszystkimi procesami w komórce' },
     ],
-    dystraktory: [{ tekst: 'wytwarzanie białek', wyjasnienie: 'Białka wytwarzają rybosomy.' }],
+    dystraktory: [{ tekst: 'wytwarzanie białek', wyjasnienie: 'Białka wytwarzają rybosomy i siateczka śródplazmatyczna, a nie wakuole, mitochondria ani jądro komórkowe.' }],
     wyjasnienie:
       'Wakuole pochłaniają, trawią i usuwają substancje, mitochondria dostarczają energii, a jądro komórkowe kieruje wszystkimi procesami w komórce.',
     zrodlo: '2.2',
@@ -128,7 +128,7 @@ export default [
       'Plemnik ma [wić|plemnik], dzięki której przemieszcza się do komórki jajowej. Komórka jajowa jest duża i [kulista|komorka-jajowa], zawiera substancje zapasowe. Komórka [nerwowa|komorka-nerwowa] ma długie wypustki, którymi łączy się z innymi komórkami. Komórka nabłonka ma kształt [kostki|komorka-nablonka] i razem z sąsiednimi tworzy warstwę ochronną.',
     dystraktory: [
       { tekst: 'rzęskę', wyjasnienie: 'Rzęskę ma część bakterii.' },
-      { tekst: 'płaska', wyjasnienie: 'Ta komórka zawiera zapasy, dlatego jest duża i ma inny kształt.' },
+      { tekst: 'płaska', wyjasnienie: 'Komórka jajowa jest duża i kulista, a komórka nerwowa ma długie wypustki.' },
       { tekst: 'jajowa', wyjasnienie: 'Komórka jajowa jest duża i kulista, nie ma długich wypustek.' },
     ],
     wyjasnienie:
@@ -144,8 +144,8 @@ export default [
     tresc: 'To komórki nabłonka jamy ustnej. Co widać przy jakim powiększeniu?',
     obraz: 'nablonek-400',
     kategorie: [
-      { id: 'x400', nazwa: 'widać przy około 400 razy' },
-      { id: 'x10000', nazwa: 'widać dopiero przy około 10 000 razy' },
+      { id: 'x400', nazwa: 'widać przy powiększeniu około 400 razy' },
+      { id: 'x10000', nazwa: 'widać dopiero przy powiększeniu około 10 000 razy' },
     ],
     elementy: [
       { tekst: 'błona komórkowa', kategoria: 'x400', karta: 'blona-komorkowa', wyjasnienie: 'Przy powiększeniu około 400 razy widać błonę komórkową, cytoplazmę i jądro komórkowe.' },
@@ -154,10 +154,10 @@ export default [
       { tekst: 'mitochondria', kategoria: 'x10000', karta: 'mitochondrium', wyjasnienie: 'Mitochondria widać dopiero przy bardzo dużym powiększeniu, około 10 000 razy.' },
       { tekst: 'rybosomy', kategoria: 'x10000', karta: 'rybosomy', wyjasnienie: 'Rybosomy widać dopiero przy bardzo dużym powiększeniu, około 10 000 razy.' },
       { tekst: 'aparat Golgiego', kategoria: 'x10000', karta: 'aparat-golgiego', wyjasnienie: 'Aparat Golgiego widać dopiero przy bardzo dużym powiększeniu, około 10 000 razy.' },
-      { tekst: 'cytozol z zawieszonymi elementami', kategoria: 'x10000', karta: 'cytozol', wyjasnienie: 'Dopiero przy około 10 000 razy widać, że cytoplazma to cytozol z zawieszonymi w nim elementami.' },
+      { tekst: 'cytozol z zawieszonymi elementami', kategoria: 'x10000', karta: 'cytozol', wyjasnienie: 'Dopiero przy powiększeniu około 10 000 razy widać, że cytoplazma to cytozol z zawieszonymi w nim elementami.' },
     ],
     wyjasnienie:
-      'Przy powiększeniu około 400 razy widać tylko błonę komórkową, cytoplazmę i jądro komórkowe. Przy około 10 000 razy widać, że cytoplazma to cytozol z zawieszonymi w nim elementami.',
+      'Przy powiększeniu około 400 razy widać tylko błonę komórkową, cytoplazmę i jądro komórkowe. Przy powiększeniu około 10 000 razy widać, że cytoplazma to cytozol z zawieszonymi w nim elementami.',
     zrodlo: '2.2',
   },
   {
@@ -207,11 +207,11 @@ export default [
         wyjasnienie: 'Komórki są zwykle mikroskopijne, a najmniejsze mają bakterie.',
       },
       {
-        tekst: 'Największą znaną komórką zwierzęcą jest komórka nerwowa.',
+        tekst: 'Największą znaną komórką zwierzęcą jest plemnik.',
         prawda: false,
         karta: 'komorka-jajowa',
         poprawne: 'Największą znaną komórką zwierzęcą jest komórka jajowa w jaju strusia.',
-        bledne: ['Największą znaną komórką zwierzęcą jest plemnik.', 'Największą znaną komórką zwierzęcą jest komórka nabłonka.'],
+        bledne: ['Największą znaną komórką zwierzęcą jest komórka jajowa kury.', 'Największą znaną komórką zwierzęcą jest komórka nabłonka.'],
         wyjasnienie: 'Jajo strusia ma około 15 cm długości, a komórka jajowa w nim to największa znana komórka zwierzęca.',
       },
       {
@@ -249,8 +249,8 @@ export default [
     tresc: 'Podpisz wskazane elementy komórki zwierzęcej.',
     schemat: 'komorka-zwierzeca',
     punkty: ['rybosomy', 'siateczka', 'jadro', 'golgi', 'blona', 'mitochondrium'],
-    dystraktory: ['chloroplast', 'rzeska'],
-    wyjasnienie: 'Komórka zwierzęca nie ma chloroplastów ani rzęski.',
+    dystraktory: ['chloroplast', 'sciana-komorkowa'],
+    wyjasnienie: 'Komórka zwierzęca nie ma chloroplastów ani ściany komórkowej.',
     zrodlo: '2.2',
   },
   {
@@ -308,7 +308,7 @@ export default [
     tresc: 'Który element komórki pełni daną funkcję?',
     etykiety: 'nazwy',
     pary: [
-      { karta: 'wakuola', opis: 'bierze udział w usuwaniu z komórki różnych substancji' },
+      { karta: 'wakuola', opis: 'bierze udział w trawieniu i usuwaniu z komórki różnych substancji' },
       { karta: 'jadro-komorkowe', opis: 'kieruje wszystkimi procesami w komórce' },
       { karta: 'mitochondrium', opis: 'centrum energetyczne komórki' },
     ],

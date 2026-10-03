@@ -99,12 +99,12 @@ function utworzBudowe(kontener, { zadanie, dane, miasto, svgTekst, tryb = 'treni
         tekst: 'Możesz też stuknąć nazwę, a potem usługę. Zatrudniony element pojawi się na planie.',
       },
       wybor: (e) => ({ rodzaj: 'info', tytul: `Wybrany element: ${nazwa(e)}.`, tekst: 'Stuknij usługę, którą wykona.' }),
-      dobrze: (e) => ({ rodzaj: 'dobrze', tytul: `Zatrudniony: ${nazwa(e)}. Usługa działa!`, tekst: elementPoId.get(e).funkcja }),
+      dobrze: (e) => ({ rodzaj: 'dobrze', tytul: `Zatrudniono: ${nazwa(e)}. Usługa działa!`, tekst: elementPoId.get(e).funkcja }),
       zle: (e, c, proba) => {
         const u = uslugaPoElemencie.get(c);
         const powod =
           typ.obecnosc[e] === 'nie' ? `${zWielkiej(typ.nazwa)} nie ma ${elementPoId.get(e).brak}.` : elementPoId.get(e).funkcja;
-        const tekst = proba >= 2 ? `${powod} Usługę „${u.nazwa}” wykona: ${nazwa(c)}.` : `${powod} Usługa „${u.nazwa}” potrzebuje innego elementu.`;
+        const tekst = proba >= 2 ? `${powod} Do usługi „${u.nazwa}” pasuje element: ${nazwa(c)}.` : `${powod} Usługa „${u.nazwa}” potrzebuje innego elementu.`;
         return { komunikat: { rodzaj: 'zle', tytul: `${zWielkiej(nazwa(e))}: nie ta usługa.`, tekst }, podswietl: proba >= 2 ? c : null };
       },
       sprawdzian: (w) => ({ rodzaj: 'zle', tytul: `${uslugaPoElemencie.get(w.cel).nazwa}: ${nazwa(w.cel)}.`, tekst: elementPoId.get(w.cel).funkcja }),

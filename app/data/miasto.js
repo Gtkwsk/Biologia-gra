@@ -35,7 +35,7 @@ export default {
     {
       element: 'rybosomy',
       nazwa: 'Warsztaty białek',
-      zlecenie: 'Będą wytwarzać białka.',
+      zlecenie: 'Drobne ziarenka, które będą wytwarzać białka.',
       awaria: 'Przestały powstawać białka, choć sieć kanalików działa.',
     },
     {

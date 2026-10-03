@@ -35,6 +35,6 @@ export default [
     pasuje: ['roslinna'],
     nieznane: ['bakteryjna'],
   },
-  { id: 'duza-wakuola', tekst: 'Mam zwykle jedną dużą wakuolę.', element: 'wakuola', pasuje: ['roslinna', 'grzybowa'] },
+  { id: 'duza-wakuola', tekst: 'Mam jedną dużą wakuolę.', element: 'wakuola', pasuje: ['roslinna', 'grzybowa'] },
   { id: 'drobne-wakuole', tekst: 'Mam wiele drobnych wakuol.', element: 'wakuola', pasuje: ['zwierzeca', 'grzybowa'] },
 ];

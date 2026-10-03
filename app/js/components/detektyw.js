@@ -115,7 +115,7 @@ export function utworzDetektywa(kontener, { zadanie, dane, wskazowki, onKoniec }
         komunikat.pokaz({
           rodzaj: 'zle',
           tytul: `To nie ${typ.nazwa}.`,
-          tekst: `Wyklucza ją wskazówka „${ocena.wykluczajaca.tekst}” ${D.powodWykluczenia(typ, ocena.wykluczajaca, elementPoId)}`,
+          tekst: `Wyklucza ją wskazówka „${ocena.wykluczajaca.tekst.replace(/\.$/, '')}”. ${D.powodWykluczenia(typ, ocena.wykluczajaca, elementPoId)}`,
         });
       } else {
         komunikat.pokaz({
@@ -153,7 +153,7 @@ export function utworzDetektywa(kontener, { zadanie, dane, wskazowki, onKoniec }
       komunikat.pokaz({
         rodzaj: 'info',
         tytul: `Trafione: to ${typ.nazwa}. Ale to było zgadywanie.`,
-        tekst: `Te wskazówki pasowały też do: ${ocena.takzeMozliwe.map((id) => typPoId.get(id).nazwa).join(', ')}. Następnym razem odsłoń wskazówkę, która je rozróżni.`,
+        tekst: `Inne komórki, które pasowały do tych wskazówek: ${ocena.takzeMozliwe.map((id) => typPoId.get(id).nazwa).join(', ')}. Następnym razem odsłoń wskazówkę, która je rozróżni.`,
       });
     }
     dalej.textContent = indeks === sprawy.length - 1 ? 'Gotowe' : 'Następna sprawa';

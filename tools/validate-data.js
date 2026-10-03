@@ -48,6 +48,11 @@ const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola'];
 
 const OBECNOSC = ['tak', 'nie', 'czasem'];
 
+// Elementy, których „nie ma” w tabeli TRESCI.md jest uproszczeniem: jako zdanie ogólne byłoby
+// fałszywe (rzęski mają np. komórki nabłonka dróg oddechowych). Nie mogą być dystraktorami,
+// wierszami tabel do wypełnienia ani częściami konstruktora (SPEC.md, sekcja 12).
+const TYLKO_U_BAKTERII = ['rzeska'];
+
 // Wiersze tabeli z TRESCI.md, sekcja 2.3, nazwane inaczej niż etykieta elementu.
 const WIERSZE_TABELI = { mitochondria: 'mitochondrium', chloroplasty: 'chloroplast', wakuola: 'wakuola' };
 
@@ -402,29 +407,30 @@ export function walidujDane(dane, kontekst) {
   const tekstyRowne = (a, b) => a.trim().toLowerCase() === b.trim().toLowerCase();
   const WALIDATORY = {
     podpisywanie(z, gdzie) {
-    const s = schematPoId.get(z.schemat);
-    if (!s) {
-      blad(gdzie, `nieznany schemat „${z.schemat}”`);
-      return;
-    }
-    const typ = typPoId.get(s.typKomorki);
-    const punktyS = new Map((s.punkty || []).map((p) => [p.id, p]));
-    if (!z.punkty?.length) blad(gdzie, 'brak punktów do podpisania');
-    if (new Set(z.punkty).size !== (z.punkty || []).length) blad(gdzie, 'powtórzony punkt');
-    const poprawne = new Set();
-    for (const idP of z.punkty || []) {
-      const p = punktyS.get(idP);
-      if (!p) blad(gdzie, `punkt „${idP}” nie istnieje w schemacie „${s.id}”`);
-      else poprawne.add(p.element);
-    }
-    if (poprawne.size !== (z.punkty || []).length) blad(gdzie, 'dwa punkty z tym samym elementem: etykiety muszą być jednoznaczne');
-    for (const idD of z.dystraktory || []) {
-      if (!elementPoId.has(idD)) blad(gdzie, `nieznany dystraktor „${idD}”`);
-      else if (poprawne.has(idD)) blad(gdzie, `dystraktor „${idD}” jest jednocześnie poprawną odpowiedzią`);
-      else if (typ && typ.obecnosc?.[idD] !== 'nie') {
-        blad(gdzie, `dystraktor „${idD}”: według TRESCI.md ${typ.nazwa} nie wyklucza tego elementu`);
+      const s = schematPoId.get(z.schemat);
+      if (!s) {
+        blad(gdzie, `nieznany schemat „${z.schemat}”`);
+        return;
       }
-    }
+      const typ = typPoId.get(s.typKomorki);
+      const punktyS = new Map((s.punkty || []).map((p) => [p.id, p]));
+      if (!z.punkty?.length) blad(gdzie, 'brak punktów do podpisania');
+      if (new Set(z.punkty).size !== (z.punkty || []).length) blad(gdzie, 'powtórzony punkt');
+      const poprawne = new Set();
+      for (const idP of z.punkty || []) {
+        const p = punktyS.get(idP);
+        if (!p) blad(gdzie, `punkt „${idP}” nie istnieje w schemacie „${s.id}”`);
+        else poprawne.add(p.element);
+      }
+      if (poprawne.size !== (z.punkty || []).length) blad(gdzie, 'dwa punkty z tym samym elementem: etykiety muszą być jednoznaczne');
+      for (const idD of z.dystraktory || []) {
+        if (TYLKO_U_BAKTERII.includes(idD)) blad(gdzie, `„${idD}” nie może być dystraktorem (SPEC.md, sekcja 12)`);
+        if (!elementPoId.has(idD)) blad(gdzie, `nieznany dystraktor „${idD}”`);
+        else if (poprawne.has(idD)) blad(gdzie, `dystraktor „${idD}” jest jednocześnie poprawną odpowiedzią`);
+        else if (typ && typ.obecnosc?.[idD] !== 'nie') {
+          blad(gdzie, `dystraktor „${idD}”: według TRESCI.md ${typ.nazwa} nie wyklucza tego elementu`);
+        }
+      }
     },
 
     przyporzadkowanie(z, gdzie) {
@@ -524,6 +530,7 @@ export function walidujDane(dane, kontekst) {
           blad(gdzie, `nieznany element „${w}”`);
           continue;
         }
+        if (TYLKO_U_BAKTERII.includes(w)) blad(gdzie, `„${w}” nie może być wierszem tabeli (SPEC.md, sekcja 12)`);
         for (const k of z.kolumny || []) {
           const t = typPoId.get(k);
           if (!t) {
@@ -545,6 +552,7 @@ export function walidujDane(dane, kontekst) {
       const s = schematPoId.get(miasto.schemat);
       const typ = s && typPoId.get(s.typKomorki);
       for (const d of z.dystraktory || []) {
+        if (TYLKO_U_BAKTERII.includes(d)) blad(gdzie, `„${d}” nie może być dystraktorem (SPEC.md, sekcja 12)`);
         if (!elementPoId.has(d)) blad(gdzie, `nieznany dystraktor „${d}”`);
         else if (typ && typ.obecnosc?.[d] !== 'nie') blad(gdzie, `dystraktor „${d}”: według TRESCI.md ${typ.nazwa} nie wyklucza tego elementu`);
       }
@@ -621,6 +629,12 @@ export function walidujDane(dane, kontekst) {
       uslugi.add(u.element);
       for (const pole of ['nazwa', 'zlecenie', 'awaria']) if (!niepustyTekst(u[pole])) blad(gu, `brak pola ${pole}`);
     }
+  }
+
+  // Części konstruktora
+  for (const idE of czesciKonstruktora) {
+    if (!elementPoId.has(idE)) blad('konstruktor', `nieznana część „${idE}”`);
+    if (TYLKO_U_BAKTERII.includes(idE)) blad('konstruktor', `„${idE}” nie może być częścią konstruktora (SPEC.md, sekcja 12)`);
   }
 
   // Wskazówki detektywa

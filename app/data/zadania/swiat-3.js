@@ -17,9 +17,9 @@ export default [
     tresc: 'Podpisz elementy komórki roślinnej.',
     schemat: 'komorka-roslinna',
     punkty: ['sciana', 'mitochondrium', 'chloroplast', 'wakuola', 'rybosomy', 'cytozol', 'siateczka', 'blona', 'jadro', 'golgi'],
-    dystraktory: ['otoczka-sluzowa', 'rzeska'],
+    dystraktory: ['otoczka-sluzowa'],
     wyjasnienie:
-      'Komórka roślinna ma te same podstawowe elementy co zwierzęca oraz ścianę komórkową, chloroplasty i zwykle jedną dużą wakuolę. Otoczkę śluzową i rzęskę mają niektóre bakterie.',
+      'Komórka roślinna ma te same podstawowe elementy co zwierzęca oraz ścianę komórkową, chloroplasty i zwykle jedną dużą wakuolę. Otoczkę śluzową mają niektóre bakterie.',
     zrodlo: '2.3',
   },
   {
@@ -29,9 +29,9 @@ export default [
     tresc: 'Inna komórka roślinna, wydłużona. Podpisz jej elementy.',
     schemat: 'komorka-roslinna-2',
     punkty: ['mitochondrium', 'golgi', 'wakuola', 'rybosomy', 'siateczka', 'jadro', 'blona', 'cytozol', 'chloroplast', 'sciana'],
-    dystraktory: ['otoczka-sluzowa', 'rzeska'],
+    dystraktory: ['otoczka-sluzowa'],
     wyjasnienie:
-      'Komórki roślinne mają różne kształty, ale te same elementy. Duża wakuola spycha jądro komórkowe i chloroplasty pod ścianę komórkową.',
+      'Komórki roślinne mogą mieć różne kształty. Ta wydłużona komórka ma te same elementy co komórka z pierwszego schematu: ścianę komórkową, chloroplasty i dużą wakuolę.',
     zrodlo: '2.3',
   },
   {
@@ -51,8 +51,8 @@ export default [
       { tekst: 'wiele drobnych wakuol', kategoria: 'zwierzeca', karta: 'wakuola', wyjasnienie: 'Komórka zwierzęca ma wiele drobnych wakuol.' },
       { tekst: 'jądro komórkowe', kategoria: 'obie', karta: 'jadro-komorkowe', wyjasnienie: 'Jądro komórkowe mają komórki zwierzęce i roślinne.' },
       { tekst: 'mitochondria', kategoria: 'obie', karta: 'mitochondrium', wyjasnienie: 'Mitochondria mają komórki zwierzęce i roślinne.' },
-      { tekst: 'błona komórkowa', kategoria: 'obie', karta: 'blona-komorkowa', wyjasnienie: 'Błonę komórkową mają wszystkie komórki.' },
-      { tekst: 'rybosomy', kategoria: 'obie', karta: 'rybosomy', wyjasnienie: 'Rybosomy mają wszystkie komórki.' },
+      { tekst: 'błona komórkowa', kategoria: 'obie', karta: 'blona-komorkowa', wyjasnienie: 'Błonę komórkową mają wszystkie cztery rodzaje komórek.' },
+      { tekst: 'rybosomy', kategoria: 'obie', karta: 'rybosomy', wyjasnienie: 'Rybosomy mają wszystkie cztery rodzaje komórek.' },
     ],
     wyjasnienie:
       'Komórkę roślinną od zwierzęcej odróżniają ściana komórkowa, chloroplasty i zwykle jedna duża wakuola. W komórce zwierzęcej jest wiele drobnych wakuol.',
@@ -64,7 +64,7 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdania o komórce roślinnej.',
     tekst:
-      'Komórka roślinna ma ścianę komórkową zbudowaną głównie z [celulozy|sciana-komorkowa|To cukier, który buduje ściany komórek roślin.]. Zielone [chloroplasty|chloroplast|To owalne elementy komórki.] zawierają barwnik [chlorofil|chlorofil], a zachodzi w nich [fotosynteza||W tym procesie powstają substancje pokarmowe.]. Komórka roślinna ma zwykle jedną dużą [wakuolę|wakuola|Ten element jest wypełniony głównie wodą.].',
+      'Komórka roślinna ma ścianę komórkową zbudowaną głównie z [celulozy|sciana-komorkowa|To cukier, który buduje ściany komórek roślin.]. Zielone [chloroplasty|chloroplast|Tych elementów nie ma w komórce zwierzęcej.] zawierają barwnik [chlorofil|chlorofil], a zachodzi w nich [fotosynteza||W tym procesie powstają substancje pokarmowe.]. Komórka roślinna ma zwykle jedną dużą [wakuolę|wakuola|Ten element jest wypełniony głównie wodą.].',
     dystraktory: [
       { tekst: 'chityny', wyjasnienie: 'Z chityny jest zbudowana ściana komórkowa grzybów.' },
       { tekst: 'mitochondria', wyjasnienie: 'Mitochondria dostarczają komórce energii.' },
@@ -101,7 +101,7 @@ export default [
       { cel: 'roslinna', wskazowki: ['ma-wakuole', 'sciana-celuloza', 'ma-chloroplasty'] },
     ],
     wyjasnienie:
-      'Ściana z chityny wskazuje komórkę grzybową, ściana z celulozy roślinną. Brak mitochondriów oznacza komórkę bakteryjną.',
+      'Ściana z chityny wskazuje komórkę grzybową, ściana zbudowana głównie z celulozy roślinną. Brak mitochondriów oznacza komórkę bakteryjną.',
     zrodlo: '2.3',
   },
 
@@ -112,7 +112,7 @@ export default [
     typ: 'konstruktor',
     tresc: 'Zbuduj komórki z tego samego zestawu części.',
     plany: ['roslinna', 'zwierzeca'],
-    wyjasnienie: 'Komórka roślinna ma wszystko, co zwierzęca, oraz ścianę komórkową, chloroplasty i zwykle jedną dużą wakuolę.',
+    wyjasnienie: 'Komórka roślinna ma te same podstawowe elementy co zwierzęca oraz ścianę komórkową, chloroplasty i zwykle jedną dużą wakuolę.',
     zrodlo: '2.3',
   },
   {
@@ -164,7 +164,7 @@ export default [
         karta: 'komorka-bakteryjna',
         poprawne: 'Komórka bakteryjna nie ma jądra komórkowego, a jego funkcję pełni nić DNA.',
         bledne: ['Komórka bakteryjna ma jądro komórkowe i nić DNA.', 'Komórka bakteryjna nie ma jądra komórkowego ani rybosomów.'],
-        wyjasnienie: 'Bakterie mają komórki bezjądrowe. Rybosomy mają wszystkie komórki.',
+        wyjasnienie: 'Bakterie mają komórki bezjądrowe. Rybosomy mają wszystkie cztery rodzaje komórek.',
       },
       {
         tekst: 'Tylko komórka roślinna ma chloroplasty.',
@@ -178,10 +178,10 @@ export default [
         karta: 'komorka-grzybowa',
         poprawne: 'Komórka grzybowa ma ścianę komórkową zbudowaną z chityny.',
         bledne: ['Komórka grzybowa nie ma ściany komórkowej.', 'Komórka grzybowa ma chloroplasty i ścianę komórkową z celulozy.'],
-        wyjasnienie: 'Z celulozy jest zbudowana ściana komórkowa roślin. Ściana grzybów jest z chityny.',
+        wyjasnienie: 'Ściana komórkowa roślin jest zbudowana głównie z celulozy. Ściana grzybów jest z chityny.',
       },
       {
-        tekst: 'Wszystkie komórki mają błonę komórkową, cytozol i rybosomy.',
+        tekst: 'Wszystkie cztery rodzaje komórek mają błonę komórkową, cytozol i rybosomy.',
         prawda: true,
         karta: 'rybosomy',
         wyjasnienie: 'Mają je komórki zwierzęce, roślinne, grzybowe i bakteryjne.',
@@ -235,7 +235,7 @@ export default [
       { karta: 'wlosniki', opis: 'pobierają wodę z solami mineralnymi z gleby' },
       { karta: 'komorki-przewodzace', opis: 'transportują wodę z solami mineralnymi w roślinie' },
     ],
-    dystraktory: [{ tekst: 'zawierają substancje zapasowe dla rozwijającego się organizmu', wyjasnienie: 'Substancje zapasowe zawiera komórka jajowa.' }],
+    dystraktory: [{ tekst: 'zawierają substancje zapasowe dla rozwijającego się organizmu', wyjasnienie: 'Substancje zapasowe dla rozwijającego się organizmu zawiera komórka jajowa.' }],
     wyjasnienie:
       'Komórki aparatu szparkowego mają kształt nasion fasoli, włośniki to długie komórki skórki korzenia, a komórki przewodzące układają się jak rury.',
     zrodlo: '2.3',
@@ -253,7 +253,7 @@ export default [
       { karta: 'komorki-przewodzace', opis: 'długie komórki ułożone jedna nad drugą jak rury' },
     ],
     dystraktory: ['komorka-nerwowa'],
-    wyjasnienie: 'Kształt komórki zależy od funkcji: długie włośniki mają dużą powierzchnię, a komórki przewodzące tworzą rury.',
+    wyjasnienie: 'Kształt komórki zależy od funkcji: włośniki to długie komórki skórki korzenia, które pobierają wodę z solami mineralnymi, a komórki przewodzące ułożone jak rury transportują wodę.',
     zrodlo: '2.3',
   },
   {
@@ -267,7 +267,7 @@ export default [
       { tekst: 'Chloroplasty', wyjasnienie: 'Chloroplasty to elementy komórki, w których zachodzi fotosynteza.' },
       { tekst: 'kule', wyjasnienie: 'Komórki przewodzące są długie, a nie kuliste.' },
     ],
-    wyjasnienie: 'Komórki aparatu szparkowego przepuszczają gazy, włośniki pobierają wodę, a komórki przewodzące ją transportują.',
+    wyjasnienie: 'Przez szparkę między komórkami aparatu szparkowego przenikają tlen i dwutlenek węgla, włośniki pobierają wodę z solami mineralnymi, a komórki przewodzące ją transportują.',
     zrodlo: '2.3',
   },
 
@@ -292,7 +292,7 @@ export default [
     tekst:
       'Komórka bakteryjna nie ma [jądra komórkowego|jadro-komorkowe|W komórkach zwierząt i roślin ten element kieruje wszystkimi procesami.]. Jego funkcję pełni [nić DNA|nic-dna|U bakterii DNA ma postać nici.] zanurzona w [cytozolu|cytozol|To galaretowata substancja, która wypełnia komórkę.]. Niektóre bakterie mają na powierzchni ściany komórkowej [otoczkę śluzową|otoczka-sluzowa|Ta warstwa chroni bakterię między innymi przed wysychaniem.]. Część bakterii porusza się dzięki [rzęsce|rzeska|To długa, cienka wypustka bakterii.].',
     dystraktory: [
-      { tekst: 'rybosomów', wyjasnienie: 'Komórka bakteryjna ma rybosomy: mają je wszystkie komórki.' },
+      { tekst: 'rybosomów', wyjasnienie: 'Komórka bakteryjna ma rybosomy: mają je wszystkie cztery rodzaje komórek.' },
       { tekst: 'chloroplastom', wyjasnienie: 'Komórka bakteryjna nie ma chloroplastów.' },
     ],
     wyjasnienie:
@@ -339,8 +339,8 @@ export default [
     tresc: 'Podpisz wskazane elementy komórki roślinnej.',
     schemat: 'komorka-roslinna',
     punkty: ['sciana', 'chloroplast', 'wakuola', 'rybosomy', 'blona', 'jadro'],
-    dystraktory: ['rzeska'],
-    wyjasnienie: 'Komórka roślinna nie ma rzęski: ma ją część bakterii.',
+    dystraktory: ['otoczka-sluzowa'],
+    wyjasnienie: 'Komórka roślinna nie ma otoczki śluzowej: mają ją niektóre bakterie.',
     zrodlo: '2.3',
   },
   {
@@ -350,7 +350,7 @@ export default [
     tresc: 'Podpisz wskazane elementy komórki roślinnej.',
     schemat: 'komorka-roslinna',
     punkty: ['sciana', 'chloroplast', 'wakuola', 'siateczka', 'blona', 'golgi'],
-    dystraktory: ['otoczka-sluzowa', 'rzeska'],
+    dystraktory: ['otoczka-sluzowa'],
     wyjasnienie: 'Siateczka śródplazmatyczna to system kanalików, a aparat Golgiego to stos spłaszczonych pęcherzy.',
     zrodlo: '2.3',
   },
@@ -362,7 +362,7 @@ export default [
     schemat: 'komorka-roslinna',
     punkty: ['mitochondrium', 'chloroplast', 'wakuola', 'cytozol', 'jadro', 'sciana'],
     dystraktory: ['otoczka-sluzowa'],
-    wyjasnienie: 'Chloroplasty są zielone i owalne, mitochondria owalne z pofałdowanym wnętrzem, a wakuola zajmuje środek komórki.',
+    wyjasnienie: 'Chloroplasty są zielone i owalne, mitochondria zwykle owalne, a duża wakuola jest w centrum komórki.',
     zrodlo: '2.3',
   },
   {
@@ -372,8 +372,8 @@ export default [
     tresc: 'Podpisz wskazane elementy komórki roślinnej.',
     schemat: 'komorka-roslinna-2',
     punkty: ['wakuola', 'jadro', 'blona', 'chloroplast', 'sciana', 'mitochondrium'],
-    dystraktory: ['otoczka-sluzowa', 'rzeska'],
-    wyjasnienie: 'Komórka roślinna ma ścianę komórkową, chloroplasty i zwykle jedną dużą wakuolę; nie ma otoczki śluzowej ani rzęski.',
+    dystraktory: ['otoczka-sluzowa'],
+    wyjasnienie: 'Komórka roślinna ma ścianę komórkową, chloroplasty i zwykle jedną dużą wakuolę; nie ma otoczki śluzowej.',
     zrodlo: '2.3',
   },
   {
@@ -382,9 +382,9 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdania o budowie komórek.',
     tekst:
-      'Komórki zwierzęce, roślinne i grzybowe to komórki [jądrowe|komorka-jadrowa]. Komórki bakterii to komórki [bezjądrowe|komorka-bezjadrowa]. Komórka grzybowa ma ścianę komórkową zbudowaną z [chityny|komorka-grzybowa]. W komórce grzybowej nie ma [chloroplastów|chloroplast], więc nie zachodzi w niej fotosynteza.',
+      'Komórki zwierzęce, roślinne i grzybowe to komórki [jądrowe|komorka-jadrowa]. Komórki bakterii to komórki [bezjądrowe|komorka-bezjadrowa]. Komórka grzybowa ma ścianę komórkową zbudowaną z [chityny|komorka-grzybowa]. W komórce grzybowej nie ma [chloroplastów|chloroplast], w których u roślin zachodzi fotosynteza.',
     dystraktory: [
-      { tekst: 'celulozy', wyjasnienie: 'Z celulozy jest zbudowana ściana komórkowa roślin.' },
+      { tekst: 'celulozy', wyjasnienie: 'Ściana komórkowa roślin jest zbudowana głównie z celulozy.' },
       { tekst: 'mitochondriów', wyjasnienie: 'Komórka grzybowa ma mitochondria.' },
     ],
     wyjasnienie: 'Bakterie mają komórki bezjądrowe. Komórka grzybowa ma ścianę z chityny i nie ma chloroplastów.',
@@ -425,7 +425,7 @@ export default [
     tresc: 'Siatka porównawcza: które komórki mają te elementy?',
     wiersze: ['blona-komorkowa', 'wakuola', 'rybosomy', 'sciana-komorkowa'],
     kolumny: WSZYSTKIE_TYPY,
-    wyjasnienie: 'Błonę komórkową i rybosomy mają wszystkie komórki. Wakuol nie ma tylko komórka bakteryjna, a ściany tylko zwierzęca.',
+    wyjasnienie: 'Błonę komórkową i rybosomy mają wszystkie cztery rodzaje komórek. Wakuol nie ma tylko komórka bakteryjna, a ściany tylko zwierzęca.',
     zrodlo: '2.3',
   },
   {

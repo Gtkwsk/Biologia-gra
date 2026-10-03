@@ -180,7 +180,7 @@ export function render(kontener, ctx) {
     const id = POZIOMY_MIKROSKOPU[wybranyPoziom].id;
     if (id === 'lupa') {
       widok.replaceChildren(obrazSceny(preparat.id === 'nablonek' ? 'nablonek-lupa' : 'moczarka-lupa'));
-      opis.replaceChildren(h('p', {}, 'Przez lupę komórek nie widać: są za małe. Komórki są zwykle mikroskopijne.'));
+      opis.replaceChildren(h('p', {}, 'Przez lupę nie widać komórek tego preparatu: są za małe. Komórki są zwykle mikroskopijne.'));
       return;
     }
     if (id === 'x400') {

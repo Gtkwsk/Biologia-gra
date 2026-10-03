@@ -56,7 +56,7 @@ const TYPY = {
     return (kontener, opcje) => utworzKonstruktor(kontener, { zadanie, dane, czesci: dane.czesciKonstruktora, rysunki, ...opcje });
   },
   async wakuola(zadanie, dane) {
-    return (kontener, opcje) => utworzWakuole(kontener, { zadanie, katalog: dane.katalog, ...opcje });
+    return (kontener, opcje) => utworzWakuole(kontener, { zadanie, katalog: dane.katalog, elementy: dane.elementy, ...opcje });
   },
 };
 

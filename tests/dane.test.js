@@ -155,3 +155,10 @@ test('wykrywa fałszywe zdanie bez poprawnej wersji', async () => {
   delete zd.poprawne;
   zawiera(walidujDane(dane, kontekst), 'wymaga pola poprawne');
 });
+
+test('wykrywa rzęskę jako dystraktor przy schemacie komórki zwierzęcej', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const z = dane.zadania.find((x) => x.id === 's2-podpis-zwierzeca-1');
+  z.dystraktory = [...z.dystraktory, 'rzeska'];
+  zawiera(walidujDane(dane, kontekst), '„rzeska” nie może być dystraktorem');
+});

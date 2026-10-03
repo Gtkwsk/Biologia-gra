@@ -43,7 +43,7 @@ export default [
   {
     id: 'mitochondrium',
     nazwa: 'mitochondrium',
-    opis: 'owalny element z pofałdowanym wnętrzem',
+    opis: 'zwykle owalny element',
     funkcja: 'Mitochondrium dostarcza energii. To centrum energetyczne komórki.',
     brak: 'mitochondriów',
     biernik: 'mitochondria',
@@ -92,13 +92,14 @@ export default [
       roslinna: {
         opis: 'duży pęcherz w centrum komórki, wypełniony głównie wodą',
         funkcja: 'Wakuola utrzymuje w komórce odpowiednią ilość wody.',
+        brak: 'dużej wakuoli',
       },
     },
   },
   {
     id: 'sciana-komorkowa',
     nazwa: 'ściana komórkowa',
-    opis: 'wyraźna warstwa na zewnątrz błony komórkowej',
+    opis: 'wyraźna warstwa otaczająca komórkę',
     funkcja:
       'Ściana komórkowa nadaje komórce kształt, chroni ją przed uszkodzeniem i zabezpiecza przed wnikaniem drobnoustrojów chorobotwórczych.',
     brak: 'ściany komórkowej',
@@ -106,7 +107,7 @@ export default [
     zrodlo: '2.3',
     wTypie: {
       grzybowa: { funkcja: 'Ściana komórkowa grzybów jest zbudowana z chityny.' },
-      bakteryjna: { funkcja: 'Ściana komórkowa bakterii leży na zewnątrz błony komórkowej.' },
+      bakteryjna: { funkcja: 'Komórka bakteryjna ma ścianę komórkową. Na jej powierzchni niektóre bakterie mają otoczkę śluzową.' },
     },
   },
   {

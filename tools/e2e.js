@@ -293,7 +293,8 @@ console.log('Tablet poziomo (mysz)');
   await strona.locator('.bramka button[type="submit"]').click();
   await strona.locator('.tabela').waitFor();
   const panel = await strona.locator('.ekran--rodzic').textContent();
-  sprawdz(panel.includes('siateczka śródplazmatyczna'), 'panel pokazuje najczęstsze pomyłki');
+  // Pomyłki z przegranego podejścia do bossa zależą od wylosowanych wariantów: sprawdzana jest lista.
+  sprawdz((await strona.locator('.ekran--rodzic .lista-opisow li').count()) > 0, 'panel pokazuje najczęstsze pomyłki');
   sprawdz(panel.includes('11 z 11'), 'panel pokazuje ukończone wyzwania świata 2');
   await zrzut(strona, '16-panel-rodzica');
   await strona.locator('.ekran--rodzic a', { hasText: 'Wróć do gry' }).last().click();

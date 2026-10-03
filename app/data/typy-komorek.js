@@ -8,12 +8,14 @@
 // pozostałe zdania powstają z form „biernik” i „brak” elementów. Zdanie o elemencie bez wpisu
 // w obecnosc (np. nić DNA w komórce jądrowej) wyjaśnia, dlaczego konstruktor go nie przyjmuje.
 // rysunek: schemat typu (assets/svg), także dla konstruktora i mikroskopu.
+// biernik: forma do poleceń (np. „Zbuduj komórkę zwierzęcą.”).
 // Typ komórki jest też kartą atlasu (id karty: komorka-<id>).
 
 export default [
   {
     id: 'zwierzeca',
     nazwa: 'komórka zwierzęca',
+    biernik: 'komórkę zwierzęcą',
     zrodlo: '2.2',
     obecnosc: {
       'blona-komorkowa': 'tak',
@@ -41,6 +43,7 @@ export default [
   {
     id: 'roslinna',
     nazwa: 'komórka roślinna',
+    biernik: 'komórkę roślinną',
     zrodlo: '2.3',
     obecnosc: {
       'blona-komorkowa': 'tak',
@@ -62,13 +65,14 @@ export default [
       'nic-dna': 'W komórce roślinnej DNA jest w jądrze komórkowym. Nić DNA w cytozolu zastępuje jądro tylko u bakterii.',
     },
     rysunek: 'assets/svg/komorka-roslinna.svg',
-    opis: 'komórka ze ścianą komórkową z celulozy, chloroplastami i zwykle jedną dużą wakuolą',
+    opis: 'komórka ze ścianą komórkową zbudowaną głównie z celulozy, chloroplastami i zwykle jedną dużą wakuolą',
     swiat: 3,
     ciekawostka: 'W komórkach liścia moczarki chloroplasty krążą wzdłuż ścian, niesione przez płynącą cytoplazmę.',
   },
   {
     id: 'grzybowa',
     nazwa: 'komórka grzybowa',
+    biernik: 'komórkę grzybową',
     zrodlo: '2.3',
     obecnosc: {
       'blona-komorkowa': 'tak',
@@ -95,6 +99,7 @@ export default [
   {
     id: 'bakteryjna',
     nazwa: 'komórka bakteryjna',
+    biernik: 'komórkę bakteryjną',
     zrodlo: '2.3',
     obecnosc: {
       'blona-komorkowa': 'tak',

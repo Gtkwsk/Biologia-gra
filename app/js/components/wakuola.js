@@ -8,7 +8,7 @@
 import { h, s } from '../core/dom.js';
 import { utworzKomunikat } from './komunikat.js';
 import { rysunekKarty } from './rysunki.js';
-import { wymieszaj, zWielkiej } from './podpisywanie-logika.js';
+import { wymieszaj, zWielkiej, elementWTypie } from './podpisywanie-logika.js';
 
 const CIEKAWOSTKA =
   'Wakuola pełna wody i ściana komórkowa działają jak balon napompowany w kartonowym pudełku: dlatego podlana roślina się prostuje, a bez wody więdnie.';
@@ -95,7 +95,15 @@ function scenaKomorki() {
   return { svg, ustaw };
 }
 
-export function utworzWakuole(kontener, { zadanie, katalog, onKoniec }) {
+export function utworzWakuole(kontener, { zadanie, katalog, elementy = [], onKoniec }) {
+  // Wyjaśnienie błędnej odpowiedzi: funkcja elementu w komórce roślinnej (np. wakuola utrzymuje wodę).
+  const elementPoId = new Map(elementy.map((e) => [e.id, e]));
+  const wyjasnij = (id) => {
+    const e = elementPoId.get(id);
+    if (e) return elementWTypie(e, 'roslinna').funkcja;
+    const k = katalog.get(id);
+    return k.zdanie ?? `${zWielkiej(k.nazwa)} to ${k.opis}.`;
+  };
   const roslina = scenaRosliny();
   const komorka = scenaKomorki();
   const komunikat = utworzKomunikat();
@@ -189,8 +197,7 @@ export function utworzWakuole(kontener, { zadanie, katalog, onKoniec }) {
     }
     przycisk.dataset.stan = 'zle';
     przycisk.disabled = true;
-    const k = katalog.get(id);
-    komunikat.pokaz({ rodzaj: 'zle', tytul: `To nie ${k.nazwa}.`, tekst: k.zdanie ?? `${zWielkiej(k.nazwa)} to ${k.opis}.` });
+    komunikat.pokaz({ rodzaj: 'zle', tytul: `To nie ${katalog.get(id).nazwa}.`, tekst: wyjasnij(id) });
   }
 
   function zakoncz() {
