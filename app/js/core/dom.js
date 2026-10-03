@@ -57,6 +57,7 @@ const IKONY = {
     ['rect', { x: '5.5', y: '11', width: '13', height: '9', rx: '2' }],
     ['path', { d: 'M8.5 11V8a3.5 3.5 0 0 1 7 0v3' }],
   ],
+  gwiazda: [['path', { d: 'M12 3.6l2.5 5.3 5.8.7-4.3 4 1.1 5.8L12 16.6l-5.1 2.8 1.1-5.8-4.3-4 5.8-.7z' }]],
 };
 
 export function ikona(nazwa, klasa = 'ikona') {

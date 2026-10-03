@@ -48,6 +48,20 @@ export function poziomKarty(stanKarty) {
   return 'brazowa';
 }
 
+const KOLEJNOSC_POZIOMOW = ['nieodkryta', 'brazowa', 'srebrna', 'zlota'];
+
+// Karty, które po zapisie wyniku są na wyższym poziomie niż przed nim (do pokazania odkrycia):
+// [{ karta, z, na }] w kolejności podanych id, bez powtórzeń.
+export function awanseKart(kartyPrzed, kartyPo, idKart) {
+  const wynik = [];
+  for (const id of new Set(idKart)) {
+    const z = poziomKarty(kartyPrzed[id]);
+    const na = poziomKarty(kartyPo[id]);
+    if (KOLEJNOSC_POZIOMOW.indexOf(na) > KOLEJNOSC_POZIOMOW.indexOf(z)) wynik.push({ karta: id, z, na });
+  }
+  return wynik;
+}
+
 // Karty z błędem przy pierwszej próbie i karty rozpoznane od razu (wynik zadania).
 export function kartyZBledem(wynik) {
   return [...new Set(wynik.karty.filter((k) => !k.odRazu).map((k) => k.karta))];

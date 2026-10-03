@@ -278,6 +278,12 @@ test('wykrywa w próbnym sprawdzianie mapę kart z nieznaną kartą albo misją 
   zawiera(bledy, 'nieznana karta atlasu „smok”');
 });
 
+test('wykrywa bossa bez portretu', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.swiaty.find((s) => s.id === 4).boss.rysunek = 'boss-nieznany';
+  zawiera(walidujDane(dane, kontekst), 'brak portretu bossa „boss-nieznany”');
+});
+
 test('wykrywa wykład bez bzdur, poprawkę spoza opcji i wykład z zadaniem innego typu', async () => {
   const { dane, kontekst } = await zaladuj();
   const z = dane.zadania.find((x) => x.id === 's2-wyklad-1');

@@ -14,6 +14,7 @@
 // }
 
 import { h } from '../core/dom.js';
+import { iskry } from '../core/efekty.js';
 import { utworzPrzeciaganie } from './przeciaganie.js';
 import { utworzKomunikat } from './komunikat.js';
 import { wymieszaj } from './podpisywanie-logika.js';
@@ -120,6 +121,7 @@ export function utworzZadanieEtykiet(kontener, o) {
     for (const chip of chipy.values()) chip.classList.remove('etykieta--podpowiedz');
     if (r.wynik === 'dobrze') {
       komunikat.pokaz(komunikaty.dobrze(etykieta, cel));
+      iskry([...(celeDoStukania ?? [])].find((c) => c.dataset?.cel === cel) ?? null, { ile: 10 });
     } else {
       const { komunikat: k, podswietl } = komunikaty.zle(etykieta, cel, r.proba);
       komunikat.pokaz(k);

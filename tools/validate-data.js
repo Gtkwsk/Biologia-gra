@@ -348,6 +348,7 @@ export function walidujDane(dane, kontekst) {
       continue;
     }
     if (!niepustyTekst(b.nazwa)) blad(`${gdzie}.boss`, 'brak nazwy');
+    if (!ID_RYSUNKOW.includes(b.rysunek)) blad(`${gdzie}.boss`, `brak portretu bossa „${b.rysunek}” (components/rysunki.js)`);
     if (!b.wyzwania?.length) blad(`${gdzie}.boss`, 'boss bez wyzwań');
     const typyBossa = new Set();
     (b.wyzwania || []).forEach((w, i) => {

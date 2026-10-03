@@ -12,16 +12,19 @@ import { soczewka, miernikOstrosci, pasek, ekranNiedostepny } from './wspolne.js
 function kartaBossa(sw, stan) {
   if (!sw.boss) return null;
   const pokonany = stan.bossowie.includes(sw.id);
+  const mistrz = stan.mistrzowie.includes(sw.id);
   const dostepny = bossDostepny(sw, stan);
   const tresc = [
     h('span', { class: 'boss-wejscie__etykieta' }, pokonany ? 'Boss pokonany' : 'Boss świata'),
-    h('span', { class: 'boss-wejscie__nazwa' }, sw.boss.nazwa),
+    h('span', { class: 'boss-wejscie__nazwa' }, [sw.boss.nazwa, mistrz ? h('span', { class: 'boss-wejscie__mistrz' }, 'Mistrz') : null]),
     h(
       'span',
       { class: 'boss-wejscie__opis' },
       dostepny
         ? pokonany
-          ? 'Rewanż: zadania w formatach sprawdzianu, losowane od nowa.'
+          ? mistrz
+            ? 'Rewanż mistrzowski wygrany. Każdy rewanż to dobre powtórzenie.'
+            : 'Czeka rewanż mistrzowski: jedno serce, zero błędów.'
           : sw.boss.opis
         : `Ukończ wszystkie misje, żeby go wyzwać. Ukończone: ${misjeUkonczone(sw, stan)} z ${sw.misje.length}.`,
     ),
@@ -122,9 +125,10 @@ export function render(kontener, ctx, cel) {
   const misje = h(
     'ul',
     { class: 'misje__lista' },
-    sw.misje.map((m) => {
+    sw.misje.map((m, i) => {
       const stanM = stanMisji(m, ctx.stan);
-      return h('li', {}, [
+      const li = h('li', {}, [
+
         h('a', { class: 'misja-karta', href: `#/swiat/${sw.id}/misja/${encodeURIComponent(m.id)}`, 'data-stan': stanM.klasa }, [
           h('span', { class: 'misja-karta__nazwa' }, m.nazwa),
           h('span', { class: 'misja-karta__opis' }, m.opis),
@@ -134,8 +138,14 @@ export function render(kontener, ctx, cel) {
           ]),
         ]),
       ]);
+      li.style.setProperty('--i', String(i));
+      return li;
     }),
   );
+  const kartaW = kartaWykladu(sw, ctx.stan);
+  kartaW?.style.setProperty('--i', String(sw.misje.length));
+  const kartaB = kartaBossa(sw, ctx.stan);
+  kartaB?.style.setProperty('--i', String(sw.misje.length + 1));
 
   kontener.append(
     h('div', { class: 'ekran ekran--swiat', 'data-swiat': sw.id }, [
@@ -153,7 +163,7 @@ export function render(kontener, ctx, cel) {
         ]),
       ]),
       h('div', { class: 'swiat-tresc' }, [
-        h('section', { class: 'misje', 'aria-labelledby': 'misje-naglowek' }, [h('h2', { id: 'misje-naglowek' }, 'Misje'), misje, kartaWykladu(sw, ctx.stan), kartaBossa(sw, ctx.stan)]),
+        h('section', { class: 'misje', 'aria-labelledby': 'misje-naglowek' }, [h('h2', { id: 'misje-naglowek' }, 'Misje'), misje, kartaW, kartaB]),
         h('div', { class: 'swiat-dodatki' }, [
           sw.coZbadasz.length
             ? h('section', { class: 'co-zbadasz' }, [h('h2', {}, 'Co tu zbadasz'), h('ul', {}, sw.coZbadasz.map((t) => h('li', {}, t)))])

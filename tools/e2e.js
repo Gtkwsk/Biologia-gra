@@ -116,12 +116,31 @@ async function otworzPanel(strona) {
 }
 
 // Rozwiązuje bieżące zadanie (misji albo bossa) i czeka na wynik.
+// Okno odkrycia kart (nowe albo lepsze karty atlasu) pojawia się po zadaniu; zapamiętuje tytuły.
+const odkrycia = [];
+async function zamknijOdkrycie(strona) {
+  const okno = strona.locator('dialog.odkrycie[open]');
+  if (!(await okno.count())) return;
+  odkrycia.push((await okno.locator('.odkrycie__tytul').textContent()).trim());
+  if (odkrycia.length === 1) await zrzut(strona, '03a-odkrycie-kart');
+  if (odkrycia.length > 1 && odkrycia.at(-1).startsWith('Złot') && !odkrycia.slice(0, -1).some((t) => t.startsWith('Złot'))) await zrzut(strona, '10a-odkrycie-zlote');
+  await okno.locator('button').click();
+  await okno.waitFor({ state: 'detached' });
+}
+
+// Licznik wyniku nabija się od zera (klasa licznik--animuje na czas animacji).
+async function poczekajNaLicznik(strona) {
+  await strona.waitForFunction(() => !document.querySelector('.licznik--animuje'));
+}
+
 async function rozwiazBiezace(strona) {
   const obszar = strona.locator('.misja__obszar');
   await obszar.locator('.zadanie').first().waitFor();
   const id = await obszar.getAttribute('data-zadanie');
   await rozwiaz(strona, zadaniePoId.get(id), daneGry);
   await strona.locator('.misja__wynik:not([hidden])').waitFor();
+  await zamknijOdkrycie(strona);
+  await poczekajNaLicznik(strona);
   // Puste wartości nie mogą trafić na ekran jako napis (np. Element.append(null) daje „null”).
   const tekst = await strona.locator('body').innerText();
   if (/\b(null|undefined|NaN)\b/.test(tekst)) bledy.push(`${id}: na ekranie jest napis „null”, „undefined” albo „NaN”`);
@@ -146,6 +165,8 @@ async function przyporzadkujZBledem(strona) {
     await strona.locator('.tacka__akcje button', { hasText: 'Sprawdź' }).click();
   }
   await strona.locator('.misja__wynik:not([hidden])').waitFor();
+  await zamknijOdkrycie(strona);
+  await poczekajNaLicznik(strona);
   const tekst = await strona.locator('body').innerText();
   if (/\b(null|undefined|NaN)\b/.test(tekst)) bledy.push(`${z.id}: na ekranie jest napis „null”, „undefined” albo „NaN”`);
   return z;
@@ -201,6 +222,8 @@ console.log('Tablet poziomo (mysz)');
       sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat 1, misja „${m.nazwa}”: od razu dobrze (wyzwania: ${tytuly.length})`);
       if (zrzutyMisji1[m.id]) await zrzut(strona, zrzutyMisji1[m.id]);
     }
+    sprawdz(odkrycia.length > 0 && odkrycia[0].startsWith('Now'), `odkrycie nowych kart pokazuje się po zadaniu („${odkrycia[0]}”)`);
+    sprawdz((await strona.locator('#efekty').count()) === 1, 'warstwa efektów (iskry, konfetti) jest na stronie');
     await strona.goto(`${adres}#/swiat/1`);
     sprawdz((await strona.locator('a.wyklad-wejscie').count()) === 1, 'po misjach świata 1 wykład Profesora Pomyłki jest otwarty');
     {
@@ -277,7 +300,9 @@ console.log('Tablet poziomo (mysz)');
     await strona.locator(`.etykieta[data-element="${elementPunktu[p]}"]`).click();
     await strona.locator(`.miejsce__pole[data-punkt="${p}"]`).click();
   }
-  await strona.locator('.misja__wynik').waitFor();
+  await strona.locator('.misja__wynik:not([hidden])').waitFor();
+  await zamknijOdkrycie(strona);
+  await poczekajNaLicznik(strona);
   const wynik = await strona.locator('.misja__wynik').textContent();
   sprawdz(wynik.includes('Od razu dobrze: 6 z 8'), `wynik liczy tylko pierwsze próby (${wynik.slice(0, 40)}…)`);
   sprawdz(wynik.includes('siateczka śródplazmatyczna'), 'wynik wskazuje element do poćwiczenia');
@@ -348,22 +373,73 @@ console.log('Tablet poziomo (mysz)');
       await strona.locator('.tacka__akcje button', { hasText: 'Sprawdź' }).click();
     }
     await strona.locator('.misja__wynik:not([hidden])').waitFor();
+    await zamknijOdkrycie(strona);
     await strona.locator('.misja__wynik .przycisk--dalej').click();
   }
   sprawdz((await strona.locator('.boss-karta--koniec h1').textContent()).includes('wygrał boss'), 'trzy wyzwania z błędem kończą podejście');
   await zrzut(strona, '09-boss-przegrana');
   await strona.locator('.boss-karta button', { hasText: 'Spróbuj ponownie' }).click();
   await strona.locator('.boss-karta button', { hasText: 'Zaczynamy' }).click();
-  for (let i = 0; i < swiaty.find((s) => s.id === 2).boss.wyzwania.length; i++) {
+  const liczbaWyzwan2 = swiaty.find((s) => s.id === 2).boss.wyzwania.length;
+  sprawdz((await strona.locator('.boss-zycie__napis').textContent()) === `Życie: ${liczbaWyzwan2} z ${liczbaWyzwan2}`, 'boss ma pełne życie na starcie');
+  sprawdz((await strona.locator('.boss-portret').count()) === 1, 'portret bossa w pasku życia');
+  const odkryciaPrzedBossem = odkrycia.length;
+  for (let i = 0; i < liczbaWyzwan2; i++) {
     await rozwiazBiezace(strona);
-    if (i === 0) await zrzut(strona, '10-boss-wyzwanie');
+    if (i === 0) {
+      sprawdz((await strona.locator('.misja__wynik-tytul').textContent()).includes('Cios krytyczny'), 'wyzwanie bez błędu to cios krytyczny');
+      sprawdz((await strona.locator('.boss-zycie__napis').textContent()) === `Życie: ${liczbaWyzwan2 - 1} z ${liczbaWyzwan2}`, 'cios zabiera bossowi segment życia');
+      await zrzut(strona, '10-boss-wyzwanie');
+    }
     await strona.locator('.misja__wynik .przycisk--dalej').click();
   }
+  sprawdz(odkrycia.slice(odkryciaPrzedBossem).some((t) => t.startsWith('Złot')), 'złote karty pokazują się w oknie odkrycia u bossa');
   await strona.locator('.boss-karta--wygrana').waitFor();
   const wygrana = await strona.locator('.boss-karta--wygrana').textContent();
   sprawdz(wygrana.includes('Inspektor miasta pokonany!'), 'boss świata 2 pokonany');
   sprawdz(wygrana.includes('Mikroskop ulepszony') && wygrana.includes('Otwarty nowy świat: Zielone twierdze'), 'nagrody: mikroskop i nowy świat');
+  sprawdz(wygrana.includes('Odblokowany rewanż mistrzowski'), 'pierwsza wygrana odblokowuje rewanż mistrzowski');
+  sprawdz((await strona.locator('.boss-portret--pokonany').count()) === 1, 'portret pokonanego bossa');
+  await strona.waitForTimeout(1600);
   await zrzut(strona, '11-boss-wygrana');
+
+  // Rewanż mistrzowski: jedno serce, pierwszy błąd kończy podejście; wygrana daje gwiazdę na mapie.
+  // (Adres bossa jest już otwarty, więc wejście przez ekran świata.)
+  await strona.goto(`${adres}#/swiat/2`);
+  await strona.locator('a.boss-wejscie').click();
+  await strona.locator('.boss-karta button', { hasText: 'Rewanż' }).first().waitFor();
+  sprawdz((await strona.locator('.boss-karta button', { hasText: 'Rewanż mistrzowski' }).count()) === 1, 'pokonany boss oferuje rewanż mistrzowski');
+  await strona.locator('.boss-karta button', { hasText: 'Rewanż mistrzowski' }).click();
+  await strona.locator('.misja__obszar .zadanie').first().waitFor();
+  sprawdz((await strona.locator('.pasek .serce').count()) === 1, 'rewanż mistrzowski: jedno serce');
+  if (await strona.locator('.pf__prawda').count()) {
+    while (await strona.locator('.pf__prawda').count()) {
+      await strona.locator('.pf__prawda').click();
+      await strona.locator('.pf__akcje .przycisk--dalej').click();
+    }
+  } else {
+    await strona.locator('.tacka__akcje button', { hasText: 'Sprawdź' }).click();
+  }
+  await strona.locator('.misja__wynik:not([hidden])').waitFor();
+  await zamknijOdkrycie(strona);
+  sprawdz((await strona.locator('.misja__wynik .przycisk--dalej').textContent()).includes('Koniec podejścia'), 'rewanż mistrzowski: pierwszy błąd kończy podejście');
+  await strona.locator('.misja__wynik .przycisk--dalej').click();
+  await strona.locator('.boss-karta--koniec').waitFor();
+  await strona.locator('.boss-karta button', { hasText: 'Spróbuj ponownie' }).click();
+  await strona.locator('.boss-karta button', { hasText: 'Rewanż mistrzowski' }).click();
+  for (let i = 0; i < liczbaWyzwan2; i++) {
+    await rozwiazBiezace(strona);
+    await strona.locator('.misja__wynik .przycisk--dalej').click();
+  }
+  await strona.locator('.boss-karta--wygrana').waitFor();
+  const mistrz = await strona.locator('.boss-karta--wygrana').textContent();
+  sprawdz(mistrz.includes('Mistrzowski rewanż wygrany!') && mistrz.includes('Tytuł mistrza świata'), 'rewanż mistrzowski wygrany');
+  await strona.waitForTimeout(1600);
+  await zrzut(strona, '11a-rewanz-mistrzowski');
+  await strona.goto(adres);
+  await strona.locator('.mapa__swiaty').waitFor();
+  sprawdz((await strona.locator('.swiat[data-swiat="2"][data-mistrz="true"] .soczewka__gwiazda').count()) === 1, 'gwiazda mistrza na mapie przy świecie 2');
+  await zrzut(strona, '11b-mapa-gwiazda');
 
   // Świat 3 otwarty, misja detektywa
   await strona.goto(adres);
@@ -541,6 +617,7 @@ console.log('Tablet poziomo (mysz)');
   const panelPoSprawdzianie = await strona.locator('.ekran--rodzic').textContent();
   sprawdz(panelPoSprawdzianie.includes('28 z 29') && panelPoSprawdzianie.includes('Próbny sprawdzian'), 'panel: wynik próbnego sprawdzianu');
   sprawdz(panelPoSprawdzianie.includes('11. Typy organizmów cudzożywnych: 50%'), 'panel: najsłabszy temat próbnego sprawdzianu');
+  sprawdz(panelPoSprawdzianie.includes('boss pokonany (mistrz)'), 'panel: świat z wygranym rewanżem mistrzowskim');
   sprawdz(panelPoSprawdzianie.includes('Słodki chleb'), 'panel: zrobione doświadczenie z domowego laboratorium');
   sprawdz(await strona.locator('#dzwiek').isChecked(), 'panel: dźwięki domyślnie włączone');
   await strona.locator('#dzwiek').click();
@@ -636,6 +713,7 @@ console.log('Telefon');
     ['#/swiat/2/misja/s2-mikroskop', 'klasyfikacja ze sceną'],
     ['#/swiat/2/misja/s2-budowa-miasta', 'budowa miasta'],
     ['#/swiat/2/misja/s2-wyklad', 'wykład Profesora Pomyłki'],
+    ['#/swiat/2/boss', 'boss (przed misjami)'],
     ['#/swiat/4/misja/s4-przepis', 'przepis fotosyntezy'],
     ['#/swiat/4/misja/s4-drogi', 'trzy drogi glukozy'],
     ['#/swiat/4/misja/s4-laboratorium', 'laboratorium fotosyntezy'],

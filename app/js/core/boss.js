@@ -5,10 +5,14 @@
 // - Z każdej puli losowane jest jedno zadanie, więc kolejne podejścia różnią się wariantami.
 // - Gracz ma trzy serca. Wyzwanie z choćby jednym błędem kosztuje jedno serce.
 //   Utrata wszystkich serc kończy podejście; można od razu spróbować ponownie.
+// - Rewanż mistrzowski (po pokonaniu bossa): jedno serce, więc pierwszy błąd kończy podejście.
+// - Boss ma tyle segmentów życia, ile wyzwań; każde ukończone wyzwanie zabiera jeden segment
+//   (postęp pokazany językiem gier), a wyzwanie bez błędu to „cios krytyczny”.
 // - Mikroskop: lupa na start, pokonany boss świata 2 daje powiększenie około 400 razy,
 //   boss świata 3 około 10 000 razy (SPEC.md, sekcja 4.1).
 
 export const SERCA = 3;
+export const SERCA_MISTRZA = 1;
 
 export function misjeUkonczone(swiat, stan) {
   return swiat.misje.filter((m) => m.zadania.every((id) => (stan.zadania[id]?.proby ?? 0) > 0)).length;
@@ -25,8 +29,13 @@ export function wylosujWyzwania(boss, zadania, losuj = Math.random) {
   });
 }
 
-export function nowePodejscie(liczbaWyzwan) {
-  return { serca: SERCA, indeks: 0, liczba: liczbaWyzwan, wyniki: [] };
+export function nowePodejscie(liczbaWyzwan, { serca = SERCA } = {}) {
+  return { serca, maksSerca: serca, indeks: 0, liczba: liczbaWyzwan, wyniki: [] };
+}
+
+// Życie bossa: pozostałe segmenty (jeden na wyzwanie).
+export function zycieBossa(podejscie) {
+  return Math.max(0, podejscie.liczba - podejscie.indeks);
 }
 
 // Zwraca podejście po wyzwaniu: { ...podejscie, serca, indeks, wyniki, stracone }.

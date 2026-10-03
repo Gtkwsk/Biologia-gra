@@ -8,8 +8,10 @@ import { graj } from '../core/dzwieki.js';
 import { otwarteSwiaty, wykladDostepny } from '../core/swiaty.js';
 import { zapiszWynik } from '../core/stan.js';
 import { dzisiaj } from '../core/daty.js';
-import { kartyZBledem } from '../core/karty.js';
+import { kartyZBledem, awanseKart } from '../core/karty.js';
+import { konfetti, licznik as nabijLicznik } from '../core/efekty.js';
 import { zaladujZadanie } from '../components/zadania.js';
+import { pokazOdkrycie } from '../components/odkrycie.js';
 import { wymieszaj } from '../components/podpisywanie-logika.js';
 import { pasek, ekranNiedostepny } from './wspolne.js';
 
@@ -36,6 +38,7 @@ export function render(kontener, ctx, cel) {
   let indeks = 0;
   let komponent = null;
   let zamkniety = false;
+  let odkrycie = null;
 
   const licznik = h('span', { class: 'pasek__licznik' });
   const polecenie = h('h1', { class: 'misja__polecenie' });
@@ -56,6 +59,7 @@ export function render(kontener, ctx, cel) {
     zniszcz() {
       zamkniety = true;
       komponent?.zniszcz();
+      if (odkrycie?.open) odkrycie.close();
     },
   };
 
@@ -91,6 +95,7 @@ export function render(kontener, ctx, cel) {
   }
 
   function zakonczZadanie(zadanie, w, czasMs) {
+    const kartyPrzed = ctx.stan.karty;
     ctx.zmien((stan) =>
       zapiszWynik(stan, {
         idZadania: zadanie.id,
@@ -104,16 +109,24 @@ export function render(kontener, ctx, cel) {
     );
     ctx.sesja.wyniki.push({ idZadania: zadanie.id, swiat: sw.id, ...w });
     pokazWynik(zadanie, w);
+    // Nowe i lepsze karty atlasu pokazują się od razu, nie dopiero w podsumowaniu.
+    const awanse = awanseKart(kartyPrzed, ctx.stan.karty, w.karty.map((k) => k.karta));
+    if (awanse.length) odkrycie = pokazOdkrycie(awanse, ctx.dane.katalog);
   }
 
   function pokazWynik(zadanie, w) {
     const ostatnie = indeks === zadania.length - 1;
     const wszystkieDobrze = w.poprawne === w.wszystkie;
     const doCwiczenia = kartyZBledem(w);
-    if (wszystkieDobrze) graj('koniec');
+    if (wszystkieDobrze) {
+      graj('koniec');
+      konfetti({ ile: 45 });
+    }
+    // Wynik nabija się od zera (efekty.js, licznik).
+    const liczba = h('span', { class: 'licznik' }, String(w.poprawne));
     wyczysc(wynik);
     dolacz(wynik, [
-      h('h2', { class: 'misja__wynik-tytul' }, wszystkieDobrze ? 'Wszystko od razu dobrze!' : `Od razu dobrze: ${w.poprawne} z ${w.wszystkie}`),
+      h('h2', { class: 'misja__wynik-tytul' }, wszystkieDobrze ? 'Wszystko od razu dobrze!' : ['Od razu dobrze: ', liczba, ` z ${w.wszystkie}`]),
       doCwiczenia.length
         ? h('p', { class: 'misja__do-cwiczenia' }, [h('strong', {}, 'Do poćwiczenia: '), doCwiczenia.map(nazwaKarty).join(', '), '.'])
         : null,
@@ -139,6 +152,7 @@ export function render(kontener, ctx, cel) {
       ]),
     ]);
     wynik.hidden = false;
+    if (!wszystkieDobrze) nabijLicznik(liczba, w.poprawne);
     wynik.scrollIntoView({ behavior: ograniczRuch() ? 'auto' : 'smooth', block: 'nearest' });
   }
 }

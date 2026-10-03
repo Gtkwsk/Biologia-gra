@@ -104,7 +104,7 @@ function panel(ekran, ctx) {
       : null;
     return h('tr', {}, [
       h('th', { scope: 'row' }, `${sw.id}. ${sw.tytul}`),
-      h('td', {}, STAN_SWIATA[statusSwiata(sw, stan, otwarte)]),
+      h('td', {}, STAN_SWIATA[statusSwiata(sw, stan, otwarte)] + (stan.mistrzowie.includes(sw.id) ? ' (mistrz)' : '')),
       h('td', {}, zadania.length ? `${zrobione.length} z ${zadania.length}` : '–'),
       h('td', {}, srednia === null ? '–' : `${srednia}%`),
     ]);
@@ -295,7 +295,7 @@ function panel(ekran, ctx) {
     h('section', { class: 'panel-sekcja' }, [
       h('h2', {}, 'Ustawienia'),
       formImie,
-      h('div', { class: 'ustawienie ustawienie--przelacznik' }, [przelacznikDzwieku, h('label', { for: 'dzwiek' }, 'Dźwięki w grze (krótkie sygnały po odpowiedziach i na końcu zadań)')]),
+      h('div', { class: 'ustawienie ustawienie--przelacznik' }, [przelacznikDzwieku, h('label', { for: 'dzwiek' }, 'Dźwięki i wibracje w grze (krótkie sygnały po odpowiedziach i na końcu zadań)')]),
       h('div', { class: 'ustawienie ustawienie--przelacznik' }, [
         przelacznik,
         h('label', { for: 'odblokuj' }, 'Odblokowanie wszystkich gotowych światów i próbnego sprawdzianu (bez pokonywania bossów)'),

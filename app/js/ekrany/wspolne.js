@@ -79,7 +79,11 @@ export function miernikOstrosci(opanowanie) {
     h(
       'span',
       { class: 'ostrosc__pasek', role: 'img', 'aria-label': `Ostrość ${pelne} z 5` },
-      Array.from({ length: 5 }, (_, i) => h('span', { class: 'ostrosc__klocek', 'data-pelny': String(i < pelne) })),
+      Array.from({ length: 5 }, (_, i) => {
+        const klocek = h('span', { class: 'ostrosc__klocek', 'data-pelny': String(i < pelne) });
+        klocek.style.setProperty('--i', String(i));
+        return klocek;
+      }),
     ),
   ]);
 }
