@@ -1117,6 +1117,15 @@ a.boss-wejscie:active {
   color: var(--atrament-jasny);
 }
 
+/* Dopisek przy uproszczeniu z podręcznika (np. słonecznik, hiena cętkowana). */
+.karta-szczegoly__uwaga {
+  padding: 0.4em 0.7em;
+  border-left: 4px solid var(--blekit);
+  border-radius: 0 var(--promien) var(--promien) 0;
+  background: var(--blekit-jasny);
+  font-size: var(--r-0);
+}
+
 .karta-szczegoly__zagadka {
   display: flex;
   align-items: center;
