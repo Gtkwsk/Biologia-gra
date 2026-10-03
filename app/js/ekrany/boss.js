@@ -1,7 +1,7 @@
 // Boss świata (SPEC.md, sekcja 4.3): wyzwania w formatach sprawdzianu, bez podpowiedzi,
 // trzy serca zamiast limitu czasu. Logika: core/boss.js.
 
-import { h, ikona, wyczysc, ograniczRuch } from '../core/dom.js';
+import { h, dolacz, ikona, wyczysc, ograniczRuch } from '../core/dom.js';
 import { otwarteSwiaty } from '../core/swiaty.js';
 import { zapiszWynik, zaliczBossa } from '../core/stan.js';
 import { dzisiaj } from '../core/daty.js';
@@ -157,7 +157,7 @@ export function render(kontener, ctx, cel) {
     const doCwiczenia = kartyZBledem(w);
     for (const s of ekran.querySelectorAll('.pasek .serca')) s.replaceWith(serca(podejscie.serca));
     wyczysc(wynikEl);
-    wynikEl.append(
+    dolacz(wynikEl, [
       h('h2', { class: 'misja__wynik-tytul', 'data-stracone': String(podejscie.stracone) }, [
         podejscie.stracone ? 'Błąd kosztuje jedno serce.' : 'Bez błędu!',
         ' ',
@@ -174,7 +174,7 @@ export function render(kontener, ctx, cel) {
           stanP === 'trwa' ? 'Następne wyzwanie' : stanP === 'wygrane' ? 'Zobacz wynik' : 'Koniec podejścia',
         ),
       ),
-    );
+    ]);
     wynikEl.hidden = false;
     wynikEl.scrollIntoView({ behavior: ograniczRuch() ? 'auto' : 'smooth', block: 'nearest' });
   }

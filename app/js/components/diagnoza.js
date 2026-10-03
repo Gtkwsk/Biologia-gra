@@ -10,7 +10,7 @@
 //   wyjasnienie: zdanie po rozwiązaniu, ciekawostka?: dosłownie z TRESCI.md, sekcja 6 }]
 // Wynik: wskazania składnika i funkcji od razu dobre; karta to wskazany składnik.
 
-import { h } from '../core/dom.js';
+import { h, dolacz } from '../core/dom.js';
 import { utworzKomunikat } from './komunikat.js';
 import { rysunekKarty } from './rysunki.js';
 import { wymieszaj, zWielkiej } from './podpisywanie-logika.js';
@@ -93,12 +93,13 @@ export function utworzDiagnoze(kontener, { zadanie, dane, onKoniec }) {
     const opcje = D.kolejnoscOpcji(krok, wymieszaj).map((i) =>
       h('button', { type: 'button', class: 'dosw__opcja', 'data-opcja': String(i), onclick: (e) => odpowiedz(i, e.currentTarget) }, krok.opcje[i].tekst),
     );
-    panel.replaceChildren(
+    panel.replaceChildren();
+    dolacz(panel, [
       h('p', { class: 'lab__krok' }, `Przypadek ${indeks + 1} z ${przypadki.length}: funkcja`),
       h('p', { class: 'dosw__pytanie' }, p.funkcja.pytanie),
       h('div', { class: 'dosw__opcje' }, opcje),
       p.ciekawostka ? h('aside', { class: 'ciekawostka', hidden: true }, [h('h2', { class: 'ciekawostka__naglowek' }, 'Ciekawostka'), h('p', {}, p.ciekawostka)]) : null,
-    );
+    ]);
     komunikat.pokaz({ rodzaj: 'info', tytul: 'Jaką funkcję pełni ten składnik?', tekst: 'Stuknij jedną odpowiedź.' });
 
     function odpowiedz(i, b) {
