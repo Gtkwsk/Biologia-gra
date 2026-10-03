@@ -2,7 +2,7 @@
 
 Gra przeglądarkowa do nauki biologii: klasa 5, dział II „Budowa i czynności życiowe organizmów”. Adres: https://biologia-gra.netlify.app Działa offline po pierwszym uruchomieniu i instaluje się na ekranie głównym tabletu. Bez kont, reklam i analityki; postęp zapisuje się tylko na urządzeniu.
 
-Gotowe: świat 2 (budowa komórki zwierzęcej), świat 3 (komórka roślinna, grzybowa i bakteryjna), świat 4 (samożywność i fotosynteza) i świat 6 (oddychanie komórkowe, wymiana gazowa, fermentacja) z misjami i bossami, atlas kart, mikroskop. Światy 1 i 5 są w budowie (`SPEC.md`, sekcja 10).
+Gotowe wszystkie sześć światów z misjami i bossami: świat 1 (składniki chemiczne organizmów), świat 2 (budowa komórki zwierzęcej), świat 3 (komórka roślinna, grzybowa i bakteryjna), świat 4 (samożywność i fotosynteza), świat 5 (cudzożywność) i świat 6 (oddychanie komórkowe, wymiana gazowa, fermentacja), a także atlas kart i mikroskop. Nowy gracz zaczyna od świata 1; kolejny świat otwiera boss poprzedniego. Następny etap (4): próbny sprawdzian, domowe laboratorium, audio i dopracowanie oprawy (`SPEC.md`, sekcja 10).
 
 ## Wdrożenie na Netlify
 
@@ -27,3 +27,5 @@ Gra zainstalowana na ekranie początkowym jest chroniona przed usuwaniem danych 
 - `git config core.hooksPath .githooks`: testy i walidator przed każdym commitem.
 
 Dokumenty: `CLAUDE.md` (zasady pracy), `SPEC.md` (projekt i dziennik decyzji), `TRESCI.md` (jedyne źródło treści), `AUDIOBOOK.md` (tekst słuchowiska).
+
+© 2026 Robert Gutkowski. Kroje pisma Lexend i Titan One mają własną licencję SIL Open Font License (pliki w `app/assets/fonts`).

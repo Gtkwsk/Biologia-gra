@@ -13,7 +13,9 @@ function ustaw(el, atrybuty) {
   }
 }
 
-function dolacz(el, dzieci) {
+// Dołącza dzieci do elementu, pomijając null, undefined i false. Samo Element.append(null)
+// wstawiłoby napis „null”, więc wszędzie, gdzie dziecko bywa puste, potrzebna jest ta funkcja.
+export function dolacz(el, dzieci) {
   for (const d of [].concat(dzieci)) {
     if (d === null || d === undefined || d === false) continue;
     el.append(d instanceof Node ? d : String(d));

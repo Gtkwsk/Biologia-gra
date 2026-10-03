@@ -1,7 +1,7 @@
 // Misja: kolejne wyzwania świata. Wynik zapisywany po każdym wyzwaniu.
 // misja.losuj: jeśli podane, misja wybiera tyle zadań z listy (przy każdym podejściu inne).
 
-import { h, wyczysc, ograniczRuch } from '../core/dom.js';
+import { h, dolacz, wyczysc, ograniczRuch } from '../core/dom.js';
 import { otwarteSwiaty } from '../core/swiaty.js';
 import { zapiszWynik } from '../core/stan.js';
 import { dzisiaj } from '../core/daty.js';
@@ -103,7 +103,7 @@ export function render(kontener, ctx, cel) {
     const wszystkieDobrze = w.poprawne === w.wszystkie;
     const doCwiczenia = kartyZBledem(w);
     wyczysc(wynik);
-    wynik.append(
+    dolacz(wynik, [
       h('h2', { class: 'misja__wynik-tytul' }, wszystkieDobrze ? 'Wszystko od razu dobrze!' : `Od razu dobrze: ${w.poprawne} z ${w.wszystkie}`),
       doCwiczenia.length
         ? h('p', { class: 'misja__do-cwiczenia' }, [h('strong', {}, 'Do poćwiczenia: '), doCwiczenia.map(nazwaKarty).join(', '), '.'])
@@ -128,7 +128,7 @@ export function render(kontener, ctx, cel) {
               'Dalej',
             ),
       ]),
-    );
+    ]);
     wynik.hidden = false;
     wynik.scrollIntoView({ behavior: ograniczRuch() ? 'auto' : 'smooth', block: 'nearest' });
   }

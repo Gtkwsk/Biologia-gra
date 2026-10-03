@@ -12,6 +12,7 @@ import czesciKonstruktora from '../data/konstruktor.js';
 import organizmy from '../data/organizmy.js';
 import procesy from '../data/procesy.js';
 import porownanie from '../data/porownanie.js';
+import pokarm from '../data/pokarm.js';
 import { katalogKart } from './core/karty.js';
 import { utworzMagazyn } from './core/magazyn.js';
 import { nowyStan } from './core/stan.js';
@@ -68,6 +69,7 @@ const ctx = {
     organizmy,
     procesy,
     porownanie,
+    pokarm,
     katalog: katalogKart({ elementy, typyKomorek, pojecia, organizmy }),
   },
   get stan() {

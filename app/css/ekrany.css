@@ -168,6 +168,14 @@
   margin-top: 28px;
 }
 
+/* Oznaczenie autorstwa gry: małe i spokojne, na dole mapy. */
+.mapa__autor {
+  margin-top: 28px;
+  font-size: var(--r-0);
+  text-align: center;
+  color: var(--atrament-jasny);
+}
+
 @media (min-width: 520px) {
   .mapa__swiaty {
     grid-template-columns: repeat(2, 1fr);
@@ -1115,6 +1123,15 @@ a.boss-wejscie:active {
 
 .karta-szczegoly__zasada {
   color: var(--atrament-jasny);
+}
+
+/* Dopisek przy uproszczeniu z podręcznika (np. słonecznik, hiena cętkowana). */
+.karta-szczegoly__uwaga {
+  padding: 0.4em 0.7em;
+  border-left: 4px solid var(--blekit);
+  border-radius: 0 var(--promien) var(--promien) 0;
+  background: var(--blekit-jasny);
+  font-size: var(--r-0);
 }
 
 .karta-szczegoly__zagadka {

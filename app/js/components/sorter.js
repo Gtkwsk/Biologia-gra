@@ -10,7 +10,7 @@
 //   błędna pokazuje przyczynę, a zdanie wraca na koniec talii.
 // Sprawdzian: lista wszystkich zdań z wyborem kategorii i jedno „Sprawdź”.
 
-import { h, ikona } from '../core/dom.js';
+import { h, dolacz, ikona } from '../core/dom.js';
 import { utworzKomunikat } from './komunikat.js';
 import { rysunekKarty } from './rysunki.js';
 import { wymieszaj } from './podpisywanie-logika.js';
@@ -49,7 +49,7 @@ export function utworzSorter(kontener, { zadanie, tryb = 'trening', onKoniec }) 
     const przyciski = kategorie.map((k) => przyciskKategorii(k, () => wybierz(k.id)));
     const stosy = new Map(kategorie.map((k) => [k.id, h('ul', { class: 'sorter__stos-lista' })]));
     const dalej = h('button', { type: 'button', class: 'przycisk przycisk--dalej', hidden: true, onclick: nastepne }, 'Dalej');
-    korzen.append(
+    dolacz(korzen, [
       scena ? h('figure', { class: 'sorter__scena' }, scena.el) : null,
       h('div', { class: 'sorter__stol' }, [licznik, karta, h('div', { class: 'sorter__kategorie' }, przyciski)]),
       h(
@@ -58,7 +58,7 @@ export function utworzSorter(kontener, { zadanie, tryb = 'trening', onKoniec }) 
         kategorie.map((k) => h('section', { class: 'sorter__stos', 'data-kategoria': k.id, 'aria-label': k.nazwa }, [h('h3', { class: 'sorter__stos-nazwa' }, k.nazwa), stosy.get(k.id)])),
       ),
       h('div', { class: 'tacka' }, [komunikat.el, h('div', { class: 'tacka__akcje' }, dalej)]),
-    );
+    ]);
     komunikat.pokaz({
       rodzaj: 'info',
       tytul: 'Do której grupy pasuje to zdanie?',

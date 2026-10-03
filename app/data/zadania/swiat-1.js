@@ -1,0 +1,679 @@
+// Zadania świata 1: „Alfabet życia” (TRESCI.md, sekcja 2.1).
+//
+// Typy zadań i pola: SPEC.md, sekcja 5; opis pól przy komponentach w js/components.
+// karta: id karty atlasu (pierwiastek, związek chemiczny, pojęcie, organizm).
+// Zadania z przedrostkiem s1-boss- należą tylko do puli bossa.
+// Luki: każda luka ma jednoznaczną rolę w zdaniu (bez równorzędnych słów w sąsiednich lukach).
+// Wartości procentowe składu ciała są orientacyjne, z podręcznika (TRESCI.md, sekcja 5).
+
+const pf = (id, tresc, zdania, wyjasnienie) => ({ id, swiat: 1, typ: 'prawda-falsz', tresc, zdania, wyjasnienie, zrodlo: '2.1' });
+
+// Zdania o funkcjach cukrów, białek i tłuszczów (punkt 3 zakresu sprawdzianu).
+const F = {
+  glukozaEnergia: { tekst: 'Glukoza pełni funkcję energetyczną.', prawda: true, karta: 'glukoza', wyjasnienie: 'Glukoza jest źródłem energii, np. dla larw pszczół karmionych miodem.' },
+  skrobiaZapas: { tekst: 'Skrobia jest materiałem zapasowym, np. w bulwach ziemniaka.', prawda: true, karta: 'skrobia', wyjasnienie: 'Skrobia to cukier zapasowy: gromadzi się np. w bulwach ziemniaka i w nasionach zbóż.' },
+  celulozaSciany: { tekst: 'Celuloza buduje ściany komórek roślinnych.', prawda: true, karta: 'celuloza', wyjasnienie: 'Z celulozy są zbudowane np. włoski nasion bawełny.' },
+  chitynaGrzyby: { tekst: 'Chityna to cukier, który buduje ściany komórek grzybów.', prawda: true, karta: 'chityna', wyjasnienie: 'Ściany komórek roślinnych buduje inny cukier: celuloza.' },
+  celulozaZapas: {
+    tekst: 'Celuloza jest materiałem zapasowym w bulwach ziemniaka.',
+    prawda: false,
+    karta: 'celuloza',
+    poprawne: 'Skrobia jest materiałem zapasowym w bulwach ziemniaka.',
+    bledne: ['Chityna jest materiałem zapasowym w bulwach ziemniaka.', 'Tłuszcz jest materiałem zapasowym w bulwach ziemniaka.'],
+    wyjasnienie: 'Celuloza buduje ściany komórek roślinnych, a materiałem zapasowym w bulwach jest skrobia.',
+  },
+  skrobiaSciany: {
+    tekst: 'Skrobia buduje ściany komórek roślinnych.',
+    prawda: false,
+    karta: 'skrobia',
+    poprawne: 'Celuloza buduje ściany komórek roślinnych.',
+    bledne: ['Chityna buduje ściany komórek roślinnych.', 'DNA buduje ściany komórek roślinnych.'],
+    wyjasnienie: 'Skrobia to cukier o funkcji zapasowej.',
+  },
+  glukozaBudulec: {
+    tekst: 'Glukoza pełni przede wszystkim funkcję budulcową.',
+    prawda: false,
+    karta: 'glukoza',
+    poprawne: 'Glukoza pełni funkcję energetyczną.',
+    bledne: ['Glukoza pełni funkcję ochronną.', 'Glukoza zawiera informację o cechach organizmu.'],
+    wyjasnienie: 'Glukoza pełni funkcję energetyczną. Funkcję budulcową wśród cukrów pełni celuloza, a informację o cechach zawiera DNA.',
+  },
+  bialkaMiesnie: { tekst: 'Białka budują mięśnie i skórę.', prawda: true, karta: 'bialka', wyjasnienie: 'Funkcja budulcowa to główna funkcja białek.' },
+  bialkaPiora: { tekst: 'Pióra, włosy, pazury, rogi i kopyta są zbudowane z białek.', prawda: true, karta: 'bialka', wyjasnienie: 'To funkcja budulcowa białek u zwierząt.' },
+  enzymyBialka: { tekst: 'Enzymy to białka o funkcji regulacyjnej.', prawda: true, karta: 'enzymy', wyjasnienie: 'Enzymy regulują przemiany chemiczne w organizmie, np. trawienie.' },
+  bialkaNasiona: { tekst: 'Nasiona grochu i fasoli zawierają białka zapasowe.', prawda: true, karta: 'groch', wyjasnienie: 'To funkcja zapasowa białek.' },
+  mlekoBialko: { tekst: 'Mleko jest bogatym źródłem białka potrzebnego do wzrostu.', prawda: true, karta: 'bialka', wyjasnienie: 'Białko jest materiałem do budowy ciała.' },
+  bialkaBezBudulca: {
+    tekst: 'Białka nie pełnią funkcji budulcowej.',
+    prawda: false,
+    karta: 'bialka',
+    poprawne: 'Funkcja budulcowa to główna funkcja białek.',
+    bledne: ['Białka pełnią tylko funkcję energetyczną.', 'Białka budują wyłącznie ściany komórek roślinnych.'],
+    wyjasnienie: 'Białka budują m.in. mięśnie i skórę.',
+  },
+  enzymyTluszcze: {
+    tekst: 'Enzymy to tłuszcze.',
+    prawda: false,
+    karta: 'enzymy',
+    poprawne: 'Enzymy to białka.',
+    bledne: ['Enzymy to cukry zapasowe.', 'Enzymy to sole mineralne.'],
+    wyjasnienie: 'Enzymy to białka regulujące przemiany chemiczne, np. enzymy trawienne w ślinie.',
+  },
+  tluszczeEnergia: { tekst: 'Tłuszcze są najbogatszym źródłem energii.', prawda: true, karta: 'tluszcze', wyjasnienie: 'Dają około dwa razy więcej energii niż cukry.' },
+  tluszczeDwaRazy: { tekst: 'Z takiej samej ilości tłuszczów organizm uzyskuje około dwa razy więcej energii niż z cukrów.', prawda: true, karta: 'tluszcze', wyjasnienie: 'Tłuszcze to najbogatsze źródło energii.' },
+  cukryWiecej: {
+    tekst: 'Z takiej samej ilości cukrów organizm uzyskuje więcej energii niż z tłuszczów.',
+    prawda: false,
+    karta: 'tluszcze',
+    poprawne: 'Z takiej samej ilości tłuszczów organizm uzyskuje około dwa razy więcej energii niż z cukrów.',
+    bledne: ['Z takiej samej ilości cukrów i tłuszczów organizm uzyskuje tyle samo energii.', 'Tłuszcze w ogóle nie dostarczają energii.'],
+    wyjasnienie: 'Tłuszcze to najbogatsze źródło energii.',
+  },
+  tluszczOchrona: { tekst: 'Warstwa tłuszczu pod skórą ssaków i ptaków chroni przed zimnem i urazami.', prawda: true, karta: 'tluszcze', wyjasnienie: 'Taką warstwę ma np. foka.' },
+  tluszczZapas: { tekst: 'Nasiona słonecznika i owoce oliwki zawierają tłuszcz zapasowy.', prawda: true, karta: 'slonecznik', wyjasnienie: 'Tłuszcze są materiałem zapasowym, u zwierząt w tkance tłuszczowej.' },
+  fokaPrzegrzanie: {
+    tekst: 'Warstwa tłuszczu pod skórą foki chroni ją przed przegrzaniem.',
+    prawda: false,
+    karta: 'foka',
+    poprawne: 'Warstwa tłuszczu pod skórą foki chroni ją przed zimnem i urazami.',
+    bledne: ['Warstwa tłuszczu pod skórą foki buduje jej kości.', 'Warstwa tłuszczu pod skórą foki zawiera informację o jej cechach.'],
+    wyjasnienie: 'Tłuszcz pod skórą to warstwa ochronna.',
+  },
+  tluszczeSciany: {
+    tekst: 'Tłuszcze budują ściany komórek roślinnych.',
+    prawda: false,
+    karta: 'tluszcze',
+    poprawne: 'Tłuszcze są materiałem zapasowym, np. w nasionach słonecznika.',
+    bledne: ['Tłuszcze budują kości.', 'Tłuszcze to enzymy trawienne.'],
+    wyjasnienie: 'Ściany komórek roślinnych buduje celuloza.',
+  },
+  trzcina: { tekst: 'Cukier spożywczy uzyskuje się m.in. z łodyg trzciny cukrowej.', prawda: true, karta: 'trzcina-cukrowa', wyjasnienie: 'Tak powstaje np. cukier brązowy.' },
+};
+
+export default [
+  // ---------- Misja „Alfabet życia” ----------
+  {
+    id: 's1-alfabet-klas',
+    swiat: 1,
+    typ: 'klasyfikacja',
+    tresc: 'Litery i słowa życia: pierwiastek chemiczny czy związek chemiczny?',
+    kategorie: [
+      { id: 'pierwiastek', nazwa: 'pierwiastki chemiczne', karta: 'pierwiastek-chemiczny' },
+      { id: 'zwiazek', nazwa: 'związki chemiczne', karta: 'zwiazek-chemiczny' },
+    ],
+    elementy: [
+      { tekst: 'węgiel', kategoria: 'pierwiastek', wyjasnienie: 'Węgiel to jeden z sześciu pierwiastków, których w organizmach jest najwięcej.' },
+      { tekst: 'azot', kategoria: 'pierwiastek', wyjasnienie: 'Azot to jeden z sześciu pierwiastków, których w organizmach jest najwięcej.' },
+      { tekst: 'fosfor', kategoria: 'pierwiastek', wyjasnienie: 'Fosfor to jeden z sześciu pierwiastków, których w organizmach jest najwięcej.' },
+      { tekst: 'wapń', kategoria: 'pierwiastek', karta: 'wapn', wyjasnienie: 'Wapń to pierwiastek, którego jest w organizmach mniej, ale jest niezbędny.' },
+      { tekst: 'magnez', kategoria: 'pierwiastek', karta: 'magnez', wyjasnienie: 'Magnez to pierwiastek, którego jest w organizmach mniej, ale jest niezbędny.' },
+      { tekst: 'woda', kategoria: 'zwiazek', karta: 'woda', wyjasnienie: 'Woda to związek chemiczny, czyli połączenie pierwiastków.' },
+      { tekst: 'białka', kategoria: 'zwiazek', karta: 'bialka', wyjasnienie: 'Białka to związki chemiczne, czyli połączenia pierwiastków.' },
+      { tekst: 'tłuszcze', kategoria: 'zwiazek', karta: 'tluszcze', wyjasnienie: 'Tłuszcze to związki chemiczne, czyli połączenia pierwiastków.' },
+      { tekst: 'kwasy nukleinowe', kategoria: 'zwiazek', karta: 'kwasy-nukleinowe', wyjasnienie: 'Kwasy nukleinowe to związki chemiczne, czyli połączenia pierwiastków.' },
+    ],
+    wyjasnienie:
+      'Pierwiastki chemiczne są jak litery, a związki chemiczne jak słowa: pierwiastki łączą się w związki. Najważniejsze związki w organizmach to woda, sole mineralne, cukry, białka, tłuszcze i kwasy nukleinowe.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-alfabet-luki',
+    swiat: 1,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o pierwiastkach i związkach chemicznych.',
+    tekst:
+      'Organizmy są zbudowane z [pierwiastków chemicznych|pierwiastek-chemiczny]. W największej ilości występuje sześć z nich: węgiel, wodór, tlen, azot, siarka i fosfor. Razem stanowią prawie [98%|pierwiastek-chemiczny] masy organizmu. Inne pierwiastki, np. wapń i [magnez|magnez], występują w mniejszej ilości, ale są niezbędne. Pierwiastki łączą się w [związki chemiczne|zwiazek-chemiczny].',
+    dystraktory: [
+      { tekst: '50%', wyjasnienie: 'Sześć najważniejszych pierwiastków to razem prawie 98% masy organizmu.' },
+      { tekst: 'glukoza', wyjasnienie: 'Glukoza to cukier, czyli związek chemiczny, a nie pierwiastek.' },
+    ],
+    wyjasnienie: 'Węgiel, wodór, tlen, azot, siarka i fosfor to razem prawie 98% masy organizmu. Wapń i magnez są potrzebne w mniejszej ilości. Pierwiastki łączą się w związki chemiczne.',
+    zrodlo: '2.1',
+  },
+  pf(
+    's1-alfabet-pf',
+    'Prawda czy fałsz? Popraw fałszywe zdania.',
+    [
+      { tekst: 'Pierwiastki łączą się w związki chemiczne.', prawda: true, karta: 'zwiazek-chemiczny', wyjasnienie: 'Związek chemiczny to połączenie pierwiastków.' },
+      {
+        tekst: 'Wapń i magnez nie są potrzebne organizmom, bo jest ich mało.',
+        prawda: false,
+        karta: 'magnez',
+        poprawne: 'Wapń i magnez występują w mniejszej ilości, ale są niezbędne do prawidłowej pracy organizmu.',
+        bledne: ['Wapń i magnez to najważniejsze związki chemiczne w organizmach.', 'Wapnia i magnezu jest w organizmach najwięcej.'],
+        wyjasnienie: 'Wapń i magnez są niezbędne: sole wapnia budują kości, a magnez wchodzi w skład chlorofilu.',
+      },
+      {
+        tekst: 'Woda jest pierwiastkiem chemicznym.',
+        prawda: false,
+        karta: 'woda',
+        poprawne: 'Woda jest związkiem chemicznym.',
+        bledne: ['Woda jest jednym z sześciu najważniejszych pierwiastków.', 'Woda jest solą mineralną.'],
+        wyjasnienie: 'Woda to połączenie pierwiastków, czyli związek chemiczny.',
+      },
+      { tekst: 'Sześć pierwiastków, których w organizmach jest najwięcej, stanowi razem prawie 98% masy organizmu.', prawda: true, karta: 'pierwiastek-chemiczny', wyjasnienie: 'To węgiel, wodór, tlen, azot, siarka i fosfor.' },
+    ],
+    'Organizmy są zbudowane z pierwiastków chemicznych, które łączą się w związki chemiczne. Wapń i magnez są niezbędne, choć jest ich mniej.',
+  ),
+
+  // ---------- Misja „Skład ciała” ----------
+  {
+    id: 's1-slupki-1',
+    swiat: 1,
+    typ: 'slupki',
+    tresc: 'Skład ciała człowieka: ułóż związki od tego, którego jest najwięcej, do tego, którego jest najmniej.',
+    skladniki: [
+      { id: 'tluszcze', nazwa: 'tłuszcze', procent: 10, karta: 'tluszcze' },
+      { id: 'cukry', nazwa: 'cukry', procent: 1, karta: 'cukry' },
+      { id: 'woda', nazwa: 'woda', procent: 65, karta: 'woda' },
+      { id: 'kwasy', nazwa: 'kwasy nukleinowe i inne związki', procent: 2, karta: 'kwasy-nukleinowe' },
+      { id: 'bialka', nazwa: 'białka', procent: 18, karta: 'bialka' },
+      { id: 'sole', nazwa: 'sole mineralne', procent: 4, karta: 'sole-mineralne' },
+    ],
+    porownanie: { nazwa: 'meduza', procent: 98, karta: 'meduza', opis: 'U meduz woda stanowi do 98% masy ciała.' },
+    wyjasnienie: 'W ciele człowieka najwięcej jest wody (65%), potem białek (18%) i tłuszczów (10%). Soli mineralnych, kwasów nukleinowych i cukrów jest znacznie mniej.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-sklad-luki',
+    swiat: 1,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o składzie ciała.',
+    tekst:
+      'Najwięcej w ciele człowieka jest [wody|woda]: około 65% masy ciała. Na drugim miejscu są [białka|bialka], a na trzecim tłuszcze. Najmniej jest [cukrów|cukry]: około 1%. U meduz woda stanowi do [98%|meduza] masy ciała.',
+    dystraktory: [
+      { tekst: 'tłuszcze', wyjasnienie: 'Tłuszcze są na trzecim miejscu, po wodzie i białkach.' },
+      { tekst: '30%', wyjasnienie: 'U meduz woda stanowi do 98% masy ciała.' },
+    ],
+    wyjasnienie: 'Skład ciała człowieka według podręcznika: woda 65%, białka 18%, tłuszcze 10%, sole mineralne 4%, kwasy nukleinowe i inne związki 2%, cukry 1%. U meduz wody jest do 98%.',
+    zrodlo: '2.1',
+  },
+
+  // ---------- Misja „Woda na pięciu etatach” ----------
+  {
+    id: 's1-woda-klas',
+    swiat: 1,
+    typ: 'klasyfikacja',
+    tresc: 'Woda pracuje na pięciu etatach. Przyporządkuj zdania do funkcji wody.',
+    kategorie: [
+      { id: 'transport', nazwa: 'transportuje substancje' },
+      { id: 'usuwanie', nazwa: 'umożliwia usuwanie zbędnych substancji' },
+      { id: 'srodowisko', nazwa: 'jest środowiskiem przemian chemicznych' },
+      { id: 'procesy', nazwa: 'bierze udział w procesach życiowych' },
+      { id: 'temperatura', nazwa: 'reguluje temperaturę ciała' },
+    ],
+    elementy: [
+      { tekst: 'Substancje przemieszczają się wewnątrz komórek.', kategoria: 'transport', karta: 'woda', wyjasnienie: 'Woda transportuje substancje wewnątrz komórek i między komórkami.' },
+      { tekst: 'Substancje przemieszczają się między komórkami.', kategoria: 'transport', karta: 'woda', wyjasnienie: 'Woda transportuje substancje wewnątrz komórek i między komórkami.' },
+      { tekst: 'Szkodliwe substancje opuszczają organizm razem z moczem.', kategoria: 'usuwanie', karta: 'woda', wyjasnienie: 'Woda umożliwia usuwanie zbędnych i szkodliwych substancji, np. razem z moczem.' },
+      { tekst: 'Zbędne substancje nie zostają w organizmie.', kategoria: 'usuwanie', karta: 'woda', wyjasnienie: 'Dzięki wodzie zbędne substancje mogą być usuwane z organizmu.' },
+      { tekst: 'W wodzie zachodzą przemiany chemiczne.', kategoria: 'srodowisko', karta: 'woda', wyjasnienie: 'Woda jest środowiskiem przemian chemicznych.' },
+      { tekst: 'Roślina zużywa wodę w fotosyntezie.', kategoria: 'procesy', karta: 'fotosynteza', wyjasnienie: 'Woda bierze udział w procesach życiowych, np. w fotosyntezie.' },
+      { tekst: 'Parowanie potu ochładza organizm.', kategoria: 'temperatura', karta: 'woda', wyjasnienie: 'U ssaków woda jest głównym składnikiem potu, a jego parowanie ochładza organizm.' },
+      { tekst: 'W upał woda w pocie pomaga ochłodzić organizm.', kategoria: 'temperatura', karta: 'woda', wyjasnienie: 'U ssaków woda jest głównym składnikiem potu, a parowanie potu ochładza organizm.' },
+    ],
+    wyjasnienie: 'Woda transportuje substancje, umożliwia usuwanie zbędnych i szkodliwych substancji, jest środowiskiem przemian chemicznych, bierze udział w procesach życiowych i reguluje temperaturę ciała.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-woda-luki',
+    swiat: 1,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o wodzie.',
+    tekst:
+      'Woda transportuje substancje wewnątrz komórek i [między|woda] komórkami. Umożliwia usuwanie zbędnych i [szkodliwych|woda] substancji, np. razem z [moczem|woda]. U ssaków jest głównym składnikiem potu, którego parowanie [ochładza|woda] organizm.',
+    dystraktory: [
+      { tekst: 'ogrzewa', wyjasnienie: 'Parowanie potu ochładza organizm.' },
+      { tekst: 'pożytecznych', wyjasnienie: 'Woda umożliwia usuwanie substancji zbędnych i szkodliwych, a nie pożytecznych.' },
+    ],
+    wyjasnienie: 'Woda transportuje substancje, umożliwia usuwanie zbędnych i szkodliwych substancji (np. razem z moczem) i reguluje temperaturę ciała.',
+    zrodlo: '2.1',
+  },
+  pf(
+    's1-woda-pf',
+    'Prawda czy fałsz? Popraw fałszywe zdania o wodzie.',
+    [
+      { tekst: 'Woda umożliwia usuwanie zbędnych i szkodliwych substancji z organizmu.', prawda: true, karta: 'woda', wyjasnienie: 'Dzięki wodzie zbędne i szkodliwe substancje mogą być usuwane z organizmu, np. razem z moczem.' },
+      {
+        tekst: 'Woda nie bierze udziału w procesach życiowych.',
+        prawda: false,
+        karta: 'woda',
+        poprawne: 'Woda bierze udział w procesach życiowych, np. w fotosyntezie.',
+        bledne: ['Woda bierze udział tylko w procesach życiowych zwierząt.', 'Woda jest potrzebna tylko roślinom.'],
+        wyjasnienie: 'W fotosyntezie z dwutlenku węgla i wody powstają substancje pokarmowe i tlen.',
+      },
+      {
+        tekst: 'Parowanie potu ogrzewa organizm.',
+        prawda: false,
+        karta: 'woda',
+        poprawne: 'Parowanie potu ochładza organizm.',
+        bledne: ['Pot nie ma wpływu na temperaturę ciała.', 'Pot składa się głównie z tłuszczów.'],
+        wyjasnienie: 'Woda w pocie reguluje temperaturę ciała.',
+      },
+      { tekst: 'Woda jest środowiskiem przemian chemicznych.', prawda: true, karta: 'woda', wyjasnienie: 'W wodzie zachodzą przemiany chemiczne w organizmie.' },
+    ],
+    'Woda transportuje substancje, umożliwia usuwanie zbędnych i szkodliwych substancji, jest środowiskiem przemian chemicznych, bierze udział w procesach życiowych i reguluje temperaturę ciała.',
+  ),
+
+  // ---------- Misja „Ratuj organizm” ----------
+  {
+    id: 's1-diagnoza-1',
+    swiat: 1,
+    typ: 'diagnoza',
+    tresc: 'Ratuj organizm: postaw diagnozę. Który składnik ma tu znaczenie i jaką pełni funkcję?',
+    przypadki: [
+      {
+        scena: 'liscie',
+        objaw: 'Liście żółkną, a roślina słabo rośnie.',
+        skladnik: {
+          pytanie: 'Którego składnika brakuje roślinie?',
+          opcje: [
+            { karta: 'magnez', poprawna: true },
+            { karta: 'skrobia', wyjasnienie: 'Skrobia to cukier zapasowy, np. w bulwach ziemniaka. Przy niedoborze magnezu powstaje mniej chlorofilu i liście żółkną.' },
+            { karta: 'tluszcze', wyjasnienie: 'Tłuszcze są źródłem energii i materiałem zapasowym. Przy niedoborze magnezu powstaje mniej chlorofilu i liście żółkną.' },
+            { karta: 'celuloza', wyjasnienie: 'Celuloza buduje ściany komórek roślinnych. Przy niedoborze magnezu powstaje mniej chlorofilu i liście żółkną.' },
+          ],
+        },
+        funkcja: {
+          pytanie: 'Do czego roślinie magnez?',
+          opcje: [
+            { tekst: 'Wchodzi w skład chlorofilu i jest potrzebny do fotosyntezy.', poprawna: true },
+            { tekst: 'Buduje ściany komórek roślinnych.', wyjasnienie: 'Ściany komórek roślinnych buduje celuloza.' },
+            { tekst: 'Jest materiałem zapasowym w bulwach.', wyjasnienie: 'Materiałem zapasowym w bulwach ziemniaka jest skrobia.' },
+          ],
+        },
+        wyjasnienie: 'Magnez wchodzi w skład chlorofilu. Przy jego niedoborze powstaje mniej chlorofilu, liście żółkną, a fotosynteza jest słabsza.',
+      },
+      {
+        scena: 'kosci',
+        objaw: 'Kości są słabe i łatwo się łamią.',
+        skladnik: {
+          pytanie: 'Którego składnika może brakować w organizmie?',
+          opcje: [
+            { karta: 'wapn', poprawna: true },
+            { karta: 'celuloza', wyjasnienie: 'Celuloza buduje ściany komórek roślinnych. Sole wapnia budują kości.' },
+            { karta: 'glukoza', wyjasnienie: 'Glukoza pełni funkcję energetyczną. Sole wapnia budują kości.' },
+            { karta: 'dna', wyjasnienie: 'DNA zawiera informację o cechach organizmu. Sole wapnia budują kości.' },
+          ],
+        },
+        funkcja: {
+          pytanie: 'Jaką funkcję pełnią sole wapnia?',
+          opcje: [
+            { tekst: 'Budulcową: budują kości, muszle i pancerze.', poprawna: true },
+            { tekst: 'Regulacyjną: wchodzą w skład chlorofilu.', wyjasnienie: 'W skład chlorofilu wchodzi magnez.' },
+            { tekst: 'Ochronną: chronią przed zimnem.', wyjasnienie: 'Przed zimnem chroni warstwa tłuszczu pod skórą.' },
+          ],
+        },
+        wyjasnienie: 'Sole wapnia budują kości, muszle i pancerze. Przy niedoborze wapnia kości są słabsze i łatwiej się łamią.',
+      },
+      {
+        scena: 'upal',
+        objaw: 'W upał organizm się nagrzewa, a na skórze pojawia się pot.',
+        skladnik: {
+          pytanie: 'Który związek, główny składnik potu, pomaga ochłodzić organizm?',
+          opcje: [
+            { karta: 'woda', poprawna: true },
+            { karta: 'tluszcze', wyjasnienie: 'Warstwa tłuszczu pod skórą chroni przed zimnem. Głównym składnikiem potu jest woda.' },
+            { karta: 'bialka', wyjasnienie: 'Białka budują m.in. mięśnie i skórę. Głównym składnikiem potu jest woda.' },
+            { karta: 'sole-mineralne', wyjasnienie: 'Sole mineralne dostarczają pierwiastków, np. wapnia i magnezu. Głównym składnikiem potu jest woda.' },
+          ],
+        },
+        funkcja: {
+          pytanie: 'Jak woda w pocie pomaga organizmowi?',
+          opcje: [
+            { tekst: 'Parowanie potu ochładza organizm: woda reguluje temperaturę ciała.', poprawna: true },
+            { tekst: 'Pot ogrzewa organizm.', wyjasnienie: 'Parowanie potu ochładza organizm.' },
+            { tekst: 'Pot jest materiałem zapasowym.', wyjasnienie: 'Materiałem zapasowym są np. skrobia i tłuszcze. Woda w pocie reguluje temperaturę ciała.' },
+          ],
+        },
+        wyjasnienie: 'U ssaków woda jest głównym składnikiem potu. Parowanie potu ochładza organizm, więc woda reguluje temperaturę ciała.',
+      },
+    ],
+    wyjasnienie: 'Magnez wchodzi w skład chlorofilu, sole wapnia budują kości, a woda w pocie reguluje temperaturę ciała.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-diagnoza-2',
+    swiat: 1,
+    typ: 'diagnoza',
+    tresc: 'Ratuj organizm: kolejne przypadki. Który składnik i jaka funkcja?',
+    przypadki: [
+      {
+        scena: 'foka',
+        objaw: 'Foka pływa w lodowatej wodzie i nie marznie.',
+        skladnik: {
+          pytanie: 'Który związek chroni fokę przed zimnem?',
+          opcje: [
+            { karta: 'tluszcze', poprawna: true },
+            { karta: 'woda', wyjasnienie: 'Woda reguluje temperaturę ciała, gdy paruje pot. Przed zimnem chroni warstwa tłuszczu.' },
+            { karta: 'skrobia', wyjasnienie: 'Skrobia to cukier o funkcji zapasowej, np. w bulwach ziemniaka.' },
+            { karta: 'celuloza', wyjasnienie: 'Celuloza buduje ściany komórek roślinnych.' },
+          ],
+        },
+        funkcja: {
+          pytanie: 'Jaką funkcję pełni tłuszcz pod skórą foki?',
+          opcje: [
+            { tekst: 'Tworzy warstwę ochronną, która chroni przed zimnem i urazami.', poprawna: true },
+            { tekst: 'Zawiera informację o cechach foki.', wyjasnienie: 'Informację o cechach organizmu zawiera DNA.' },
+            { tekst: 'Buduje kości foki.', wyjasnienie: 'Sole wapnia budują kości.' },
+          ],
+        },
+        wyjasnienie: 'Pod skórą ssaków i ptaków, np. foki, jest warstwa tłuszczu, która chroni przed zimnem i urazami.',
+      },
+      {
+        scena: 'ziemniak',
+        objaw: 'Wiosną z bulwy ziemniaka wyrastają nowe pędy.',
+        skladnik: {
+          pytanie: 'Który związek zgromadzony w bulwie umożliwia rozwój nowych pędów?',
+          opcje: [
+            { karta: 'skrobia', poprawna: true },
+            { karta: 'celuloza', wyjasnienie: 'Celuloza buduje ściany komórek roślinnych. Materiałem zapasowym w bulwie jest skrobia.' },
+            { karta: 'bialka', wyjasnienie: 'Białka zapasowe są np. w nasionach grochu i fasoli. W bulwach ziemniaka jest skrobia.' },
+            { karta: 'tluszcze', wyjasnienie: 'Tłuszcz zapasowy jest np. w nasionach słonecznika. W bulwach ziemniaka materiałem zapasowym jest skrobia.' },
+          ],
+        },
+        funkcja: {
+          pytanie: 'Jaką funkcję pełni skrobia w bulwie ziemniaka?',
+          opcje: [
+            { tekst: 'Jest materiałem zapasowym.', poprawna: true },
+            { tekst: 'Buduje ściany komórek roślinnych.', wyjasnienie: 'To funkcja celulozy.' },
+            { tekst: 'Wchodzi w skład chlorofilu.', wyjasnienie: 'W skład chlorofilu wchodzi magnez.' },
+          ],
+        },
+        wyjasnienie: 'Skrobia w bulwie ziemniaka to materiał zapasowy, który umożliwia wiosną rozwój nowych pędów.',
+        ciekawostka: 'Stary, kiełkujący ziemniak mięknie i marszczy się, bo młoda roślina zużywa zgromadzoną skrobię.',
+      },
+      {
+        scena: 'usuwanie',
+        objaw: 'W organizmie powstają zbędne i szkodliwe substancje.',
+        skladnik: {
+          pytanie: 'Który związek umożliwia ich usuwanie?',
+          opcje: [
+            { karta: 'woda', poprawna: true },
+            { karta: 'tluszcze', wyjasnienie: 'Tłuszcze są źródłem energii i materiałem zapasowym. Usuwanie zbędnych substancji umożliwia woda.' },
+            { karta: 'dna', wyjasnienie: 'DNA zawiera informację o cechach organizmu. Usuwanie zbędnych substancji umożliwia woda.' },
+            { karta: 'skrobia', wyjasnienie: 'Skrobia to cukier o funkcji zapasowej. Usuwanie zbędnych substancji umożliwia woda.' },
+          ],
+        },
+        funkcja: {
+          pytanie: 'Jak woda pomaga w tej sytuacji?',
+          opcje: [
+            { tekst: 'Umożliwia usuwanie tych substancji z organizmu, np. razem z moczem.', poprawna: true },
+            { tekst: 'Zatrzymuje je w komórkach.', wyjasnienie: 'Woda umożliwia usuwanie zbędnych substancji, a nie ich zatrzymywanie.' },
+            { tekst: 'Zamienia je w chlorofil.', wyjasnienie: 'Chlorofil to zielony barwnik roślin. Woda umożliwia usuwanie zbędnych substancji.' },
+          ],
+        },
+        wyjasnienie: 'Woda umożliwia usuwanie zbędnych i szkodliwych substancji z organizmu, np. razem z moczem.',
+      },
+    ],
+    wyjasnienie: 'Tłuszcz pod skórą chroni przed zimnem, skrobia jest materiałem zapasowym, a woda umożliwia usuwanie zbędnych i szkodliwych substancji.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-sole-luki',
+    swiat: 1,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o solach mineralnych.',
+    tekst:
+      'Sole mineralne dostarczają organizmom pierwiastków innych niż węgiel, wodór i [tlen|sole-mineralne]. Sole [wapnia|wapn] budują kości, muszle i pancerze. Magnez wchodzi w skład [chlorofilu|magnez] i jest potrzebny do fotosyntezy. Przy niedoborze magnezu liście [żółkną|magnez].',
+    dystraktory: [
+      { tekst: 'zielenieją', wyjasnienie: 'Przy niedoborze magnezu powstaje mniej chlorofilu, więc liście żółkną.' },
+      { tekst: 'azot', wyjasnienie: 'Sole mineralne dostarczają pierwiastków innych niż węgiel, wodór i tlen, np. wapnia i magnezu.' },
+    ],
+    wyjasnienie: 'Sole wapnia budują kości, muszle i pancerze, a magnez wchodzi w skład chlorofilu. Przy niedoborze magnezu liście żółkną.',
+    zrodlo: '2.1',
+  },
+
+  // ---------- Misja „Sortownia” ----------
+  {
+    id: 's1-siatka-1',
+    swiat: 1,
+    typ: 'siatka',
+    tresc: 'Sortownia: przeciągnij każdy przykład do właściwego związku i funkcji.',
+    wiersze: [
+      { id: 'cukry', nazwa: 'cukry', karta: 'cukry' },
+      { id: 'bialka', nazwa: 'białka', karta: 'bialka' },
+      { id: 'tluszcze', nazwa: 'tłuszcze', karta: 'tluszcze' },
+    ],
+    kolumny: [
+      { id: 'budulcowa', nazwa: 'budulcowa' },
+      { id: 'energetyczna', nazwa: 'energetyczna' },
+      { id: 'zapasowa', nazwa: 'zapasowa' },
+    ],
+    elementy: [
+      { tekst: 'miód, którym żywią się larwy pszczół', wiersz: 'cukry', kolumna: 'energetyczna', karta: 'pszczola-miodna', wyjasnienie: 'W miodzie jest glukoza, cukier o funkcji energetycznej.' },
+      { tekst: 'winogrona', wiersz: 'cukry', kolumna: 'energetyczna', karta: 'glukoza', wyjasnienie: 'W winogronach jest glukoza, cukier o funkcji energetycznej.' },
+      { tekst: 'bulwy ziemniaka', wiersz: 'cukry', kolumna: 'zapasowa', karta: 'ziemniak', wyjasnienie: 'W bulwach ziemniaka jest skrobia, cukier o funkcji zapasowej.' },
+      { tekst: 'nasiona zbóż', wiersz: 'cukry', kolumna: 'zapasowa', karta: 'skrobia', wyjasnienie: 'W nasionach zbóż jest skrobia, cukier o funkcji zapasowej.' },
+      { tekst: 'włoski nasion bawełny', wiersz: 'cukry', kolumna: 'budulcowa', karta: 'bawelna', wyjasnienie: 'Włoski nasion bawełny buduje celuloza, cukier o funkcji budulcowej.' },
+      { tekst: 'mięśnie i skóra', wiersz: 'bialka', kolumna: 'budulcowa', karta: 'bialka', wyjasnienie: 'Białka budują mięśnie i skórę: to ich główna funkcja.' },
+      { tekst: 'rogi i kopyta', wiersz: 'bialka', kolumna: 'budulcowa', wyjasnienie: 'Rogi i kopyta zwierząt są zbudowane z białek.' },
+      { tekst: 'nasiona grochu', wiersz: 'bialka', kolumna: 'zapasowa', karta: 'groch', wyjasnienie: 'Nasiona grochu zawierają białka o funkcji zapasowej.' },
+      { tekst: 'nasiona fasoli', wiersz: 'bialka', kolumna: 'zapasowa', karta: 'fasola', wyjasnienie: 'Nasiona fasoli zawierają białka o funkcji zapasowej.' },
+      { tekst: 'najbogatsze źródło energii', wiersz: 'tluszcze', kolumna: 'energetyczna', wyjasnienie: 'Z takiej samej ilości tłuszczów organizm uzyskuje około dwa razy więcej energii niż z cukrów.' },
+      { tekst: 'nasiona słonecznika', wiersz: 'tluszcze', kolumna: 'zapasowa', karta: 'slonecznik', wyjasnienie: 'Tłuszcz w nasionach słonecznika to materiał zapasowy.' },
+      { tekst: 'owoce oliwki', wiersz: 'tluszcze', kolumna: 'zapasowa', karta: 'oliwka-europejska', wyjasnienie: 'Tłuszcz w owocach oliwki to materiał zapasowy.' },
+    ],
+    wyjasnienie: 'Cukry pełnią funkcję energetyczną (glukoza), zapasową (skrobia) i budulcową (celuloza). Białka są przede wszystkim budulcem, ale też materiałem zapasowym. Tłuszcze są najbogatszym źródłem energii i materiałem zapasowym.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-siatka-2',
+    swiat: 1,
+    typ: 'siatka',
+    tresc: 'Sortownia: budulec, regulacja, ochrona czy informacja? Przeciągnij przykłady.',
+    wiersze: [
+      { id: 'bialka', nazwa: 'białka', karta: 'bialka' },
+      { id: 'tluszcze', nazwa: 'tłuszcze', karta: 'tluszcze' },
+      { id: 'sole', nazwa: 'sole mineralne', karta: 'sole-mineralne' },
+      { id: 'kwasy', nazwa: 'kwasy nukleinowe', karta: 'kwasy-nukleinowe' },
+    ],
+    kolumny: [
+      { id: 'budulcowa', nazwa: 'budulcowa' },
+      { id: 'regulacyjna', nazwa: 'regulacyjna' },
+      { id: 'ochronna', nazwa: 'ochronna' },
+      { id: 'informacja', nazwa: 'informacja o cechach', opis: 'informacja o cechach organizmu' },
+    ],
+    elementy: [
+      { tekst: 'pióra i włosy', wiersz: 'bialka', kolumna: 'budulcowa', wyjasnienie: 'Pióra i włosy zwierząt są zbudowane z białek.' },
+      { tekst: 'enzymy trawienne w ślinie', wiersz: 'bialka', kolumna: 'regulacyjna', karta: 'enzymy', wyjasnienie: 'Enzymy to białka o funkcji regulacyjnej.' },
+      { tekst: 'warstwa pod skórą foki', wiersz: 'tluszcze', kolumna: 'ochronna', karta: 'foka', wyjasnienie: 'Warstwa tłuszczu pod skórą chroni przed zimnem i urazami.' },
+      { tekst: 'warstwa pod skórą ptaków', wiersz: 'tluszcze', kolumna: 'ochronna', wyjasnienie: 'Pod skórą ssaków i ptaków warstwa tłuszczu chroni przed zimnem i urazami.' },
+      { tekst: 'kości, muszle i pancerze', wiersz: 'sole', kolumna: 'budulcowa', karta: 'wapn', wyjasnienie: 'Sole wapnia pełnią funkcję budulcową: budują kości, muszle i pancerze.' },
+      { tekst: 'magnez w chlorofilu', wiersz: 'sole', kolumna: 'regulacyjna', karta: 'magnez', wyjasnienie: 'Magnez pełni funkcję regulacyjną: wchodzi w skład chlorofilu i jest potrzebny do fotosyntezy.' },
+      { tekst: 'kolor kwiatów', wiersz: 'kwasy', kolumna: 'informacja', karta: 'dna', wyjasnienie: 'DNA zawiera informację o cechach organizmu, np. o kolorze kwiatów.' },
+      { tekst: 'kolor piór', wiersz: 'kwasy', kolumna: 'informacja', karta: 'dna', wyjasnienie: 'DNA zawiera informację o cechach organizmu, np. o kolorze piór.' },
+    ],
+    wyjasnienie: 'Białka budują ciało i regulują przemiany (enzymy), tłuszcze tworzą warstwę ochronną, sole wapnia budują kości, magnez wchodzi w skład chlorofilu, a DNA zawiera informację o cechach organizmu.',
+    zrodlo: '2.1',
+  },
+
+  // ---------- Misja „Cukry, białka, tłuszcze” ----------
+  pf('s1-pf-funkcje-1', 'Prawda czy fałsz? Popraw fałszywe zdania.', [F.glukozaEnergia, F.celulozaZapas, F.bialkaMiesnie, F.cukryWiecej, F.trzcina], 'Glukoza pełni funkcję energetyczną, skrobia zapasową, a celuloza budulcową. Białka budują m.in. mięśnie, a tłuszcze są najbogatszym źródłem energii.'),
+  {
+    id: 's1-funkcje-przyp',
+    swiat: 1,
+    typ: 'przyporzadkowanie',
+    tresc: 'Dopasuj związki do opisów.',
+    etykiety: 'nazwy',
+    pary: [
+      { karta: 'skrobia', opis: 'cukier zapasowy, np. w bulwach ziemniaka i nasionach zbóż' },
+      { karta: 'celuloza', opis: 'cukier budujący ściany komórek roślinnych' },
+      { karta: 'chityna', opis: 'cukier budujący ściany komórek grzybów' },
+      { karta: 'enzymy', opis: 'białka regulujące przemiany chemiczne, np. trawienie' },
+      { karta: 'dna', opis: 'zawiera informację o cechach organizmu przekazywaną potomstwu' },
+    ],
+    dystraktory: ['tluszcze'],
+    wyjasnienie: 'Skrobia jest zapasem, celuloza i chityna budują ściany komórek roślin i grzybów, enzymy regulują przemiany chemiczne, a DNA zawiera informację o cechach organizmu.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-dna-luki',
+    swiat: 1,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o kwasach nukleinowych.',
+    tekst:
+      'Najważniejszym kwasem nukleinowym jest [DNA|dna]. Zawiera on informację o [cechach|dna] organizmu, np. o kolorze kwiatów albo piór. Ta informacja jest przekazywana [potomstwu|kwasy-nukleinowe].',
+    dystraktory: [
+      { tekst: 'chlorofil', wyjasnienie: 'Chlorofil to zielony barwnik roślin, a nie kwas nukleinowy.' },
+      { tekst: 'rodzicom', wyjasnienie: 'Informacja o cechach organizmu jest przekazywana potomstwu.' },
+    ],
+    wyjasnienie: 'DNA zawiera informację o cechach organizmu (np. kolor kwiatów, kolor piór), która jest przekazywana potomstwu.',
+    zrodlo: '2.1',
+  },
+
+  // ---------- Pule bossa ----------
+  {
+    id: 's1-boss-woda-luki-2',
+    swiat: 1,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o wodzie.',
+    tekst:
+      'Woda jest [głównym|woda] składnikiem organizmów. Jest środowiskiem przemian [chemicznych|woda]. Umożliwia [usuwanie|woda|Woda umożliwia pozbywanie się zbędnych i szkodliwych substancji.] zbędnych i szkodliwych substancji, np. razem z [moczem|woda]. Bierze udział w procesach życiowych, np. w [fotosyntezie|fotosynteza].',
+    dystraktory: [
+      { tekst: 'rzadkim', wyjasnienie: 'Woda to główny składnik organizmów: w ciele człowieka około 65% masy.' },
+      { tekst: 'chlorofilem', wyjasnienie: 'Chlorofil to zielony barwnik roślin. Zbędne substancje są usuwane np. razem z moczem.' },
+      { tekst: 'gromadzenie', wyjasnienie: 'Woda umożliwia usuwanie zbędnych i szkodliwych substancji, a nie ich gromadzenie.' },
+    ],
+    wyjasnienie: 'Woda to główny składnik organizmów. Jest środowiskiem przemian chemicznych, umożliwia usuwanie zbędnych substancji i bierze udział w procesach życiowych.',
+    zrodlo: '2.1',
+  },
+  pf(
+    's1-boss-woda-pf-2',
+    'Prawda czy fałsz?',
+    [
+      { tekst: 'Bez wody organizm nie mógłby usuwać zbędnych substancji razem z moczem.', prawda: true, karta: 'woda', wyjasnienie: 'Woda umożliwia usuwanie zbędnych i szkodliwych substancji.' },
+      {
+        tekst: 'Woda stanowi około 10% masy ciała człowieka.',
+        prawda: false,
+        karta: 'woda',
+        poprawne: 'Woda stanowi około 65% masy ciała człowieka.',
+        bledne: ['Woda stanowi około 1% masy ciała człowieka.', 'Woda stanowi około 98% masy ciała człowieka.'],
+        wyjasnienie: 'U meduz woda stanowi do 98% masy ciała, a u człowieka około 65%.',
+      },
+      { tekst: 'Woda transportuje substancje wewnątrz komórek i między komórkami.', prawda: true, karta: 'woda', wyjasnienie: 'Dzięki wodzie substancje przemieszczają się w komórkach i między nimi.' },
+      {
+        tekst: 'Zbędne substancje zostają w organizmie, bo woda nie bierze udziału w ich usuwaniu.',
+        prawda: false,
+        karta: 'woda',
+        poprawne: 'Woda umożliwia usuwanie zbędnych i szkodliwych substancji, np. razem z moczem.',
+        bledne: ['Zbędne substancje usuwa wyłącznie tłuszcz.', 'Zbędne substancje usuwają sole wapnia.'],
+        wyjasnienie: 'Usuwanie zbędnych substancji umożliwia woda.',
+      },
+    ],
+    'Woda umożliwia usuwanie zbędnych i szkodliwych substancji, np. razem z moczem. Stanowi około 65% masy ciała człowieka.',
+  ),
+  {
+    id: 's1-boss-sole-luki-2',
+    swiat: 1,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o wapniu i magnezie.',
+    tekst:
+      'Źródłem wapnia i magnezu dla organizmów są [sole mineralne|sole-mineralne]. Sole wapnia pełnią funkcję [budulcową|wapn|Sole wapnia budują kości, muszle i pancerze: to funkcja budulcowa.]: budują kości, muszle i pancerze. Magnez pełni funkcję [regulacyjną|magnez|Magnez wchodzi w skład chlorofilu i jest potrzebny do fotosyntezy: to funkcja regulacyjna.]: wchodzi w skład [chlorofilu|magnez].',
+    dystraktory: [
+      { tekst: 'energetyczną', wyjasnienie: 'Funkcję energetyczną pełni np. glukoza. Sole wapnia budują kości, a magnez wchodzi w skład chlorofilu.' },
+      { tekst: 'celulozy', wyjasnienie: 'Celuloza to cukier budujący ściany komórek roślinnych. Magnez wchodzi w skład chlorofilu.' },
+      { tekst: 'tłuszcze', wyjasnienie: 'Tłuszcze są źródłem energii i materiałem zapasowym. Wapnia i magnezu dostarczają sole mineralne.' },
+    ],
+    wyjasnienie: 'Sole wapnia pełnią funkcję budulcową, a magnez regulacyjną: wchodzi w skład chlorofilu i jest potrzebny do fotosyntezy.',
+    zrodlo: '2.1',
+  },
+  pf(
+    's1-boss-sole-pf-1',
+    'Prawda czy fałsz?',
+    [
+      { tekst: 'Sole wapnia budują kości, muszle i pancerze.', prawda: true, karta: 'wapn', wyjasnienie: 'To funkcja budulcowa soli mineralnych.' },
+      {
+        tekst: 'Wapń wchodzi w skład chlorofilu.',
+        prawda: false,
+        karta: 'magnez',
+        poprawne: 'Magnez wchodzi w skład chlorofilu.',
+        bledne: ['Glukoza wchodzi w skład chlorofilu.', 'Wapń jest cukrem zapasowym.'],
+        wyjasnienie: 'Sole wapnia budują kości, muszle i pancerze, a w skład chlorofilu wchodzi magnez.',
+      },
+      { tekst: 'Przy niedoborze magnezu liście żółkną.', prawda: true, karta: 'magnez', wyjasnienie: 'Powstaje mniej chlorofilu, a fotosynteza jest słabsza.' },
+      {
+        tekst: 'Przy niedoborze wapnia kości są mocniejsze.',
+        prawda: false,
+        karta: 'wapn',
+        poprawne: 'Przy niedoborze wapnia kości są słabsze i łatwiej się łamią.',
+        bledne: ['Niedobór wapnia nie ma wpływu na kości.', 'Przy niedoborze wapnia muszle i pancerze są grubsze.'],
+        wyjasnienie: 'Sole wapnia budują kości, więc przy ich niedoborze kości są słabsze.',
+      },
+      { tekst: 'Sole mineralne dostarczają organizmom pierwiastków innych niż węgiel, wodór i tlen.', prawda: true, karta: 'sole-mineralne', wyjasnienie: 'Dostarczają np. wapnia i magnezu.' },
+    ],
+    'Sole wapnia budują kości, muszle i pancerze, a magnez wchodzi w skład chlorofilu. Niedobór wapnia osłabia kości, a niedobór magnezu powoduje żółknięcie liści.',
+  ),
+  {
+    id: 's1-boss-sole-przyp-1',
+    swiat: 1,
+    typ: 'przyporzadkowanie',
+    tresc: 'Dopasuj nazwy do opisów.',
+    etykiety: 'nazwy',
+    pary: [
+      { karta: 'wapn', opis: 'pierwiastek, którego sole budują kości, muszle i pancerze' },
+      { karta: 'magnez', opis: 'pierwiastek, który wchodzi w skład chlorofilu' },
+      { karta: 'sole-mineralne', opis: 'związki, które dostarczają organizmom m.in. wapnia i magnezu' },
+      { karta: 'woda', opis: 'główny składnik organizmów' },
+    ],
+    dystraktory: ['glukoza'],
+    wyjasnienie: 'Sole mineralne dostarczają m.in. wapnia, którego sole budują kości, i magnezu, który wchodzi w skład chlorofilu. Woda to główny składnik organizmów.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-boss-sole-klas-1',
+    swiat: 1,
+    typ: 'klasyfikacja',
+    tresc: 'Skutek niedoboru wapnia czy magnezu? Przyporządkuj.',
+    kategorie: [
+      { id: 'wapn', nazwa: 'niedobór wapnia', karta: 'wapn' },
+      { id: 'magnez', nazwa: 'niedobór magnezu', karta: 'magnez' },
+    ],
+    elementy: [
+      { tekst: 'słabsze kości', kategoria: 'wapn', wyjasnienie: 'Sole wapnia budują kości.' },
+      { tekst: 'kości łatwiej się łamią', kategoria: 'wapn', wyjasnienie: 'Przy niedoborze wapnia kości są słabsze i łatwiej się łamią.' },
+      { tekst: 'mniej chlorofilu', kategoria: 'magnez', wyjasnienie: 'Magnez wchodzi w skład chlorofilu.' },
+      { tekst: 'żółknięcie liści', kategoria: 'magnez', wyjasnienie: 'Przy niedoborze magnezu powstaje mniej chlorofilu i liście żółkną.' },
+      { tekst: 'słabsza fotosynteza', kategoria: 'magnez', karta: 'fotosynteza', wyjasnienie: 'Mniej chlorofilu to słabsza fotosynteza.' },
+    ],
+    wyjasnienie: 'Niedobór wapnia osłabia kości. Niedobór magnezu to mniej chlorofilu, żółknięcie liści i słabsza fotosynteza.',
+    zrodlo: '2.1',
+  },
+  pf('s1-boss-pf-funkcje-2', 'Prawda czy fałsz?', [F.skrobiaZapas, F.enzymyTluszcze, F.tluszczeEnergia, F.skrobiaSciany, F.bialkaPiora], 'Skrobia jest materiałem zapasowym, a celuloza buduje ściany komórek roślinnych. Enzymy to białka, a tłuszcze są najbogatszym źródłem energii.'),
+  pf('s1-boss-pf-funkcje-3', 'Prawda czy fałsz?', [F.celulozaSciany, F.bialkaBezBudulca, F.tluszczOchrona, F.glukozaBudulec, F.mlekoBialko], 'Celuloza buduje ściany komórek roślinnych, glukoza pełni funkcję energetyczną, a białka budują ciało. Warstwa tłuszczu chroni przed zimnem i urazami.'),
+  pf('s1-boss-pf-funkcje-4', 'Prawda czy fałsz?', [F.tluszczZapas, F.fokaPrzegrzanie, F.enzymyBialka, F.cukryWiecej, F.chitynaGrzyby], 'Tłuszcze są materiałem zapasowym i chronią przed zimnem. Enzymy to białka. Z tłuszczów organizm uzyskuje około dwa razy więcej energii niż z cukrów.'),
+  pf('s1-boss-pf-funkcje-5', 'Prawda czy fałsz?', [F.bialkaNasiona, F.tluszczeSciany, F.tluszczeDwaRazy, F.celulozaZapas, F.glukozaEnergia], 'Białka mogą być zapasem w nasionach, tłuszcze dają najwięcej energii, celuloza buduje ściany komórek roślinnych, a glukoza pełni funkcję energetyczną.'),
+  {
+    id: 's1-boss-przyp-2',
+    swiat: 1,
+    typ: 'przyporzadkowanie',
+    tresc: 'Dopasuj związki do przykładów.',
+    etykiety: 'nazwy',
+    pary: [
+      { karta: 'glukoza', opis: 'źródło energii, np. w miodzie i winogronach' },
+      { karta: 'skrobia', opis: 'materiał zapasowy w nasionach zbóż' },
+      { karta: 'celuloza', opis: 'buduje włoski nasion bawełny' },
+      { karta: 'bialka', opis: 'budują mięśnie, skórę, pióra i kopyta' },
+      { karta: 'tluszcze', opis: 'warstwa ochronna pod skórą foki' },
+    ],
+    dystraktory: ['dna'],
+    wyjasnienie: 'Glukoza daje energię, skrobia jest zapasem, celuloza buduje ściany komórek roślinnych, białka budują ciało, a tłuszcz pod skórą chroni przed zimnem.',
+    zrodlo: '2.1',
+  },
+  {
+    id: 's1-boss-przyp-3',
+    swiat: 1,
+    typ: 'przyporzadkowanie',
+    tresc: 'Dopasuj opisy do nazw.',
+    etykiety: 'opisy',
+    pary: [
+      { karta: 'enzymy', opis: 'białka regulujące przemiany chemiczne, np. trawienie' },
+      { karta: 'dna', opis: 'zawiera informację o cechach organizmu, np. o kolorze piór' },
+      { karta: 'chityna', opis: 'cukier budujący ściany komórek grzybów' },
+      { karta: 'sole-mineralne', opis: 'dostarczają organizmom pierwiastków innych niż węgiel, wodór i tlen' },
+    ],
+    dystraktory: [{ tekst: 'zielony barwnik, który pochłania światło', wyjasnienie: 'Tak można opisać chlorofil, którego nie ma w tym zadaniu.' }],
+    wyjasnienie: 'Enzymy regulują przemiany chemiczne, DNA zawiera informację o cechach, chityna buduje ściany komórek grzybów, a sole mineralne dostarczają pierwiastków.',
+    zrodlo: '2.1',
+  },
+];

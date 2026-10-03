@@ -101,7 +101,10 @@ export function utworzLuki(kontener, { zadanie, katalog, tryb = 'trening', onKon
         return {
           rodzaj: 'zle',
           tytul: `Luka ${l.numer}: „${l.slowo}”.`,
-          tekst: w.etykieta ? (etykietaPoId.get(w.etykieta).wyjasnienie ?? `„${tekstEtykiety.get(w.etykieta)}” tu nie pasuje.`) : 'Ta luka została pusta.',
+          // Słowo z innej luki: przyczyna z podpowiedzi tej luki (jeśli jest), jak w treningu.
+          tekst: w.etykieta
+            ? [wyjasnienieSlowa(w.etykieta), podpowiedzLuki(l)].filter(Boolean).join(' ') || `„${tekstEtykiety.get(w.etykieta)}” tu nie pasuje.`
+            : 'Ta luka została pusta.',
         };
       },
     },

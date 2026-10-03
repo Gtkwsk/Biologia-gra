@@ -9,11 +9,14 @@ import { zWielkiej } from '../components/podpisywanie-logika.js';
 import { pasek } from './wspolne.js';
 
 const GRUPY = [
+  { rodzaj: 'pierwiastek', nazwa: 'Pierwiastki' },
+  { rodzaj: 'zwiazek', nazwa: 'Związki chemiczne' },
   { rodzaj: 'element', nazwa: 'Elementy komórki' },
   { rodzaj: 'typ', nazwa: 'Rodzaje komórek' },
   { rodzaj: 'ksztalt', nazwa: 'Kształty komórek' },
   { rodzaj: 'proces', nazwa: 'Procesy' },
   { rodzaj: 'substancja', nazwa: 'Substancje' },
+  { rodzaj: 'sposob', nazwa: 'Sposoby zdobywania pokarmu' },
   { rodzaj: 'pojecie', nazwa: 'Pojęcia' },
   { rodzaj: 'organizm', nazwa: 'Organizmy' },
 ];
@@ -111,6 +114,8 @@ export function render(kontener, ctx) {
         h('h2', { id: 'karta-szczegoly-tytul' }, odkryta ? zWielkiej(k.nazwa) : 'Karta nieodkryta'),
         odkryta ? h('p', {}, `${zWielkiej(k.opis)}.`) : null,
         odkryta && k.zdanie ? h('p', {}, k.zdanie) : null,
+        // Dopisek przy uproszczeniu podręcznika (TRESCI.md, sekcja 5): tylko w atlasie.
+        odkryta && k.uwaga ? h('p', { class: 'karta-szczegoly__uwaga' }, k.uwaga) : null,
         h('p', { class: 'karta-szczegoly__zasada' }, OPIS_POZIOMU[p]),
         p === 'zlota' && k.ciekawostka
           ? h('aside', { class: 'ciekawostka' }, [h('h3', { class: 'ciekawostka__naglowek' }, 'Ciekawostka'), h('p', {}, k.ciekawostka)])

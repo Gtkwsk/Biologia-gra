@@ -309,7 +309,8 @@ export default [
       { id: 'bezjadrowe', nazwa: 'komórki bezjądrowe', karta: 'komorka-bezjadrowa' },
     ],
     elementy: [
-      { tekst: 'komórka bakteryjna', kategoria: 'bezjadrowe', karta: 'komorka-bakteryjna', wyjasnienie: 'Bakterie nie mają jądra komórkowego: to komórki bezjądrowe.' },
+      // Bez własnej karty: element liczy się do karty kategorii „komórka bezjądrowa”.
+      { tekst: 'komórka bakteryjna', kategoria: 'bezjadrowe', wyjasnienie: 'Bakterie nie mają jądra komórkowego: to komórki bezjądrowe.' },
       { tekst: 'komórka zwierzęca', kategoria: 'jadrowe', karta: 'komorka-zwierzeca', wyjasnienie: 'Komórki zwierzęce mają jądro komórkowe.' },
       { tekst: 'komórka roślinna', kategoria: 'jadrowe', karta: 'komorka-roslinna', wyjasnienie: 'Komórki roślinne mają jądro komórkowe.' },
       { tekst: 'komórka grzybowa', kategoria: 'jadrowe', karta: 'komorka-grzybowa', wyjasnienie: 'Komórki grzybowe mają jądro komórkowe.' },
