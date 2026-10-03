@@ -412,6 +412,7 @@ export function walidujDane(dane, kontekst) {
 
   // Pojęcia i kształty komórek (karty atlasu)
   const tekstMaly = tekstTresci.toLowerCase();
+  const uproszczenia = (tekstTresci.split(/^## 5\./m)[1]?.split(/^## 6\./m)[0] ?? '').toLowerCase();
   for (const p of pojecia) {
     const gdzie = `pojecia[${p.id}]`;
     for (const pole of ['nazwa', 'opis', 'zdanie']) if (!niepustyTekst(p[pole])) blad(gdzie, `brak pola ${pole}`);
@@ -422,6 +423,11 @@ export function walidujDane(dane, kontekst) {
     ciekawostka(`${gdzie}.ciekawostka`, p.ciekawostka);
     if (niepustyTekst(p.nazwa) && !terminy.has(p.nazwa) && !tekstMaly.includes(p.nazwa.toLowerCase())) {
       blad(gdzie, `nazwa „${p.nazwa}” nie występuje w TRESCI.md`);
+    }
+    // Dopisek o rzeczywistości (karta atlasu) tylko przy uproszczeniach z TRESCI.md, sekcja 5.
+    if (p.uwaga !== undefined) {
+      if (!pelneZdanie(p.uwaga)) blad(gdzie, 'uwaga musi być pełnym zdaniem');
+      if (!uproszczenia.includes((p.nazwa ?? '').toLowerCase())) blad(gdzie, 'uwaga tylko przy uproszczeniach z TRESCI.md, sekcja 5');
     }
   }
   if (!tabelaTk) {

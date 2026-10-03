@@ -128,7 +128,7 @@ const WYJASNIENIA = {
     nadmiar: 'Nadmiar dwutlenku węgla też zmniejsza intensywność fotosyntezy.',
   },
   woda: {
-    brak: 'Bez wody fotosynteza nie zachodzi: woda jest jednym z jej składników.',
+    brak: 'Bez wody fotosynteza nie zachodzi: woda jest jednym z jej składników (substratów).',
     niedobor: 'Niedobór wody zmniejsza intensywność fotosyntezy.',
     optimum: 'Wody jest w sam raz.',
     nadmiar: 'Nadmiar wody też zmniejsza intensywność fotosyntezy.',

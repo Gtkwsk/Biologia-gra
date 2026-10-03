@@ -77,11 +77,11 @@ test('lustro: informacja zwrotna podaje rolę substancji w obu procesach i kieru
   const para = ['fotosynteza', 'oddychanie-tlenowe'].map((id) => procesy.find((p) => p.id === id));
   assert.equal(
     drogaWLustrze('tlen', 'tlen', para),
-    'Tlen to produkt fotosyntezy i składnik oddychania tlenowego. Dlatego wędruje od fotosyntezy do oddychania tlenowego.',
+    'Tlen to produkt fotosyntezy i składnik (substrat) oddychania tlenowego. Dlatego wędruje od fotosyntezy do oddychania tlenowego.',
   );
   assert.equal(
     drogaWLustrze('dwutlenek-wegla', 'dwutlenek węgla', para),
-    'Dwutlenek węgla to produkt oddychania tlenowego i składnik fotosyntezy. Dlatego wędruje od oddychania tlenowego do fotosyntezy.',
+    'Dwutlenek węgla to produkt oddychania tlenowego i składnik (substrat) fotosyntezy. Dlatego wędruje od oddychania tlenowego do fotosyntezy.',
   );
   assert.equal(
     drogaWLustrze('swiatlo', 'światło', para),
@@ -89,6 +89,6 @@ test('lustro: informacja zwrotna podaje rolę substancji w obu procesach i kieru
   );
   assert.equal(
     drogaWLustrze('energia', 'energia', para),
-    'Energia to produkt oddychania tlenowego. Nie jest składnikiem fotosyntezy, więc nie wędruje między procesami.',
+    'Energia to produkt oddychania tlenowego. Nie jest składnikiem (substratem) fotosyntezy, więc nie wędruje między procesami.',
   );
 });

@@ -1,7 +1,9 @@
 // Logika mechaniki „przepis procesu” (SPEC.md, sekcja 3.2: przepis kuchenny w świecie 4,
 // piekarnia i lustro w świecie 6). Funkcje czyste. Dane procesów: data/procesy.js.
 //
-// Przepis to „garnek” procesu z polami na składniki (wejścia) i produkty (wyjścia).
+// Przepis to „garnek” procesu z polami na składniki (wejścia) i produkty (wyjścia). W tekstach
+// dla gracza składnik ma dopisek „(substrat)”: to słowo może paść na sprawdzianie (TRESCI.md,
+// sekcja 8, punkt 7), a kuchenna nazwa zostaje jako metafora (SPEC.md, sekcja 12).
 // Tryb lustra: dwa procesy obok siebie (fotosynteza i oddychanie tlenowe), a pola leżą na
 // strzałkach między nimi: produkty jednego procesu są składnikami drugiego.
 //
@@ -52,10 +54,10 @@ export function pasujeDoStrefy(strefa, idKarty, [lewy, prawy = null]) {
   }
 }
 
-const NAZWY_ROL = { substrat: 'składnik', warunek: 'warunek', produkt: 'produkt' };
+const NAZWY_ROL = { substrat: 'składnik (substrat)', warunek: 'warunek', produkt: 'produkt' };
 
 // Lustro: rola substancji w obu procesach i jej droga między nimi, np. „Tlen to produkt
-// fotosyntezy i składnik oddychania tlenowego. Dlatego wędruje od fotosyntezy do oddychania
+// fotosyntezy i składnik (substrat) oddychania tlenowego. Dlatego wędruje od fotosyntezy do oddychania
 // tlenowego.” Zdania bez form zależnych od rodzaju gramatycznego nazwy.
 export function drogaWLustrze(idKarty, nazwa, [lewy, prawy]) {
   const role = [
@@ -70,7 +72,7 @@ export function drogaWLustrze(idKarty, nazwa, [lewy, prawy]) {
   const cel = role.find(([, r]) => r !== 'produkt')?.[0];
   const drugi = (p) => (p === lewy ? prawy : lewy);
   if (zrodlo && cel) return `${kim} Dlatego wędruje od ${zrodlo.dopelniacz} do ${cel.dopelniacz}.`;
-  if (zrodlo) return `${kim} Nie jest składnikiem ${drugi(zrodlo).dopelniacz}, więc nie wędruje między procesami.`;
+  if (zrodlo) return `${kim} Nie jest składnikiem (substratem) ${drugi(zrodlo).dopelniacz}, więc nie wędruje między procesami.`;
   return `${kim} Nie powstaje ${drugi(cel).miejscownik}, więc nie wędruje między procesami.`;
 }
 
@@ -82,9 +84,9 @@ export function powodBledu(pole, idKarty, procesy, dystraktor = null, nazwa = id
   if (prawy) return drogaWLustrze(idKarty, nazwa, procesy);
   const r = rola(lewy, idKarty);
   const opis = lewy.opisy?.[idKarty] ?? '';
-  if (pole.strefa === 'wejscie' && r === 'produkt') return `To nie składnik ${lewy.dopelniacz}, tylko produkt. ${opis}`.trim();
-  if (pole.strefa === 'wejscie' && r === 'warunek') return `To nie składnik ${lewy.dopelniacz}, tylko warunek: w zapisie słownym stoi nad strzałką. ${opis}`.trim();
-  if (pole.strefa === 'warunek' && r === 'substrat') return `To składnik ${lewy.dopelniacz}, a nie warunek: w zapisie słownym stoi przed strzałką. ${opis}`.trim();
+  if (pole.strefa === 'wejscie' && r === 'produkt') return `To nie składnik (substrat) ${lewy.dopelniacz}, tylko produkt. ${opis}`.trim();
+  if (pole.strefa === 'wejscie' && r === 'warunek') return `To nie składnik (substrat) ${lewy.dopelniacz}, tylko warunek: w zapisie słownym stoi nad strzałką. ${opis}`.trim();
+  if (pole.strefa === 'warunek' && r === 'substrat') return `To składnik (substrat) ${lewy.dopelniacz}, a nie warunek: w zapisie słownym stoi przed strzałką. ${opis}`.trim();
   if (pole.strefa === 'warunek' && r === 'produkt') return `To produkt ${lewy.dopelniacz}, a nie warunek. ${opis}`.trim();
   if (pole.strefa === 'wyjscie' && (r === 'substrat' || r === 'warunek')) return `To nie produkt ${lewy.dopelniacz}. ${opis}`.trim();
   return pole.podpis ? `${opis} To pole: ${pole.podpis}.`.trim() : opis;

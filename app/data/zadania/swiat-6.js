@@ -300,7 +300,7 @@ export default [
     dopasowanie: 'strefa',
     dystraktory: [
       { karta: 'tlen', wyjasnienie: 'Fermentacja to rozkład glukozy bez udziału tlenu.' },
-      { karta: 'woda', wyjasnienie: 'Wody nie ma w zapisie fermentacji alkoholowej: nie jest jej składnikiem ani produktem. Woda powstaje w oddychaniu tlenowym.' },
+      { karta: 'woda', wyjasnienie: 'Wody nie ma w zapisie fermentacji alkoholowej: nie jest jej składnikiem (substratem) ani produktem. Woda powstaje w oddychaniu tlenowym.' },
       { karta: 'kwas-mlekowy', wyjasnienie: 'Kwas mlekowy powstaje w fermentacji mlekowej, np. w mięśniach.' },
     ],
     scena: { id: 'ciasto', substancja: 'dwutlenek-wegla' },

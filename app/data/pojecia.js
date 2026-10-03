@@ -428,6 +428,7 @@ export default [
     swiat: 1,
     opis: 'pierwiastek, którego sole budują kości, muszle i pancerze',
     zdanie: 'Wapń występuje w organizmach w mniejszej ilości, ale jest niezbędny. Sole wapnia budują kości, muszle i pancerze; przy niedoborze wapnia kości są słabsze i łatwiej się łamią.',
+    uwaga: 'W rzeczywistości w ciele człowieka wapnia jest więcej niż siarki i fosforu; większość wapnia jest w kościach.',
     zrodlo: '2.1',
   },
   {

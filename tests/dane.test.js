@@ -253,6 +253,14 @@ test('wykrywa las, w którym szczątki nigdy się nie gromadzą', async () => {
   zawiera(walidujDane(dane, kontekst), 'żaden etap nie pokazuje gromadzenia się szczątków');
 });
 
+test('dopisek o rzeczywistości przy pojęciu tylko przy uproszczeniu z TRESCI.md, sekcja 5', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.pojecia.find((p) => p.id === 'chityna').uwaga = 'W rzeczywistości chityna buduje też pancerze owadów.';
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'pojecia[chityna]: uwaga tylko przy uproszczeniach');
+  assert.ok(!bledy.some((b) => b.startsWith('pojecia[wapn]')), 'dopisek przy wapniu jest w sekcji 5');
+});
+
 test('wykrywa w próbnym sprawdzianie złą sumę punktów i mechanikę w puli', async () => {
   const { dane, kontekst } = await zaladuj();
   dane.sprawdzian[0].punkty += 1;
