@@ -22,6 +22,12 @@ const NAZWY_TYPOW = {
   sorter: 'przyporządkowanie zdań',
 };
 
+// Tabela ✓/✗ z procesami (co powstaje w procesie) to inne zadanie niż tabela porównawcza.
+function nazwaTypu(z) {
+  if (z.typ === 'tabela' && z.procesy) return 'tabela produktów';
+  return NAZWY_TYPOW[z.typ] ?? z.typ;
+}
+
 export function serca(liczba) {
   return h(
     'span',
@@ -85,7 +91,7 @@ export function render(kontener, ctx, cel) {
           h('ul', { class: 'boss-karta__zasady' }, [
             h('li', {}, [serca(B.SERCA), ' Masz trzy serca. Wyzwanie z błędem kosztuje jedno serce.']),
             h('li', {}, 'Bez podpowiedzi, za to bez limitu czasu. Najpierw ułóż wszystko, potem „Sprawdź”.'),
-            h('li', {}, `Wyzwania: ${wyzwania.map((z) => NAZWY_TYPOW[z.typ] ?? z.typ).join(', ')}.`),
+            h('li', {}, `Wyzwania: ${wyzwania.map(nazwaTypu).join(', ')}.`),
             h('li', {}, 'Każde podejście ma nowe warianty zadań.'),
           ]),
           h('button', { type: 'button', class: 'przycisk przycisk--dalej', onclick: pokazWyzwanie }, 'Zaczynamy'),
