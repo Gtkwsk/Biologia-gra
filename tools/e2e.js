@@ -1,11 +1,12 @@
 // Test całej gry w przeglądarce Chromium:
 //   node tools/e2e.js [katalog-na-zrzuty] [--adres=https://biologia-gra.netlify.app/]
 // Bez --adres test uruchamia lokalny serwer z katalogiem app/.
-// Narzędzie deweloperskie (wymaga playwright). Sprawdza przejście mapa → świat → misja →
-// podsumowanie, przeciąganie myszą i palcem, stuknięcia, zapis postępu, wszystkie misje
-// świata 2 i jego bossa (przegrana i wygrana), otwarcie świata 3, atlas, mikroskop, bramkę
-// panelu rodzica, wszystkie misje i bossów światów 3, 4 i 6 (kolejne światy otwierają się po
-// bossach), pracę offline, układ na telefonie oraz brak błędów w konsoli (w tym naruszeń CSP).
+// Narzędzie deweloperskie (wymaga playwright). Sprawdza mapę nowego gracza (otwarty tylko
+// świat 1), wszystkie misje i bossa świata 1, przejście mapa → świat → misja → podsumowanie,
+// przeciąganie myszą i palcem, stuknięcia, zapis postępu, wszystkie misje świata 2 i jego bossa
+// (przegrana i wygrana), atlas, mikroskop, bramkę panelu rodzica, wszystkie misje i bossów
+// światów 3-6 (każdy świat otwiera się po bossie poprzedniego), pracę offline, układ na
+// telefonie oraz brak błędów w konsoli (w tym naruszeń CSP).
 // Zadania rozwiązuje tools/rozwiazania.js na podstawie danych gry.
 // Każdy przebieg używa nowego, pustego profilu przeglądarki.
 
@@ -101,6 +102,9 @@ async function rozwiazBiezace(strona) {
   const id = await obszar.getAttribute('data-zadanie');
   await rozwiaz(strona, zadaniePoId.get(id), daneGry);
   await strona.locator('.misja__wynik:not([hidden])').waitFor();
+  // Puste wartości nie mogą trafić na ekran jako napis (np. Element.append(null) daje „null”).
+  const tekst = await strona.locator('body').innerText();
+  if (/\b(null|undefined|NaN)\b/.test(tekst)) bledy.push(`${id}: na ekranie jest napis „null”, „undefined” albo „NaN”`);
   return id;
 }
 
@@ -123,17 +127,54 @@ console.log('Tablet poziomo (mysz)');
   const { kontekst, strona } = await nowaStrona({ viewport: { width: 1024, height: 768 } });
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
+  const status = (id) => strona.locator(`.swiat[data-swiat="${id}"]`).getAttribute('data-status');
   sprawdz((await strona.locator('.swiat').count()) === 6, 'mapa pokazuje sześć światów');
-  sprawdz((await strona.locator('.swiat[data-swiat="2"]').getAttribute('data-status')) === 'otwarty', 'świat 2 jest otwarty');
-  sprawdz((await strona.locator('.swiat[data-swiat="3"]').getAttribute('data-status')) === 'zablokowany', 'świat 3 czeka na bossa świata 2');
-  sprawdz((await strona.locator('.swiat[data-status="w-budowie"]').count()) === 2, 'światy 1 i 5 są w budowie');
-  sprawdz((await strona.locator('.swiat[data-swiat="4"]').getAttribute('data-status')) === 'zablokowany', 'świat 4 czeka na bossa świata 3');
-  sprawdz((await strona.locator('.swiat[data-swiat="6"]').getAttribute('data-status')) === 'zablokowany', 'świat 6 czeka na bossa świata 4');
+  sprawdz((await status(1)) === 'otwarty', 'świat 1 jest otwarty');
+  for (const id of [2, 3, 4, 5, 6]) sprawdz((await status(id)) === 'zablokowany', `świat ${id} czeka na bossa poprzedniego świata`);
+  sprawdz((await strona.locator('.swiat[data-status="w-budowie"]').count()) === 0, 'żaden świat nie jest w budowie');
   await zrzut(strona, '01-mapa-tablet-poziomo');
 
-  await strona.locator('.swiat[data-swiat="1"] .swiat__przycisk').click();
-  sprawdz((await strona.locator('.powiadomienie').first().textContent()).includes('w budowie'), 'świat w budowie odpowiada komunikatem');
+  await strona.locator('.swiat[data-swiat="2"] .swiat__przycisk').click();
+  sprawdz(
+    (await strona.locator('.powiadomienie').first().textContent()).includes('po pokonaniu bossa w świecie „Alfabet życia”'),
+    'zablokowany świat mówi, po którym bossie się otworzy',
+  );
 
+  // Świat 1: wstęp, wszystkie misje i boss, który otwiera świat 2.
+  {
+    const sw = swiaty.find((s) => s.id === 1);
+    await strona.locator('.swiat[data-swiat="1"] .swiat__przycisk').click();
+    await strona.locator('.swiat-wstep').waitFor();
+    sprawdz((await strona.locator('h1').textContent()) === 'Alfabet życia', 'wstęp świata 1');
+    sprawdz((await strona.locator('.misja-karta').count()) === 6, 'świat 1 ma sześć misji');
+    await zrzut(strona, '01a-swiat-1');
+    const zrzutyMisji1 = { 's1-sklad': '01b-sklad-ciala', 's1-ratuj': '01c-ratuj-organizm', 's1-sortownia': '01d-sortownia' };
+    for (const m of sw.misje) {
+      const tytuly = await przejdzMisje(strona, 1, m.id);
+      sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat 1, misja „${m.nazwa}”: od razu dobrze (wyzwania: ${tytuly.length})`);
+      if (zrzutyMisji1[m.id]) await zrzut(strona, zrzutyMisji1[m.id]);
+    }
+    await strona.goto(`${adres}#/swiat/1`);
+    await strona.locator('a.boss-wejscie').click();
+    await strona.locator('.boss-karta button', { hasText: 'Zaczynamy' }).click();
+    for (let i = 0; i < sw.boss.wyzwania.length; i++) {
+      await rozwiazBiezace(strona);
+      await strona.locator('.misja__wynik .przycisk--dalej').click();
+    }
+    await strona.locator('.boss-karta--wygrana').waitFor();
+    const tekstWygranej = await strona.locator('.boss-karta--wygrana').textContent();
+    sprawdz(tekstWygranej.includes('Bibliotekarz pokonany!'), 'boss świata 1 („Bibliotekarz”) pokonany');
+    sprawdz(tekstWygranej.includes('Otwarty nowy świat: Miasto, którego nie widać'), 'po bossie świata 1 otwiera się świat 2');
+    await zrzut(strona, '01e-boss-swiata-1');
+  }
+
+  // Nowa sesja: podsumowanie wyprawy liczy dalej tylko wyzwania świata 2.
+  await strona.goto(adres);
+  await strona.reload();
+  await strona.locator('.mapa__swiaty').waitFor();
+  sprawdz((await status(1)) === 'pokonany', 'świat 1 oznaczony jako pokonany');
+  sprawdz((await status(2)) === 'otwarty', 'świat 2 otwarty po bossie świata 1');
+  sprawdz((await status(3)) === 'zablokowany', 'świat 3 czeka na bossa świata 2');
   await strona.locator('.swiat[data-swiat="2"] .swiat__przycisk').click();
   await strona.locator('.swiat-wstep').waitFor();
   sprawdz((await strona.locator('h1').textContent()) === 'Miasto, którego nie widać', 'wstęp świata 2');
@@ -308,11 +349,18 @@ console.log('Tablet poziomo (mysz)');
   await strona.goto(`${adres}#/rodzic`);
   sprawdz((await strona.locator('.bramka').count()) === 1, 'po wyjściu panel znów wymaga bramki');
 
-  // Światy 3, 4 i 6: pozostałe misje i bossowie; kolejny gotowy świat otwiera się po bossie.
+  // Światy 3-6: pozostałe misje i bossowie; kolejny świat otwiera się po bossie poprzedniego.
   const przejdzione = new Set(['s3-twierdza', 's3-detektyw', 's3-konstruktor']);
-  const zrzutyMisji = { 's4-laboratorium': '16a-laboratorium', 's6-sprint': '16b-sprint', 's6-doba': '16c-doba' };
-  const nastepnySwiat = { 3: 'Kuchnia zasilana światłem', 4: 'Ogień bez płomienia' };
-  for (const idSwiata of [3, 4, 6]) {
+  const zrzutyMisji = {
+    's4-laboratorium': '16a-laboratorium',
+    's5-lancuchy': '16b-lancuchy',
+    's5-trawienie': '16c-rozbiorka',
+    's5-las': '16d-las',
+    's6-sprint': '16e-sprint',
+    's6-doba': '16f-doba',
+  };
+  const nastepnySwiat = { 3: 'Kuchnia zasilana światłem', 4: 'Wielka uczta', 5: 'Ogień bez płomienia' };
+  for (const idSwiata of [3, 4, 5, 6]) {
     const sw = swiaty.find((s) => s.id === idSwiata);
     for (const m of sw.misje.filter((x) => !przejdzione.has(x.id))) {
       const tytuly = await przejdzMisje(strona, idSwiata, m.id);
@@ -332,21 +380,31 @@ console.log('Tablet poziomo (mysz)');
     if (nastepnySwiat[idSwiata]) {
       sprawdz(tekstWygranej.includes(`Otwarty nowy świat: ${nastepnySwiat[idSwiata]}`), `po bossie świata ${idSwiata} otwiera się świat „${nastepnySwiat[idSwiata]}”`);
     }
-    if (idSwiata === 6) await zrzut(strona, '16d-boss-swiata-6');
+    if (idSwiata === 5) await zrzut(strona, '16g-boss-swiata-5');
   }
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
-  for (const id of [3, 4, 6]) {
-    sprawdz((await strona.locator(`.swiat[data-swiat="${id}"]`).getAttribute('data-status')) === 'pokonany', `świat ${id} oznaczony jako pokonany`);
+  for (const id of [1, 2, 3, 4, 5, 6]) {
+    sprawdz((await status(id)) === 'pokonany', `świat ${id} oznaczony jako pokonany`);
   }
-  await zrzut(strona, '16e-mapa-po-bossach');
+  await zrzut(strona, '16h-mapa-po-bossach');
   await strona.goto(`${adres}#/atlas`);
   await strona.locator('.ekran--atlas').waitFor();
   const atlas = await strona.locator('.ekran--atlas').textContent();
-  sprawdz(['Procesy', 'Substancje', 'Organizmy'].every((g) => atlas.includes(g)), 'atlas ma grupy procesów, substancji i organizmów');
-  for (const k of ['fotosynteza', 'fermentacja-mlekowa', 'drozdze', 'woda-wapienna']) {
+  sprawdz(
+    ['Pierwiastki', 'Związki chemiczne', 'Procesy', 'Substancje', 'Sposoby zdobywania pokarmu', 'Organizmy'].every((g) => atlas.includes(g)),
+    'atlas ma grupy pierwiastków, związków, procesów, substancji, sposobów zdobywania pokarmu i organizmów',
+  );
+  for (const k of ['magnez', 'bialka', 'fotosynteza', 'trawienie', 'jelen', 'organizmy-odzywiajace-sie-szczatkami', 'fermentacja-mlekowa', 'drozdze', 'woda-wapienna']) {
     sprawdz((await strona.locator(`.karta-atlasu[data-karta="${k}"]`).getAttribute('data-poziom')) !== 'nieodkryta', `atlas: karta „${k}” odkryta`);
   }
+  await strona.locator('.karta-atlasu[data-karta="hiena-cetkowana"]').click();
+  sprawdz(
+    (await strona.locator('dialog.karta-szczegoly .karta-szczegoly__uwaga').textContent()).includes('sprawnym drapieżnikiem'),
+    'karta hieny cętkowanej ma dopisek o uproszczeniu z podręcznika',
+  );
+  await zrzut(strona, '16i-atlas-uwaga');
+  await strona.locator('dialog.karta-szczegoly button', { hasText: 'Zamknij' }).click();
   await strona.goto(`${adres}#/mikroskop`);
   await strona.locator('.ekran--mikroskop').waitFor();
   sprawdz(!(await strona.locator('.mikroskop__poziomy button', { hasText: '10 000' }).isDisabled()), 'mikroskop: 10 000 razy otwarte po bossie świata 3');
@@ -366,6 +424,9 @@ console.log('Tablet poziomo (mysz)');
   await strona.goto(`${adres}#/swiat/6/misja/s6-sprint`);
   await strona.locator('.sprint__bieznia').waitFor();
   sprawdz(await strona.locator('.sprint__akcja').isVisible(), 'offline działa też sprint w świecie 6');
+  await strona.goto(`${adres}#/swiat/5/misja/s5-lancuchy`);
+  await strona.locator('.lancuch__plansza').waitFor();
+  sprawdz((await strona.locator('.lancuch__opcja svg').count()) > 0, 'offline działają też łańcuchy pokarmowe z rysunkami');
   await kontekst.setOffline(false);
   await kontekst.close();
 }
@@ -377,6 +438,8 @@ console.log('Tablet pionowo (dotyk)');
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
   await zrzut(strona, '17-mapa-tablet-pionowo');
+  // Ustawienie z panelu rodzica „odblokuj wszystkie gotowe światy”: schemat komórki jest w świecie 2.
+  await strona.evaluate((klucz) => localStorage.setItem(klucz, JSON.stringify({ wersja: 2, ustawienia: { odblokujWszystkie: true } })), KLUCZ);
   await wejdzDoMisji(strona);
   const cdp = await kontekst.newCDPSession(strona);
   const dotyk = (type, x, y) =>
@@ -408,11 +471,24 @@ console.log('Telefon');
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
   await zrzut(strona, '18-mapa-telefon');
-  // Ustawienie z panelu rodzica „odblokuj wszystkie gotowe światy”, żeby obejrzeć misje światów 4 i 6.
+  // Ustawienie z panelu rodzica „odblokuj wszystkie gotowe światy”, żeby obejrzeć misje wszystkich światów.
   await strona.evaluate((klucz) => localStorage.setItem(klucz, JSON.stringify({ wersja: 2, ustawienia: { odblokujWszystkie: true } })), KLUCZ);
   await wejdzDoMisji(strona);
+  const zrzutyTelefonu = {
+    'skład ciała': '19a-telefon-sklad-ciala',
+    'ratuj organizm': '19b-telefon-ratuj-organizm',
+    sortownia: '19c-telefon-sortownia',
+    'łańcuchy pokarmowe': '19d-telefon-lancuchy',
+    'trawienie jako rozbiórka': '19e-telefon-rozbiorka',
+    'las bez sprzątaczy': '19f-telefon-las',
+  };
   for (const [adresEkranu, nazwa] of [
     [null, 'misja'],
+    ['#/swiat/1/misja/s1-alfabet', 'alfabet życia'],
+    ['#/swiat/1/misja/s1-sklad', 'skład ciała'],
+    ['#/swiat/1/misja/s1-woda', 'woda na pięciu etatach'],
+    ['#/swiat/1/misja/s1-ratuj', 'ratuj organizm'],
+    ['#/swiat/1/misja/s1-sortownia', 'sortownia'],
     ['#/swiat/2/misja/s2-mikroskop', 'klasyfikacja ze sceną'],
     ['#/swiat/2/misja/s2-budowa-miasta', 'budowa miasta'],
     ['#/swiat/4/misja/s4-przepis', 'przepis fotosyntezy'],
@@ -420,6 +496,11 @@ console.log('Telefon');
     ['#/swiat/4/misja/s4-laboratorium', 'laboratorium fotosyntezy'],
     ['#/swiat/4/misja/s4-ogniwo', 'najsłabsze ogniwo'],
     ['#/swiat/4/misja/s4-projektant', 'projektant doświadczeń'],
+    ['#/swiat/5/misja/s5-uczta', 'wielka uczta'],
+    ['#/swiat/5/misja/s5-atlas', 'atlas Bieszczad'],
+    ['#/swiat/5/misja/s5-lancuchy', 'łańcuchy pokarmowe'],
+    ['#/swiat/5/misja/s5-trawienie', 'trawienie jako rozbiórka'],
+    ['#/swiat/5/misja/s5-las', 'las bez sprzątaczy'],
     ['#/swiat/6/misja/s6-sprint', 'sprint'],
     ['#/swiat/6/misja/s6-doba', 'liść przez dobę'],
     ['#/swiat/6/misja/s6-lustro', 'lustro'],
@@ -438,6 +519,7 @@ console.log('Telefon');
     }
     const szerokosc = await strona.evaluate(() => document.documentElement.scrollWidth);
     sprawdz(szerokosc <= 390, `telefon, ${nazwa}: brak przewijania w poziomie (${szerokosc}px)`);
+    if (zrzutyTelefonu[nazwa]) await zrzut(strona, zrzutyTelefonu[nazwa]);
   }
   await strona.goto(`${adres}#/swiat/2/misja/s2-plan-miasta`);
   await strona.locator('.podpis__rysunek').waitFor();
