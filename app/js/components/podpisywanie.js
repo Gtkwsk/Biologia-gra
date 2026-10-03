@@ -125,7 +125,7 @@ export function utworzPodpisywanie(kontener, opcje) {
         komunikat.pokaz({
           rodzaj: 'info',
           tytul: `Wybrana etykieta: ${nazwa(id)}.`,
-          tekst: 'Stuknij numer, pod którym jest ten element.',
+          tekst: 'Stuknij numer, do którego pasuje ta etykieta.',
         });
       }
     },

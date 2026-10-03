@@ -5,6 +5,10 @@
 // znacznik: miejsce numeru na brzegu rysunku
 // Walidator sprawdza, czy rysunek zawiera wskazany element (atrybut data-element)
 // i czy element występuje w danym typie komórki.
+//
+// Schematy procesów (pole proces zamiast typKomorki): punkty to karty substancji biorących udział
+// w procesie (data/procesy.js) albo element komórki, w którym proces zachodzi (pole wKomorce).
+// opis: rzeczownikowy opis punktu w tym schemacie (informacja zwrotna bez podawania nazwy).
 
 export default [
   {
@@ -80,6 +84,39 @@ export default [
       { id: 'cytozol', element: 'cytozol', cel: [320, 286], znacznik: [606, 410] },
       { id: 'blona', element: 'blona-komorkowa', cel: [126, 284], znacznik: [34, 340] },
       { id: 'sciana', element: 'sciana-komorkowa', cel: [97, 240], znacznik: [34, 240] },
+    ],
+  },
+
+  // ---------- Schematy procesów (świat 4) ----------
+  {
+    id: 'fotosynteza-roslina',
+    nazwa: 'Schemat fotosyntezy: cała roślina',
+    proces: 'fotosynteza',
+    plik: 'assets/svg/fotosynteza-roslina.svg',
+    szerokosc: 640,
+    wysokosc: 480,
+    punkty: [
+      { id: 'swiatlo', element: 'swiatlo', cel: [214, 124], znacznik: [38, 140], opis: 'źródło energii, które pochłania chlorofil w liściach' },
+      { id: 'tlen', element: 'tlen', cel: [492, 166], znacznik: [602, 110], opis: 'gaz, który powstaje w liściach i trafia do atmosfery' },
+      { id: 'pokarm', element: 'substancje-pokarmowe', cel: [358, 380], znacznik: [602, 400], opis: 'produkt fotosyntezy, który z liści trafia do wszystkich komórek rośliny' },
+      { id: 'woda', element: 'woda', cel: [284, 400], znacznik: [38, 400], opis: 'substancja, którą korzenie pobierają z gleby' },
+      { id: 'co2', element: 'dwutlenek-wegla', cel: [140, 218], znacznik: [38, 250], opis: 'gaz, który wnika do liści z powietrza przez aparaty szparkowe' },
+    ],
+  },
+  {
+    id: 'fotosynteza-lisc',
+    nazwa: 'Schemat fotosyntezy: liść i powiększona komórka liścia',
+    proces: 'fotosynteza',
+    plik: 'assets/svg/fotosynteza-lisc.svg',
+    szerokosc: 640,
+    wysokosc: 480,
+    punkty: [
+      { id: 'swiatlo', element: 'swiatlo', cel: [176, 116], znacznik: [38, 150], opis: 'źródło energii, które pochłania chlorofil' },
+      { id: 'tlen', element: 'tlen', cel: [424, 80], znacznik: [602, 70], opis: 'gaz, który powstaje w liściu i trafia do atmosfery' },
+      { id: 'chloroplast', element: 'chloroplast', cel: [528, 258], znacznik: [602, 200], opis: 'zielony element komórki liścia, w którym zachodzi fotosynteza' },
+      { id: 'pokarm', element: 'substancje-pokarmowe', cel: [318, 420], znacznik: [602, 430], opis: 'produkt fotosyntezy, który z liścia trafia do wszystkich komórek rośliny' },
+      { id: 'woda', element: 'woda', cel: [262, 420], znacznik: [38, 420], opis: 'substancja, którą do liścia doprowadzają komórki przewodzące' },
+      { id: 'co2', element: 'dwutlenek-wegla', cel: [120, 254], znacznik: [38, 290], opis: 'gaz, który wnika do liścia z powietrza przez aparaty szparkowe' },
     ],
   },
 ];

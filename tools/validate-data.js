@@ -26,6 +26,7 @@ import { parsujLuki } from '../app/js/components/luki-logika.js';
 import { pasujaceTypy, potrzebneWskazowki, wyklucza } from '../app/js/components/detektyw-logika.js';
 import { regula } from '../app/js/components/konstruktor-logika.js';
 import { ID_SCEN } from '../app/js/components/obrazy.js';
+import { ID_SCEN_PROCESOW, KATEGORIE_SCEN } from '../app/js/components/sceny-procesow.js';
 
 const KORZEN = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const KATALOG_APP = path.join(KORZEN, 'app');
@@ -37,16 +38,21 @@ export const TYPY_ZADAN = [
   'luki',
   'klasyfikacja',
   'tabela',
+  'porownanie',
   'doswiadczenie',
   'sorter',
   'miasto',
   'detektyw',
   'konstruktor',
   'wakuola',
+  'przepis',
+  'laboratorium',
+  'sprint',
+  'doba',
 ];
 
 // Typy zadań w formatach sprawdzianu (SPEC.md, sekcja 5); mechaniki to pozostałe.
-const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola'];
+const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola', 'przepis', 'laboratorium', 'sprint', 'doba'];
 
 const OBECNOSC = ['tak', 'nie', 'czasem'];
 
@@ -394,8 +400,40 @@ export function walidujDane(dane, kontekst) {
     }
   }
 
-  // Schematy
-  for (const s of schematy) {
+  // Schematy procesów: punkty to uczestnicy procesu albo miejsce w komórce
+  const uczestnicyProcesu = (pr) => new Set([...(pr.substraty || []), ...(pr.warunki || []), ...(pr.produkty || []), ...(pr.wKomorce || [])]);
+  for (const s of schematy.filter((x) => x.proces)) {
+    const gdzie = `schematy[${s.id}]`;
+    const pr = procesPoId.get(s.proces);
+    if (!pr) {
+      blad(gdzie, `nieznany proces „${s.proces}”`);
+      continue;
+    }
+    const rysunek = svg.get(s.plik);
+    if (rysunek === undefined) blad(gdzie, `plik „${s.plik}” nie istnieje`);
+    else {
+      if (/\sstyle\s*=/.test(rysunek)) blad(s.plik, 'atrybut style jest blokowany przez politykę CSP; użyj atrybutów fill, stroke itp.');
+      if (/<script/i.test(rysunek)) blad(s.plik, 'rysunek nie może zawierać skryptów');
+    }
+    const uczestnicy = uczestnicyProcesu(pr);
+    const idPunktow = new Set();
+    for (const p of s.punkty || []) {
+      const gp = `${gdzie}.punkty[${p.id}]`;
+      if (idPunktow.has(p.id)) blad(gp, 'powtórzone id punktu');
+      idPunktow.add(p.id);
+      karta(gp, p.element);
+      if (!uczestnicy.has(p.element)) blad(gp, `„${p.element}” nie bierze udziału w procesie „${pr.id}” według data/procesy.js`);
+      if (!niepustyTekst(p.opis)) blad(gp, 'brak opisu punktu');
+      if (rysunek !== undefined && !rysunek.includes(`data-element="${p.element}"`)) blad(gp, `rysunek nie zawiera elementu „${p.element}” (data-element)`);
+      for (const pole of ['cel', 'znacznik']) {
+        const [x, y] = p[pole] || [];
+        if (!(x >= 0 && x <= s.szerokosc && y >= 0 && y <= s.wysokosc)) blad(gp, `${pole} poza obszarem rysunku`);
+      }
+    }
+  }
+
+  // Schematy komórek
+  for (const s of schematy.filter((x) => !x.proces)) {
     const gdzie = `schematy[${s.id}]`;
     const typ = typPoId.get(s.typKomorki);
     if (!typ) blad(gdzie, `nieznany typ komórki „${s.typKomorki}”`);
@@ -432,6 +470,26 @@ export function walidujDane(dane, kontekst) {
       const s = schematPoId.get(z.schemat);
       if (!s) {
         blad(gdzie, `nieznany schemat „${z.schemat}”`);
+        return;
+      }
+      if (s.proces) {
+        const pr = procesPoId.get(s.proces);
+        const punktyS = new Map((s.punkty || []).map((p) => [p.id, p]));
+        if (!z.punkty?.length) blad(gdzie, 'brak punktów do podpisania');
+        const poprawne = new Set();
+        for (const idP of z.punkty || []) {
+          if (!punktyS.has(idP)) blad(gdzie, `punkt „${idP}” nie istnieje w schemacie „${s.id}”`);
+          else poprawne.add(punktyS.get(idP).element);
+        }
+        if (poprawne.size !== (z.punkty || []).length) blad(gdzie, 'dwa punkty z tą samą etykietą');
+        const uczestnicy = pr ? uczestnicyProcesu(pr) : new Set();
+        for (const d of z.dystraktory || []) {
+          const id = typeof d === 'string' ? d : d?.karta;
+          karta(gdzie, id);
+          if (typeof d !== 'string' && !niepustyTekst(d?.wyjasnienie)) blad(gdzie, `dystraktor „${id}” bez wyjaśnienia`);
+          if (poprawne.has(id)) blad(gdzie, `dystraktor „${id}” jest jednocześnie poprawną odpowiedzią`);
+          else if (uczestnicy.has(id)) blad(gdzie, `dystraktor „${id}” bierze udział w procesie „${s.proces}”`);
+        }
         return;
       }
       const typ = typPoId.get(s.typKomorki);
@@ -546,6 +604,13 @@ export function walidujDane(dane, kontekst) {
     },
 
     tabela(z, gdzie) {
+      if (z.procesy) {
+        if (!(z.procesy.length >= 2) || !(z.substancje?.length >= 2)) blad(gdzie, 'tabela procesów: co najmniej dwa procesy i dwie substancje');
+        for (const id of z.procesy) if (!procesPoId.has(id)) blad(gdzie, `nieznany proces „${id}”`);
+        for (const id of z.substancje || []) karta(gdzie, id);
+        if (new Set(z.substancje).size !== (z.substancje || []).length) blad(gdzie, 'powtórzona substancja');
+        return;
+      }
       if (!z.wiersze?.length || !z.kolumny?.length) blad(gdzie, 'tabela bez wierszy albo kolumn');
       for (const w of z.wiersze || []) {
         if (!elementPoId.has(w)) {
@@ -563,6 +628,80 @@ export function walidujDane(dane, kontekst) {
           if (o !== 'tak' && o !== 'nie') blad(gdzie, `${t.nazwa} / ${w}: w tabeli tylko ✓ albo ✗, a według danych jest „${o ?? 'brak'}”`);
         }
       }
+    },
+
+    porownanie(z, gdzie) {
+      if (!porownanie) {
+        blad(gdzie, 'brak danych tabeli porównawczej (data/porownanie.js)');
+        return;
+      }
+      const cechy = new Map((porownanie.cechy || []).map((c) => [c.id, c]));
+      if (!(z.cechy?.length >= 2)) blad(gdzie, 'co najmniej dwie cechy');
+      if (new Set(z.cechy).size !== (z.cechy || []).length) blad(gdzie, 'powtórzona cecha');
+      for (const id of z.cechy || []) if (!cechy.has(id)) blad(gdzie, `nieznana cecha „${id}”`);
+      const etykiety = new Set((porownanie.cechy || []).flatMap((c) => (porownanie.kolumny || []).flatMap((k) => [c.wartosci?.[k], c.etykiety?.[k]])).filter(Boolean));
+      for (const d of z.dystraktory || []) {
+        if (!niepustyTekst(d?.tekst) || !niepustyTekst(d?.wyjasnienie)) blad(gdzie, 'dystraktor wymaga pól tekst i wyjasnienie');
+        else if (etykiety.has(d.tekst)) blad(gdzie, `dystraktor „${d.tekst}” jest wartością z tabeli`);
+      }
+    },
+
+    sorter(z, gdzie) {
+      const kat = new Set();
+      if (!(z.kategorie?.length >= 2 && z.kategorie.length <= 3)) blad(gdzie, 'sorter ma 2 albo 3 kategorie');
+      for (const k of z.kategorie || []) {
+        if (!niepustyTekst(k.id) || !niepustyTekst(k.nazwa)) blad(gdzie, 'kategoria bez id albo nazwy');
+        if (kat.has(k.id)) blad(gdzie, `powtórzona kategoria „${k.id}”`);
+        kat.add(k.id);
+        if (k.karta) karta(gdzie, k.karta);
+        if (!k.skrot && !k.karta) blad(gdzie, `kategoria „${k.id}” potrzebuje skrótu albo karty (rysunek na przycisku)`);
+      }
+      if (!(z.zdania?.length >= 4)) blad(gdzie, 'co najmniej cztery zdania');
+      const teksty = new Set();
+      const uzyte = new Set();
+      for (const zd of z.zdania || []) {
+        if (!niepustyTekst(zd.tekst)) blad(gdzie, 'zdanie bez tekstu');
+        if (teksty.has(zd.tekst)) blad(gdzie, `powtórzone zdanie „${zd.tekst}”`);
+        teksty.add(zd.tekst);
+        if (!kat.has(zd.kategoria)) blad(gdzie, `zdanie „${zd.tekst}”: nieznana kategoria „${zd.kategoria}”`);
+        uzyte.add(zd.kategoria);
+        if (!niepustyTekst(zd.wyjasnienie)) blad(gdzie, `zdanie „${zd.tekst}” bez wyjaśnienia`);
+        if (zd.karta) karta(gdzie, zd.karta);
+      }
+      for (const k of kat) if (!uzyte.has(k)) blad(gdzie, `kategoria „${k}” bez żadnego zdania`);
+      if (z.scena !== undefined) {
+        if (!ID_SCEN_PROCESOW.includes(z.scena)) blad(gdzie, `nieznana scena „${z.scena}”`);
+        else if (KATEGORIE_SCEN[z.scena]) {
+          for (const k of kat) if (!KATEGORIE_SCEN[z.scena].includes(k)) blad(gdzie, `scena „${z.scena}” nie ma części dla kategorii „${k}”`);
+        }
+      }
+    },
+
+    doswiadczenie(z, gdzie) {
+      if (!niepustyTekst(z.opis)) blad(gdzie, 'brak opisu doświadczenia');
+      if (z.scena !== undefined && !ID_SCEN_PROCESOW.includes(z.scena)) blad(gdzie, `nieznana scena „${z.scena}”`);
+      ciekawostka(`${gdzie}.ciekawostka`, z.ciekawostka);
+      if (z.wyniki) {
+        const n = z.wyniki.kolumny?.length ?? 0;
+        if (n < 2) blad(gdzie, 'tabela wyników: co najmniej dwie kolumny');
+        for (const w of z.wyniki.wiersze || []) if (w.length !== n) blad(gdzie, 'tabela wyników: wiersz o innej liczbie komórek niż kolumn');
+      }
+      if (!z.kroki?.length) blad(gdzie, 'brak pytań');
+      (z.kroki || []).forEach((k, i) => {
+        const gk = `${gdzie}.kroki[${i}]`;
+        if (!niepustyTekst(k.pytanie) || !niepustyTekst(k.wyjasnienie)) blad(gk, 'brak pytania albo wyjaśnienia');
+        if (!(k.opcje?.length >= 2)) blad(gk, 'co najmniej dwie opcje');
+        const poprawne = (k.opcje || []).filter((o) => o.poprawna === true).length;
+        if (poprawne !== 1) blad(gk, `opcji poprawnych jest ${poprawne}, a musi być dokładnie jedna`);
+        const teksty = (k.opcje || []).map((o) => o.tekst);
+        if (new Set(teksty).size !== teksty.length) blad(gk, 'powtórzona opcja');
+        for (const o of k.opcje || []) {
+          if (!niepustyTekst(o.tekst)) blad(gk, 'opcja bez tekstu');
+          if (o.poprawna !== true && !niepustyTekst(o.wyjasnienie)) blad(gk, `opcja „${o.tekst}” bez wyjaśnienia, dlaczego jest błędna`);
+        }
+        if (k.kolejnosc !== undefined && k.kolejnosc !== 'stala') blad(gk, `kolejnosc: „${k.kolejnosc}” spoza listy stala`);
+        if (k.karta) karta(gk, k.karta);
+      });
     },
 
     miasto(z, gdzie) {
@@ -710,7 +849,10 @@ export function walidujDane(dane, kontekst) {
     }
     if (pr.energia !== undefined && !['dużo', 'mało'].includes(pr.energia)) blad(gdzie, `energia „${pr.energia}” spoza listy dużo, mało`);
     const uczestnicy = new Set([...(pr.substraty || []), ...(pr.warunki || []), ...(pr.produkty || [])]);
-    for (const id of Object.keys(pr.opisy || {})) if (!uczestnicy.has(id)) blad(`${gdzie}.opisy`, `„${id}” nie bierze udziału w tym procesie`);
+    for (const [id, zd] of Object.entries(pr.opisy || {})) {
+      if (!uczestnicy.has(id)) blad(`${gdzie}.opisy`, `„${id}” nie bierze udziału w tym procesie`);
+      if (!/^[A-ZĄĆĘŁŃÓŚŹŻ].*\.$/u.test(zd ?? '')) blad(`${gdzie}.opisy.${id}`, 'opis musi być pełnym zdaniem');
+    }
   }
 
   // Tabela porównawcza oddychania tlenowego i fermentacji

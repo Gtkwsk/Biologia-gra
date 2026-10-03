@@ -2,7 +2,7 @@
 // WERSJA i PLIKI uzupełnia narzędzie: node tools/wersja.js (nie edytować ręcznie).
 // Każda zmiana w app/ zmienia WERSJA, więc przeglądarka pobiera nową wersję gry.
 
-const WERSJA = '25f40dfb0d9f';
+const WERSJA = '77b9cf639212';
 const PLIKI = [
   './',
   'assets/fonts/OFL-lexend.txt',
@@ -15,6 +15,8 @@ const PLIKI = [
   'assets/ikony/ikona-192.png',
   'assets/ikony/ikona-512.png',
   'assets/ikony/ikona.svg',
+  'assets/svg/fotosynteza-lisc.svg',
+  'assets/svg/fotosynteza-roslina.svg',
   'assets/svg/komorka-bakteryjna.svg',
   'assets/svg/komorka-grzybowa.svg',
   'assets/svg/komorka-roslinna-2.svg',
@@ -24,6 +26,7 @@ const PLIKI = [
   'css/ekrany.css',
   'css/mechaniki.css',
   'css/podpisywanie.css',
+  'css/procesy.css',
   'css/tokeny.css',
   'css/zadania.css',
   'data/elementy-komorek.js',
@@ -40,10 +43,13 @@ const PLIKI = [
   'data/zadania.js',
   'data/zadania/swiat-2.js',
   'data/zadania/swiat-3.js',
+  'data/zadania/swiat-4.js',
   'index.html',
   'js/components/detektyw-logika.js',
   'js/components/detektyw.js',
   'js/components/dopasowanie-logika.js',
+  'js/components/doswiadczenie-logika.js',
+  'js/components/doswiadczenie.js',
   'js/components/klasyfikacja.js',
   'js/components/komunikat.js',
   'js/components/konstruktor-logika.js',
@@ -59,7 +65,11 @@ const PLIKI = [
   'js/components/przeciaganie.js',
   'js/components/przyporzadkowanie.js',
   'js/components/rysunki.js',
+  'js/components/sceny-procesow.js',
+  'js/components/sorter-logika.js',
+  'js/components/sorter.js',
   'js/components/tabela-logika.js',
+  'js/components/tabela-wartosci.js',
   'js/components/tabela.js',
   'js/components/wakuola.js',
   'js/components/zadania.js',

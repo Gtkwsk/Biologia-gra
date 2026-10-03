@@ -3,7 +3,7 @@
 // Wynik każdego zadania: { poprawne, wszystkie, karty: [{ karta, odRazu, poprawnie }] }.
 
 import { wczytajTekst } from '../core/zasoby.js';
-import { przygotujZadanie } from './podpisywanie-logika.js';
+import { przygotujZadanie, elementyProcesu } from './podpisywanie-logika.js';
 import { utworzPodpisywanie } from './podpisywanie.js';
 import { utworzPrzyporzadkowanie } from './przyporzadkowanie.js';
 import { utworzLuki } from './luki.js';
@@ -14,14 +14,24 @@ import { utworzMiasto } from './miasto.js';
 import { utworzDetektywa } from './detektyw.js';
 import { utworzKonstruktor } from './konstruktor.js';
 import { utworzWakuole } from './wakuola.js';
+import { utworzSorter } from './sorter.js';
+import { utworzDoswiadczenie } from './doswiadczenie.js';
+import { utworzTabeleWartosci } from './tabela-wartosci.js';
 import { obrazSceny } from './obrazy.js';
 
 const TYPY = {
   async podpisywanie(zadanie, dane) {
     const schemat = dane.schematy.find((s) => s.id === zadanie.schemat);
-    const typKomorki = dane.typyKomorek.find((t) => t.id === schemat.typKomorki);
     const svgTekst = await wczytajTekst(schemat.plik);
-    const przygotowane = przygotujZadanie({ zadanie, schemat, elementy: dane.elementy, typKomorki });
+    let przygotowane;
+    if (schemat.proces) {
+      const proces = dane.procesy.find((p) => p.id === schemat.proces);
+      const elementy = elementyProcesu(schemat, proces, dane.katalog, zadanie.dystraktory);
+      przygotowane = przygotujZadanie({ zadanie, schemat, elementy, typKomorki: null });
+    } else {
+      const typKomorki = dane.typyKomorek.find((t) => t.id === schemat.typKomorki);
+      przygotowane = przygotujZadanie({ zadanie, schemat, elementy: dane.elementy, typKomorki });
+    }
     return (kontener, opcje) => utworzPodpisywanie(kontener, { przygotowane, svgTekst, opisSchematu: schemat.nazwa, ...opcje });
   },
   async przyporzadkowanie(zadanie, dane) {
@@ -57,6 +67,15 @@ const TYPY = {
   },
   async wakuola(zadanie, dane) {
     return (kontener, opcje) => utworzWakuole(kontener, { zadanie, katalog: dane.katalog, elementy: dane.elementy, ...opcje });
+  },
+  async sorter(zadanie) {
+    return (kontener, opcje) => utworzSorter(kontener, { zadanie, ...opcje });
+  },
+  async doswiadczenie(zadanie) {
+    return (kontener, opcje) => utworzDoswiadczenie(kontener, { zadanie, ...opcje });
+  },
+  async porownanie(zadanie, dane) {
+    return (kontener, opcje) => utworzTabeleWartosci(kontener, { zadanie, porownanie: dane.porownanie, katalog: dane.katalog, ...opcje });
   },
 };
 
