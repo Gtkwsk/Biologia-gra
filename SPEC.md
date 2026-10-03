@@ -288,7 +288,7 @@ Odpowiedzi z 2026-10-03 są dopisane przy pytaniach; wynikające z nich decyzje 
 2. W co Mikołaj gra najchętniej (np. Minecraft, gry kolekcjonerskie, sportowe)? Od tego zależą oprawa i akcenty: budowanie, kolekcja, rywalizacja. Odpowiedź: Roblox.
 3. Termin sprawdzianu i czy pierwsza wersja ma objąć wszystkie światy w uproszczonej formie. Odpowiedź: pełne światy (bez wersji uproszczonej); termin sprawdzianu niepodany; „nie rób planu powtórek”.
 4. Czy będą nagrania audiobooka (mp3)? Odpowiedź: tekst słuchowiska z czatu Claude, zapisany jako `AUDIOBOOK.md`. Nagrania mp3: brak informacji; odtwarzacz pojawi się, gdy pliki trafią do `app/audio/`.
-5. Nazwa gry i adres na Netlify. Odpowiedź: nazwa ostateczna „Wyprawa do wnętrza życia”; adres na Netlify zostanie podany później.
+5. Nazwa gry i adres na Netlify. Odpowiedź: nazwa ostateczna „Wyprawa do wnętrza życia”; adres: https://biologia-gra.netlify.app.
 6. Czy Mikołaj ma dostęp do mikroskopu? Brak odpowiedzi: misje z mikroskopem pozostają opcjonalne.
 7. Czy potrzebny jest tryb rywalizacji z rodzicem na jednym urządzeniu? Odpowiedź: bez rywalizacji z rodzicem.
 
@@ -305,5 +305,6 @@ Odpowiedzi z 2026-10-03 są dopisane przy pytaniach; wynikające z nich decyzje 
 - 2026-10-03, podpisywanie schematu: w treningu błędna etykieta wraca do banku, a komunikat podaje przyczynę i opis wskazanego elementu bez jego nazwy (przypominanie zamiast podpowiedzi); nazwa pada po drugiej błędnej próbie w tym samym miejscu; wynik liczy pierwsze próby. Dystraktorami mogą być tylko elementy, których dany typ komórki według `TRESCI.md` nie ma (pilnuje walidator). Na szerokim ekranie pola stoją obok numerów jak na sprawdzianie; komunikat i etykiety na tacce przy dolnej krawędzi ekranu.
 - 2026-10-03, walidator: porównuje typy komórek z tabelą porównawczą w `TRESCI.md` (sekcja 2.3), sprawdza zawartość rysunków SVG (brak elementów, których typ komórki nie ma) i szuka terminów spoza `TRESCI.md` (np. „destruenci”, „organellum”, „retikulum”).
 - 2026-10-03, panel rodzica: postęp w światach, najczęstsze pomyłki, czas w wyzwaniach, imię gracza, odblokowanie gotowych światów, kopia postępu w pliku (na iPadzie przez arkusz udostępniania), usuwanie postępu, informacja o instalacji i ochronie zapisu.
+- 2026-10-03, adres gry: https://biologia-gra.netlify.app (Netlify, gałąź `main`). Repozytorium na GitHubie jest publiczne: dokumenty projektu, w tym imię i wiek gracza w `CLAUDE.md`, są widoczne publicznie. Ukrycie repozytorium nie przeszkadza we wdrożeniu na Netlify (decyzja Roberta).
 - 2026-10-03, otwarte: rozkład punktów 0-29 na 14 punktów zakresu sprawdzianu (potrzebny do próbnego sprawdzianu, etap 4); kategorie pomocnicze z `TRESCI.md`, sekcja 7 („zwierzę (przykład)” itp.) nie trafiają do zadań klasyfikacyjnych.
 - 2026-10-03, propozycje akcentów z gier Roblox na kolejne etapy (do decyzji): baza rozbudowywana wraz z opanowaniem jak w grach typu tycoon (nowe stanowiska i ulepszenia mikroskopu), boss jako tor przeszkód z punktami kontrolnymi zamiast licznika błędów, odznaki za pokonanych bossów, awatar badacza z elementami zdobywanymi za opanowanie.

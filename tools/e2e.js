@@ -1,7 +1,10 @@
-// Test całej gry w przeglądarce Chromium: node tools/e2e.js [katalog-na-zrzuty]
+// Test całej gry w przeglądarce Chromium:
+//   node tools/e2e.js [katalog-na-zrzuty] [--adres=https://biologia-gra.netlify.app/]
+// Bez --adres test uruchamia lokalny serwer z katalogiem app/.
 // Narzędzie deweloperskie (wymaga playwright). Sprawdza przejście mapa → świat → misja →
 // podsumowanie, przeciąganie myszą i palcem, stuknięcia, zapis postępu, bramkę panelu
 // rodzica, pracę offline oraz brak błędów w konsoli (w tym naruszeń CSP).
+// Każdy przebieg używa nowego, pustego profilu przeglądarki.
 
 import path from 'node:path';
 import { mkdir } from 'node:fs/promises';
@@ -11,7 +14,10 @@ import schematy from '../app/data/schematy.js';
 import zadania from '../app/data/zadania.js';
 
 const { chromium } = wczytajPlaywright();
-const katalogZrzutow = process.argv[2] ? path.resolve(process.argv[2]) : null;
+const argumenty = process.argv.slice(2);
+const adresZdalny = argumenty.find((a) => a.startsWith('--adres='))?.slice('--adres='.length);
+const katalogArg = argumenty.find((a) => !a.startsWith('--'));
+const katalogZrzutow = katalogArg ? path.resolve(katalogArg) : null;
 if (katalogZrzutow) await mkdir(katalogZrzutow, { recursive: true });
 
 const zadanie = zadania.find((z) => z.id === 's2-podpis-zwierzeca-1');
@@ -24,8 +30,9 @@ const sprawdz = (warunek, opis) => {
   else bledy.push(opis);
 };
 
-const serwer = await uruchomSerwer(0);
-const adres = `http://127.0.0.1:${serwer.address().port}/`;
+const serwer = adresZdalny ? null : await uruchomSerwer(0);
+const adres = adresZdalny ? adresZdalny.replace(/\/?$/, '/') : `http://127.0.0.1:${serwer.address().port}/`;
+console.log(`Adres: ${adres}`);
 const przegladarka = await chromium.launch();
 
 async function nowaStrona(opcje) {
@@ -230,7 +237,7 @@ console.log('Telefon');
 }
 
 await przegladarka.close();
-serwer.close();
+serwer?.close();
 
 if (bledy.length) {
   console.error(`\nBłędy (${bledy.length}):`);
