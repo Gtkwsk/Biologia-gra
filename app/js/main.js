@@ -5,6 +5,11 @@ import zadania from '../data/zadania.js';
 import schematy from '../data/schematy.js';
 import elementy from '../data/elementy-komorek.js';
 import typyKomorek from '../data/typy-komorek.js';
+import pojecia from '../data/pojecia.js';
+import miasto from '../data/miasto.js';
+import wskazowki from '../data/wskazowki.js';
+import czesciKonstruktora from '../data/konstruktor.js';
+import { katalogKart } from './core/karty.js';
 import { utworzMagazyn } from './core/magazyn.js';
 import { nowyStan } from './core/stan.js';
 import { dzisiaj } from './core/daty.js';
@@ -44,7 +49,18 @@ function zapisz() {
 const nowaSesja = () => ({ wyniki: [] });
 
 const ctx = {
-  dane: { swiaty, zadania, schematy, elementy, typyKomorek },
+  dane: {
+    swiaty,
+    zadania,
+    schematy,
+    elementy,
+    typyKomorek,
+    pojecia,
+    miasto,
+    wskazowki,
+    czesciKonstruktora,
+    katalog: katalogKart({ elementy, typyKomorek, pojecia }),
+  },
   get stan() {
     return stan;
   },

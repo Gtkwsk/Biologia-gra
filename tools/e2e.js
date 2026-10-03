@@ -100,9 +100,9 @@ console.log('Tablet poziomo (mysz)');
 
   await strona.locator('.misja-karta').first().click();
   await strona.locator('.podpis__rysunek').waitFor();
-  sprawdz((await strona.locator('.podpis__bank .etykieta').count()) === 10, 'bank ma 8 etykiet i 2 dystraktory');
+  sprawdz((await strona.locator('.bank .etykieta').count()) === 10, 'bank ma 8 etykiet i 2 dystraktory');
   {
-    const tacka = await strona.locator('.podpis__tacka').boundingBox();
+    const tacka = await strona.locator('.tacka').boundingBox();
     const rysunek = await strona.locator('.podpis__rysunek').boundingBox();
     sprawdz(rysunek.y + rysunek.height <= tacka.y, `w poziomie rysunek mieści się nad tacką (${Math.round(rysunek.y + rysunek.height)} ≤ ${Math.round(tacka.y)})`);
   }
@@ -202,7 +202,7 @@ console.log('Tablet poziomo (mysz)');
   await strona.reload();
   await strona.locator('.mapa__swiaty').waitFor();
   await wejdzDoMisji(strona);
-  sprawdz((await strona.locator('.podpis__bank .etykieta').count()) === 10, 'gra działa offline (mapa i misja z rysunkiem)');
+  sprawdz((await strona.locator('.bank .etykieta').count()) === 10, 'gra działa offline (mapa i misja z rysunkiem)');
   await kontekst.setOffline(false);
   await kontekst.close();
 }
@@ -231,7 +231,7 @@ console.log('Tablet pionowo (dotyk)');
   sprawdz((await strona.locator('.etykieta[data-element="cytozol"]').getAttribute('aria-pressed')) === 'true', 'stuknięcie palcem wybiera etykietę');
   await strona.locator('.znacznik[data-punkt="cytozol"] .znacznik__kolko').tap();
   sprawdz((await strona.locator('.miejsce[data-punkt="cytozol"]').getAttribute('data-stan')) === 'dobrze', 'stuknięcie numeru podpisuje punkt');
-  const tacka = await strona.locator('.podpis__tacka').boundingBox();
+  const tacka = await strona.locator('.tacka').boundingBox();
   const rysunek = await strona.locator('.podpis__rysunek').boundingBox();
   sprawdz(rysunek.y + rysunek.height <= tacka.y, 'w pionie rysunek mieści się nad tacką z etykietami');
   await zrzut(strona, '10-misja-tablet-pionowo');

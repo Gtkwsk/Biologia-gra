@@ -1,0 +1,39 @@
+// Pole informacji zwrotnej wspólne dla zadań (SPEC.md, sekcja 6.4: poprawna odpowiedź
+// i zdanie przyczynowe). Rodzaje: 'info', 'dobrze', 'zle'.
+// Komunikat: { rodzaj, tytul, tekst?, dodatek? } – dodatek to element DOM pod tekstem (np. lupy).
+
+import { h, ikona, wyczysc } from '../core/dom.js';
+
+function tresc(k) {
+  return h('div', { class: 'komunikat__tresc' }, [
+    h('p', { class: 'komunikat__tytul' }, k.tytul),
+    k.tekst ? h('p', { class: 'komunikat__tekst' }, k.tekst) : null,
+    k.dodatek ?? null,
+  ]);
+}
+
+export function utworzKomunikat() {
+  const el = h('div', { class: 'komunikat', role: 'status', 'aria-live': 'polite' });
+  return {
+    el,
+    pokaz(k) {
+      wyczysc(el);
+      el.dataset.rodzaj = k.rodzaj;
+      el.append(ikona(k.rodzaj, 'komunikat__ikona'), tresc(k));
+      el.classList.remove('komunikat--nowy');
+      void el.offsetWidth;
+      el.classList.add('komunikat--nowy');
+    },
+    pokazListe(lista) {
+      wyczysc(el);
+      el.dataset.rodzaj = lista.some((k) => k.rodzaj === 'zle') ? 'zle' : 'dobrze';
+      el.append(
+        h(
+          'ul',
+          { class: 'komunikat__lista' },
+          lista.map((k) => h('li', { 'data-rodzaj': k.rodzaj }, [ikona(k.rodzaj, 'komunikat__ikona'), tresc(k)])),
+        ),
+      );
+    },
+  };
+}

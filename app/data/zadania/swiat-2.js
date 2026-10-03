@@ -1,10 +1,11 @@
 // Zadania świata 2: „Miasto, którego nie widać” (TRESCI.md, sekcja 2.2).
 //
-// Typ „podpisywanie”: poprawna odpowiedź wynika ze schematu (punkt → element).
-// punkty:      które punkty schematu trzeba podpisać
-// dystraktory: etykiety elementów, których dany typ komórki nie ma
+// Typy zadań i pola: SPEC.md, sekcja 5; opis pól przy komponentach w js/components.
+// karta: id karty atlasu (element komórki, typ komórki „komorka-<typ>”, pojęcie, kształt).
+// Zadania z przedrostkiem s2-boss- należą tylko do puli bossa.
 
 export default [
+  // ---------- Misja „Plan miasta” ----------
   {
     id: 's2-podpis-zwierzeca-1',
     swiat: 2,
@@ -15,6 +16,456 @@ export default [
     dystraktory: ['sciana-komorkowa', 'chloroplast'],
     wyjasnienie:
       'Komórka zwierzęca ma błonę komórkową, cytozol, jądro komórkowe, mitochondria, rybosomy, siateczkę śródplazmatyczną, aparat Golgiego i wiele drobnych wakuol. Nie ma ściany komórkowej ani chloroplastów.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-wyglad-1',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Jak wyglądają elementy komórki zwierzęcej? Dopasuj nazwy do opisów.',
+    etykiety: 'nazwy',
+    wyjasnij: 'wyglad',
+    pary: [
+      { karta: 'rybosomy', opis: 'drobne ziarenka' },
+      { karta: 'siateczka-srodplazmatyczna', opis: 'system cienkich kanalików w całej komórce' },
+      { karta: 'aparat-golgiego', opis: 'stos przylegających, spłaszczonych pęcherzy i drobne pęcherzyki' },
+      { karta: 'jadro-komorkowe', opis: 'zwykle kuliste, w środkowej części komórki' },
+      { karta: 'wakuola', opis: 'niewielki pęcherzyk; w komórce zwierzęcej jest ich wiele' },
+      { karta: 'blona-komorkowa', opis: 'cienka granica komórki' },
+    ],
+    dystraktory: ['sciana-komorkowa'],
+    wyjasnienie:
+      'Rybosomy to drobne ziarenka, siateczka śródplazmatyczna to system kanalików, a aparat Golgiego to stos spłaszczonych pęcherzy. Komórka zwierzęca nie ma ściany komórkowej.',
+    zrodlo: '2.2',
+  },
+
+  // ---------- Misja „Budowa miasta” ----------
+  {
+    id: 's2-miasto-budowa',
+    swiat: 2,
+    typ: 'miasto',
+    faza: 'budowa',
+    tresc: 'Zbuduj miasto-komórkę: zatrudnij element do każdej usługi.',
+    dystraktory: ['sciana-komorkowa', 'chloroplast'],
+    wyjasnienie:
+      'Każdy element komórki ma swoje zadanie. Komórka zwierzęca nie ma ściany komórkowej ani chloroplastów.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-miasto-awarie',
+    swiat: 2,
+    typ: 'miasto',
+    faza: 'awarie',
+    ile: 5,
+    tresc: 'Awarie w mieście! Znajdź na planie element, który przestał działać.',
+    wyjasnienie: 'Brak elementu zatrzymuje jego usługę: bez mitochondriów brakuje energii, bez rybosomów nie powstają białka.',
+    zrodlo: '2.2',
+  },
+
+  // ---------- Misja „Biuro zatrudnienia” ----------
+  {
+    id: 's2-biuro-1',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Biuro zatrudnienia: kogo zatrudnić do każdego ogłoszenia?',
+    etykiety: 'nazwy',
+    pary: [
+      { karta: 'mitochondrium', opis: 'szukamy elektrowni, która dostarczy energii całej komórce' },
+      { karta: 'rybosomy', opis: 'szukamy warsztatów, które będą wytwarzać białka' },
+      { karta: 'blona-komorkowa', opis: 'szukamy straży granicznej, która oddzieli komórkę od otoczenia i będzie transportować substancje do wnętrza i na zewnątrz' },
+      { karta: 'aparat-golgiego', opis: 'szukamy sortowni, która będzie przekształcać i transportować białka' },
+      { karta: 'siateczka-srodplazmatyczna', opis: 'szukamy sieci kanalików, która będzie wytwarzać i transportować białka i tłuszcze' },
+      { karta: 'jadro-komorkowe', opis: 'szukamy ratusza, który będzie zawierać DNA i kierować wszystkimi procesami w komórce' },
+    ],
+    dystraktory: ['wakuola', 'cytozol'],
+    wyjasnienie:
+      'Mitochondria dostarczają energii, rybosomy wytwarzają białka, a aparat Golgiego je przekształca i transportuje. Siateczka śródplazmatyczna wytwarza i transportuje białka i tłuszcze.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-funkcje-1',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Przyporządkuj funkcje elementom komórki.',
+    etykiety: 'opisy',
+    pary: [
+      { karta: 'wakuola', opis: 'pochłanianie, trawienie i usuwanie z komórki różnych substancji' },
+      { karta: 'mitochondrium', opis: 'dostarczanie komórce energii' },
+      { karta: 'jadro-komorkowe', opis: 'kierowanie wszystkimi procesami w komórce' },
+    ],
+    dystraktory: [{ tekst: 'wytwarzanie białek', wyjasnienie: 'Białka wytwarzają rybosomy.' }],
+    wyjasnienie:
+      'Wakuole pochłaniają, trawią i usuwają substancje, mitochondria dostarczają energii, a jądro komórkowe kieruje wszystkimi procesami w komórce.',
+    zrodlo: '2.2',
+  },
+
+  // ---------- Misja „Kształt do zadania” ----------
+  {
+    id: 's2-ksztalt-1',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Kształt komórki zależy od jej funkcji. Dopasuj funkcję do komórki.',
+    etykiety: 'opisy',
+    pary: [
+      { karta: 'plemnik', opis: 'przemieszcza się do komórki jajowej' },
+      { karta: 'komorka-jajowa', opis: 'zawiera substancje zapasowe dla rozwijającego się organizmu' },
+      { karta: 'komorka-nerwowa', opis: 'łączy się z innymi komórkami i przekazuje informacje' },
+      { karta: 'komorka-nablonka', opis: 'ściśle przylega do sąsiednich komórek i tworzy z nimi warstwę ochronną' },
+    ],
+    dystraktory: [
+      { tekst: 'pobiera wodę z solami mineralnymi', wyjasnienie: 'Wodę z solami mineralnymi pobierają włośniki, komórki skórki korzenia rośliny.' },
+    ],
+    wyjasnienie:
+      'Plemnik ma wić, komórka jajowa jest duża i kulista, komórka nerwowa ma długie wypustki, a komórka nabłonka ma kształt kostki.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-ksztalt-2',
+    swiat: 2,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o kształtach komórek.',
+    tekst:
+      'Plemnik ma [wić|plemnik], dzięki której przemieszcza się do komórki jajowej. Komórka jajowa jest duża i [kulista|komorka-jajowa], zawiera substancje zapasowe. Komórka [nerwowa|komorka-nerwowa] ma długie wypustki, którymi łączy się z innymi komórkami. Komórka nabłonka ma kształt [kostki|komorka-nablonka] i razem z sąsiednimi tworzy warstwę ochronną.',
+    dystraktory: [
+      { tekst: 'rzęskę', wyjasnienie: 'Rzęskę ma część bakterii.' },
+      { tekst: 'płaska', wyjasnienie: 'Ta komórka zawiera zapasy, dlatego jest duża i ma inny kształt.' },
+      { tekst: 'jajowa', wyjasnienie: 'Komórka jajowa jest duża i kulista, nie ma długich wypustek.' },
+    ],
+    wyjasnienie:
+      'Plemnik przemieszcza się dzięki wici, komórka jajowa jest duża i kulista, komórka nerwowa ma długie wypustki, a komórka nabłonka ma kształt kostki.',
+    zrodlo: '2.2',
+  },
+
+  // ---------- Misja „Pod mikroskopem” ----------
+  {
+    id: 's2-mikroskop-1',
+    swiat: 2,
+    typ: 'klasyfikacja',
+    tresc: 'To komórki nabłonka jamy ustnej. Co widać przy jakim powiększeniu?',
+    obraz: 'nablonek-400',
+    kategorie: [
+      { id: 'x400', nazwa: 'widać przy około 400 razy' },
+      { id: 'x10000', nazwa: 'widać dopiero przy około 10 000 razy' },
+    ],
+    elementy: [
+      { tekst: 'błona komórkowa', kategoria: 'x400', karta: 'blona-komorkowa', wyjasnienie: 'Przy powiększeniu około 400 razy widać błonę komórkową, cytoplazmę i jądro komórkowe.' },
+      { tekst: 'cytoplazma', kategoria: 'x400', karta: 'cytoplazma', wyjasnienie: 'Przy powiększeniu około 400 razy widać błonę komórkową, cytoplazmę i jądro komórkowe.' },
+      { tekst: 'jądro komórkowe', kategoria: 'x400', karta: 'jadro-komorkowe', wyjasnienie: 'Przy powiększeniu około 400 razy widać błonę komórkową, cytoplazmę i jądro komórkowe.' },
+      { tekst: 'mitochondria', kategoria: 'x10000', karta: 'mitochondrium', wyjasnienie: 'Mitochondria widać dopiero przy bardzo dużym powiększeniu, około 10 000 razy.' },
+      { tekst: 'rybosomy', kategoria: 'x10000', karta: 'rybosomy', wyjasnienie: 'Rybosomy widać dopiero przy bardzo dużym powiększeniu, około 10 000 razy.' },
+      { tekst: 'aparat Golgiego', kategoria: 'x10000', karta: 'aparat-golgiego', wyjasnienie: 'Aparat Golgiego widać dopiero przy bardzo dużym powiększeniu, około 10 000 razy.' },
+      { tekst: 'cytozol z zawieszonymi elementami', kategoria: 'x10000', karta: 'cytozol', wyjasnienie: 'Dopiero przy około 10 000 razy widać, że cytoplazma to cytozol z zawieszonymi w nim elementami.' },
+    ],
+    wyjasnienie:
+      'Przy powiększeniu około 400 razy widać tylko błonę komórkową, cytoplazmę i jądro komórkowe. Przy około 10 000 razy widać, że cytoplazma to cytozol z zawieszonymi w nim elementami.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-jeden-czy-wielu',
+    swiat: 2,
+    typ: 'klasyfikacja',
+    tresc: 'Jedna komórka czy wiele? Przyporządkuj organizmy do grup.',
+    kategorie: [
+      { id: 'jedno', nazwa: 'organizmy jednokomórkowe', karta: 'organizm-jednokomorkowy' },
+      { id: 'wielo', nazwa: 'organizmy wielokomórkowe', karta: 'organizm-wielokomorkowy' },
+    ],
+    elementy: [
+      { tekst: 'bakteria', kategoria: 'jedno', wyjasnienie: 'Bakterie to organizmy jednokomórkowe: cały organizm to jedna komórka.' },
+      { tekst: 'drożdże', kategoria: 'jedno', wyjasnienie: 'Drożdże to grzyby jednokomórkowe.' },
+      { tekst: 'żubr', kategoria: 'wielo', wyjasnienie: 'Żubr to zwierzę, a zwierzęta są organizmami wielokomórkowymi.' },
+      { tekst: 'struś', kategoria: 'wielo', wyjasnienie: 'Struś to zwierzę, a zwierzęta są organizmami wielokomórkowymi.' },
+      { tekst: 'słonecznik', kategoria: 'wielo', wyjasnienie: 'Słonecznik to roślina zbudowana z wielu komórek.' },
+      { tekst: 'człowiek', kategoria: 'wielo', wyjasnienie: 'Człowiek jest zbudowany z wielu komórek.' },
+    ],
+    wyjasnienie:
+      'Organizmy jednokomórkowe to na przykład bakterie i drożdże. Wielokomórkowe są zwierzęta oraz wiele roślin i grzybów.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-pf-1',
+    swiat: 2,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz? Popraw zdania fałszywe.',
+    zdania: [
+      {
+        tekst: 'Komórka to najmniejsza część organizmu zdolna do wykonywania czynności życiowych.',
+        prawda: true,
+        karta: 'komorka',
+        wyjasnienie: 'Dlatego komórkę nazywamy podstawową jednostką życia.',
+      },
+      {
+        tekst: 'Rybosomy dostarczają komórce energii.',
+        prawda: false,
+        karta: 'mitochondrium',
+        poprawne: 'Mitochondria dostarczają komórce energii.',
+        bledne: ['Wakuole dostarczają komórce energii.', 'Jądro komórkowe dostarcza komórce energii.'],
+        wyjasnienie: 'Mitochondria to centrum energetyczne komórki. Rybosomy wytwarzają białka.',
+      },
+      {
+        tekst: 'Najmniejsze komórki mają bakterie.',
+        prawda: true,
+        wyjasnienie: 'Komórki są zwykle mikroskopijne, a najmniejsze mają bakterie.',
+      },
+      {
+        tekst: 'Największą znaną komórką zwierzęcą jest komórka nerwowa.',
+        prawda: false,
+        karta: 'komorka-jajowa',
+        poprawne: 'Największą znaną komórką zwierzęcą jest komórka jajowa w jaju strusia.',
+        bledne: ['Największą znaną komórką zwierzęcą jest plemnik.', 'Największą znaną komórką zwierzęcą jest komórka nabłonka.'],
+        wyjasnienie: 'Jajo strusia ma około 15 cm długości, a komórka jajowa w nim to największa znana komórka zwierzęca.',
+      },
+      {
+        tekst: 'Przy powiększeniu około 400 razy widać w komórce rybosomy i aparat Golgiego.',
+        prawda: false,
+        karta: 'cytoplazma',
+        poprawne: 'Przy powiększeniu około 400 razy widać błonę komórkową, cytoplazmę i jądro komórkowe.',
+        bledne: [
+          'Przy powiększeniu około 400 razy widać tylko jądro komórkowe.',
+          'Przy powiększeniu około 400 razy nie widać jeszcze żadnej komórki.',
+        ],
+        wyjasnienie: 'Rybosomy i aparat Golgiego widać dopiero przy bardzo dużym powiększeniu, około 10 000 razy.',
+      },
+    ],
+    wyjasnienie: 'Komórka to podstawowa jednostka życia. Energii dostarczają jej mitochondria.',
+    zrodlo: '2.2',
+  },
+
+  // ---------- Pule bossa ----------
+  {
+    id: 's2-boss-podpis-2',
+    swiat: 2,
+    typ: 'podpisywanie',
+    tresc: 'Podpisz wskazane elementy komórki zwierzęcej.',
+    schemat: 'komorka-zwierzeca',
+    punkty: ['blona', 'mitochondrium', 'cytozol', 'jadro', 'wakuola', 'golgi'],
+    dystraktory: ['sciana-komorkowa', 'otoczka-sluzowa'],
+    wyjasnienie: 'Komórka zwierzęca nie ma ściany komórkowej ani otoczki śluzowej.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-podpis-3',
+    swiat: 2,
+    typ: 'podpisywanie',
+    tresc: 'Podpisz wskazane elementy komórki zwierzęcej.',
+    schemat: 'komorka-zwierzeca',
+    punkty: ['rybosomy', 'siateczka', 'jadro', 'golgi', 'blona', 'mitochondrium'],
+    dystraktory: ['chloroplast', 'rzeska'],
+    wyjasnienie: 'Komórka zwierzęca nie ma chloroplastów ani rzęski.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-funkcje-2',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Przyporządkuj funkcje elementom komórki.',
+    etykiety: 'opisy',
+    pary: [
+      { karta: 'wakuola', opis: 'usuwa z komórki różne substancje' },
+      { karta: 'mitochondrium', opis: 'jest centrum energetycznym komórki' },
+      { karta: 'jadro-komorkowe', opis: 'zawiera DNA' },
+    ],
+    dystraktory: [{ tekst: 'przekształca i transportuje białka', wyjasnienie: 'Białka przekształca i transportuje aparat Golgiego.' }],
+    wyjasnienie: 'Wakuole usuwają z komórki różne substancje, mitochondria to centrum energetyczne komórki, a jądro komórkowe zawiera DNA.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-funkcje-3',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Przyporządkuj funkcje elementom komórki.',
+    etykiety: 'opisy',
+    pary: [
+      { karta: 'wakuola', opis: 'trawi różne substancje' },
+      { karta: 'mitochondrium', opis: 'dostarcza energii' },
+      { karta: 'jadro-komorkowe', opis: 'kieruje wszystkimi procesami w komórce' },
+    ],
+    dystraktory: [
+      { tekst: 'oddziela komórkę od otoczenia', wyjasnienie: 'Komórkę od otoczenia oddziela błona komórkowa.' },
+      { tekst: 'wytwarza i transportuje tłuszcze', wyjasnienie: 'Białka i tłuszcze wytwarza i transportuje siateczka śródplazmatyczna.' },
+    ],
+    wyjasnienie: 'Wakuole trawią różne substancje, mitochondria dostarczają energii, a jądro komórkowe kieruje wszystkimi procesami w komórce.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-funkcje-4',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Który element komórki pełni daną funkcję?',
+    etykiety: 'nazwy',
+    pary: [
+      { karta: 'mitochondrium', opis: 'dostarcza energii' },
+      { karta: 'jadro-komorkowe', opis: 'zawiera DNA i kieruje wszystkimi procesami w komórce' },
+      { karta: 'wakuola', opis: 'pochłania, trawi i usuwa z komórki różne substancje' },
+    ],
+    dystraktory: ['rybosomy', 'aparat-golgiego'],
+    wyjasnienie: 'Energii dostarczają mitochondria, procesami kieruje jądro komórkowe, a substancje pochłaniają, trawią i usuwają wakuole.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-funkcje-5',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Który element komórki pełni daną funkcję?',
+    etykiety: 'nazwy',
+    pary: [
+      { karta: 'wakuola', opis: 'bierze udział w usuwaniu z komórki różnych substancji' },
+      { karta: 'jadro-komorkowe', opis: 'kieruje wszystkimi procesami w komórce' },
+      { karta: 'mitochondrium', opis: 'centrum energetyczne komórki' },
+    ],
+    dystraktory: ['blona-komorkowa', 'siateczka-srodplazmatyczna'],
+    wyjasnienie: 'Wakuole usuwają z komórki substancje, jądro komórkowe kieruje procesami, a mitochondria to centrum energetyczne komórki.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-funkcje-6',
+    swiat: 2,
+    typ: 'przyporzadkowanie',
+    tresc: 'Przyporządkuj funkcje elementom komórki.',
+    etykiety: 'opisy',
+    pary: [
+      { karta: 'jadro-komorkowe', opis: 'zawiera DNA i kieruje wszystkimi procesami w komórce' },
+      { karta: 'wakuola', opis: 'pochłania, trawi i usuwa z komórki różne substancje' },
+      { karta: 'mitochondrium', opis: 'dostarcza komórce energii' },
+      { karta: 'rybosomy', opis: 'wytwarzają białka' },
+    ],
+    dystraktory: [{ tekst: 'wypełnia komórkę', wyjasnienie: 'Komórkę wypełnia cytozol.' }],
+    wyjasnienie: 'Jądro kieruje procesami, wakuole pochłaniają, trawią i usuwają substancje, mitochondria dostarczają energii, a rybosomy wytwarzają białka.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-organizmy-2',
+    swiat: 2,
+    typ: 'klasyfikacja',
+    tresc: 'Przyporządkuj organizmy do grup.',
+    kategorie: [
+      { id: 'jedno', nazwa: 'organizmy jednokomórkowe', karta: 'organizm-jednokomorkowy' },
+      { id: 'wielo', nazwa: 'organizmy wielokomórkowe', karta: 'organizm-wielokomorkowy' },
+    ],
+    elementy: [
+      { tekst: 'drożdże', kategoria: 'jedno', wyjasnienie: 'Drożdże to grzyby jednokomórkowe.' },
+      { tekst: 'bakteria', kategoria: 'jedno', wyjasnienie: 'Bakterie to organizmy jednokomórkowe.' },
+      { tekst: 'wilk', kategoria: 'wielo', wyjasnienie: 'Wilk to zwierzę, a zwierzęta są organizmami wielokomórkowymi.' },
+      { tekst: 'moczarka kanadyjska', kategoria: 'wielo', wyjasnienie: 'W liściu moczarki widać pod mikroskopem wiele komórek.' },
+      { tekst: 'foka', kategoria: 'wielo', wyjasnienie: 'Foka to zwierzę, a zwierzęta są organizmami wielokomórkowymi.' },
+    ],
+    wyjasnienie: 'Bakterie i drożdże to organizmy jednokomórkowe. Zwierzęta oraz wiele roślin i grzybów to organizmy wielokomórkowe.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-organizmy-3',
+    swiat: 2,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz?',
+    zdania: [
+      {
+        tekst: 'Drożdże to organizmy wielokomórkowe.',
+        prawda: false,
+        karta: 'organizm-jednokomorkowy',
+        poprawne: 'Drożdże to organizmy jednokomórkowe.',
+        bledne: ['Drożdże to organizmy zbudowane z wielu komórek.', 'Drożdże nie są zbudowane z komórek.'],
+        wyjasnienie: 'Drożdże to grzyby jednokomórkowe.',
+      },
+      {
+        tekst: 'Zwierzęta to organizmy wielokomórkowe.',
+        prawda: true,
+        karta: 'organizm-wielokomorkowy',
+        wyjasnienie: 'Zwierzęta oraz wiele roślin i grzybów to organizmy wielokomórkowe.',
+      },
+      {
+        tekst: 'Organizm jednokomórkowy jest zbudowany z jednej komórki.',
+        prawda: true,
+        karta: 'organizm-jednokomorkowy',
+        wyjasnienie: 'Taka jedna komórka to cały organizm, na przykład bakteria.',
+      },
+      {
+        tekst: 'Bakterie to organizmy wielokomórkowe.',
+        prawda: false,
+        karta: 'organizm-jednokomorkowy',
+        poprawne: 'Bakterie to organizmy jednokomórkowe.',
+        bledne: ['Bakterie mają największe komórki.', 'Bakterie nie są zbudowane z komórek.'],
+        wyjasnienie: 'Bakterie to organizmy jednokomórkowe, a ich komórki są najmniejsze.',
+      },
+    ],
+    wyjasnienie: 'Bakterie i drożdże to organizmy jednokomórkowe, a zwierzęta to organizmy wielokomórkowe.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-pf-1',
+    swiat: 2,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz?',
+    zdania: [
+      {
+        tekst: 'Aparat Golgiego wytwarza i transportuje tłuszcze.',
+        prawda: false,
+        karta: 'aparat-golgiego',
+        poprawne: 'Aparat Golgiego przekształca i transportuje białka.',
+        bledne: ['Aparat Golgiego dostarcza komórce energii.', 'Aparat Golgiego zawiera DNA i kieruje procesami w komórce.'],
+        wyjasnienie: 'Tłuszcze wytwarza i transportuje siateczka śródplazmatyczna. Aparat Golgiego przekształca i transportuje białka.',
+      },
+      {
+        tekst: 'Błona komórkowa oddziela komórkę od otoczenia.',
+        prawda: true,
+        karta: 'blona-komorkowa',
+        wyjasnienie: 'Błona komórkowa transportuje też substancje do wnętrza komórki i na zewnątrz.',
+      },
+      {
+        tekst: 'Komórka zwierzęca ma jedną dużą wakuolę.',
+        prawda: false,
+        karta: 'wakuola',
+        poprawne: 'Komórka zwierzęca ma wiele drobnych wakuol.',
+        bledne: ['Komórka zwierzęca nie ma wakuol.', 'Komórka zwierzęca ma jedną dużą wakuolę i ścianę komórkową.'],
+        wyjasnienie: 'W komórce zwierzęcej wakuole to niewielkie pęcherzyki i jest ich wiele.',
+      },
+      {
+        tekst: 'Cytozol wypełnia komórkę, a zanurzone są w nim pozostałe elementy.',
+        prawda: true,
+        karta: 'cytozol',
+        wyjasnienie: 'Cytozol to galaretowata substancja: woda, sole mineralne i inne związki, głównie białka.',
+      },
+    ],
+    wyjasnienie: 'Siateczka śródplazmatyczna wytwarza i transportuje białka i tłuszcze, a aparat Golgiego przekształca i transportuje białka.',
+    zrodlo: '2.2',
+  },
+  {
+    id: 's2-boss-pf-2',
+    swiat: 2,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz?',
+    zdania: [
+      {
+        tekst: 'Wakuole dostarczają komórce energii.',
+        prawda: false,
+        karta: 'wakuola',
+        poprawne: 'Wakuole pochłaniają, trawią i usuwają z komórki różne substancje.',
+        bledne: ['Wakuole wytwarzają białka.', 'Wakuole kierują wszystkimi procesami w komórce.'],
+        wyjasnienie: 'Energii dostarczają mitochondria. Wakuole biorą udział w pochłanianiu, trawieniu i usuwaniu substancji.',
+      },
+      {
+        tekst: 'Siateczka śródplazmatyczna wytwarza i transportuje białka i tłuszcze.',
+        prawda: true,
+        karta: 'siateczka-srodplazmatyczna',
+        wyjasnienie: 'Siateczka śródplazmatyczna to system cienkich kanalików w całej komórce.',
+      },
+      {
+        tekst: 'Komórka nabłonka ma długie wypustki, którymi łączy się z innymi komórkami.',
+        prawda: false,
+        karta: 'komorka-nerwowa',
+        poprawne: 'Komórka nerwowa ma długie wypustki, którymi łączy się z innymi komórkami.',
+        bledne: [
+          'Komórka jajowa ma długie wypustki, którymi łączy się z innymi komórkami.',
+          'Plemnik ma długie wypustki, którymi łączy się z innymi komórkami.',
+        ],
+        wyjasnienie: 'Komórka nabłonka ma kształt kostki i tworzy z sąsiednimi warstwę ochronną.',
+      },
+      {
+        tekst: 'Jądro komórkowe zawiera DNA i kieruje wszystkimi procesami w komórce.',
+        prawda: true,
+        karta: 'jadro-komorkowe',
+        wyjasnienie: 'Jądro komórkowe jest zwykle kuliste i leży w środkowej części komórki.',
+      },
+    ],
+    wyjasnienie: 'Wakuole pochłaniają, trawią i usuwają substancje. Siateczka śródplazmatyczna wytwarza i transportuje białka i tłuszcze.',
     zrodlo: '2.2',
   },
 ];

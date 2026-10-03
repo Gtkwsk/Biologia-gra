@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480">
+  <!-- Schemat komórki grzybowej, rysunek własny (SPEC.md, sekcja 6.2). -->
+  <!-- Zgodnie z TRESCI.md, sekcja 2.3: jak komórka zwierzęca (jądro, mitochondria, rybosomy, wakuole), -->
+  <!-- ale ze ścianą komórkową zbudowaną z chityny; bez chloroplastów. -->
+
+  <g data-element="sciana-komorkowa">
+    <path d="M136 96 H504 A56 56 0 0 1 560 152 V328 A56 56 0 0 1 504 384 H136 A56 56 0 0 1 80 328 V152 A56 56 0 0 1 136 96 Z M138 114 A40 40 0 0 0 98 154 V326 A40 40 0 0 0 138 366 H502 A40 40 0 0 0 542 326 V154 A40 40 0 0 0 502 114 Z" fill="#D9CDB4" fill-rule="evenodd" stroke="#6E5B3A" stroke-width="3.5"/>
+  </g>
+
+  <g data-element="cytozol">
+    <rect x="102" y="118" width="436" height="244" rx="36" fill="#FBF1E4"/>
+  </g>
+
+  <g data-element="jadro-komorkowe">
+    <ellipse cx="300" cy="236" rx="52" ry="46" fill="#D6C4EE" stroke="#4E3684" stroke-width="3.5"/>
+    <g fill="none" stroke="#8E6CC0" stroke-width="2.5" stroke-linecap="round">
+      <path d="M268 222 q9 -11 20 -2 t18 4"/>
+      <path d="M276 256 q11 9 23 0 t20 5"/>
+      <path d="M306 206 q7 7 16 2"/>
+      <path d="M312 238 q9 -7 18 2"/>
+    </g>
+  </g>
+
+  <g data-element="wakuola" fill="#D7F0F7" stroke="#2F7F99" stroke-width="2.5">
+    <circle cx="172" cy="186" r="22"/>
+    <circle cx="190" cy="292" r="15"/>
+    <circle cx="440" cy="300" r="20"/>
+    <circle cx="470" cy="176" r="12"/>
+  </g>
+
+  <g data-element="mitochondrium" fill="#F7B267" stroke="#8F4A0C">
+    <g transform="translate(410 214) rotate(70)">
+      <ellipse rx="30" ry="13" stroke-width="3"/>
+      <path d="M-21 0 q5 -10 10.5 0 t10.5 0 t10.5 0 t10.5 0" fill="none" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <g transform="translate(260 334) rotate(-6)">
+      <ellipse rx="28" ry="12" stroke-width="3"/>
+      <path d="M-19 0 q5 -9 9.5 0 t9.5 0 t9.5 0 t9.5 0" fill="none" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <g transform="translate(330 142) rotate(4)">
+      <ellipse rx="28" ry="12" stroke-width="3"/>
+      <path d="M-19 0 q5 -9 9.5 0 t9.5 0 t9.5 0 t9.5 0" fill="none" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <g data-element="rybosomy" fill="#4B3A78">
+    <circle cx="140" cy="240" r="3.6"/>
+    <circle cx="152" cy="252" r="3.6"/>
+    <circle cx="136" cy="258" r="3.6"/>
+    <circle cx="232" cy="150" r="3.6"/>
+    <circle cx="244" cy="160" r="3.6"/>
+    <circle cx="228" cy="166" r="3.6"/>
+    <circle cx="494" cy="236" r="3.6"/>
+    <circle cx="506" cy="248" r="3.6"/>
+    <circle cx="490" cy="254" r="3.6"/>
+    <circle cx="370" cy="330" r="3.6"/>
+    <circle cx="382" cy="340" r="3.6"/>
+    <circle cx="366" cy="344" r="3.6"/>
+    <circle cx="410" cy="140" r="3.6"/>
+    <circle cx="420" cy="150" r="3.6"/>
+  </g>
+
+  <g data-element="blona-komorkowa">
+    <rect x="102" y="118" width="436" height="244" rx="36" fill="none" stroke="#9E3B5B" stroke-width="4"/>
+  </g>
+</svg>

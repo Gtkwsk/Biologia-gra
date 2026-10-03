@@ -67,7 +67,15 @@ test('odczyt odrzuca dane bez numeru wersji', () => {
 test('eksport i import zachowują postęp', () => {
   let s = nowyStan(DZIEN);
   s = ustawImie(s, '  Mikołaj   Nowak ');
-  s = zapiszWynik(s, { idZadania: 'z1', poprawne: 7, wszystkie: 8, bledneElementy: ['rybosomy'], czasMs: 60000, dzien: DZIEN });
+  s = zapiszWynik(s, {
+    idZadania: 'z1',
+    typ: 'podpisywanie',
+    poprawne: 7,
+    wszystkie: 8,
+    karty: [{ karta: 'rybosomy', odRazu: false, poprawnie: true }],
+    czasMs: 60000,
+    dzien: DZIEN,
+  });
   const odczytany = zImportu(doEksportu(s, DZIEN), DZIEN);
   assert.deepEqual(odczytany, s);
   assert.equal(odczytany.ustawienia.imie, 'Mikołaj Nowak');
@@ -82,12 +90,47 @@ test('import odrzuca obcy plik i niepoprawny JSON', () => {
   );
 });
 
+const zle = (karta) => ({ karta, odRazu: false, poprawnie: true });
+const dobrze = (karta) => ({ karta, odRazu: true, poprawnie: true });
+
 test('zapis wyniku liczy próby, najlepszy i ostatni wynik oraz pomyłki', () => {
   let s = nowyStan(DZIEN);
-  s = zapiszWynik(s, { idZadania: 'z1', poprawne: 6, wszystkie: 8, bledneElementy: ['rybosomy', 'cytozol'], dzien: DZIEN });
-  s = zapiszWynik(s, { idZadania: 'z1', poprawne: 4, wszystkie: 8, bledneElementy: ['rybosomy'], dzien: '2026-10-04' });
+  s = zapiszWynik(s, { idZadania: 'z1', poprawne: 6, wszystkie: 8, karty: [zle('rybosomy'), zle('cytozol')], dzien: DZIEN });
+  s = zapiszWynik(s, { idZadania: 'z1', poprawne: 4, wszystkie: 8, karty: [zle('rybosomy')], dzien: '2026-10-04' });
   assert.deepEqual(s.zadania.z1, { proby: 2, najlepszy: 0.75, ostatni: 0.5, ostatnio: '2026-10-04' });
   assert.deepEqual(s.pomylki, { rybosomy: 2, cytozol: 1 });
+});
+
+test('karty atlasu: odkrycie, typy zadań z odpowiedzią od razu i wynik w bossie', () => {
+  let s = nowyStan(DZIEN);
+  s = zapiszWynik(s, { idZadania: 'z1', typ: 'podpisywanie', poprawne: 1, wszystkie: 2, karty: [dobrze('jadro-komorkowe'), zle('cytozol')], dzien: DZIEN });
+  assert.deepEqual(s.karty['jadro-komorkowe'], { odRazu: 1, typy: ['podpisywanie'], boss: false });
+  assert.deepEqual(s.karty.cytozol, { odRazu: 0, typy: [], boss: false });
+  s = zapiszWynik(s, { idZadania: 'z2', typ: 'przyporzadkowanie', poprawne: 1, wszystkie: 1, karty: [dobrze('jadro-komorkowe')], dzien: DZIEN });
+  s = zapiszWynik(s, { idZadania: 'z1', typ: 'podpisywanie', poprawne: 1, wszystkie: 1, karty: [dobrze('jadro-komorkowe')], dzien: DZIEN });
+  assert.deepEqual(s.karty['jadro-komorkowe'], { odRazu: 3, typy: ['podpisywanie', 'przyporzadkowanie'], boss: false });
+  s = zapiszWynik(s, { idZadania: 'b', typ: 'podpisywanie', boss: true, poprawne: 0, wszystkie: 1, karty: [{ karta: 'rybosomy', odRazu: false, poprawnie: false }], dzien: DZIEN });
+  assert.equal(s.karty.rybosomy, undefined, 'błędna odpowiedź bez poprawki nie odkrywa karty');
+  s = zapiszWynik(s, { idZadania: 'b', typ: 'podpisywanie', boss: true, poprawne: 1, wszystkie: 1, karty: [dobrze('cytozol')], dzien: DZIEN });
+  assert.equal(s.karty.cytozol.boss, true);
+});
+
+test('migracja z wersji 1 dodaje pusty atlas i zachowuje wyniki', () => {
+  const v1 = {
+    wersja: 1,
+    utworzono: DZIEN,
+    ustawienia: { imie: 'Mikołaj', odblokujWszystkie: false },
+    odblokowane: [2],
+    bossowie: [],
+    zadania: { 's2-podpis-zwierzeca-1': { proby: 2, najlepszy: 1, ostatni: 1, ostatnio: DZIEN } },
+    pomylki: { cytozol: 1 },
+    czasMs: 120000,
+  };
+  const s = odczytajStan(v1, DZIEN);
+  assert.equal(s.wersja, WERSJA_SCHEMATU);
+  assert.deepEqual(s.karty, {});
+  assert.deepEqual(s.zadania, v1.zadania);
+  assert.deepEqual(s.pomylki, v1.pomylki);
 });
 
 test('zapis wyniku nie zmienia poprzedniego stanu', () => {

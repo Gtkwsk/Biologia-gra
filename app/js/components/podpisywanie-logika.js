@@ -159,14 +159,12 @@ export function czyGotowe(przyg, przebieg) {
   return przyg.punkty.every((p) => przebieg.przypisania[p.id] === p.element);
 }
 
-// Wynik do zapisu: poprawne od razu, elementy z błędem przy pierwszej próbie.
+// Wynik zadania: liczba odpowiedzi dobrych od razu i karty atlasu z wynikiem.
 export function podsumuj(przyg, przebieg) {
-  const odRazu = przyg.punkty.filter((p) => przebieg.pierwszaDobra[p.id] === true);
-  const zBledem = przyg.punkty.filter((p) => przebieg.pierwszaDobra[p.id] !== true);
-  return {
-    poprawne: odRazu.length,
-    wszystkie: przyg.punkty.length,
-    opanowaneElementy: odRazu.map((p) => p.element),
-    bledneElementy: zBledem.map((p) => p.element),
-  };
+  const karty = przyg.punkty.map((p) => ({
+    karta: p.element,
+    odRazu: przebieg.pierwszaDobra[p.id] === true,
+    poprawnie: przebieg.przypisania[p.id] === p.element,
+  }));
+  return { poprawne: karty.filter((k) => k.odRazu).length, wszystkie: karty.length, karty };
 }

@@ -1,0 +1,556 @@
+/* Mechaniki światów: budowa miasta, detektyw komórek, konstruktor, woda w wakuoli. */
+
+.etykieta.blad {
+  background: var(--eozyna-jasna);
+  animation: potrzasniecie 0.5s;
+}
+
+/* ---------- Budowa miasta ---------- */
+
+.miasto__plansza {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .miasto__plansza {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+  /* Plan zostaje na ekranie, gdy przewija się listę usług. */
+  .miasto--budowa .miasto__plan {
+    position: sticky;
+    top: 8px;
+  }
+}
+
+.miasto__plan {
+  margin: 0;
+  overflow: hidden;
+  background: #1e2236;
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.miasto__rysunek {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.miasto__plan--numery {
+  background: var(--bialy);
+}
+
+.miasto__zarys {
+  fill: none;
+  stroke: #f2b33d;
+  stroke-width: 4;
+  stroke-dasharray: 10 9;
+  opacity: 0.8;
+}
+
+.miasto__ukryty {
+  opacity: 0;
+}
+
+.miasto__nowy {
+  animation: pojawienie 0.6s ease-out;
+}
+
+@keyframes pojawienie {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+.miasto__nowy,
+.konstruktor__nowy {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.miasto__naprawiony {
+  animation: naprawa 1.2s ease-in-out 2;
+}
+
+@keyframes naprawa {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.miasto__uslugi {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.usluga {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  grid-template-areas:
+    'nazwa slot'
+    'zlecenie slot';
+  align-items: center;
+  gap: 2px 10px;
+  padding: 6px 8px;
+  background: var(--bialy);
+  border: 3px solid var(--papier-ciemny);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.usluga__nazwa {
+  grid-area: nazwa;
+  font-family: var(--font-tytul);
+  font-size: 1rem;
+  line-height: 1.15;
+}
+
+.usluga__zlecenie {
+  grid-area: zlecenie;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  color: var(--atrament-jasny);
+}
+
+.usluga__slot {
+  grid-area: slot;
+  font-size: 0.9rem;
+}
+
+.usluga[data-stan='dobrze'] {
+  border-color: var(--chlorofil);
+}
+
+.usluga.cel,
+.wybor-aktywny .usluga[data-stan='puste'] {
+  background: #fff7d6;
+  border-color: var(--blekit);
+}
+
+.usluga.blad {
+  animation: potrzasniecie 0.5s;
+  border-color: var(--eozyna);
+}
+
+@media (max-width: 599px) {
+  .usluga {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'nazwa'
+      'zlecenie'
+      'slot';
+  }
+}
+
+.miasto__alarm {
+  padding: 0.75rem 1rem;
+  color: #f4f6f1;
+  background: #1e2236;
+  border: var(--kontur) solid var(--okular);
+  border-left: 12px solid #f2b33d;
+  border-radius: 10px;
+}
+
+.miasto__licznik {
+  margin: 0;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: #f2b33d;
+}
+
+.miasto__objaw {
+  max-width: none;
+  margin: 0.15rem 0 0;
+  font-family: var(--font-tytul);
+  font-size: var(--r-2);
+  line-height: 1.25;
+}
+
+.miasto--awarie .miasto__plan {
+  justify-self: center;
+  width: 100%;
+  max-width: 720px;
+}
+
+.miasto--awarie .miasto__rysunek {
+  max-height: max(300px, calc(100dvh - 430px));
+}
+
+/* ---------- Detektyw komórek ---------- */
+
+.detektyw__akta {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: 1rem 1.25rem;
+  background: #fffdf2;
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+.detektyw__tajemnica {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  font-family: var(--font-tytul);
+  font-size: 3rem;
+  color: var(--bialy);
+  background: var(--atrament-jasny);
+  border: 6px dashed var(--okular);
+  border-radius: 46% 54% 50% 50% / 52% 46% 54% 48%;
+}
+
+.detektyw__licznik {
+  margin: 0;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.detektyw__mowi {
+  margin: 0.2rem 0 0.4rem;
+  font-weight: 700;
+}
+
+.detektyw__wskazowki {
+  margin: 0 0 0.75rem;
+  padding-left: 1.4em;
+}
+
+.detektyw__wskazowki li {
+  margin-bottom: 0.35em;
+  font-size: var(--r-2);
+  font-weight: 600;
+}
+
+.detektyw__nowa {
+  animation: wjazd 0.3s ease-out;
+}
+
+.detektyw__podejrzani {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.podejrzany {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 150px;
+  padding: 10px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--atrament);
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 5px 0 var(--okular);
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.podejrzany:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--okular);
+}
+
+.podejrzany__rysunek {
+  width: 84px;
+  height: 84px;
+}
+
+.podejrzany[data-stan='wykluczona'] {
+  background: var(--papier-ciemny);
+  box-shadow: none;
+}
+
+.podejrzany[data-stan='wykluczona'] .podejrzany__rysunek,
+.podejrzany[data-stan='wykluczona'] .podejrzany__nazwa {
+  opacity: 0.4;
+}
+
+.podejrzany[data-stan='trafiona'] {
+  background: var(--chlorofil-jasny);
+  border-color: var(--chlorofil);
+}
+
+.podejrzany:disabled {
+  cursor: default;
+}
+
+.podejrzany__znak:not(:empty) {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--bialy);
+  background: var(--eozyna);
+  border-radius: 50%;
+}
+
+.podejrzany[data-stan='trafiona'] .podejrzany__znak {
+  background: var(--chlorofil);
+}
+
+.podejrzany__znak .ikona {
+  width: 18px;
+  height: 18px;
+}
+
+.lupy {
+  display: inline-flex;
+  gap: 4px;
+  margin-top: 0.3rem;
+}
+
+.lupy__lupa {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--atrament-jasny);
+  background: var(--bialy);
+  border: 2px solid var(--okular);
+  border-radius: 50%;
+}
+
+.lupy__lupa[data-pelna='true'] {
+  color: var(--okular);
+  background: #f5c400;
+}
+
+.lupy__lupa .ikona {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 599px) {
+  .detektyw__akta {
+    grid-template-columns: 1fr;
+  }
+  .detektyw__tajemnica {
+    width: 64px;
+    height: 64px;
+    font-size: 2rem;
+  }
+}
+
+/* ---------- Konstruktor czterech komórek ---------- */
+
+.konstruktor__plansza {
+  display: grid;
+  gap: 8px;
+}
+
+.konstruktor__opis {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.konstruktor__naglowek {
+  margin: 0;
+  font-family: var(--font-tytul);
+  font-size: var(--r-3);
+}
+
+.konstruktor__licznik {
+  margin: 0;
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.konstruktor__plan {
+  margin: 0;
+  overflow: hidden;
+  background: var(--bialy)
+    repeating-linear-gradient(0deg, transparent 0 23px, rgba(36, 87, 166, 0.12) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, rgba(36, 87, 166, 0.12) 23px 24px);
+  border: var(--kontur) dashed var(--blekit);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.konstruktor__plan.cel,
+.wybor-aktywny .konstruktor__plan {
+  background-color: #fff7d6;
+  border-style: solid;
+}
+
+.konstruktor__rysunek {
+  display: block;
+  width: 100%;
+  max-height: max(280px, calc(100dvh - 560px));
+  height: auto;
+}
+
+.konstruktor__zarys {
+  fill: none;
+  stroke: var(--blekit);
+  stroke-width: 4;
+  stroke-dasharray: 12 10;
+}
+
+.konstruktor__ukryty {
+  opacity: 0;
+}
+
+.konstruktor__nowy {
+  animation: pojawienie 0.6s ease-out;
+}
+
+.konstruktor .tacka__akcje {
+  gap: 12px;
+}
+
+/* ---------- Woda w wakuoli ---------- */
+
+.wakuola__scena {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.wakuola__panel {
+  margin: 0;
+  padding: 8px;
+  text-align: center;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.wakuola__panel svg {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  height: auto;
+}
+
+.wakuola__panel figcaption {
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.wakuola__napis {
+  font-family: var(--font-tekst);
+  font-size: 13px;
+  font-weight: 700;
+  fill: #1f5f75;
+}
+
+.wakuola__sterowanie {
+  padding: 0.75rem 1rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.wakuola__etykieta {
+  display: block;
+  font-family: var(--font-tytul);
+  font-size: var(--r-2);
+}
+
+.wakuola__skala {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.wakuola__suwak {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  accent-color: var(--blekit);
+}
+
+.wakuola__stan {
+  max-width: none;
+  margin: 0.25rem 0 0;
+  font-weight: 700;
+}
+
+.wakuola__ciekawostka {
+  margin-top: 0;
+}
+
+.wakuola__pytanie {
+  padding: 1rem 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+.wakuola__licznik {
+  margin: 0;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.wakuola__tresc {
+  max-width: none;
+  margin: 0.2rem 0 0.75rem;
+  font-size: var(--r-2);
+  font-weight: 700;
+}
+
+.wakuola__opcje {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 10px;
+}
+
+.wakuola__opcja {
+  justify-content: flex-start;
+  gap: 0.5em;
+  font-family: var(--font-tekst);
+  font-size: var(--r-1);
+  font-weight: 700;
+  text-align: left;
+}
+
+.wakuola__opcja[data-stan='dobrze'] {
+  background: var(--chlorofil-jasny);
+  border-color: var(--chlorofil);
+}
+
+.wakuola__opcja[data-stan='zle'] {
+  text-decoration: line-through;
+  background: var(--eozyna-jasna);
+}
+
+@media (max-width: 599px) {
+  .wakuola__scena {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}

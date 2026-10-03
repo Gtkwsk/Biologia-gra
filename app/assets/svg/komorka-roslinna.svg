@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480">
+  <!-- Schemat komórki roślinnej, rysunek własny w konwencji szkolnej (SPEC.md, sekcja 6.2): -->
+  <!-- wyraźna ściana komórkowa, duża wakuola w centrum, owalne zielone chloroplasty. -->
+  <!-- Linie wskazujące i numery dorysowuje komponent podpisywania według data/schematy.js. -->
+
+  <g data-element="sciana-komorkowa">
+    <path d="M88 34 H552 A22 22 0 0 1 574 56 V424 A22 22 0 0 1 552 446 H88 A22 22 0 0 1 66 424 V56 A22 22 0 0 1 88 34 Z M100 56 A12 12 0 0 0 88 68 V412 A12 12 0 0 0 100 424 H540 A12 12 0 0 0 552 412 V68 A12 12 0 0 0 540 56 Z" fill="#D9E4B4" fill-rule="evenodd" stroke="#55702A" stroke-width="3.5"/>
+    <g fill="none" stroke="#9BB264" stroke-width="2" stroke-linecap="round">
+      <path d="M120 45 h60 M230 45 h80 M360 45 h70 M470 45 h50"/>
+      <path d="M120 435 h70 M240 435 h60 M350 435 h80 M480 435 h40"/>
+      <path d="M77 110 v60 M77 220 v80 M77 350 v40"/>
+      <path d="M563 100 v70 M563 230 v60 M563 340 v50"/>
+    </g>
+  </g>
+
+  <g data-element="cytozol">
+    <rect x="92" y="60" width="456" height="360" rx="10" fill="#F3FAEC"/>
+  </g>
+
+  <g data-element="wakuola">
+    <path d="M236 138 C296 112 404 114 452 142 C496 168 502 258 480 310 C456 360 362 372 298 360 C232 348 206 300 208 246 C210 196 216 150 236 138 Z" fill="#D7F0F7" stroke="#2F7F99" stroke-width="3.5"/>
+    <path d="M250 160 C300 140 380 140 420 156" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  </g>
+
+  <g data-element="siateczka-srodplazmatyczna" fill="none" stroke-linecap="round">
+    <g stroke="#2F6F94" stroke-width="10">
+      <path d="M106 300 C132 290 162 312 194 298"/>
+      <path d="M106 326 C136 316 162 340 196 324"/>
+      <path d="M108 352 C138 342 162 366 194 350"/>
+    </g>
+    <g stroke="#A9DBF2" stroke-width="5">
+      <path d="M106 300 C132 290 162 312 194 298"/>
+      <path d="M106 326 C136 316 162 340 196 324"/>
+      <path d="M108 352 C138 342 162 366 194 350"/>
+    </g>
+  </g>
+
+  <g data-element="jadro-komorkowe">
+    <ellipse cx="150" cy="236" rx="44" ry="40" fill="#D6C4EE" stroke="#4E3684" stroke-width="3.5"/>
+    <g fill="none" stroke="#8E6CC0" stroke-width="2.5" stroke-linecap="round">
+      <path d="M124 224 q8 -10 18 -2 t16 4"/>
+      <path d="M130 252 q10 8 20 0 t18 4"/>
+      <path d="M156 212 q6 6 14 2"/>
+      <path d="M160 236 q8 -6 16 2"/>
+    </g>
+  </g>
+
+  <g data-element="aparat-golgiego" stroke-linecap="round" fill="none">
+    <g stroke="#8C6A0C" stroke-width="10">
+      <path d="M114 126 Q150 110 186 126"/>
+      <path d="M118 138 Q150 123 182 138"/>
+      <path d="M122 150 Q150 136 178 150"/>
+      <path d="M127 162 Q150 149 173 162"/>
+    </g>
+    <g stroke="#F6D56B" stroke-width="5.5">
+      <path d="M114 126 Q150 110 186 126"/>
+      <path d="M118 138 Q150 123 182 138"/>
+      <path d="M122 150 Q150 136 178 150"/>
+      <path d="M127 162 Q150 149 173 162"/>
+    </g>
+    <g fill="#F6D56B" stroke="#8C6A0C" stroke-width="2">
+      <circle cx="104" cy="118" r="4.5"/>
+      <circle cx="196" cy="118" r="4.5"/>
+      <circle cx="188" cy="168" r="4"/>
+      <circle cx="112" cy="170" r="4"/>
+    </g>
+  </g>
+
+  <g data-element="mitochondrium" fill="#F7B267" stroke="#8F4A0C">
+    <g transform="translate(462 92) rotate(14)">
+      <ellipse rx="26" ry="12" stroke-width="3"/>
+      <path d="M-18 0 q4.5 -9 9 0 t9 0 t9 0 t9 0" fill="none" stroke-width="2.4" stroke-linejoin="round"/>
+    </g>
+    <g transform="translate(236 398) rotate(-6)">
+      <ellipse rx="26" ry="12" stroke-width="3"/>
+      <path d="M-18 0 q4.5 -9 9 0 t9 0 t9 0 t9 0" fill="none" stroke-width="2.4" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <g data-element="chloroplast">
+    <g transform="translate(252 88) rotate(-6)">
+      <ellipse rx="27" ry="13" fill="#3C9A47" stroke="#1F5A32" stroke-width="3"/>
+      <path d="M-13 -6 v12 M0 -7 v14 M13 -6 v12" stroke="#1F5A32" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(360 84) rotate(4)">
+      <ellipse rx="27" ry="13" fill="#3C9A47" stroke="#1F5A32" stroke-width="3"/>
+      <path d="M-13 -6 v12 M0 -7 v14 M13 -6 v12" stroke="#1F5A32" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(524 196) rotate(84)">
+      <ellipse rx="27" ry="13" fill="#3C9A47" stroke="#1F5A32" stroke-width="3"/>
+      <path d="M-13 -6 v12 M0 -7 v14 M13 -6 v12" stroke="#1F5A32" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(522 300) rotate(96)">
+      <ellipse rx="27" ry="13" fill="#3C9A47" stroke="#1F5A32" stroke-width="3"/>
+      <path d="M-13 -6 v12 M0 -7 v14 M13 -6 v12" stroke="#1F5A32" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(340 396) rotate(3)">
+      <ellipse rx="27" ry="13" fill="#3C9A47" stroke="#1F5A32" stroke-width="3"/>
+      <path d="M-13 -6 v12 M0 -7 v14 M13 -6 v12" stroke="#1F5A32" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(444 392) rotate(-8)">
+      <ellipse rx="27" ry="13" fill="#3C9A47" stroke="#1F5A32" stroke-width="3"/>
+      <path d="M-13 -6 v12 M0 -7 v14 M13 -6 v12" stroke="#1F5A32" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(140 398) rotate(-4)">
+      <ellipse rx="27" ry="13" fill="#3C9A47" stroke="#1F5A32" stroke-width="3"/>
+      <path d="M-13 -6 v12 M0 -7 v14 M13 -6 v12" stroke="#1F5A32" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g data-element="rybosomy" fill="#4B3A78">
+    <circle cx="196" cy="82" r="3.4"/>
+    <circle cx="207" cy="90" r="3.4"/>
+    <circle cx="190" cy="94" r="3.4"/>
+    <circle cx="303" cy="78" r="3.4"/>
+    <circle cx="314" cy="86" r="3.4"/>
+    <circle cx="300" cy="92" r="3.4"/>
+    <circle cx="494" cy="336" r="3.4"/>
+    <circle cx="505" cy="344" r="3.4"/>
+    <circle cx="492" cy="350" r="3.4"/>
+    <circle cx="506" cy="330" r="3.4"/>
+    <circle cx="282" cy="408" r="3.4"/>
+    <circle cx="292" cy="398" r="3.4"/>
+    <circle cx="296" cy="410" r="3.4"/>
+    <circle cx="512" cy="128" r="3.4"/>
+    <circle cx="500" cy="138" r="3.4"/>
+    <circle cx="514" cy="142" r="3.4"/>
+    <circle cx="206" cy="196" r="3.4"/>
+    <circle cx="198" cy="276" r="3.4"/>
+  </g>
+
+  <g data-element="blona-komorkowa">
+    <rect x="92" y="60" width="456" height="360" rx="10" fill="none" stroke="#9E3B5B" stroke-width="4"/>
+  </g>
+</svg>

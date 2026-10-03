@@ -1,22 +1,18 @@
 // Misja: kolejne wyzwania świata. Wynik zapisywany po każdym wyzwaniu.
+// misja.losuj: jeśli podane, misja wybiera tyle zadań z listy (przy każdym podejściu inne).
 
 import { h, wyczysc, ograniczRuch } from '../core/dom.js';
 import { otwarteSwiaty } from '../core/swiaty.js';
 import { zapiszWynik } from '../core/stan.js';
 import { dzisiaj } from '../core/daty.js';
-import { przygotujZadanie } from '../components/podpisywanie-logika.js';
-import { utworzPodpisywanie } from '../components/podpisywanie.js';
+import { kartyZBledem } from '../core/karty.js';
+import { zaladujZadanie } from '../components/zadania.js';
+import { wymieszaj } from '../components/podpisywanie-logika.js';
 import { pasek, ekranNiedostepny } from './wspolne.js';
 
-const pamiecRysunkow = new Map();
-
-async function wczytajRysunek(plik) {
-  if (!pamiecRysunkow.has(plik)) {
-    const odpowiedz = await fetch(plik);
-    if (!odpowiedz.ok) throw new Error(`HTTP ${odpowiedz.status}`);
-    pamiecRysunkow.set(plik, await odpowiedz.text());
-  }
-  return pamiecRysunkow.get(plik);
+export function wybierzZadania(misja, zadania) {
+  const lista = misja.zadania.map((id) => zadania.find((z) => z.id === id));
+  return misja.losuj ? wymieszaj(lista).slice(0, misja.losuj) : lista;
 }
 
 export function render(kontener, ctx, cel) {
@@ -26,8 +22,8 @@ export function render(kontener, ctx, cel) {
     ekranNiedostepny(kontener, { tytul: 'Nie ma takiej misji', tekst: 'Wybierz misję na mapie wyprawy.' });
     return null;
   }
-  const zadania = misja.zadania.map((id) => ctx.dane.zadania.find((z) => z.id === id));
-  const nazwaElementu = (id) => ctx.dane.elementy.find((e) => e.id === id)?.nazwa ?? id;
+  const zadania = wybierzZadania(misja, ctx.dane.zadania);
+  const nazwaKarty = (id) => ctx.dane.katalog.get(id)?.nazwa ?? id;
 
   let indeks = 0;
   let komponent = null;
@@ -65,23 +61,15 @@ export function render(kontener, ctx, cel) {
     komponent = null;
     wyczysc(obszar);
     obszar.append(h('p', { class: 'wczytywanie' }, 'Wczytywanie…'));
-
-    if (zadanie.typ !== 'podpisywanie') {
-      wyczysc(obszar);
-      obszar.append(h('p', {}, 'Ten typ wyzwania pojawi się w kolejnej wersji gry.'));
-      return;
-    }
-    const schemat = ctx.dane.schematy.find((s) => s.id === zadanie.schemat);
-    const typKomorki = ctx.dane.typyKomorek.find((t) => t.id === schemat.typKomorki);
-    let svgTekst;
+    let utworz;
     try {
-      svgTekst = await wczytajRysunek(schemat.plik);
+      utworz = await zaladujZadanie(zadanie, ctx.dane);
     } catch {
       if (zamkniety) return;
       wyczysc(obszar);
       obszar.append(
         h('div', { class: 'karta-komunikatu' }, [
-          h('p', {}, 'Nie udało się wczytać rysunku.'),
+          h('p', {}, 'Nie udało się wczytać wyzwania.'),
           h('button', { type: 'button', class: 'przycisk', onclick: pokazZadanie }, 'Spróbuj ponownie'),
         ]),
       );
@@ -89,24 +77,18 @@ export function render(kontener, ctx, cel) {
     }
     if (zamkniety) return;
     wyczysc(obszar);
-    const przygotowane = przygotujZadanie({ zadanie, schemat, elementy: ctx.dane.elementy, typKomorki });
     const start = performance.now();
-    komponent = utworzPodpisywanie(obszar, {
-      przygotowane,
-      svgTekst,
-      opisSchematu: schemat.nazwa,
-      tryb: 'trening',
-      onKoniec: (w) => zakonczZadanie(zadanie, w, performance.now() - start),
-    });
+    komponent = utworz(obszar, { tryb: 'trening', onKoniec: (w) => zakonczZadanie(zadanie, w, performance.now() - start) });
   }
 
   function zakonczZadanie(zadanie, w, czasMs) {
     ctx.zmien((stan) =>
       zapiszWynik(stan, {
         idZadania: zadanie.id,
+        typ: zadanie.typ,
         poprawne: w.poprawne,
         wszystkie: w.wszystkie,
-        bledneElementy: w.bledneElementy,
+        karty: w.karty,
         czasMs,
         dzien: dzisiaj(),
       }),
@@ -118,21 +100,18 @@ export function render(kontener, ctx, cel) {
   function pokazWynik(zadanie, w) {
     const ostatnie = indeks === zadania.length - 1;
     const wszystkieDobrze = w.poprawne === w.wszystkie;
+    const doCwiczenia = kartyZBledem(w);
     wyczysc(wynik);
     wynik.append(
       h('h2', { class: 'misja__wynik-tytul' }, wszystkieDobrze ? 'Wszystko od razu dobrze!' : `Od razu dobrze: ${w.poprawne} z ${w.wszystkie}`),
-      w.bledneElementy.length
-        ? h('p', { class: 'misja__do-cwiczenia' }, [
-            h('strong', {}, 'Do poćwiczenia: '),
-            w.bledneElementy.map(nazwaElementu).join(', '),
-            '.',
-          ])
+      doCwiczenia.length
+        ? h('p', { class: 'misja__do-cwiczenia' }, [h('strong', {}, 'Do poćwiczenia: '), doCwiczenia.map(nazwaKarty).join(', '), '.'])
         : null,
       h('p', { class: 'misja__wyjasnienie' }, zadanie.wyjasnienie),
       ostatnie ? h('p', { class: 'misja__koniec' }, `Misja „${misja.nazwa}” zakończona.`) : null,
       h('div', { class: 'przyciski' }, [
         h('button', { type: 'button', class: 'przycisk przycisk--jasny', onclick: pokazZadanie }, 'Jeszcze raz'),
-        ostatnie ? h('a', { class: 'przycisk przycisk--jasny', href: '#/' }, 'Na mapę') : null,
+        ostatnie ? h('a', { class: 'przycisk przycisk--jasny', href: `#/swiat/${sw.id}` }, 'Misje świata') : null,
         ostatnie
           ? h('a', { class: 'przycisk przycisk--dalej', href: '#/podsumowanie' }, 'Zakończ wyprawę')
           : h(

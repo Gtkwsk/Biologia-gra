@@ -1,5 +1,8 @@
 // Sześć światów w kolejności części słuchowiska. Treści: TRESCI.md, sekcje 2.1-2.6.
 // gotowy: świat ma treść do grania. Świat niegotowy jest na mapie oznaczony „W budowie”.
+// ciekawostka: dosłownie z TRESCI.md, sekcja 6.
+// boss: wyzwania w formatach sprawdzianu (SPEC.md, sekcja 4.3); z każdej puli losowane jest
+// jedno zadanie, więc kolejne podejścia różnią się wariantami.
 
 export default [
   {
@@ -26,7 +29,7 @@ export default [
       'Zacznij od planu miasta.',
     ],
     ciekawostka:
-      'Robert Hooke ponad 350 lat temu zobaczył pod mikroskopem w plasterku korka setki pustych komór. Nazwał je słowem oznaczającym małą izbę. Po polsku to „komórki”.',
+      'Robert Hooke ponad 350 lat temu zobaczył pod mikroskopem w plasterku korka setki pustych komór i nazwał je słowem oznaczającym małą izbę; po polsku to „komórki”. Oglądał puste ściany martwych komórek.',
     coZbadasz: [
       'z jakich elementów zbudowana jest komórka zwierzęca',
       'do czego służy każdy z tych elementów',
@@ -36,10 +39,44 @@ export default [
       {
         id: 's2-plan-miasta',
         nazwa: 'Plan miasta',
-        opis: 'Podpisz elementy komórki zwierzęcej na planie.',
-        zadania: ['s2-podpis-zwierzeca-1'],
+        opis: 'Podpisz elementy komórki zwierzęcej i poznaj ich wygląd.',
+        zadania: ['s2-podpis-zwierzeca-1', 's2-wyglad-1'],
+      },
+      {
+        id: 's2-budowa-miasta',
+        nazwa: 'Budowa miasta',
+        opis: 'Zatrudnij elementy do usług miasta i znajdź przyczyny awarii.',
+        zadania: ['s2-miasto-budowa', 's2-miasto-awarie'],
+      },
+      {
+        id: 's2-biuro',
+        nazwa: 'Biuro zatrudnienia',
+        opis: 'Dopasuj elementy komórki do ogłoszeń i funkcji.',
+        zadania: ['s2-biuro-1', 's2-funkcje-1'],
+      },
+      {
+        id: 's2-ksztalty',
+        nazwa: 'Kształt do zadania',
+        opis: 'Dlaczego plemnik ma wić, a komórka nerwowa długie wypustki?',
+        zadania: ['s2-ksztalt-1', 's2-ksztalt-2'],
+      },
+      {
+        id: 's2-mikroskop',
+        nazwa: 'Pod mikroskopem',
+        opis: 'Co widać przy różnych powiększeniach? Jedna komórka czy wiele?',
+        zadania: ['s2-mikroskop-1', 's2-jeden-czy-wielu', 's2-pf-1'],
       },
     ],
+    boss: {
+      nazwa: 'Inspektor miasta',
+      opis: 'Inspektor sprawdza, czy znasz miasto-komórkę: plan, funkcje elementów i organizmy jedno- i wielokomórkowe.',
+      wyzwania: [
+        { pula: ['s2-podpis-zwierzeca-1', 's2-boss-podpis-2', 's2-boss-podpis-3'] },
+        { pula: ['s2-funkcje-1', 's2-boss-funkcje-2', 's2-boss-funkcje-3', 's2-boss-funkcje-4', 's2-boss-funkcje-5', 's2-boss-funkcje-6'] },
+        { pula: ['s2-jeden-czy-wielu', 's2-boss-organizmy-2', 's2-boss-organizmy-3'] },
+        { pula: ['s2-boss-pf-1', 's2-boss-pf-2', 's2-pf-1'] },
+      ],
+    },
   },
   {
     id: 3,
@@ -47,10 +84,74 @@ export default [
     tytul: 'Zielone twierdze i niewidzialni mieszkańcy',
     temat: 'Komórka roślinna. Inne rodzaje komórek',
     zrodlo: '2.3',
-    gotowy: false,
-    wstep: [],
-    coZbadasz: [],
-    misje: [],
+    gotowy: true,
+    wstep: [
+      'Zapomniana roślina na parapecie zwiędła, a po podlaniu znów stoi prosto. Jak to możliwe bez kości i mięśni?',
+      'Odpowiedź kryje się w komórkach: w zielonych twierdzach roślin, w komórkach grzybów i w maleńkich bakteriach, które nie mają nawet jądra.',
+      'Zacznij od planu zielonej twierdzy.',
+    ],
+    ciekawostka:
+      'Antoni van Leeuwenhoek, kupiec handlujący suknem w Delft, budował najlepsze mikroskopy swoich czasów. W nalocie z własnych zębów zobaczył mnóstwo poruszających się „zwierzątek”, czyli bakterii; pisał, że jest ich tam więcej niż ludzi w całym królestwie.',
+    coZbadasz: [
+      'czym komórka roślinna różni się od zwierzęcej',
+      'jak zbudowane są komórki grzybów i bakterii',
+      'jak rozpoznać komórkę po trzech zasadach',
+      'po co roślinie duża wakuola',
+    ],
+    misje: [
+      {
+        id: 's3-twierdza',
+        nazwa: 'Zielona twierdza',
+        opis: 'Podpisz komórkę roślinną i znajdź różnice między nią a zwierzęcą.',
+        zadania: ['s3-podpis-roslinna-1', 's3-roslinna-zwierzeca', 's3-luki-1'],
+      },
+      {
+        id: 's3-detektyw',
+        nazwa: 'Detektyw komórek',
+        opis: 'Rozpoznaj komórkę po jak najmniejszej liczbie wskazówek.',
+        zadania: ['s3-detektyw-1', 's3-detektyw-2'],
+      },
+      {
+        id: 's3-konstruktor',
+        nazwa: 'Konstruktor czterech komórek',
+        opis: 'Zbuduj cztery komórki z jednego zestawu części.',
+        zadania: ['s3-konstruktor-1', 's3-konstruktor-2'],
+      },
+      {
+        id: 's3-siatka',
+        nazwa: 'Siatka porównawcza',
+        opis: 'Porównaj komórki zwierzęcą, roślinną, grzybową i bakteryjną.',
+        zadania: ['s3-tabela-1', 's3-luki-3', 's3-pf-1'],
+      },
+      {
+        id: 's3-woda',
+        nazwa: 'Woda w wakuoli',
+        opis: 'Podlej zwiędłą roślinę i zajrzyj do jej komórek.',
+        zadania: ['s3-wakuola-1'],
+      },
+      {
+        id: 's3-ksztalty',
+        nazwa: 'Kształty komórek roślinnych',
+        opis: 'Aparat szparkowy, włośniki i komórki przewodzące.',
+        zadania: ['s3-ksztalt-1', 's3-ksztalt-wyglad', 's3-ksztalt-2'],
+      },
+      {
+        id: 's3-bakterie',
+        nazwa: 'Niewidzialni mieszkańcy',
+        opis: 'Komórka bakterii: bez jądra, za to z nicią DNA.',
+        zadania: ['s3-podpis-bakteryjna-1', 's3-luki-2', 's3-jadrowe'],
+      },
+    ],
+    boss: {
+      nazwa: 'Strażnik twierdzy',
+      opis: 'Strażnik sprawdza schemat komórki roślinnej, zdania o budowie komórek i siatkę porównawczą.',
+      wyzwania: [
+        { pula: ['s3-podpis-roslinna-1', 's3-boss-podpis-2', 's3-boss-podpis-3', 's3-boss-podpis-4', 's3-boss-podpis-5'] },
+        { pula: ['s3-luki-1', 's3-luki-2', 's3-luki-3', 's3-boss-luki-4', 's3-boss-luki-5', 's3-boss-luki-6'] },
+        { pula: ['s3-tabela-1', 's3-boss-tabela-2', 's3-boss-tabela-3'] },
+        { pula: ['s3-boss-pf-1', 's3-boss-pf-2', 's3-pf-1'] },
+      ],
+    },
   },
   {
     id: 4,
