@@ -1,0 +1,469 @@
+/* Komponent „podpisywanie schematu”. */
+
+.podpis {
+  display: grid;
+  gap: 14px;
+}
+
+.podpis__plansza {
+  position: relative;
+}
+
+.podpis__schemat {
+  margin: 0;
+  overflow: hidden;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.podpis__rysunek {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: manipulation;
+}
+
+/* Linie i numery na rysunku */
+.znacznik__tlo-linii {
+  stroke: var(--bialy);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.znacznik__linia {
+  stroke: var(--atrament);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.znacznik {
+  cursor: pointer;
+}
+
+.znacznik__obszar {
+  fill: transparent;
+}
+
+.znacznik__kolko {
+  fill: var(--bialy);
+  stroke: var(--okular);
+  stroke-width: 3.5;
+  transition: fill 0.2s;
+}
+
+.znacznik__numer {
+  font-family: var(--font-tekst);
+  font-size: 21px;
+  font-weight: 800;
+  fill: var(--atrament);
+  pointer-events: none;
+}
+
+.znacznik[data-stan='dobrze'] .znacznik__kolko {
+  fill: var(--chlorofil);
+}
+
+.znacznik[data-stan='zle'] .znacznik__kolko,
+.znacznik.blad .znacznik__kolko {
+  fill: var(--eozyna);
+}
+
+.znacznik[data-stan='dobrze'] .znacznik__numer,
+.znacznik[data-stan='zle'] .znacznik__numer,
+.znacznik.blad .znacznik__numer {
+  fill: var(--bialy);
+}
+
+.znacznik[data-stan='wypelnione'] .znacznik__kolko {
+  fill: var(--blekit-jasny);
+}
+
+.znacznik.cel .znacznik__kolko,
+.znacznik--aktywny .znacznik__kolko {
+  fill: var(--zolty-wybor);
+  stroke-width: 5;
+}
+
+.podpis--wybor .znacznik[data-stan='puste'] .znacznik__kolko {
+  animation: pulsuj 1.2s ease-in-out infinite;
+}
+
+@keyframes pulsuj {
+  50% {
+    fill: var(--zolty-wybor);
+  }
+}
+
+/* Pola z numerami */
+.podpis__miejsca {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 8px 14px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.miejsce {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.miejsce__nr {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  font-weight: 800;
+  background: var(--bialy);
+  border: 3px solid var(--okular);
+  border-radius: 50%;
+}
+
+.miejsce__pole {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 50px;
+  padding: 4px 10px;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  color: var(--atrament);
+  background: rgba(255, 255, 255, 0.75);
+  border: 3px dashed var(--atrament-jasny);
+  border-radius: var(--promien);
+  cursor: pointer;
+}
+
+.miejsce__tekst {
+  overflow-wrap: break-word;
+}
+
+/* Znak ✓ albo ✗ jako naklejka w rogu pola: nie zabiera miejsca na nazwę */
+.miejsce__ikona:not(:empty) {
+  position: absolute;
+  top: -11px;
+  right: -9px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  background: var(--bialy);
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.miejsce__ikona .ikona {
+  width: 16px;
+  height: 16px;
+}
+
+.miejsce[data-stan='dobrze'] .miejsce__pole {
+  background: var(--chlorofil-jasny);
+  border-style: solid;
+  border-color: var(--chlorofil);
+}
+
+.miejsce[data-stan='dobrze'] .miejsce__nr {
+  color: var(--bialy);
+  background: var(--chlorofil);
+}
+
+.miejsce[data-stan='dobrze'] .miejsce__ikona {
+  color: var(--chlorofil);
+}
+
+.miejsce[data-stan='zle'] .miejsce__pole {
+  background: var(--eozyna-jasna);
+  border-style: solid;
+  border-color: var(--eozyna);
+}
+
+.miejsce[data-stan='zle'] .miejsce__nr {
+  color: var(--bialy);
+  background: var(--eozyna);
+}
+
+.miejsce[data-stan='zle'] .miejsce__ikona {
+  color: var(--eozyna);
+}
+
+.miejsce[data-stan='wypelnione'] .miejsce__pole {
+  background: var(--blekit-jasny);
+  border-style: solid;
+  border-color: var(--blekit);
+}
+
+.miejsce.cel .miejsce__pole,
+.podpis--wybor .miejsce[data-stan='puste'] .miejsce__pole {
+  background: #fff7d6;
+  border-color: var(--blekit);
+}
+
+.miejsce.blad {
+  animation: potrzasniecie 0.5s;
+}
+
+.miejsce.blad .miejsce__pole {
+  background: var(--eozyna-jasna);
+  border-color: var(--eozyna);
+}
+
+/* Średni ekran (tablet pionowo): pola w dwóch kolumnach, po tej samej stronie co numery.
+   Rysunek dopasowany do wysokości ekranu, żeby rysunek, pola i tacka mieściły się razem. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .podpis__rysunek {
+    max-height: max(300px, calc(100vh - 620px));
+    max-height: max(300px, calc(100dvh - 620px));
+  }
+
+  .podpis__miejsca {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 14px;
+  }
+
+  .miejsce__pole {
+    min-height: 46px;
+  }
+
+  .etykieta {
+    font-size: 0.85rem;
+  }
+
+  .miejsce {
+    grid-column: var(--kolumna-pola);
+    grid-row: var(--wiersz-pola);
+  }
+}
+
+/* Szeroki ekran: pola stoją obok numerów, jak na rysunku w sprawdzianie */
+@media (min-width: 900px) {
+  .podpis__plansza {
+    --kolumna: 13.5rem;
+    display: grid;
+    grid-template-columns: var(--kolumna) minmax(0, 1fr) var(--kolumna);
+    column-gap: 10px;
+  }
+
+  .podpis__schemat {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .podpis__miejsca {
+    position: absolute;
+    inset: 0;
+    display: block;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .miejsce {
+    position: absolute;
+    top: calc(var(--y) * 100%);
+    width: var(--kolumna);
+    transform: translateY(-50%);
+    pointer-events: auto;
+  }
+
+  .miejsce[data-strona='lewa'] {
+    left: 0;
+  }
+
+  .miejsce[data-strona='prawa'] {
+    right: 0;
+  }
+
+  .miejsce__nr {
+    width: 28px;
+    height: 28px;
+    font-size: var(--r-0);
+  }
+
+  .miejsce__pole {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tacka z komunikatem i etykietami przyklejona do dołu ekranu (tablet) */
+.podpis__tacka {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .podpis__tacka {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    margin: 0 -16px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: var(--papier);
+    border-top: var(--kontur) solid var(--okular);
+  }
+}
+
+/* Komunikat zwrotny */
+.komunikat {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 4.2rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.95rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: var(--promien);
+}
+
+.komunikat[data-rodzaj='info'] {
+  background: rgba(255, 255, 255, 0.85);
+  border-style: dashed;
+  border-color: var(--atrament-jasny);
+}
+
+.komunikat[data-rodzaj='dobrze'] {
+  background: var(--chlorofil-jasny);
+  border-color: var(--chlorofil);
+}
+
+.komunikat[data-rodzaj='zle'] {
+  background: var(--eozyna-jasna);
+  border-color: var(--eozyna);
+}
+
+.komunikat__ikona {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  padding: 4px;
+  color: var(--bialy);
+  background: var(--atrament-jasny);
+  border-radius: 50%;
+}
+
+[data-rodzaj='dobrze'] > .komunikat__ikona {
+  background: var(--chlorofil);
+}
+
+[data-rodzaj='zle'] > .komunikat__ikona {
+  background: var(--eozyna);
+}
+
+.komunikat__tytul {
+  max-width: none;
+  margin: 0;
+  font-weight: 800;
+}
+
+.komunikat__tekst {
+  max-width: none;
+  margin: 0.1rem 0 0;
+}
+
+.komunikat--nowy {
+  animation: wjazd 0.25s ease-out;
+}
+
+.komunikat__lista {
+  display: grid;
+  gap: 0.6rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.komunikat__lista li {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Bank etykiet */
+.podpis__bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 10px;
+  min-height: 70px;
+  padding: 10px;
+  background: rgba(17, 25, 27, 0.05);
+  border: 2px solid rgba(17, 25, 27, 0.12);
+  border-radius: 12px;
+}
+
+.etykieta {
+  min-height: 48px;
+  margin-bottom: 4px;
+  padding: 0.35em 0.8em;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--atrament);
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 6px;
+  box-shadow: 0 4px 0 var(--okular);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: transform 0.08s, box-shadow 0.08s, background-color 0.15s, opacity 0.15s;
+}
+
+.etykieta[aria-pressed='true'] {
+  background: var(--zolty-wybor);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 0 var(--okular);
+}
+
+.etykieta--w-ruchu {
+  opacity: 0.35;
+}
+
+.etykieta--duch {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  margin: 0;
+  background: var(--zolty-wybor);
+  box-shadow: 0 10px 0 rgba(17, 25, 27, 0.35);
+  cursor: grabbing;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.etykieta--podpowiedz {
+  background: #fff3c4;
+  animation: podpowiedz 1.1s ease-in-out infinite;
+}
+
+@keyframes podpowiedz {
+  50% {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 0 var(--okular);
+  }
+}
+
+.etykieta:disabled {
+  cursor: default;
+}
+
+.podpis--gotowe .podpis__bank {
+  display: none;
+}
+
+.podpis__akcje {
+  display: flex;
+  justify-content: center;
+}

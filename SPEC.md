@@ -12,7 +12,7 @@ Dokument projektowy, wersja 1.0 (październik 2026). Treści merytoryczne: `TRES
 
 **Kontekst.**
 
-- Audiobook „Wyprawa do wnętrza życia”: sześć części po 10-15 minut, zgodnych z sześcioma tematami działu, w stylu programów przyrodniczych (opowieści o uczonych, metafory, doświadczenia domowe, podsumowanie na końcu każdej części). Tytuły części są tytułami światów w grze. Nagrania mp3 mogą trafić do `audio/` (sekcja 4.6), a tekst do repozytorium jako `AUDIOBOOK.md`.
+- Audiobook „Wyprawa do wnętrza życia”: sześć części po 10-15 minut, zgodnych z sześcioma tematami działu, w stylu programów przyrodniczych (opowieści o uczonych, metafory, doświadczenia domowe, podsumowanie na końcu każdej części). Tytuły części są tytułami światów w grze. Nagrania mp3 mogą trafić do `app/audio/` (sekcja 4.6). Tekst jest w repozytorium jako `AUDIOBOOK.md`.
 - Wcześniejsze aplikacje Roberta do nauki: test wyboru i dopasowywanie par. Ta gra nie opiera głównej rozgrywki na tych formach.
 
 ## 2. Zasady projektowe
@@ -32,7 +32,7 @@ Dokument projektowy, wersja 1.0 (październik 2026). Treści merytoryczne: `TRES
 
 - **Mapa wyprawy:** sześć światów w kolejności części audiobooka. Świat 1 otwarty, kolejne odblokowuje pokonanie bossa poprzedniego. W panelu rodzica i w trybie deweloperskim można odblokować wszystkie.
 - **Baza:** atlas, mikroskop, domowe laboratorium, panel rodzica.
-- **Pętla sesji:** powtórki dnia (3-8 kart z minionym terminem) → misja w wybranym świecie (1-3 wyzwania) → boss, jeśli świat jest gotowy → podsumowanie i zapis.
+- **Pętla sesji:** powtórki dnia (3-8 kart z minionym terminem) → misja w wybranym świecie (1-3 wyzwania) → boss, jeśli świat jest gotowy → podsumowanie i zapis. Powtórki dnia zawieszone decyzją z 2026-10-03 (bez planu powtórek; zob. sekcja 12).
 - **Wstęp do świata:** ekran fabularny (2-4 zdania w duchu audiobooka), opcjonalny odtwarzacz nagrania danej części, lista „co tu zbadasz”.
 
 ### 3.2 Światy
@@ -129,6 +129,8 @@ Boss: oddychanie komórkowe czy wymiana gazowa, tabela porównawcza, produkty ob
 
 ### 4.2 Atlas i powtórki
 
+(Zawieszone decyzją z 2026-10-03: bez planu powtórek; zob. sekcja 12.) Część o odstępach, terminach i dacie sprawdzianu nie obowiązuje do czasu nowej decyzji; reguła zmiany koloru kart do ustalenia w etapie 1.
+
 - Karty: organizmy (`TRESCI.md`, sekcja 7), elementy komórek, pojęcia i procesy (np. fotosynteza, chemosynteza, fermentacja alkoholowa, wymiana gazowa, żywiciel).
 - Stany karty: nieodkryta → brązowa → srebrna → złota. Awans wymaga poprawnego przypomnienia w innym dniu niż poprzednie, przy rosnących odstępach (np. 1, 3, 7, 14 dni). Błąd obniża kartę o jeden poziom i skraca odstęp; kolekcja nigdy nie jest zerowana.
 - Jeśli w panelu rodzica wpisano datę sprawdzianu, odstępy są skracane tak, by każda karta miała co najmniej dwie powtórki przed tą datą.
@@ -139,7 +141,7 @@ Boss: oddychanie komórkowe czy wymiana gazowa, tabela porównawcza, produkty ob
 ### 4.3 Bossowie, rewanże, próbny sprawdzian
 
 - Boss to mieszanka typów zadań sprawdzianowych z danego świata, bez podpowiedzi, z limitem błędów zamiast limitu czasu (np. trzy błędy kończą podejście; można od razu spróbować ponownie).
-- Pokonani bossowie wracają w powtórkach jako krótkie rewanże.
+- Pokonani bossowie wracają w powtórkach jako krótkie rewanże. (Zawieszone decyzją z 2026-10-03: bez planu powtórek; zob. sekcja 12.)
 - **Próbny sprawdzian:** mieszanka wszystkich światów, punktacja 0-29 jak w podręczniku, bez podpowiedzi; raport słabych punktów w panelu rodzica.
 
 ### 4.4 Przewodnicy
@@ -168,14 +170,14 @@ Misje w realnym świecie zaliczane przyciskiem „Zrobione z dorosłym”, każd
 
 ### 4.6 Audiobook
 
-- Folder `audio/` na pliki `czesc-1.mp3` … `czesc-6.mp3` (opcjonalne). Odtwarzacz na ekranie wstępu świata; brak pliku ukrywa odtwarzacz.
+- Folder `app/audio/` na pliki `czesc-1.mp3` … `czesc-6.mp3` (opcjonalne). Odtwarzacz na ekranie wstępu świata; brak pliku ukrywa odtwarzacz.
 - Pliki audio poza wstępnym cache service workera (rozmiar); cache na żądanie.
 
 ### 4.7 Panel rodzica
 
 - Wejście ukryte (np. przytrzymanie logo przez 3 sekundy i proste działanie matematyczne).
 - Widok: postęp w światach, karty z największą liczbą błędów, łączny czas, wynik próbnego sprawdzianu.
-- Ustawienia: imię gracza, data sprawdzianu, odblokowanie światów, dźwięk, reset postępu, eksport i import postępu (JSON).
+- Ustawienia: imię gracza, data sprawdzianu, odblokowanie światów, dźwięk, reset postępu, eksport i import postępu (JSON). Data sprawdzianu zawieszona decyzją z 2026-10-03 (bez planu powtórek; zob. sekcja 12).
 
 ## 5. Typy zadań (komponenty wielokrotnego użytku)
 
@@ -227,25 +229,27 @@ Wymagania wspólne: dotyk i mysz (Pointer Events); alternatywa dla przeciągania
 - **Stan:** `localStorage` pod jednym kluczem, z numerem wersji schematu i migracjami; zapis po każdym zadaniu; eksport i import JSON.
 - **Dane:** `data/` jako moduły ES lub JSON: pojęcia, elementy komórek, typy komórek, organizmy, pytania dla światów 1-6, ciekawostki. Każde pytanie ma: `id`, `swiat`, `typ`, treść, poprawną odpowiedź, wyjaśnienie, odwołanie do sekcji `TRESCI.md`.
 - **Walidator danych** (`tools/validate-data.js`): unikalne id, kompletność pól, terminy zgodne ze słownikiem kanonicznym (`TRESCI.md`, sekcja 9), kategorie organizmów z dozwolonej listy.
-- **Testy** (`node --test`): logika powtórek (awanse, spadki, terminy, skracanie odstępów przed sprawdzianem), punktacja, model fotosyntezy (wynik maleje przy niedoborze i nadmiarze każdego czynnika), model sprintu.
-- **Struktura (propozycja):**
+- **Testy** (`node --test`): logika powtórek (awanse, spadki, terminy, skracanie odstępów przed sprawdzianem; zawieszone decyzją z 2026-10-03, zob. sekcja 12), punktacja, model fotosyntezy (wynik maleje przy niedoborze i nadmiarze każdego czynnika), model sprintu.
+- **Struktura (stan po etapie 0):**
 
 ```
-index.html
-manifest.webmanifest
-sw.js
-netlify.toml
-css/
-js/core/        stan, router ekranów, powtórki, punktacja
-js/components/  typy zadań (sekcja 5)
-js/worlds/      swiat-1.js … swiat-6.js
-js/meta/        atlas, mikroskop, laboratorium, panel rodzica
-data/
-assets/svg/
-assets/fonts/
-audio/          opcjonalnie
-tests/
-tools/validate-data.js
+netlify.toml            publikacja katalogu app/, testy i walidator przed wdrożeniem
+app/                    publikowana gra (tylko ten katalog trafia na stronę)
+  index.html
+  manifest.webmanifest
+  sw.js                 service worker; WERSJA i PLIKI generuje tools/wersja.js
+  css/                  tokeny, podstawy, ekrany, komponenty
+  js/core/              stan, zapis, adresy ekranów, dostępność światów, DOM
+  js/components/        typy zadań (sekcja 5); logika oddzielona od widoku
+  js/ekrany/            mapa, świat, misja, podsumowanie, baza, panel rodzica
+  data/                 moduły ES z treściami (światy, elementy, typy komórek, schematy, zadania)
+  assets/svg/           schematy rysowane od zera
+  assets/fonts/         kroje OFL z licencjami
+  assets/ikony/
+  audio/                opcjonalnie, poza pamięcią offline
+tests/                  node --test
+tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, ikony.js
+.githooks/pre-commit    testy i walidator przed commitem
 ```
 
 - **Wdrożenie:** Netlify z gałęzi `main`, publikacja statyczna; `netlify.toml` z nagłówkami cache (bez długiego cache dla `sw.js`).
@@ -268,7 +272,7 @@ tools/validate-data.js
 
 ## 10. Etapy
 
-0. **Fundament:** plan wizualny do akceptacji; szkielet PWA, router ekranów, stan, moduł powtórek z testami, podstawowy panel rodzica, komponent podpisywania schematu, walidator danych, `netlify.toml`.
+0. **Fundament:** plan wizualny do akceptacji; szkielet PWA, router ekranów, stan, moduł powtórek z testami, podstawowy panel rodzica, komponent podpisywania schematu, walidator danych, `netlify.toml`. Zrealizowany 2026-10-03 bez modułu powtórek (zob. sekcja 12).
 1. **Wersja do pierwszego testu z Mikołajem:** świat 2 i świat 3 (komórki, najważniejsze dla sprawdzianu), mikroskop z dwoma poziomami, atlas elementów komórek, dwóch bossów. Po etapie: obserwacja gry Mikołaja i notatki.
 2. **Świat 4 i świat 6:** procesy (fotosynteza, oddychanie, fermentacja), symulacje.
 3. **Świat 5 i świat 1:** atlas organizmów, łańcuchy pokarmowe, składniki chemiczne.
@@ -278,14 +282,29 @@ Po każdym etapie: wdrożenie, lista rzeczy do sprawdzenia przez Roberta, korekt
 
 ## 11. Otwarte decyzje (pytania do Roberta na start)
 
-1. Urządzenie główne: tablet czy telefon, Android czy iPad?
-2. W co Mikołaj gra najchętniej (np. Minecraft, gry kolekcjonerskie, sportowe)? Od tego zależą oprawa i akcenty: budowanie, kolekcja, rywalizacja.
-3. Termin sprawdzianu i czy pierwsza wersja ma objąć wszystkie światy w uproszczonej formie.
-4. Czy będą nagrania audiobooka (mp3)?
-5. Nazwa gry i adres na Netlify.
-6. Czy Mikołaj ma dostęp do mikroskopu?
-7. Czy potrzebny jest tryb rywalizacji z rodzicem na jednym urządzeniu?
+Odpowiedzi z 2026-10-03 są dopisane przy pytaniach; wynikające z nich decyzje w sekcji 12.
+
+1. Urządzenie główne: tablet czy telefon, Android czy iPad? Odpowiedź: tablet. System nieustalony: gra działa w Safari na iPadzie i w Chrome na Androidzie.
+2. W co Mikołaj gra najchętniej (np. Minecraft, gry kolekcjonerskie, sportowe)? Od tego zależą oprawa i akcenty: budowanie, kolekcja, rywalizacja. Odpowiedź: Roblox.
+3. Termin sprawdzianu i czy pierwsza wersja ma objąć wszystkie światy w uproszczonej formie. Odpowiedź: pełne światy (bez wersji uproszczonej); termin sprawdzianu niepodany; „nie rób planu powtórek”.
+4. Czy będą nagrania audiobooka (mp3)? Odpowiedź: tekst słuchowiska z czatu Claude, zapisany jako `AUDIOBOOK.md`. Nagrania mp3: brak informacji; odtwarzacz pojawi się, gdy pliki trafią do `app/audio/`.
+5. Nazwa gry i adres na Netlify. Odpowiedź: nazwa ostateczna „Wyprawa do wnętrza życia”; adres: https://biologia-gra.netlify.app.
+6. Czy Mikołaj ma dostęp do mikroskopu? Brak odpowiedzi: misje z mikroskopem pozostają opcjonalne.
+7. Czy potrzebny jest tryb rywalizacji z rodzicem na jednym urządzeniu? Odpowiedź: bez rywalizacji z rodzicem.
 
 ## 12. Dziennik decyzji
 
 - 2026-10: dokument startowy przygotowany na podstawie rozmowy o audiobooku i koncepcji gry.
+- 2026-10-03, odpowiedzi Roberta: tablet, Roblox, pełne światy, tekst słuchowiska z czatu Claude, nazwa ostateczna, bez rywalizacji z rodzicem, „nie rób planu powtórek”, wybór rozwiązań technicznych i wizualnych pozostawiony wykonawcy.
+- 2026-10-03, plan powtórek: przyjęta interpretacja to brak harmonogramu powtórek (odstępy, terminy kart, powtórki dnia, skracanie odstępów przed sprawdzianem) i brak daty sprawdzianu w panelu rodzica. Sekcje 3.1, 4.2, 4.3, 4.7 i 7 mają przy tych fragmentach znacznik zawieszenia. Jeśli decyzja dotyczyła tylko daty sprawdzianu, moduł powtórek może wrócić w etapie 1. Koszt dydaktyczny: przypominanie z rosnącymi odstępami to najsilniej udokumentowany sposób utrwalania wiedzy; zastępczo gra pozwala powtarzać misje i pokazuje elementy do poćwiczenia.
+- 2026-10-03, oprawa (Roblox): zachowany motyw soczewki okularu i tło zeszytu w kratkę; dodany „klockowy” język interakcji znany z gier: przyciski i etykiety z grubym konturem i twardym cieniem, wciskane przy dotknięciu; gruby, growy krój nagłówków. Schematy komórek zostają w konwencji szkolnej (przenoszenie na rysunki ze sprawdzianu).
+- 2026-10-03, ostrość jako miara opanowania: obraz w soczewce świata jest nieostry i wyostrza się z odsetkiem zadań świata rozwiązanych co najmniej w 80%. Nagroda informacyjna, bez związku z czasem gry.
+- 2026-10-03, paleta bazowa (barwniki laboratoryjne): papier #F4F6F1, atrament #1C2B2D, okular #11191B, błękit metylenowy #2457A6 (działanie, wybór), chlorofil #2E7D46 (poprawnie), eozyna #C2366B (do poprawy). Stan odpowiedzi zawsze także znakiem ✓/✗ i zdaniem, nie samym kolorem. Klimat światów: tła i akcenty w `app/css/tokeny.css`.
+- 2026-10-03, kroje: Titan One (nagłówki, przyciski) i Lexend (tekst, etykiety), licencja OFL, pliki lokalne. Odrzucone po sprawdzeniu glifów: Lilita One (brak ą, ć, ę, ń, ś, ź, ż), Atkinson Hyperlegible Next (tylko przekreślone zero, nietypowe dla ucznia polskiej szkoły).
+- 2026-10-03, technika: dane jako moduły ES; na Netlify publikowany tylko katalog `app/` (dokumenty projektu, w tym `CLAUDE.md` z imieniem dziecka, nie trafiają na stronę); polecenie budowania Netlify uruchamia testy i walidator, więc błąd zatrzymuje wdrożenie; adresy ekranów po znaku #; wersja gry to skrót zawartości plików (`tools/wersja.js`), dzięki czemu każda zmiana dociera do urządzeń; hak przed commitem w `.githooks/`.
+- 2026-10-03, podpisywanie schematu: w treningu błędna etykieta wraca do banku, a komunikat podaje przyczynę i opis wskazanego elementu bez jego nazwy (przypominanie zamiast podpowiedzi); nazwa pada po drugiej błędnej próbie w tym samym miejscu; wynik liczy pierwsze próby. Dystraktorami mogą być tylko elementy, których dany typ komórki według `TRESCI.md` nie ma (pilnuje walidator). Na szerokim ekranie pola stoją obok numerów jak na sprawdzianie; komunikat i etykiety na tacce przy dolnej krawędzi ekranu.
+- 2026-10-03, walidator: porównuje typy komórek z tabelą porównawczą w `TRESCI.md` (sekcja 2.3), sprawdza zawartość rysunków SVG (brak elementów, których typ komórki nie ma) i szuka terminów spoza `TRESCI.md` (np. „destruenci”, „organellum”, „retikulum”).
+- 2026-10-03, panel rodzica: postęp w światach, najczęstsze pomyłki, czas w wyzwaniach, imię gracza, odblokowanie gotowych światów, kopia postępu w pliku (na iPadzie przez arkusz udostępniania), usuwanie postępu, informacja o instalacji i ochronie zapisu.
+- 2026-10-03, adres gry: https://biologia-gra.netlify.app (Netlify, gałąź `main`). Repozytorium na GitHubie jest publiczne: dokumenty projektu, w tym imię i wiek gracza w `CLAUDE.md`, są widoczne publicznie. Ukrycie repozytorium nie przeszkadza we wdrożeniu na Netlify (decyzja Roberta).
+- 2026-10-03, otwarte: rozkład punktów 0-29 na 14 punktów zakresu sprawdzianu (potrzebny do próbnego sprawdzianu, etap 4); kategorie pomocnicze z `TRESCI.md`, sekcja 7 („zwierzę (przykład)” itp.) nie trafiają do zadań klasyfikacyjnych.
+- 2026-10-03, propozycje akcentów z gier Roblox na kolejne etapy (do decyzji): baza rozbudowywana wraz z opanowaniem jak w grach typu tycoon (nowe stanowiska i ulepszenia mikroskopu), boss jako tor przeszkód z punktami kontrolnymi zamiast licznika błędów, odznaki za pokonanych bossów, awatar badacza z elementami zdobywanymi za opanowanie.

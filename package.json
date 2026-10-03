@@ -1,0 +1,18 @@
+{
+  "name": "wyprawa-do-wnetrza-zycia",
+  "private": true,
+  "type": "module",
+  "description": "Gra przeglądarkowa do nauki biologii: klasa 5, dział II „Budowa i czynności życiowe organizmów”.",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node tools/validate-data.js",
+    "check": "node --test && node tools/validate-data.js",
+    "wersja": "node tools/wersja.js",
+    "start": "node tools/serwer.js",
+    "e2e": "node tools/e2e.js",
+    "ikony": "node tools/ikony.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,88 @@
+// Sześć światów w kolejności części słuchowiska. Treści: TRESCI.md, sekcje 2.1-2.6.
+// gotowy: świat ma treść do grania. Świat niegotowy jest na mapie oznaczony „W budowie”.
+
+export default [
+  {
+    id: 1,
+    czesc: 1,
+    tytul: 'Alfabet życia',
+    temat: 'Składniki chemiczne organizmów',
+    zrodlo: '2.1',
+    gotowy: false,
+    wstep: [],
+    coZbadasz: [],
+    misje: [],
+  },
+  {
+    id: 2,
+    czesc: 2,
+    tytul: 'Miasto, którego nie widać',
+    temat: 'Budowa komórki zwierzęcej',
+    zrodlo: '2.2',
+    gotowy: true,
+    wstep: [
+      'Wyobraź sobie, że zmniejszasz się tysiące razy i stajesz u bram komórki.',
+      'Komórka to podstawowa jednostka życia. Działa jak miasto: ma granicę z przejściami, centrum dowodzenia, elektrownie i fabryki.',
+      'Zacznij od planu miasta.',
+    ],
+    ciekawostka:
+      'Robert Hooke ponad 350 lat temu zobaczył pod mikroskopem w plasterku korka setki pustych komór. Nazwał je słowem oznaczającym małą izbę. Po polsku to „komórki”.',
+    coZbadasz: [
+      'z jakich elementów zbudowana jest komórka zwierzęca',
+      'do czego służy każdy z tych elementów',
+      'dlaczego komórki mają różne kształty',
+    ],
+    misje: [
+      {
+        id: 's2-plan-miasta',
+        nazwa: 'Plan miasta',
+        opis: 'Podpisz elementy komórki zwierzęcej na planie.',
+        zadania: ['s2-podpis-zwierzeca-1'],
+      },
+    ],
+  },
+  {
+    id: 3,
+    czesc: 3,
+    tytul: 'Zielone twierdze i niewidzialni mieszkańcy',
+    temat: 'Komórka roślinna. Inne rodzaje komórek',
+    zrodlo: '2.3',
+    gotowy: false,
+    wstep: [],
+    coZbadasz: [],
+    misje: [],
+  },
+  {
+    id: 4,
+    czesc: 4,
+    tytul: 'Kuchnia zasilana światłem',
+    temat: 'Samożywność',
+    zrodlo: '2.4',
+    gotowy: false,
+    wstep: [],
+    coZbadasz: [],
+    misje: [],
+  },
+  {
+    id: 5,
+    czesc: 5,
+    tytul: 'Wielka uczta',
+    temat: 'Cudzożywność',
+    zrodlo: '2.5',
+    gotowy: false,
+    wstep: [],
+    coZbadasz: [],
+    misje: [],
+  },
+  {
+    id: 6,
+    czesc: 6,
+    tytul: 'Ogień bez płomienia',
+    temat: 'Sposoby oddychania organizmów',
+    zrodlo: '2.6',
+    gotowy: false,
+    wstep: [],
+    coZbadasz: [],
+    misje: [],
+  },
+];
