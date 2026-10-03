@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480">
+  <!-- Schemat komórki bakteryjnej, rysunek własny w konwencji szkolnej (SPEC.md, sekcja 6.2): -->
+  <!-- otoczka śluzowa, ściana komórkowa, błona komórkowa, nić DNA w cytozolu, rybosomy, rzęska. -->
+  <!-- Linie wskazujące i numery dorysowuje komponent podpisywania według data/schematy.js. -->
+
+  <g data-element="rzeska">
+    <path d="M428 240 C452 222 470 258 494 240 C518 222 536 258 558 242 C568 235 574 231 580 229" fill="none" stroke="#5E4A22" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <g data-element="otoczka-sluzowa">
+    <rect x="70" y="140" width="380" height="200" rx="100" fill="#F5ECC8" stroke="#C2A54A" stroke-width="3" stroke-dasharray="9 7"/>
+  </g>
+
+  <g data-element="sciana-komorkowa">
+    <path d="M170 160 H350 A80 80 0 0 1 350 320 H170 A80 80 0 0 1 170 160 Z M170 174 A66 66 0 0 0 170 306 H350 A66 66 0 0 0 350 174 Z" fill="#D8C49A" fill-rule="evenodd" stroke="#7A6234" stroke-width="3"/>
+  </g>
+
+  <g data-element="cytozol">
+    <rect x="108" y="178" width="304" height="124" rx="62" fill="#FFF6E5"/>
+  </g>
+
+  <g data-element="nic-dna">
+    <path d="M206 238 C214 208 252 206 262 228 C272 250 238 268 228 248 C216 224 262 206 292 220 C322 234 302 266 280 262 C254 256 282 218 314 224 C346 230 344 262 320 266 C298 270 296 242 326 236" fill="none" stroke="#6B4FA0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g data-element="rybosomy" fill="#4B3A78">
+    <circle cx="140" cy="222" r="3.6"/>
+    <circle cx="152" cy="252" r="3.6"/>
+    <circle cx="140" cy="270" r="3.6"/>
+    <circle cx="166" cy="204" r="3.6"/>
+    <circle cx="370" cy="206" r="3.6"/>
+    <circle cx="388" cy="232" r="3.6"/>
+    <circle cx="372" cy="262" r="3.6"/>
+    <circle cx="390" cy="276" r="3.6"/>
+    <circle cx="240" cy="288" r="3.6"/>
+    <circle cx="266" cy="292" r="3.6"/>
+    <circle cx="226" cy="196" r="3.6"/>
+    <circle cx="342" cy="196" r="3.6"/>
+    <circle cx="352" cy="288" r="3.6"/>
+    <circle cx="186" cy="282" r="3.6"/>
+  </g>
+
+  <g data-element="blona-komorkowa">
+    <rect x="108" y="178" width="304" height="124" rx="62" fill="none" stroke="#9E3B5B" stroke-width="4"/>
+  </g>
+</svg>

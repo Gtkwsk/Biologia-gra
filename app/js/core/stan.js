@@ -1,7 +1,7 @@
 // Stan gry: jeden obiekt zapisywany lokalnie na urządzeniu.
 // Funkcje czyste, bez DOM i bez localStorage (zapis: magazyn.js).
 
-export const WERSJA_SCHEMATU = 1;
+export const WERSJA_SCHEMATU = 2;
 export const ID_GRY = 'wyprawa-do-wnetrza-zycia';
 export const PROG_OPANOWANIA = 0.8;
 export const DOMYSLNE_IMIE = 'Mikołaj';
@@ -20,12 +20,16 @@ export function nowyStan(dzien) {
     bossowie: [],
     zadania: {},
     pomylki: {},
+    karty: {},
     czasMs: 0,
   };
 }
 
 // Migracje schematu: klucz to wersja źródłowa, funkcja zwraca dane o jedną wersję wyższe.
-export const MIGRACJE = {};
+export const MIGRACJE = {
+  // Wersja 2: karty atlasu. Wyników z wersji 1 nie da się rozbić na karty: atlas zaczyna od zera.
+  1: (dane) => ({ ...dane, karty: {} }),
+};
 
 export function migruj(dane, migracje = MIGRACJE, docelowa = WERSJA_SCHEMATU) {
   let wersja = dane.wersja;
@@ -70,6 +74,22 @@ function wynikiZadan(v) {
   return wynik;
 }
 
+// Karta atlasu: odRazu (ile razy poprawnie za pierwszym razem), typy (typy zadań z odpowiedzią
+// poprawną za pierwszym razem), boss (poprawnie za pierwszym razem w zadaniu bossa).
+function stanKart(v) {
+  const wynik = {};
+  if (!czyObiekt(v)) return wynik;
+  for (const [id, k] of Object.entries(v)) {
+    if (!czyObiekt(k)) continue;
+    wynik[id] = {
+      odRazu: Math.floor(liczbaNieujemna(k.odRazu)),
+      typy: Array.isArray(k.typy) ? [...new Set(k.typy.filter((t) => typeof t === 'string'))] : [],
+      boss: k.boss === true,
+    };
+  }
+  return wynik;
+}
+
 function liczniki(v) {
   const wynik = {};
   if (!czyObiekt(v)) return wynik;
@@ -100,6 +120,7 @@ export function normalizuj(dane, dzien) {
     bossowie: idSwiatow(d.bossowie),
     zadania: wynikiZadan(d.zadania),
     pomylki: liczniki(d.pomylki),
+    karty: stanKart(d.karty),
     czasMs: liczbaNieujemna(d.czasMs),
   };
 }
@@ -126,13 +147,25 @@ export function zImportu(tekst, dzien) {
   return odczytajStan(dane.stan, dzien);
 }
 
-// wynik: { idZadania, poprawne, wszystkie, bledneElementy, czasMs, dzien }
+// wynik: { idZadania, typ, boss, poprawne, wszystkie, karty, czasMs, dzien }
+// karty: [{ karta, odRazu, poprawnie }] – odRazu: dobrze za pierwszym razem;
+// poprawnie: dobrze na końcu zadania (np. po poprawce w treningu).
 export function zapiszWynik(stan, wynik) {
-  const { idZadania, poprawne, wszystkie, bledneElementy = [], czasMs = 0, dzien } = wynik;
+  const { idZadania, typ = '', boss = false, poprawne, wszystkie, karty = [], czasMs = 0, dzien } = wynik;
   const czesc = wszystkie > 0 ? ulamek(poprawne / wszystkie) : 0;
   const poprzedni = stan.zadania[idZadania];
   const pomylki = { ...stan.pomylki };
-  for (const id of bledneElementy) pomylki[id] = (pomylki[id] ?? 0) + 1;
+  const stanKartPo = { ...stan.karty };
+  for (const { karta, odRazu, poprawnie } of karty) {
+    if (!odRazu) pomylki[karta] = (pomylki[karta] ?? 0) + 1;
+    if (!odRazu && !poprawnie) continue;
+    const k = stanKartPo[karta] ?? { odRazu: 0, typy: [], boss: false };
+    stanKartPo[karta] = {
+      odRazu: k.odRazu + (odRazu ? 1 : 0),
+      typy: odRazu && typ && !k.typy.includes(typ) ? [...k.typy, typ] : k.typy,
+      boss: k.boss || (boss && odRazu),
+    };
+  }
   return {
     ...stan,
     zadania: {
@@ -145,6 +178,7 @@ export function zapiszWynik(stan, wynik) {
       },
     },
     pomylki,
+    karty: stanKartPo,
     czasMs: stan.czasMs + Math.min(liczbaNieujemna(czasMs), MAKS_CZAS_ZADANIA_MS),
   };
 }

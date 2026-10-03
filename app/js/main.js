@@ -5,6 +5,11 @@ import zadania from '../data/zadania.js';
 import schematy from '../data/schematy.js';
 import elementy from '../data/elementy-komorek.js';
 import typyKomorek from '../data/typy-komorek.js';
+import pojecia from '../data/pojecia.js';
+import miasto from '../data/miasto.js';
+import wskazowki from '../data/wskazowki.js';
+import czesciKonstruktora from '../data/konstruktor.js';
+import { katalogKart } from './core/karty.js';
 import { utworzMagazyn } from './core/magazyn.js';
 import { nowyStan } from './core/stan.js';
 import { dzisiaj } from './core/daty.js';
@@ -18,9 +23,12 @@ import * as swiat from './ekrany/swiat.js';
 import * as misja from './ekrany/misja.js';
 import * as podsumowanie from './ekrany/podsumowanie.js';
 import * as baza from './ekrany/baza.js';
+import * as atlas from './ekrany/atlas.js';
+import * as mikroskop from './ekrany/mikroskop.js';
+import * as boss from './ekrany/boss.js';
 import * as rodzic from './ekrany/rodzic.js';
 
-const EKRANY = { mapa, swiat, misja, podsumowanie, baza, rodzic };
+const EKRANY = { mapa, swiat, misja, boss, podsumowanie, baza, atlas, mikroskop, rodzic };
 
 function dostepnyStorage() {
   try {
@@ -44,7 +52,18 @@ function zapisz() {
 const nowaSesja = () => ({ wyniki: [] });
 
 const ctx = {
-  dane: { swiaty, zadania, schematy, elementy, typyKomorek },
+  dane: {
+    swiaty,
+    zadania,
+    schematy,
+    elementy,
+    typyKomorek,
+    pojecia,
+    miasto,
+    wskazowki,
+    czesciKonstruktora,
+    katalog: katalogKart({ elementy, typyKomorek, pojecia }),
+  },
   get stan() {
     return stan;
   },

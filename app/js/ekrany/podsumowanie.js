@@ -1,13 +1,14 @@
 // Koniec wyprawy: co poszło od razu, co do poćwiczenia (SPEC.md, sekcja 2, zasada 7).
 
 import { h } from '../core/dom.js';
+import { kartyZBledem, kartyOdRazu } from '../core/karty.js';
 import { pasek } from './wspolne.js';
 
 export function render(kontener, ctx) {
   const wyniki = ctx.sesja.wyniki;
-  const element = (id) => ctx.dane.elementy.find((e) => e.id === id);
-  const doCwiczenia = [...new Set(wyniki.flatMap((w) => w.bledneElementy))];
-  const opanowane = [...new Set(wyniki.flatMap((w) => w.opanowaneElementy))].filter((id) => !doCwiczenia.includes(id));
+  const element = (id) => ctx.dane.katalog.get(id);
+  const doCwiczenia = [...new Set(wyniki.flatMap(kartyZBledem))];
+  const opanowane = [...new Set(wyniki.flatMap(kartyOdRazu))].filter((id) => !doCwiczenia.includes(id));
   const poprawne = wyniki.reduce((suma, w) => suma + w.poprawne, 0);
   const wszystkie = wyniki.reduce((suma, w) => suma + w.wszystkie, 0);
 

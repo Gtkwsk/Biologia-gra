@@ -46,6 +46,15 @@ const IKONY = {
     ['path', { d: 'M12 11v6' }],
     ['path', { d: 'M12 7.2v.1' }],
   ],
+  lupa: [
+    ['circle', { cx: '10', cy: '10', r: '6' }],
+    ['path', { d: 'M14.5 14.5L20 20' }],
+  ],
+  serce: [['path', { d: 'M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z' }]],
+  klodka: [
+    ['rect', { x: '5.5', y: '11', width: '13', height: '9', rx: '2' }],
+    ['path', { d: 'M8.5 11V8a3.5 3.5 0 0 1 7 0v3' }],
+  ],
 };
 
 export function ikona(nazwa, klasa = 'ikona') {

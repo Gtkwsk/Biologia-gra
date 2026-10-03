@@ -10,6 +10,11 @@ export function zWielkiej(tekst) {
   return tekst.charAt(0).toUpperCase() + tekst.slice(1);
 }
 
+// „jest” albo „są” zależnie od liczby w nazwie elementu.
+export function jest(element) {
+  return element.mnoga ? 'są' : 'jest';
+}
+
 export function elementWTypie(element, idTypu) {
   return { ...element, ...(element.wTypie?.[idTypu] ?? {}) };
 }
@@ -67,7 +72,7 @@ export function komunikatBledu(przyg, punkt, wybranyId, proba) {
   const p = el(przyg, punkt.element);
   const wskazany =
     proba >= 2
-      ? `Pod numerem ${punkt.numer} jest ${p.nazwa}: ${p.opis}.`
+      ? `Pod numerem ${punkt.numer} ${jest(p)} ${p.nazwa}: ${p.opis}.`
       : `Pod numerem ${punkt.numer}: ${p.opis}.`;
   return { rodzaj: 'zle', tytul: `To nie ${w.nazwa}.`, tekst: `${przyczynaBledu(przyg, wybranyId)} ${wskazany}` };
 }
@@ -75,12 +80,12 @@ export function komunikatBledu(przyg, punkt, wybranyId, proba) {
 export function komunikatSprawdzianu(przyg, punkt, wybranyId) {
   const p = el(przyg, punkt.element);
   if (!wybranyId) {
-    return { rodzaj: 'zle', tytul: `Pod numerem ${punkt.numer} jest ${p.nazwa}.`, tekst: `${zWielkiej(p.nazwa)} to ${p.opis}.` };
+    return { rodzaj: 'zle', tytul: `Pod numerem ${punkt.numer} ${jest(p)} ${p.nazwa}.`, tekst: `${zWielkiej(p.nazwa)} to ${p.opis}.` };
   }
   const w = el(przyg, wybranyId);
   return {
     rodzaj: 'zle',
-    tytul: `Pod numerem ${punkt.numer} jest ${p.nazwa}, nie ${w.nazwa}.`,
+    tytul: `Pod numerem ${punkt.numer} ${jest(p)} ${p.nazwa}, nie ${w.nazwa}.`,
     tekst: przyczynaBledu(przyg, wybranyId),
   };
 }
@@ -159,14 +164,12 @@ export function czyGotowe(przyg, przebieg) {
   return przyg.punkty.every((p) => przebieg.przypisania[p.id] === p.element);
 }
 
-// Wynik do zapisu: poprawne od razu, elementy z błędem przy pierwszej próbie.
+// Wynik zadania: liczba odpowiedzi dobrych od razu i karty atlasu z wynikiem.
 export function podsumuj(przyg, przebieg) {
-  const odRazu = przyg.punkty.filter((p) => przebieg.pierwszaDobra[p.id] === true);
-  const zBledem = przyg.punkty.filter((p) => przebieg.pierwszaDobra[p.id] !== true);
-  return {
-    poprawne: odRazu.length,
-    wszystkie: przyg.punkty.length,
-    opanowaneElementy: odRazu.map((p) => p.element),
-    bledneElementy: zBledem.map((p) => p.element),
-  };
+  const karty = przyg.punkty.map((p) => ({
+    karta: p.element,
+    odRazu: przebieg.pierwszaDobra[p.id] === true,
+    poprawnie: przebieg.przypisania[p.id] === p.element,
+  }));
+  return { poprawne: karty.filter((k) => k.odRazu).length, wszystkie: karty.length, karty };
 }

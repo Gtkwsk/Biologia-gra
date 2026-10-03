@@ -129,7 +129,7 @@ Boss: oddychanie komórkowe czy wymiana gazowa, tabela porównawcza, produkty ob
 
 ### 4.2 Atlas i powtórki
 
-(Zawieszone decyzją z 2026-10-03: bez planu powtórek; zob. sekcja 12.) Część o odstępach, terminach i dacie sprawdzianu nie obowiązuje do czasu nowej decyzji; reguła zmiany koloru kart do ustalenia w etapie 1.
+(Zawieszone decyzją z 2026-10-03: bez planu powtórek; zob. sekcja 12.) Część o odstępach, terminach i dacie sprawdzianu nie obowiązuje do czasu nowej decyzji. Reguła zmiany koloru kart bez harmonogramu: sekcja 12, wpis z etapu 1.
 
 - Karty: organizmy (`TRESCI.md`, sekcja 7), elementy komórek, pojęcia i procesy (np. fotosynteza, chemosynteza, fermentacja alkoholowa, wymiana gazowa, żywiciel).
 - Stany karty: nieodkryta → brązowa → srebrna → złota. Awans wymaga poprawnego przypomnienia w innym dniu niż poprzednie, przy rosnących odstępach (np. 1, 3, 7, 14 dni). Błąd obniża kartę o jeden poziom i skraca odstęp; kolekcja nigdy nie jest zerowana.
@@ -140,7 +140,7 @@ Boss: oddychanie komórkowe czy wymiana gazowa, tabela porównawcza, produkty ob
 
 ### 4.3 Bossowie, rewanże, próbny sprawdzian
 
-- Boss to mieszanka typów zadań sprawdzianowych z danego świata, bez podpowiedzi, z limitem błędów zamiast limitu czasu (np. trzy błędy kończą podejście; można od razu spróbować ponownie).
+- Boss to mieszanka typów zadań sprawdzianowych z danego świata, bez podpowiedzi, z limitem błędów zamiast limitu czasu (np. trzy błędy kończą podejście; można od razu spróbować ponownie). W etapie 1: trzy serca, wyzwanie z błędem kosztuje jedno serce (sekcja 12).
 - Pokonani bossowie wracają w powtórkach jako krótkie rewanże. (Zawieszone decyzją z 2026-10-03: bez planu powtórek; zob. sekcja 12.)
 - **Próbny sprawdzian:** mieszanka wszystkich światów, punktacja 0-29 jak w podręczniku, bez podpowiedzi; raport słabych punktów w panelu rodzica.
 
@@ -230,7 +230,7 @@ Wymagania wspólne: dotyk i mysz (Pointer Events); alternatywa dla przeciągania
 - **Dane:** `data/` jako moduły ES lub JSON: pojęcia, elementy komórek, typy komórek, organizmy, pytania dla światów 1-6, ciekawostki. Każde pytanie ma: `id`, `swiat`, `typ`, treść, poprawną odpowiedź, wyjaśnienie, odwołanie do sekcji `TRESCI.md`.
 - **Walidator danych** (`tools/validate-data.js`): unikalne id, kompletność pól, terminy zgodne ze słownikiem kanonicznym (`TRESCI.md`, sekcja 9), kategorie organizmów z dozwolonej listy.
 - **Testy** (`node --test`): logika powtórek (awanse, spadki, terminy, skracanie odstępów przed sprawdzianem; zawieszone decyzją z 2026-10-03, zob. sekcja 12), punktacja, model fotosyntezy (wynik maleje przy niedoborze i nadmiarze każdego czynnika), model sprintu.
-- **Struktura (stan po etapie 0):**
+- **Struktura (stan po etapie 1):**
 
 ```
 netlify.toml            publikacja katalogu app/, testy i walidator przed wdrożeniem
@@ -238,17 +238,21 @@ app/                    publikowana gra (tylko ten katalog trafia na stronę)
   index.html
   manifest.webmanifest
   sw.js                 service worker; WERSJA i PLIKI generuje tools/wersja.js
-  css/                  tokeny, podstawy, ekrany, komponenty
-  js/core/              stan, zapis, adresy ekranów, dostępność światów, DOM
-  js/components/        typy zadań (sekcja 5); logika oddzielona od widoku
-  js/ekrany/            mapa, świat, misja, podsumowanie, baza, panel rodzica
-  data/                 moduły ES z treściami (światy, elementy, typy komórek, schematy, zadania)
-  assets/svg/           schematy rysowane od zera
+  css/                  tokeny, podstawy, ekrany, zadania, podpisywanie, mechaniki
+  js/core/              stan, zapis, adresy ekranów, światy, boss, karty atlasu, DOM
+  js/components/        typy zadań (sekcja 5) i mechaniki światów; logika (*-logika.js)
+                        oddzielona od widoku; zadania.js wybiera komponent według typu
+  js/ekrany/            mapa, świat, misja, boss, podsumowanie, baza, atlas, mikroskop,
+                        panel rodzica
+  data/                 moduły ES z treściami: światy (misje, bossowie), elementy i typy
+                        komórek, pojęcia, schematy, miasto, wskazówki detektywa, części
+                        konstruktora, zadania/swiat-N.js
+  assets/svg/           schematy komórek rysowane od zera
   assets/fonts/         kroje OFL z licencjami
   assets/ikony/
   audio/                opcjonalnie, poza pamięcią offline
 tests/                  node --test
-tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, ikony.js
+tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, rozwiazania.js, ikony.js
 .githooks/pre-commit    testy i walidator przed commitem
 ```
 
@@ -273,7 +277,7 @@ tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, ikony.js
 ## 10. Etapy
 
 0. **Fundament:** plan wizualny do akceptacji; szkielet PWA, router ekranów, stan, moduł powtórek z testami, podstawowy panel rodzica, komponent podpisywania schematu, walidator danych, `netlify.toml`. Zrealizowany 2026-10-03 bez modułu powtórek (zob. sekcja 12).
-1. **Wersja do pierwszego testu z Mikołajem:** świat 2 i świat 3 (komórki, najważniejsze dla sprawdzianu), mikroskop z dwoma poziomami, atlas elementów komórek, dwóch bossów. Po etapie: obserwacja gry Mikołaja i notatki.
+1. **Wersja do pierwszego testu z Mikołajem:** świat 2 i świat 3 (komórki, najważniejsze dla sprawdzianu), mikroskop z dwoma poziomami, atlas elementów komórek, dwóch bossów. Po etapie: obserwacja gry Mikołaja i notatki. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 2 z pięcioma misjami, świat 3 z siedmioma, dwóch bossów, atlas, mikroskop, baza.
 2. **Świat 4 i świat 6:** procesy (fotosynteza, oddychanie, fermentacja), symulacje.
 3. **Świat 5 i świat 1:** atlas organizmów, łańcuchy pokarmowe, składniki chemiczne.
 4. **Domknięcie:** próbny sprawdzian, domowe laboratorium, audio, dopracowanie oprawy i dźwięku.
@@ -308,3 +312,16 @@ Odpowiedzi z 2026-10-03 są dopisane przy pytaniach; wynikające z nich decyzje 
 - 2026-10-03, adres gry: https://biologia-gra.netlify.app (Netlify, gałąź `main`). Repozytorium na GitHubie jest publiczne: dokumenty projektu, w tym imię i wiek gracza w `CLAUDE.md`, są widoczne publicznie. Ukrycie repozytorium nie przeszkadza we wdrożeniu na Netlify (decyzja Roberta).
 - 2026-10-03, otwarte: rozkład punktów 0-29 na 14 punktów zakresu sprawdzianu (potrzebny do próbnego sprawdzianu, etap 4); kategorie pomocnicze z `TRESCI.md`, sekcja 7 („zwierzę (przykład)” itp.) nie trafiają do zadań klasyfikacyjnych.
 - 2026-10-03, propozycje akcentów z gier Roblox na kolejne etapy (do decyzji): baza rozbudowywana wraz z opanowaniem jak w grach typu tycoon (nowe stanowiska i ulepszenia mikroskopu), boss jako tor przeszkód z punktami kontrolnymi zamiast licznika błędów, odznaki za pokonanych bossów, awatar badacza z elementami zdobywanymi za opanowanie.
+- 2026-10-03, etap 1, zakres: świat 2 (misje: Plan miasta, Budowa miasta, Biuro zatrudnienia, Kształt do zadania, Pod mikroskopem; 22 zadania, 107 pozycji) i świat 3 (Zielona twierdza, Detektyw komórek, Konstruktor czterech komórek, Siatka porównawcza, Woda w wakuoli, Kształty komórek roślinnych, Niewidzialni mieszkańcy; 30 zadań, 182 pozycje). Punkty zakresu sprawdzianu z tych tematów mają co najmniej pięć wariantów: przyporządkowanie funkcji do wakuoli, mitochondrium i jądra (6), zdania o budowie komórek (6), schemat komórki roślinnej (7, na dwóch rysunkach). „Dlaczego komórki są małe” zostaje ciekawostką na karcie błony komórkowej.
+- 2026-10-03, etap 1, misje i bossowie: misja ma stały zestaw 1-3 zadań (powtórka misji to to samo zadanie z innym ułożeniem etykiet); warianty losuje boss, po jednym z każdej puli. Boss jest dostępny po rozwiązaniu wszystkich zadań z misji świata (każde choć raz). Trzy serca; wyzwanie z choćby jednym błędem kosztuje serce; utrata trzech kończy podejście, nowe podejście od razu i z nowymi wariantami. Uzasadnienie: limit błędów zamiast czasu (SPEC, sekcja 4.3), a próg „wyzwanie bez błędu” jest prosty do zrozumienia dla 11-latka. Wygrana otwiera kolejny świat i ulepsza mikroskop; przegrana pokazuje elementy do poćwiczenia, bez kar. Mechaniki (miasto, detektyw, konstruktor, wakuola) są tylko w misjach, boss ma wyłącznie formaty sprawdzianu.
+- 2026-10-03, etap 1, karty atlasu bez harmonogramu powtórek: nieodkryta, brązowa (co najmniej jedna poprawna odpowiedź), srebrna (od razu dobrze w dwóch różnych typach zadań), złota (od razu dobrze u bossa, czyli w warunkach sprawdzianu). Karta nie traci poziomu. Złota karta odsłania ciekawostkę z `TRESCI.md`, sekcja 6. Karty: elementy komórek, cztery typy komórek (w atlasie świata 3, bo tam są porównania), kształty komórek, pojęcia (komórka, organizm jedno- i wielokomórkowy, cytoplazma, komórka jądrowa i bezjądrowa, chlorofil).
+- 2026-10-03, etap 1, mikroskop: lupa na start (komórek nie widać), około 400 razy za bossa świata 2 (nabłonek jamy ustnej z podpisami błony, cytoplazmy i jądra; liść moczarki z krążącymi chloroplastami jako oznaczona ciekawostka), około 10 000 razy za bossa świata 3 (schematy czterech komórek; dotknięcie elementu podaje nazwę i funkcję). Preparaty drożdży i bakterii tylko przy 10 000 razy, bo `TRESCI.md` nie opisuje, co widać przy 400 razy.
+- 2026-10-03, etap 1, prawda/fałsz: zdanie fałszywe poprawia się wyborem prawdziwej wersji. Wskazywanie błędnego słowa zostaje tylko dla tekstów z jednoznacznym błędem (np. przyszły „Wykrywacz bzdur”), bo w zdaniu „X robi Y” błąd można poprawić i w X, i w Y; gra uznałaby wtedy poprawne rozumowanie za błąd.
+- 2026-10-03, etap 1, detektyw komórek: lupy za liczbę wskazówek tylko przy trafieniu „na pewno” (gdy odsłonięte wskazówki wykluczają pozostałe komórki); trafienie na zgadywanie nie daje lup i nie liczy się jako „od razu dobrze”. Wskazówka o budulcu ściany (chityna, celuloza) nie wyklucza bakterii, bo `TRESCI.md` nie podaje budulca ich ściany.
+- 2026-10-03, etap 1, konstruktor czterech komórek: części to elementy z tabeli porównawczej (`TRESCI.md`, sekcja 2.3) i nić DNA. Bez siateczki śródplazmatycznej i aparatu Golgiego, bo `TRESCI.md` nie rozstrzyga ich obecności w komórce grzybowej (pojawiają się na planie zwierzęcej i roślinnej po zbudowaniu). Nić DNA w komórce jądrowej jest odrzucana z wyjaśnieniem, że DNA jest tam w jądrze komórkowym; tabela porównawcza nie zawiera wiersza „nić DNA”. Otoczka śluzowa jest w bakterii dozwolona, ale nie wymagana; rzęski nie ma wśród części (wpis o rzęsce niżej).
+- 2026-10-03, etap 1, woda w wakuoli: scena (suwak podlewania, roślina i komórka liścia) ilustruje ciekawostkę o balonie w pudełku z oznaczeniem „Ciekawostka”; pytania dotyczą tylko faktów z sekcji 2.3 (wakuola utrzymuje odpowiednią ilość wody, ściana nadaje kształt). Rysunek nie pokazuje odstawania błony od ściany, bo tego nie ma w `TRESCI.md`.
+- 2026-10-03, etap 1, budowa miasta: nazwy usług to przenośnie ze słuchowiska (elektrownie, warsztaty białek, sortownia paczek); awarie są dobrane tak, by każda pasowała do jednego elementu według `TRESCI.md` (tłuszcze tylko siateczka, przekształcanie białek tylko aparat Golgiego, trawienie tylko wakuole).
+- 2026-10-03, etap 1, przykłady organizmów jedno- i wielokomórkowych: tylko takie, które wynikają z `TRESCI.md` (bakterie, drożdże; zwierzęta, rośliny z tabeli organizmów). Komórka grzybowa narysowana bez siateczki i aparatu Golgiego (jak wyżej).
+- 2026-10-03, etap 1, rzęska: tabela w `TRESCI.md` (sekcja 2.3) podaje rzęskę tylko „u części” bakterii, a w pozostałych komórkach ✗. Jako zdanie ogólne „komórka zwierzęca nie ma rzęski” jest nieprawdziwe (rzęski mają np. komórki nabłonka dróg oddechowych), a sekcja 5 nie wymienia tego uproszczenia. Dlatego rzęska nie jest dystraktorem przy schematach komórek zwierzęcej i roślinnej, nie ma jej w tabelach do wypełnienia ani wśród części konstruktora; występuje tylko jako element komórki bakteryjnej. Do decyzji Roberta: dopisanie uproszczenia do `TRESCI.md`, sekcja 5.
+- 2026-10-03, etap 1, przegląd treści względem `TRESCI.md` (niezależny przegląd wszystkich tekstów światów 2 i 3): poprawione m.in. „wszystkie komórki” na „wszystkie cztery rodzaje komórek”, opisy funkcji, które pasowały do dwóch elementów (rybosomy i siateczka śródplazmatyczna, wakuole i błona komórkowa), zdania spoza `TRESCI.md` (pofałdowane wnętrze mitochondrium, położenie ściany bakterii, powierzchnia włośników), fałszywe zdanie o największej komórce (komórka nerwowa bywa rozumiana jako najdłuższa), wyjaśnienia w scenie wakuoli (funkcja wakuoli w komórce roślinnej), forma gramatyczna komunikatów.
+- 2026-10-03, etap 1, dwa rysunki komórki roślinnej (prostokątna i wydłużona, inny układ elementów), żeby rozpoznawanie nie opierało się na jednym obrazie; oba w misji „Zielona twierdza” i w puli bossa (siedem wariantów podpisywania). Do rozważenia po teście z Mikołajem: dźwięki, liczba serc u bossa.

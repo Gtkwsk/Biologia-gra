@@ -1,5 +1,6 @@
 // Wszystkie zadania gry. Nowy plik świata dopisuje się tutaj jednym importem.
 
 import swiat2 from './zadania/swiat-2.js';
+import swiat3 from './zadania/swiat-3.js';
 
-export default [...swiat2];
+export default [...swiat2, ...swiat3];

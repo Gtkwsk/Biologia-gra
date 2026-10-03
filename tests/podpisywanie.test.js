@@ -66,7 +66,10 @@ test('poprawka po błędzie kończy zadanie, ale nie liczy się jako odpowiedź 
   assert.equal(L.czyGotowe(przyg, p), true);
   const wynik = L.podsumuj(przyg, p);
   assert.equal(wynik.poprawne, przyg.punkty.length - 1);
-  assert.deepEqual(wynik.bledneElementy, ['cytozol']);
+  assert.deepEqual(
+    wynik.karty.filter((k) => !k.odRazu),
+    [{ karta: 'cytozol', odRazu: false, poprawnie: true }],
+  );
   assert.equal(p.pomylki.length, 1);
 });
 
