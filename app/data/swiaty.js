@@ -87,7 +87,7 @@ export default [
       'Komórka to podstawowa jednostka życia. Działa jak miasto: ma granicę z przejściami, centrum dowodzenia, elektrownie i fabryki.',
       'Zacznij od planu miasta.',
     ],
-    przewodnik: { imie: 'Robert Hooke', kim: 'angielski uczony sprzed ponad 350 lat', rysunek: 'przewodnik-hooke' },
+    przewodnik: { imie: 'Robert Hooke', kim: 'angielski uczony', rysunek: 'przewodnik-hooke' },
     ciekawostka:
       'Robert Hooke ponad 350 lat temu zobaczył pod mikroskopem w plasterku korka setki pustych komór i nazwał je słowem oznaczającym małą izbę; po polsku to „komórki”. Oglądał puste ściany martwych komórek.',
     coZbadasz: [
@@ -150,7 +150,7 @@ export default [
       'Odpowiedź kryje się w komórkach: w zielonych twierdzach roślin, w komórkach grzybów i w maleńkich bakteriach, które nie mają nawet jądra.',
       'Zacznij od planu zielonej twierdzy.',
     ],
-    przewodnik: { imie: 'Antoni van Leeuwenhoek', kim: 'kupiec z Delft, który budował mikroskopy', rysunek: 'przewodnik-leeuwenhoek' },
+    przewodnik: { imie: 'Antoni van Leeuwenhoek', kim: 'holenderski kupiec i badacz sprzed około 350 lat', rysunek: 'przewodnik-leeuwenhoek' },
     ciekawostka:
       'Antoni van Leeuwenhoek, kupiec handlujący suknem w Delft, budował najlepsze mikroskopy swoich czasów. W nalocie z własnych zębów zobaczył mnóstwo poruszających się „zwierzątek”, czyli bakterii; pisał, że jest ich tam więcej niż ludzi w całym królestwie.',
     coZbadasz: [
@@ -450,7 +450,7 @@ export default [
       wyzwania: [
         { pula: ['s6-sorter-ow-1', 's6-boss-sorter-ow-2', 's6-boss-sorter-ow-3', 's6-boss-sorter-ow-4', 's6-boss-sorter-ow-5'] },
         { pula: ['s6-tabela-1', 's6-boss-tabela-2', 's6-boss-tabela-3', 's6-boss-tabela-4', 's6-boss-pf-tabela-1'] },
-        { pula: ['s6-produkty-1', 's6-boss-produkty-2', 's6-luki-tlenowe-2', 's6-boss-luki-fermentacje-1', 's6-boss-pf-produkty-1'] },
+        { pula: ['s6-produkty-1', 's6-boss-produkty-2', 's6-boss-pf-produkty-2', 's6-boss-luki-fermentacje-1', 's6-boss-pf-produkty-1'] },
         { pula: ['s6-pf-ow-1', 's6-pf-fermentacja-1', 's6-wapienna-1', 's6-boss-pf-1'] },
       ],
     },

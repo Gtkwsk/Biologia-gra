@@ -21,7 +21,7 @@ function kartaBossa(sw, stan) {
       { class: 'boss-wejscie__opis' },
       dostepny
         ? pokonany
-          ? 'Rewanż: nowe warianty zadań w formatach sprawdzianu.'
+          ? 'Rewanż: zadania w formatach sprawdzianu, losowane od nowa.'
           : sw.boss.opis
         : `Ukończ wszystkie misje, żeby go wyzwać. Ukończone: ${misjeUkonczone(sw, stan)} z ${sw.misje.length}.`,
     ),

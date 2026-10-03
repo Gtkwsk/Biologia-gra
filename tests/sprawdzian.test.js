@@ -56,6 +56,41 @@ test('wynik i podsumowanie: suma punktów i tematy do poprawy', () => {
   assert.deepEqual(pods.doPoprawy, [3]);
 });
 
+test('liczba punktów po polsku: mianownik i dopełniacz po „z”', () => {
+  assert.deepEqual([1, 2, 4, 5, 12, 14, 22, 25, 29].map(S.liczbaPunktow), [
+    '1 punkt',
+    '2 punkty',
+    '4 punkty',
+    '5 punktów',
+    '12 punktów',
+    '14 punktów',
+    '22 punkty',
+    '25 punktów',
+    '29 punktów',
+  ]);
+  assert.equal(S.zPunktow(1), '1 punktu');
+  assert.equal(S.zPunktow(3), '3 punktów');
+  assert.equal(S.zPunktow(29), '29 punktów');
+});
+
+test('odnośniki do poćwiczenia: misje kart z błędem, a bez mapy misja tematu', () => {
+  const temat11 = sprawdzian.find((p) => p.punkt === 11);
+  const wynik = (zBledem, dobre = []) => ({
+    poprawne: dobre.length,
+    wszystkie: dobre.length + zBledem.length,
+    karty: [...zBledem.map((karta) => ({ karta, odRazu: false, poprawnie: true })), ...dobre.map((karta) => ({ karta, odRazu: true, poprawnie: true }))],
+  });
+  assert.deepEqual(S.misjeDoPoprawy(temat11, wynik(['polpasozyt'], ['wszystkozerca'])), ['s5-pasozyty']);
+  assert.deepEqual(S.misjeDoPoprawy(temat11, wynik(['padlinozerca', 'organizmy-odzywiajace-sie-szczatkami', 'roslina-pasozytnicza'])), [
+    's5-atlas',
+    's5-las',
+    's5-pasozyty',
+  ]);
+  assert.deepEqual(S.misjeDoPoprawy(temat11, { poprawne: 0, wszystkie: 1 }), ['s5-atlas'], 'wynik bez kart: misja tematu');
+  const temat3 = sprawdzian.find((p) => p.punkt === 3);
+  assert.deepEqual(S.misjeDoPoprawy(temat3, wynik(['bialka', 'tluszcze'])), [temat3.misja.id], 'bez mapy kart zawsze misja tematu');
+});
+
 test('najsłabsze tematy liczone z ostatnich podejść, od najsłabszego', () => {
   const s = (punkty) => ({ dzien: DZIEN, zadania: punkty.map(([punkt, zdobyte, maks]) => ({ punkt, zdobyte, maks })) });
   const lista = [s([[1, 0, 1], [2, 2, 2]]), s([[1, 1, 1], [2, 0, 2], [3, 1, 3]]), s([[1, 1, 1], [2, 2, 2], [3, 3, 3]]), s([[1, 1, 1], [2, 1, 2], [3, 3, 3]])];

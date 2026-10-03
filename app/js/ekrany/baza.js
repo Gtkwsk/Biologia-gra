@@ -5,7 +5,7 @@
 import { h, ikona } from '../core/dom.js';
 import { poziomKarty } from '../core/karty.js';
 import { POZIOMY_MIKROSKOPU, poziomMikroskopu } from '../core/boss.js';
-import { sprawdzianDostepny, sumaPunktow, podsumuj } from '../core/sprawdzian.js';
+import { sprawdzianDostepny, sumaPunktow, podsumuj, liczbaPunktow } from '../core/sprawdzian.js';
 import { pasek } from './wspolne.js';
 
 export function render(kontener, ctx) {
@@ -38,7 +38,7 @@ export function render(kontener, ctx) {
     {
       id: 'sprawdzian',
       nazwa: 'Próbny sprawdzian',
-      opis: `Czternaście zadań ze wszystkich światów, jak na sprawdzianie z działu. Razem ${maksSprawdzianu} punktów.`,
+      opis: `Czternaście zadań ze wszystkich światów, jak na sprawdzianie z działu. Razem ${liczbaPunktow(maksSprawdzianu)}.`,
       stan: !sprawdzianDostepny(ctx.dane.swiaty, ctx.stan)
         ? 'Otworzy się po pokonaniu bossów wszystkich światów.'
         : najlepszy === null

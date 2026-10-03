@@ -7,6 +7,22 @@
 // - Punkty za zadanie: część poprawnych odpowiedzi razy liczba punktów, zaokrąglona w dół
 //   do pełnych punktów (pełna liczba punktów tylko za zadanie bez błędu).
 
+import { kartyZBledem } from './karty.js';
+
+// „1 punkt”, „3 punkty”, „29 punktów”.
+export function liczbaPunktow(n) {
+  if (n === 1) return '1 punkt';
+  const r10 = n % 10;
+  const r100 = n % 100;
+  if (r10 >= 2 && r10 <= 4 && (r100 < 12 || r100 > 14)) return `${n} punkty`;
+  return `${n} punktów`;
+}
+
+// „z 1 punktu”, „z 3 punktów” (dopełniacz po „z”).
+export function zPunktow(n) {
+  return n === 1 ? '1 punktu' : `${n} punktów`;
+}
+
 export function sprawdzianDostepny(swiaty, stan) {
   if (stan.ustawienia.odblokujWszystkie) return true;
   const zBossem = swiaty.filter((s) => s.gotowy && s.boss);
@@ -35,6 +51,15 @@ export function wynikSprawdzianu(pozycje, wyniki, dzien) {
     dzien,
     zadania: pozycje.map((p, i) => ({ punkt: p.punkt, zdobyte: punktyZaZadanie(p.punkty, wyniki[i]), maks: p.punkty })),
   };
+}
+
+// Misje do poćwiczenia po zadaniu z błędami (odnośniki w wyniku). Pozycja może mieć mapę
+// misjeKart (karta atlasu → misja w świecie pozycji): odnośniki prowadzą wtedy do misji kart
+// z błędem. Karta spoza mapy i zadanie bez kart prowadzą do misji tematu.
+export function misjeDoPoprawy(pozycja, wynik) {
+  const mapa = pozycja.misjeKart ?? {};
+  const misje = (wynik?.karty ? kartyZBledem(wynik) : []).map((k) => mapa[k] ?? pozycja.misja.id);
+  return misje.length ? [...new Set(misje)] : [pozycja.misja.id];
 }
 
 export function podsumuj(wynik) {

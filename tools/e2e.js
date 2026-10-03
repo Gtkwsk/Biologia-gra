@@ -26,7 +26,9 @@ import wskazowki from '../app/data/wskazowki.js';
 import czesciKonstruktora from '../app/data/konstruktor.js';
 import procesy from '../app/data/procesy.js';
 import porownanie from '../app/data/porownanie.js';
+import sprawdzian from '../app/data/sprawdzian.js';
 import { KLUCZ } from '../app/js/core/magazyn.js';
+import { misjeDoPoprawy } from '../app/js/core/sprawdzian.js';
 
 const daneGry = { zadania, schematy, typyKomorek, miasto, wskazowki, czesciKonstruktora, procesy, porownanie };
 const zadaniePoId = new Map(zadania.map((z) => [z.id, z]));
@@ -123,6 +125,29 @@ async function rozwiazBiezace(strona) {
   const tekst = await strona.locator('body').innerText();
   if (/\b(null|undefined|NaN)\b/.test(tekst)) bledy.push(`${id}: na ekranie jest napis „null”, „undefined” albo „NaN”`);
   return id;
+}
+
+// Przyporządkowanie z dwiema pierwszymi parami zamienionymi (próbny sprawdzian): sprawdza punkty
+// za część odpowiedzi i odnośniki do misji. Zwraca zadanie.
+async function przyporzadkujZBledem(strona) {
+  const obszar = strona.locator('.misja__obszar');
+  await obszar.locator('.zadanie').first().waitFor();
+  const z = zadaniePoId.get(await obszar.getAttribute('data-zadanie'));
+  if (z.typ !== 'przyporzadkowanie') {
+    bledy.push(`${z.id}: oczekiwano przyporządkowania`);
+    await rozwiaz(strona, z, daneGry);
+  } else {
+    const etykieta = (i) => ((z.etykiety ?? 'nazwy') === 'nazwy' ? z.pary[i].karta : `opis-${i}`);
+    for (let i = 0; i < z.pary.length; i++) {
+      await strona.locator(`.bank .etykieta[data-element="${etykieta(i < 2 ? 1 - i : i)}"]`).click();
+      await strona.locator(`.pole-celu[data-cel="para-${i}"]`).first().click();
+    }
+    await strona.locator('.tacka__akcje button', { hasText: 'Sprawdź' }).click();
+  }
+  await strona.locator('.misja__wynik:not([hidden])').waitFor();
+  const tekst = await strona.locator('body').innerText();
+  if (/\b(null|undefined|NaN)\b/.test(tekst)) bledy.push(`${z.id}: na ekranie jest napis „null”, „undefined” albo „NaN”`);
+  return z;
 }
 
 // Przechodzi całą misję; zwraca tytuły wyników kolejnych zadań.
@@ -431,7 +456,8 @@ console.log('Tablet poziomo (mysz)');
   await strona.locator('.ekran--mikroskop').waitFor();
   sprawdz(!(await strona.locator('.mikroskop__poziomy button', { hasText: '10 000' }).isDisabled()), 'mikroskop: 10 000 razy otwarte po bossie świata 3');
 
-  // Próbny sprawdzian: otwarty po bossach wszystkich światów; całe podejście bez błędu daje 29 punktów.
+  // Próbny sprawdzian: otwarty po bossach wszystkich światów. Wszystko dobrze poza tematem 11,
+  // w którym dwie pary są zamienione: 28 z 29 punktów i odnośniki do misji kart z błędem.
   await strona.goto(`${adres}#/baza`);
   await strona.locator('.ekran--baza').waitFor();
   sprawdz(
@@ -440,13 +466,31 @@ console.log('Tablet poziomo (mysz)');
   );
   await strona.locator('.stanowisko[data-stanowisko="sprawdzian"] a').click();
   await strona.locator('.ekran--sprawdzian .boss-karta button', { hasText: 'Zaczynamy' }).click();
+  let zBledem = null;
   for (let i = 0; i < 14; i++) {
-    await rozwiazBiezace(strona);
+    if (i === 10) zBledem = await przyporzadkujZBledem(strona);
+    else await rozwiazBiezace(strona);
     if (i === 0) await zrzut(strona, '16j-sprawdzian-zadanie');
+    if (i === 10) await zrzut(strona, '16j-sprawdzian-blad');
     await strona.locator('.misja__wynik .przycisk--dalej').click();
   }
   await strona.locator('.sprawdzian-wynik').waitFor();
-  sprawdz((await strona.locator('.sprawdzian-wynik h1').textContent()) === 'Wynik: 29 z 29 punktów', 'próbny sprawdzian: 29 z 29 punktów przy samych dobrych odpowiedziach');
+  sprawdz((await strona.locator('.sprawdzian-wynik h1').textContent()) === 'Wynik: 28 z 29 punktów', 'próbny sprawdzian: 28 z 29 punktów przy dwóch zamienionych parach w jednym zadaniu');
+  const wierszeWyniku = strona.locator('.sprawdzian__tabela tbody tr');
+  const pelneTematy = await wierszeWyniku.evaluateAll((wiersze) => wiersze.map((w) => w.dataset.pelne));
+  sprawdz(
+    pelneTematy.filter((p) => p === 'true').length === 13 && pelneTematy[10] === 'false',
+    'próbny sprawdzian: pełne punkty za 13 tematów, brak tylko w temacie 11',
+  );
+  const misjeSwiata5 = swiaty.find((s) => s.id === 5).misje;
+  const oczekiwaneOdnosniki = misjeDoPoprawy(sprawdzian[10], { karty: zBledem.pary.slice(0, 2).map((p) => ({ karta: p.karta, odRazu: false })) }).map(
+    (id) => `Poćwicz: ${misjeSwiata5.find((m) => m.id === id).nazwa}`,
+  );
+  const odnosniki = await wierszeWyniku.nth(10).locator('.sprawdzian__cwicz').allTextContents();
+  sprawdz(
+    JSON.stringify(odnosniki) === JSON.stringify(oczekiwaneOdnosniki),
+    `próbny sprawdzian: odnośniki do misji przy temacie z błędem (${zBledem.id}: ${odnosniki.join(', ')})`,
+  );
   await zrzut(strona, '16k-sprawdzian-wynik');
 
   // Domowe laboratorium: oznaczenie doświadczenia
@@ -460,7 +504,8 @@ console.log('Tablet poziomo (mysz)');
   // Panel rodzica: wynik sprawdzianu, laboratorium i ustawienie dźwięku
   await otworzPanel(strona);
   const panelPoSprawdzianie = await strona.locator('.ekran--rodzic').textContent();
-  sprawdz(panelPoSprawdzianie.includes('29 z 29') && panelPoSprawdzianie.includes('Próbny sprawdzian'), 'panel: wynik próbnego sprawdzianu');
+  sprawdz(panelPoSprawdzianie.includes('28 z 29') && panelPoSprawdzianie.includes('Próbny sprawdzian'), 'panel: wynik próbnego sprawdzianu');
+  sprawdz(panelPoSprawdzianie.includes('11. Typy organizmów cudzożywnych: 50%'), 'panel: najsłabszy temat próbnego sprawdzianu');
   sprawdz(panelPoSprawdzianie.includes('Słodki chleb'), 'panel: zrobione doświadczenie z domowego laboratorium');
   sprawdz(await strona.locator('#dzwiek').isChecked(), 'panel: dźwięki domyślnie włączone');
   await strona.locator('#dzwiek').click();

@@ -14,19 +14,6 @@ import { pasek } from './wspolne.js';
 
 const WSTECZ = { tekst: 'Baza', href: '#/baza' };
 
-// „z 1 punktu”, „z 3 punktów” (dopełniacz po „z”).
-export function zPunktow(n) {
-  return n === 1 ? '1 punktu' : `${n} punktów`;
-}
-
-export function liczbaPunktow(n) {
-  if (n === 1) return '1 punkt';
-  const r10 = n % 10;
-  const r100 = n % 100;
-  if (r10 >= 2 && r10 <= 4 && (r100 < 12 || r100 > 14)) return `${n} punkty`;
-  return `${n} punktów`;
-}
-
 export function render(kontener, ctx) {
   const { swiaty, zadania, sprawdzian } = ctx.dane;
   const nazwaKarty = (id) => ctx.dane.katalog.get(id)?.nazwa ?? id;
@@ -76,11 +63,11 @@ export function render(kontener, ctx) {
         h('div', { class: 'boss-karta__tekst' }, [
           h('p', { class: 'boss-karta__swiat' }, 'Dział II: Budowa i czynności życiowe organizmów'),
           h('h1', {}, 'Próbny sprawdzian'),
-          h('p', {}, `${pozycje.length} zadań ze wszystkich światów, w tej samej kolejności co tematy sprawdzianu. Razem ${liczbaPunktow(maks)}.`),
+          h('p', {}, `${pozycje.length} zadań ze wszystkich światów, w tej samej kolejności co tematy sprawdzianu. Razem ${S.liczbaPunktow(maks)}.`),
           h('ul', { class: 'boss-karta__zasady' }, [
-            h('li', {}, 'Bez podpowiedzi i bez limitu czasu. Najpierw ułóż wszystko, potem „Sprawdź”.'),
+            h('li', {}, 'Bez podpowiedzi i bez limitu czasu. Gdy zadanie ma przycisk „Sprawdź”, najpierw ułóż wszystko, potem go stuknij.'),
             h('li', {}, 'Po każdym zadaniu pojawią się punkty i wyjaśnienie.'),
-            h('li', {}, 'Każde podejście ma nowe warianty zadań.'),
+            h('li', {}, 'W każdym podejściu zadania są losowane od nowa.'),
           ]),
           najlepszy === null ? null : h('p', { class: 'sprawdzian-karta__rekord' }, `Najlepszy wynik: ${najlepszy} z ${maks}.`),
           h('button', { type: 'button', class: 'przycisk przycisk--dalej', onclick: pokazZadanie }, 'Zaczynamy'),
@@ -103,7 +90,7 @@ export function render(kontener, ctx) {
     wyczysc(ekran);
     ekran.append(
       pasek({ wstecz: { tekst: 'Wyjdź', href: '#/baza' }, tytul: 'Próbny sprawdzian', prawa: [licznik] }),
-      h('p', { class: 'sprawdzian__punkty-zadania' }, `Zadanie ${indeks + 1} (${liczbaPunktow(p.punkty)})`),
+      h('p', { class: 'sprawdzian__punkty-zadania' }, `Do zdobycia: ${S.liczbaPunktow(p.punkty)}`),
       h('h1', { class: 'misja__polecenie' }, zadanie.tresc),
       obszar,
       wynik,
@@ -142,7 +129,7 @@ export function render(kontener, ctx) {
     const ostatnie = indeks === pozycje.length - 1;
     wyczysc(wynikEl);
     dolacz(wynikEl, [
-      h('h2', { class: 'misja__wynik-tytul', 'data-pelne': String(zdobyte === p.punkty) }, `Zadanie ${indeks + 1}: ${zdobyte} z ${zPunktow(p.punkty)}.`),
+      h('h2', { class: 'misja__wynik-tytul', 'data-pelne': String(zdobyte === p.punkty) }, `Zadanie ${indeks + 1}: ${zdobyte} z ${S.zPunktow(p.punkty)}.`),
       doCwiczenia.length ? h('p', {}, [h('strong', {}, 'Do poćwiczenia: '), doCwiczenia.map(nazwaKarty).join(', '), '.']) : null,
       h('p', { class: 'misja__wyjasnienie' }, zadanie.wyjasnienie),
       h(
@@ -178,14 +165,12 @@ export function render(kontener, ctx) {
     const wiersze = pozycje.map((p, i) => {
       const z = wynik.zadania[i];
       const sw = swiaty.find((s) => s.id === p.misja.swiat);
-      const misja = sw?.misje.find((m) => m.id === p.misja.id);
-      // Przy temacie z brakami odnośnik do misji, w której ten temat się ćwiczy.
+      // Przy temacie z brakami odnośniki do misji, w których można poćwiczyć to, co poszło źle.
+      const misje = z.zdobyte < z.maks ? S.misjeDoPoprawy(p, wyniki[i]).map((id) => sw?.misje.find((m) => m.id === id)).filter(Boolean) : [];
       return h('tr', { 'data-pelne': String(z.zdobyte === z.maks) }, [
         h('th', { scope: 'row' }, [
           `${p.punkt}. ${p.nazwa}`,
-          z.zdobyte < z.maks && misja
-            ? h('a', { class: 'sprawdzian__cwicz', href: `#/swiat/${sw.id}/misja/${encodeURIComponent(misja.id)}` }, `Poćwicz: ${misja.nazwa}`)
-            : null,
+          ...misje.map((m) => h('a', { class: 'sprawdzian__cwicz', href: `#/swiat/${sw.id}/misja/${encodeURIComponent(m.id)}` }, `Poćwicz: ${m.nazwa}`)),
         ]),
         h('td', { class: 'sprawdzian__wynik-pkt' }, `${z.zdobyte} z ${z.maks}`),
       ]);
@@ -195,10 +180,10 @@ export function render(kontener, ctx) {
       pasek({ wstecz: WSTECZ }),
       h('section', { class: 'boss-karta sprawdzian-wynik' }, [
         h('p', { class: 'boss-karta__swiat' }, 'Próbny sprawdzian'),
-        h('h1', {}, `Wynik: ${zdobyte} z ${zPunktow(maks)}`),
+        h('h1', {}, `Wynik: ${zdobyte} z ${S.zPunktow(maks)}`),
         zdobyte === maks
-          ? h('p', {}, 'Komplet punktów! Każdy temat sprawdzianu poszedł bez błędu.')
-          : h('p', {}, `Bez błędu: ${pozycje.length - doPoprawy.length} z ${pozycje.length} zadań. Przy tematach z brakami jest odnośnik do misji, w której można je poćwiczyć.`),
+          ? h('p', {}, 'Komplet punktów! Wszystkie zadania bez błędu.')
+          : h('p', {}, `Bez błędu: ${pozycje.length - doPoprawy.length} z ${pozycje.length} zadań. Przy tematach z brakami są odnośniki do misji, w których można je poćwiczyć.`),
         poprzedni !== null && zdobyte > poprzedni ? h('p', { class: 'sprawdzian-karta__rekord' }, `Nowy najlepszy wynik (poprzednio ${poprzedni}).`) : null,
         h('div', { class: 'tabela-przewijana' }, [
           h('table', { class: 'tabela sprawdzian__tabela' }, [

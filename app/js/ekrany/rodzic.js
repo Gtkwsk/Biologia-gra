@@ -5,7 +5,7 @@ import { h, wyczysc } from '../core/dom.js';
 import { otwarteSwiaty, statusSwiata, zadaniaSwiata } from '../core/swiaty.js';
 import { doEksportu, zImportu, ustawImie, ustawOdblokujWszystkie, ustawDzwiek } from '../core/stan.js';
 import { dzisiaj, dataSlownie } from '../core/daty.js';
-import { sprawdzianDostepny, sumaPunktow, podsumuj, najslabszePunkty } from '../core/sprawdzian.js';
+import { sprawdzianDostepny, sumaPunktow, podsumuj, najslabszePunkty, liczbaPunktow } from '../core/sprawdzian.js';
 import { graj } from '../core/dzwieki.js';
 import { WERSJA } from '../wersja.js';
 import { pasek, powiadom } from './wspolne.js';
@@ -164,7 +164,7 @@ function panel(ekran, ctx) {
           h('p', {}, `Podejścia: ${stan.sprawdziany.length}. Ostatnie wyniki (od najnowszego): ${stan.sprawdziany
             .slice(-5)
             .reverse()
-            .map((s) => `${dataSlownie(s.dzien)}: ${podsumuj(s).zdobyte} z ${podsumuj(s).maks}`)
+            .map((s) => `${podsumuj(s).zdobyte} z ${podsumuj(s).maks} (${dataSlownie(s.dzien)})`)
             .join('; ')}.`),
           h('h3', {}, 'Ostatnie podejście'),
           h('div', { class: 'tabela-przewijana' }, [
@@ -174,7 +174,10 @@ function panel(ekran, ctx) {
             ]),
           ]),
           najslabsze.length
-            ? h('p', {}, [h('strong', {}, 'Najsłabsze tematy w ostatnich podejściach: '), `${najslabsze.map((p) => `${nazwaTematu(p.punkt)} (${Math.round(p.czesc * 100)}%)`).join(', ')}.`])
+            ? h('p', {}, [
+                h('strong', {}, 'Najsłabsze tematy w ostatnich podejściach (najwyżej trzech; część zdobytych punktów): '),
+                `${najslabsze.map((p) => `${p.punkt}. ${nazwaTematu(p.punkt)}: ${Math.round(p.czesc * 100)}%`).join('; ')}.`,
+              ])
             : h('p', {}, 'W ostatnich podejściach wszystkie tematy bez straty punktów.'),
         ]
       : [
@@ -182,10 +185,11 @@ function panel(ekran, ctx) {
             'p',
             {},
             sprawdzianDostepny(ctx.dane.swiaty, stan)
-              ? `Próbny sprawdzian (${maksSprawdzianu} punktów) nie był jeszcze rozwiązywany. Wejście: Baza, „Próbny sprawdzian”.`
-              : `Próbny sprawdzian (${maksSprawdzianu} punktów) otworzy się po pokonaniu bossów wszystkich światów albo po włączeniu odblokowania wszystkich światów w ustawieniach.`,
+              ? `Próbny sprawdzian (${liczbaPunktow(maksSprawdzianu)}) nie był jeszcze rozwiązywany. Wejście: Baza, „Próbny sprawdzian”.`
+              : `Próbny sprawdzian (${liczbaPunktow(maksSprawdzianu)}) otworzy się po pokonaniu bossów wszystkich światów albo po włączeniu odblokowania w ustawieniach.`,
           ),
         ]),
+    h('p', { class: 'panel-uwaga' }, 'Rozkład punktów na zadania jest przyjęty w grze, bez wzoru z podręcznika, więc wynik jest orientacyjny.'),
   ]);
 
   // Domowe laboratorium
@@ -291,10 +295,10 @@ function panel(ekran, ctx) {
     h('section', { class: 'panel-sekcja' }, [
       h('h2', {}, 'Ustawienia'),
       formImie,
-      h('div', { class: 'ustawienie ustawienie--przelacznik' }, [przelacznikDzwieku, h('label', { for: 'dzwiek' }, 'Dźwięki w grze (krótkie sygnały po odpowiedziach)')]),
+      h('div', { class: 'ustawienie ustawienie--przelacznik' }, [przelacznikDzwieku, h('label', { for: 'dzwiek' }, 'Dźwięki w grze (krótkie sygnały po odpowiedziach i na końcu zadań)')]),
       h('div', { class: 'ustawienie ustawienie--przelacznik' }, [
         przelacznik,
-        h('label', { for: 'odblokuj' }, 'Odblokuj wszystkie gotowe światy (bez pokonywania bossów); otwiera też próbny sprawdzian'),
+        h('label', { for: 'odblokuj' }, 'Odblokowanie wszystkich gotowych światów i próbnego sprawdzianu (bez pokonywania bossów)'),
       ]),
     ]),
     sekcjaLaboratorium,

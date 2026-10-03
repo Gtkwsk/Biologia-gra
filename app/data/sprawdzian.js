@@ -6,12 +6,15 @@
 // punkty: najwyższa liczba punktów za zadanie (rozkład przyjęty w etapie 4, SPEC.md, sekcja 12;
 //         jeśli podręcznik podaje inny, wystarczy zmienić liczby tutaj),
 // misja:  świat i misja, w której ten punkt się ćwiczy (odnośnik w raporcie),
+// misjeKart: opcjonalnie karta atlasu → misja w tym samym świecie, gdy temat ćwiczy się
+//         w kilku misjach (odnośniki do misji kart z błędem),
 // pula:   warianty zadania w formatach sprawdzianu; przy każdym podejściu losowany jest jeden.
+//         Każdy wariant sprawdza dokładnie temat punktu.
 
 export default [
   {
     punkt: 1,
-    nazwa: 'Rola wody w usuwaniu zbędnych substancji',
+    nazwa: 'Funkcje wody, w tym usuwanie zbędnych substancji',
     punkty: 1,
     misja: { swiat: 1, id: 's1-woda' },
     pula: ['s1-woda-luki', 's1-woda-pf', 's1-woda-klas', 's1-boss-woda-luki-2', 's1-boss-woda-pf-2'],
@@ -42,7 +45,7 @@ export default [
     nazwa: 'Budowa komórek bakterii, roślin i zwierząt',
     punkty: 2,
     misja: { swiat: 3, id: 's3-siatka' },
-    pula: ['s3-luki-1', 's3-luki-2', 's3-luki-3', 's3-boss-luki-4', 's3-boss-luki-5', 's3-boss-luki-6'],
+    pula: ['s3-luki-1', 's3-luki-2', 's3-luki-3', 's3-boss-luki-5', 's3-boss-luki-6'],
   },
   {
     punkt: 6,
@@ -56,7 +59,7 @@ export default [
     nazwa: 'Nazwy związków w schemacie fotosyntezy',
     punkty: 2,
     misja: { swiat: 4, id: 's4-przepis' },
-    pula: ['s4-podpis-roslina-1', 's4-boss-podpis-lisc-1', 's4-boss-podpis-lisc-2', 's4-boss-podpis-roslina-2', 's4-luki-zapis-1', 's4-boss-luki-zapis-2', 's4-boss-klas-zapis-1'],
+    pula: ['s4-podpis-roslina-1', 's4-boss-podpis-lisc-1', 's4-boss-podpis-lisc-2', 's4-boss-podpis-roslina-2', 's4-luki-zapis-1', 's4-boss-luki-zapis-2'],
   },
   {
     punkt: 8,
@@ -67,7 +70,7 @@ export default [
   },
   {
     punkt: 9,
-    nazwa: 'Dwutlenek węgla a fotosynteza',
+    nazwa: 'Wpływ dwutlenku węgla na fotosyntezę',
     punkty: 1,
     misja: { swiat: 4, id: 's4-projektant' },
     pula: ['s4-dosw-co2-1', 's4-szklarnia-1', 's4-boss-dosw-co2-2', 's4-boss-luki-co2-1', 's4-boss-pf-co2-1'],
@@ -84,6 +87,15 @@ export default [
     nazwa: 'Typy organizmów cudzożywnych',
     punkty: 2,
     misja: { swiat: 5, id: 's5-atlas' },
+    misjeKart: {
+      pasozyt: 's5-pasozyty',
+      'pasozyt-zewnetrzny': 's5-pasozyty',
+      'pasozyt-wewnetrzny': 's5-pasozyty',
+      'roslina-pasozytnicza': 's5-pasozyty',
+      polpasozyt: 's5-pasozyty',
+      zywiciel: 's5-pasozyty',
+      'organizmy-odzywiajace-sie-szczatkami': 's5-las',
+    },
     pula: ['s5-atlas-przyp-1', 's5-boss-przyp-2', 's5-boss-przyp-3', 's5-boss-przyp-4', 's5-boss-przyp-5'],
   },
   {
@@ -105,6 +117,6 @@ export default [
     nazwa: 'Produkty oddychania tlenowego i fermentacji',
     punkty: 1,
     misja: { swiat: 6, id: 's6-tabela' },
-    pula: ['s6-produkty-1', 's6-boss-produkty-2', 's6-luki-tlenowe-2', 's6-boss-luki-fermentacje-1', 's6-boss-pf-produkty-1'],
+    pula: ['s6-produkty-1', 's6-boss-produkty-2', 's6-boss-pf-produkty-2', 's6-boss-luki-fermentacje-1', 's6-boss-pf-produkty-1'],
   },
 ];

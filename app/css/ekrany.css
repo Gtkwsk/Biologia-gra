@@ -688,6 +688,12 @@
   font-size: var(--r-2);
 }
 
+/* Uwaga pod raportem (np. orientacyjny wynik próbnego sprawdzianu). */
+.panel-uwaga {
+  font-size: var(--r-0);
+  color: var(--atrament-jasny);
+}
+
 .tabela-przewijana {
   overflow-x: auto;
 }

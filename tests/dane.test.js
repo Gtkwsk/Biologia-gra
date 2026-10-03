@@ -262,6 +262,14 @@ test('wykrywa w próbnym sprawdzianie złą sumę punktów i mechanikę w puli',
   zawiera(bledy, '„s5-lancuchy-1” to mechanika');
 });
 
+test('wykrywa w próbnym sprawdzianie mapę kart z nieznaną kartą albo misją spoza świata tematu', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.sprawdzian[10].misjeKart = { pasozyt: 's4-przepis', smok: 's5-pasozyty' };
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'nieznana misja „s4-przepis” w świecie 5');
+  zawiera(bledy, 'nieznana karta atlasu „smok”');
+});
+
 test('wykrywa w domowym laboratorium ciekawostkę spoza TRESCI.md i krok bez kropki', async () => {
   const { dane, kontekst } = await zaladuj();
   dane.laboratorium[0].ciekawostka = 'Chleb jest pyszny.';

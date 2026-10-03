@@ -1242,6 +1242,11 @@ export function walidujDane(dane, kontekst) {
       if (!Number.isInteger(p.punkty) || p.punkty < 1) blad(g, 'punkty: liczba całkowita od 1');
       const sw = swiaty.find((x) => x.id === p.misja?.swiat);
       if (!sw?.misje?.some((m) => m.id === p.misja?.id)) blad(g, `nieznana misja „${p.misja?.id}” w świecie ${p.misja?.swiat}`);
+      // misjeKart: karta atlasu → misja w świecie tematu (odnośniki do misji kart z błędem)
+      for (const [k, idMisji] of Object.entries(p.misjeKart ?? {})) {
+        if (!katalog.has(k)) blad(`${g}.misjeKart`, `nieznana karta atlasu „${k}”`);
+        if (!sw?.misje?.some((m) => m.id === idMisji)) blad(`${g}.misjeKart`, `nieznana misja „${idMisji}” w świecie ${p.misja?.swiat}`);
+      }
       const pula = p.pula || [];
       if (new Set(pula).size !== pula.length) blad(g, 'powtórzone zadanie w puli');
       if (new Set(pula).size < 5) blad(g, `wariantów ${new Set(pula).size}, a potrzeba co najmniej pięciu (TRESCI.md, sekcja 8)`);

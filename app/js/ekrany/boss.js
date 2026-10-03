@@ -92,9 +92,9 @@ export function render(kontener, ctx, cel) {
           pokonany ? h('p', { class: 'boss-karta__pokonany' }, 'Ten boss jest już pokonany. Rewanż to dobre powtórzenie.') : null,
           h('ul', { class: 'boss-karta__zasady' }, [
             h('li', {}, [serca(B.SERCA), ' Masz trzy serca. Wyzwanie z błędem kosztuje jedno serce.']),
-            h('li', {}, 'Bez podpowiedzi, za to bez limitu czasu. Najpierw ułóż wszystko, potem „Sprawdź”.'),
+            h('li', {}, 'Bez podpowiedzi, za to bez limitu czasu. Gdy zadanie ma przycisk „Sprawdź”, najpierw ułóż wszystko, potem go stuknij.'),
             h('li', {}, `Wyzwania: ${wyzwania.map(nazwaTypu).join(', ')}.`),
-            h('li', {}, 'Każde podejście ma nowe warianty zadań.'),
+            h('li', {}, 'W każdym podejściu zadania są losowane od nowa.'),
           ]),
           h('button', { type: 'button', class: 'przycisk przycisk--dalej', onclick: pokazWyzwanie }, 'Zaczynamy'),
         ]),
@@ -195,7 +195,7 @@ export function render(kontener, ctx, cel) {
           h('h1', {}, 'Tym razem wygrał boss.'),
           h('p', {}, `Wyzwania ukończone bez błędu: ${podejscie.wyniki.filter((w) => w.poprawne === w.wszystkie).length} z ${podejscie.wyniki.length}.`),
           bledy.length ? h('p', {}, [h('strong', {}, 'Do poćwiczenia: '), bledy.map(nazwaKarty).join(', '), '.']) : null,
-          h('p', {}, 'Następne podejście ma nowe warianty zadań. Można też najpierw wrócić do misji.'),
+          h('p', {}, 'W następnym podejściu zadania zostaną wylosowane od nowa. Można też najpierw wrócić do misji.'),
           h('div', { class: 'przyciski' }, [
             h('button', { type: 'button', class: 'przycisk przycisk--dalej', onclick: pokazWstep }, 'Spróbuj ponownie'),
             h('a', { class: 'przycisk przycisk--jasny', href: `#/swiat/${sw.id}` }, 'Misje świata'),
