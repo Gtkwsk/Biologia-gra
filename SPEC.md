@@ -230,7 +230,7 @@ Wymagania wspólne: dotyk i mysz (Pointer Events); alternatywa dla przeciągania
 - **Dane:** `data/` jako moduły ES lub JSON: pojęcia, elementy komórek, typy komórek, organizmy, pytania dla światów 1-6, ciekawostki. Każde pytanie ma: `id`, `swiat`, `typ`, treść, poprawną odpowiedź, wyjaśnienie, odwołanie do sekcji `TRESCI.md`.
 - **Walidator danych** (`tools/validate-data.js`): unikalne id, kompletność pól, terminy zgodne ze słownikiem kanonicznym (`TRESCI.md`, sekcja 9), kategorie organizmów z dozwolonej listy.
 - **Testy** (`node --test`): logika powtórek (awanse, spadki, terminy, skracanie odstępów przed sprawdzianem; zawieszone decyzją z 2026-10-03, zob. sekcja 12), punktacja, model fotosyntezy (wynik maleje przy niedoborze i nadmiarze każdego czynnika), model sprintu.
-- **Struktura (stan po etapie 2):**
+- **Struktura (stan po etapie 3):**
 
 ```
 netlify.toml            publikacja katalogu app/, testy i walidator przed wdrożeniem
@@ -238,7 +238,8 @@ app/                    publikowana gra (tylko ten katalog trafia na stronę)
   index.html
   manifest.webmanifest
   sw.js                 service worker; WERSJA i PLIKI generuje tools/wersja.js
-  css/                  tokeny, podstawy, ekrany, zadania, podpisywanie, mechaniki, procesy
+  css/                  tokeny, podstawy, ekrany, zadania, podpisywanie, mechaniki, procesy,
+                        alfabet (świat 1), uczta (świat 5)
   js/core/              stan, zapis, adresy ekranów, światy, boss, karty atlasu, DOM
   js/components/        typy zadań (sekcja 5) i mechaniki światów; logika (*-logika.js)
                         oddzielona od widoku; zadania.js wybiera komponent według typu
@@ -247,7 +248,8 @@ app/                    publikowana gra (tylko ten katalog trafia na stronę)
   data/                 moduły ES z treściami: światy (misje, bossowie), elementy i typy
                         komórek, pojęcia, organizmy, procesy (zapisy słowne), tabela
                         oddychania tlenowego i fermentacji, schematy, miasto, wskazówki
-                        detektywa, części konstruktora, zadania/swiat-N.js
+                        detektywa, części konstruktora, zależności pokarmowe do łańcuchów
+                        (pokarm.js), zadania/swiat-N.js
   assets/svg/           schematy komórek i fotosyntezy rysowane od zera
   assets/fonts/         kroje OFL z licencjami
   assets/ikony/
@@ -280,7 +282,7 @@ tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, rozwiaza
 0. **Fundament:** plan wizualny do akceptacji; szkielet PWA, router ekranów, stan, moduł powtórek z testami, podstawowy panel rodzica, komponent podpisywania schematu, walidator danych, `netlify.toml`. Zrealizowany 2026-10-03 bez modułu powtórek (zob. sekcja 12).
 1. **Wersja do pierwszego testu z Mikołajem:** świat 2 i świat 3 (komórki, najważniejsze dla sprawdzianu), mikroskop z dwoma poziomami, atlas elementów komórek, dwóch bossów. Po etapie: obserwacja gry Mikołaja i notatki. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 2 z pięcioma misjami, świat 3 z siedmioma, dwóch bossów, atlas, mikroskop, baza.
 2. **Świat 4 i świat 6:** procesy (fotosynteza, oddychanie, fermentacja), symulacje. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 4 z siedmioma misjami, świat 6 z ośmioma, dwóch bossów, karty procesów, substancji i organizmów w atlasie.
-3. **Świat 5 i świat 1:** atlas organizmów, łańcuchy pokarmowe, składniki chemiczne.
+3. **Świat 5 i świat 1:** atlas organizmów, łańcuchy pokarmowe, składniki chemiczne. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 1 z sześcioma misjami, świat 5 z siedmioma, dwóch bossów, karty pierwiastków, związków chemicznych, sposobów zdobywania pokarmu i 47 nowych organizmów w atlasie.
 4. **Domknięcie:** próbny sprawdzian, domowe laboratorium, audio, dopracowanie oprawy i dźwięku.
 
 Po każdym etapie: wdrożenie, lista rzeczy do sprawdzenia przez Roberta, korekty treści. Kolejność może się zmienić po odpowiedzi na pytanie o termin sprawdzianu.
@@ -341,3 +343,13 @@ Odpowiedzi z 2026-10-03 są dopisane przy pytaniach; wynikające z nich decyzje 
 - 2026-10-03, etap 2, światło w przepisie fotosyntezy: osobne pole „Zasilanie” nad garnkiem zamiast miejsca wśród składników, zgodnie z zapisem słownym (warunki stoją nad strzałką) i z nazwą świata („Kuchnia zasilana światłem”). Unika to odpowiedzi „substraty: dwutlenek węgla, woda i światło” na sprawdzianie (`TRESCI.md`, sekcja 8, punkt 7). Komunikaty rozróżniają składnik i warunek („w zapisie słownym stoi nad strzałką”). Odstępstwo od słowa „składniki” w sekcji 3.2.
 - 2026-10-03, etap 2, przegląd treści względem `TRESCI.md` (niezależny przegląd wszystkich tekstów światów 4 i 6): poprawione m.in. kolejność kroków laboratorium (nadmiar soli przy upale nie zmieniał wyniku, co przeczyło regule „nadmiar zmniejsza intensywność”; walidator pilnuje teraz, by w trybie przewidywania każdy krok zmieniał wynik), zdania „światło pochłania chlorofil” (szyk dwuznaczny, teraz „chlorofil pochłania światło”), nazwy poziomów dwutlenku węgla w szklarni (powietrze zamiast wody), komunikat o energii w lustrze (fotosyntezę zasila energia świetlna, a nie energia z oddychania), wynik doświadczenia w szklarniach dopisany do opisu, zdanie sortera pasujące do obu grup, wyjaśnienia bez przyczyny i drobne błędy językowe.
 - 2026-10-03, otwarte (do decyzji Roberta): w przepisach i w lustrze to, z czego powstają produkty, nazywa się „składnikami” (metafora kuchni), a ciekawostka z `TRESCI.md` i opis sprawdzianu (sekcja 8, punkt 7) mówią o „substratach”. Możliwości: zostawić „składnik”, pisać „składnik (substrat)” albo przejść na „substrat”.
+
+- 2026-10-03, etap 3, zakres: świat 1 „Alfabet życia” (misje: Alfabet życia, Skład ciała, Woda na pięciu etatach, Ratuj organizm, Sortownia, Cukry, białka, tłuszcze; 28 zadań, w tym 12 tylko u bossa) i świat 5 „Wielka uczta” (Wielka uczta, Kto co je?, Atlas Bieszczad, Łańcuchy pokarmowe, Pasożyt szuka żywiciela, Trawienie jako rozbiórka, Las bez sprzątaczy; 30 zadań, w tym 12 tylko u bossa). Bossowie: „Bibliotekarz” (rola wody w usuwaniu substancji, sole wapnia i magnez, prawda/fałsz o funkcjach cukrów, białek i tłuszczów, przyporządkowanie funkcji) i „Król Bieszczad” (uzupełnianie zdań o cudzożywności, przyporządkowanie typów organizmów cudzożywnych do opisów, klasyfikacja, prawda/fałsz). Punkty zakresu sprawdzianu 1, 2, 3, 10 i 11 (`TRESCI.md`, sekcja 8) mają w pulach bossów po pięć wariantów. Wszystkie sześć światów jest gotowych.
+- 2026-10-03, etap 3, kolejność światów: nowy gracz zaczyna od świata 1, a każdy kolejny świat otwiera boss poprzedniego (1, 2, 3, 4, 5, 6), zgodnie z kolejnością części słuchowiska i podręcznika. Świat, który gracz już otworzył albo w którym ma wyniki, zostaje otwarty: świat 2 nie zamyka się temu, kto od niego zaczynał (także przy zapisie sprzed listy otwartych światów), a świat 6 temu, kto pokonał bossa świata 4. Gra nie odbiera tego, co już zdobyte.
+- 2026-10-03, etap 3, łańcuchy pokarmowe: `TRESCI.md` nie opisuje łańcuchów i podaje tylko kilka par „kto kogo zjada”. Łańcuch ma jedną lukę; dobre ogniwa wynikają wyłącznie z par w `data/pokarm.js` (np. orzeł przedni poluje na lisy, niedźwiedź brunatny zjada jelenie, wróbel latem zjada owady), a każdą złą opcję wyklucza sama definicja kategorii (roślinożerca nie zjada zwierząt, drapieżnik nie żywi się roślinami, łańcuch zaczyna się od organizmu samożywnego). Opcji, której definicja nie wyklucza (np. wilk po jeleniu), gra nie pokazuje, bo nie mogłaby uznać jej za błąd bez faktów spoza `TRESCI.md`. Walidator pilnuje obu reguł. Łańcuchy są tylko w misjach.
+- 2026-10-03, etap 3, las bez sprzątaczy: poglądowy model rok po roku (opad liści, rozkład, sole mineralne w glebie, wielkość roślin). Pytania dotyczą faktów z sekcji 2.5: bez organizmów odżywiających się szczątkami szczątki się gromadzą; te organizmy żyją w glebie, w ściółce, na dnie zbiorników wodnych i w mule. Zwrot soli mineralnych glebie i „las utonąłby we własnych szczątkach” to ciekawostka z sekcji 6 w ramce po pierwszym etapie bez tych organizmów; mniejsze rośliny przy braku soli wynikają z sekcji 2.4.
+- 2026-10-03, etap 3, trawienie jako rozbiórka: enzymy trawienne rozkładają cukry, białka i tłuszcze z pokarmu na związki proste; stuknięcie związku bez enzymów daje komunikat, że sam związek się nie rozłoży. Trawienie wewnątrz ciała (dżdżownica) i na zewnątrz ciała (bakterie i grzyby, np. pleśniak biały) w szybkim sorterze.
+- 2026-10-03, etap 3, mechaniki świata 1: Ratuj organizm (objaw, potem składnik i jego funkcja, scena przed i po; przypadki z sekcji 2.1; przy kiełkującym ziemniaku odpowiedź wynika z sekcji 2.1 i 2.4, a przyczyna mięknięcia jest ciekawostką z sekcji 6 w ramce), Sortownia (siatka związek × funkcja; komunikat mówi, czy nie zgadza się związek, funkcja, czy jedno i drugie), Skład ciała (ranking, potem słupki z wartościami z podręcznika z dopiskiem „wartości orientacyjne” z sekcji 5 i porównanie z meduzą w tej samej skali). Woda jest kartą świata 1 (związek chemiczny), tasiemiec uzbrojony kartą świata 5. Misja domowa z żuciem chleba czeka na domowe laboratorium (etap 4); ciekawostka o chlebie jest we wstępie świata i na karcie enzymów.
+- 2026-10-03, etap 3, pory roku i gra karciana: zmiany jadłospisu wróbla (zimą nasiona, latem także owady, pisklęta karmione larwami owadów) ćwiczą luki o wszystkożercach, bez osobnej mechaniki. Opcjonalna gra karciana „Uczta” nie weszła do etapu; do decyzji przy etapie 4.
+- 2026-10-03, etap 3, atlas: karty pierwiastków, związków chemicznych, sposobów zdobywania pokarmu i 47 nowych organizmów; każda karta ma własny piktogram. Pole `uwaga` (dopisek w karcie atlasu, nigdy w zadaniu) tylko przy uproszczeniach z `TRESCI.md`, sekcja 5: słonecznik (ruch kwiatów dotyczy głównie młodych roślin) i hiena cętkowana (także sprawny drapieżnik). Walidator to sprawdza.
+- 2026-10-03, etap 3, poprawka błędu z etapu 0: `Element.append(null)` wstawiał napis „null” w wyniku misji i wyzwania bossa (gdy nie było kart do poćwiczenia), w sorterze bez sceny i w diagnozie bez ciekawostki. Te miejsca używają teraz `dolacz` z `core/dom.js`, a test całej gry sprawdza po każdym zadaniu, czy na ekranie nie ma napisów „null”, „undefined” ani „NaN”.
