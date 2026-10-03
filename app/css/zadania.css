@@ -689,3 +689,27 @@
   width: 26px;
   height: 26px;
 }
+
+/* Telefon: cztery kolumny tabeli mieszczą się bez przewijania. */
+@media (max-width: 599px) {
+  .tabela-zad__siatka th,
+  .tabela-zad__siatka td {
+    padding: 4px 3px;
+  }
+  .tabela-zad__siatka tbody th,
+  .tabela-zad__rog {
+    width: 33%;
+    font-size: 0.75rem;
+  }
+  .tabela-zad__siatka thead th {
+    font-size: 0.65rem;
+  }
+  .tabela-zad__rysunek {
+    width: 30px;
+    height: 30px;
+  }
+  .tabela-zad__pole {
+    width: 44px;
+    height: 44px;
+  }
+}
