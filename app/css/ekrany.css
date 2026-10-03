@@ -489,7 +489,12 @@
   border-radius: var(--promien);
 }
 
+/* Ten sam wygląd niezależnie od poziomu nagłówka (h2, h3, h4). */
 .ciekawostka__naglowek {
+  margin: 0 0 0.5em;
+  font-family: var(--font-tytul);
+  font-weight: 400;
+  line-height: 1.15;
   font-size: var(--r-2);
   color: var(--blekit);
 }
