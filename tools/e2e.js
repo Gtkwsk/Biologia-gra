@@ -7,7 +7,8 @@
 // Każdy przebieg używa nowego, pustego profilu przeglądarki.
 
 import path from 'node:path';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
+import { X509Certificate, createHash } from 'node:crypto';
 import { uruchomSerwer } from './serwer.js';
 import { wczytajPlaywright } from './playwright.js';
 import schematy from '../app/data/schematy.js';
@@ -16,6 +17,9 @@ import zadania from '../app/data/zadania.js';
 const { chromium } = wczytajPlaywright();
 const argumenty = process.argv.slice(2);
 const adresZdalny = argumenty.find((a) => a.startsWith('--adres='))?.slice('--adres='.length);
+// --ca=plik.pem: przeglądarka ufa certyfikatom z tego pliku (np. pośrednik sieciowy środowiska
+// z własnym urzędem certyfikacji). Weryfikacja TLS działa dalej, tylko z dodatkowym zaufanym kluczem.
+const plikCA = argumenty.find((a) => a.startsWith('--ca='))?.slice('--ca='.length);
 const katalogArg = argumenty.find((a) => !a.startsWith('--'));
 const katalogZrzutow = katalogArg ? path.resolve(katalogArg) : null;
 if (katalogZrzutow) await mkdir(katalogZrzutow, { recursive: true });
@@ -33,7 +37,19 @@ const sprawdz = (warunek, opis) => {
 const serwer = adresZdalny ? null : await uruchomSerwer(0);
 const adres = adresZdalny ? adresZdalny.replace(/\/?$/, '/') : `http://127.0.0.1:${serwer.address().port}/`;
 console.log(`Adres: ${adres}`);
-const przegladarka = await chromium.launch();
+async function skrotyKluczyCA(plik) {
+  const pem = await readFile(plik, 'utf8');
+  const certyfikaty = pem.match(/-----BEGIN CERTIFICATE-----[\s\S]+?-----END CERTIFICATE-----/g) ?? [];
+  return certyfikaty.map((c) =>
+    createHash('sha256')
+      .update(new X509Certificate(c).publicKey.export({ type: 'spki', format: 'der' }))
+      .digest('base64'),
+  );
+}
+
+const przegladarka = await chromium.launch({
+  args: plikCA ? [`--ignore-certificate-errors-spki-list=${(await skrotyKluczyCA(plikCA)).join(',')}`] : [],
+});
 
 async function nowaStrona(opcje) {
   const kontekst = await przegladarka.newContext({ locale: 'pl-PL', ...opcje });

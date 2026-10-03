@@ -21,7 +21,7 @@ Gra zainstalowana na ekranie początkowym jest chroniona przed usuwaniem danych 
 - `node tools/validate-data.js`: walidator danych (zgodność z `TRESCI.md`).
 - `node tools/wersja.js`: po każdej zmianie w `app/` (wersja gry i lista plików offline).
 - `node tools/serwer.js`: podgląd pod adresem http://localhost:8080/.
-- `node tools/e2e.js zrzuty`: test całej gry w Chromium ze zrzutami ekranu (wymaga pakietu playwright). Test opublikowanej wersji: `node tools/e2e.js zrzuty --adres=https://biologia-gra.netlify.app/`.
+- `node tools/e2e.js zrzuty`: test całej gry w Chromium ze zrzutami ekranu (wymaga pakietu playwright). Test opublikowanej wersji: `node tools/e2e.js zrzuty --adres=https://biologia-gra.netlify.app/` (za pośrednikiem sieciowym z własnym urzędem certyfikacji dodatkowo `--ca=<plik z certyfikatami>`).
 - `git config core.hooksPath .githooks`: testy i walidator przed każdym commitem.
 
 Dokumenty: `CLAUDE.md` (zasady pracy), `SPEC.md` (projekt i dziennik decyzji), `TRESCI.md` (jedyne źródło treści), `AUDIOBOOK.md` (tekst słuchowiska).
