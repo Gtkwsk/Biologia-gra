@@ -164,7 +164,7 @@ export function utworzRozbiorke(kontener, { zadanie, onKoniec }) {
     p.querySelector('.rozbiorka__stan').textContent = 'związki proste';
     p.setAttribute('aria-label', `${BUDOWLE[id].nazwa}: rozłożone na związki proste`);
     if (rozlozone.size < zadanie.zwiazki.length) {
-      komunikat.pokaz({ rodzaj: 'dobrze', tytul: `Tak: ${BUDOWLE[id].nazwa} rozłożone.`, tekst: 'Złożony związek rozpadł się na związki proste. Zostały jeszcze inne związki.' });
+      komunikat.pokaz({ rodzaj: 'dobrze', tytul: `Tak: ${BUDOWLE[id].nazwa} rozłożone.`, tekst: 'Enzymy trawienne rozłożyły związek złożony na związki proste. Zostały jeszcze inne związki.' });
       return;
     }
     enzymWziety = false;

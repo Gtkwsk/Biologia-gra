@@ -25,11 +25,12 @@ export function utworzSlupki(kontener, { zadanie, tryb = 'trening', onKoniec }) 
   const pola = new Map();
   const kolumny = ulozone.map((s) => {
     const cel = `miejsce-${s.miejsce}`;
-    const tekst = h('span', { class: 'slupki__tekst' });
-    const znak = h('span', { class: 'slupki__znak' });
+    const tekst = h('span', { class: 'pole-celu__tekst' });
+    const znak = h('span', { class: 'pole-celu__ikona' });
     const slupek = h('span', { class: 'slupki__slupek' });
     const wartosc = h('span', { class: 'slupki__wartosc' });
-    slupek.style.setProperty('--wysokosc', `${Math.max(2, Math.round((s.procent / maks) * 100))}%`);
+    // Najwyższy słupek zajmuje 80% wykresu: nad nim jest jeszcze miejsce na wartość.
+    slupek.style.setProperty('--wysokosc', `${Math.max(2, Math.round((s.procent / maks) * 80))}%`);
     const pole = h('button', { type: 'button', class: 'pole-celu slupki__pole', 'data-cel': cel, 'data-stan': 'puste', 'aria-label': `Miejsce ${s.miejsce}: puste` }, [tekst, znak]);
     pola.set(cel, { pole, tekst, znak, wartosc });
     return h('li', { class: 'slupki__kolumna', 'data-miejsce': String(s.miejsce) }, [
@@ -42,7 +43,7 @@ export function utworzSlupki(kontener, { zadanie, tryb = 'trening', onKoniec }) 
     ? (() => {
         const p = zadanie.porownanie;
         const slupek = h('span', { class: 'slupki__slupek slupki__slupek--porownanie' });
-        slupek.style.setProperty('--wysokosc', `${Math.round((p.procent / maks) * 100)}%`);
+        slupek.style.setProperty('--wysokosc', `${Math.round((p.procent / maks) * 80)}%`);
         return h('aside', { class: 'slupki__porownanie', hidden: true }, [
           h('span', { class: 'slupki__wykres' }, [h('span', { class: 'slupki__wartosc' }, `do ${p.procent}%`), slupek]),
           h('p', {}, [p.karta ? rysunekKarty(p.karta, 'slupki__rysunek') : null, h('span', {}, p.opis)]),

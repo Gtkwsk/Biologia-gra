@@ -142,11 +142,13 @@
   color: var(--atrament-jasny);
 }
 
+/* Wartość stoi tuż nad słupkiem; wysokość słupka liczona od całej wysokości wykresu. */
 .slupki__wykres {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  align-items: end;
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px;
   height: 100%;
 }
 
@@ -214,8 +216,17 @@
   .slupki__lista {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  /* Ta sama wysokość wykresu w rankingu i w porównaniu z meduzą: słupki w jednej skali. */
   .slupki__kolumna {
     grid-template-rows: auto 110px auto;
+  }
+  .slupki__porownanie {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    grid-template-rows: 110px;
+  }
+  .slupki__pole {
+    padding: 4px 6px;
+    font-size: 0.75rem;
   }
 }
 

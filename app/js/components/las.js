@@ -42,19 +42,16 @@ function scenaLasu() {
     s('path', { d: 'M90 0 V-30 M90 -16 C80 -24 74 -22 70 -18 M90 -22 C100 -32 108 -30 110 -26', fill: 'none', stroke: '#2E6B33', 'stroke-width': 4, 'stroke-linecap': 'round' }),
     s('path', { d: 'M150 0 V-24 M150 -12 C142 -18 138 -16 134 -12 M150 -18 C158 -26 164 -24 166 -20', fill: 'none', stroke: '#2E6B33', 'stroke-width': 4, 'stroke-linecap': 'round' }),
   ]);
-  const sprzatacze = s('g', { class: 'las__sprzatacze' });
+  // Organizmy odżywiające się szczątkami: dżdżownica w glebie i grzyb w ściółce (TRESCI.md, 2.5).
+  const grzyb = s('g', { class: 'las__grzyb' }, [
+    s('path', { d: 'M197 158 C198 151 198 145 199 140 H209 C210 145 210 151 211 158 Z', fill: '#F4EBDD', stroke: '#8C6A2E', 'stroke-width': 2, 'stroke-linejoin': 'round' }),
+    s('path', { d: 'M187 141 C187 125 221 125 221 141 Z', fill: '#B5652E', stroke: '#6E3A16', 'stroke-width': 2.5, 'stroke-linejoin': 'round' }),
+  ]);
+  const sprzatacze = s('g', { class: 'las__sprzatacze' }, [grzyb]);
   const dzdzownica = rysunekKarty('dzdzownica', 'las__organizm');
-  const grzyb = rysunekKarty('plesniak-bialy', 'las__organizm');
-  for (const [el, x, y] of [
-    [dzdzownica, 30, 176],
-    [grzyb, 200, 168],
-  ]) {
-    if (!el) continue;
-    el.setAttribute('x', String(x));
-    el.setAttribute('y', String(y));
-    el.setAttribute('width', '40');
-    el.setAttribute('height', '40');
-    sprzatacze.append(el);
+  if (dzdzownica) {
+    for (const [k, v] of Object.entries({ x: 30, y: 176, width: 40, height: 40 })) dzdzownica.setAttribute(k, String(v));
+    sprzatacze.append(dzdzownica);
   }
   const napisRoku = s('text', { x: 16, y: 30, class: 'las__rok' }, 'Rok 0');
   const el = s('svg', { class: 'las__scena', viewBox: '0 0 400 220', role: 'img', 'aria-label': 'Las: drzewo, rośliny, warstwa szczątków i gleba' }, [
@@ -84,9 +81,10 @@ function scenaLasu() {
       const wielkosc = LS.rosliny(stan.sole);
       const r = { duze: 46, srednie: 38, male: 28 }[wielkosc];
       const gora = ZIEMIA - grubosc;
-      pien.setAttribute('y', String(gora - 70));
-      pien.setAttribute('height', String(70));
-      korona.setAttribute('cy', String(gora - 70 - r * 0.6));
+      // Drzewo stoi w miejscu, a rosnąca warstwa szczątków zasypuje jego pień.
+      pien.setAttribute('y', String(ZIEMIA - 80));
+      pien.setAttribute('height', String(80));
+      korona.setAttribute('cy', String(ZIEMIA - 80 - r * 0.6));
       korona.setAttribute('r', String(r));
       ziola.setAttribute('transform', `translate(0 ${gora}) scale(1 ${wielkosc === 'male' ? 0.55 : wielkosc === 'srednie' ? 0.8 : 1})`);
       ziola.dataset.wielkosc = wielkosc;

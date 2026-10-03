@@ -17,10 +17,10 @@ export const ZALEZNOSCI = [
   { zjada: 'jelen', pokarm: 'rosliny', dlaczego: 'Jeleń jest roślinożercą: żywi się pokarmem roślinnym.' },
   { zjada: 'zebra', pokarm: 'trawa', dlaczego: 'Zebra jest roślinożercą: zjada liście i łodygi traw.' },
   { zjada: 'lis', pokarm: 'rosliny', dlaczego: 'Lis jest wszystkożercą: zjada pokarm roślinny i zwierzęcy.' },
-  { zjada: 'rusalka-pokrzywnik', pokarm: 'kwiat', dlaczego: 'Rusałka pokrzywnik pije nektar kwiatów.' },
+  { zjada: 'rusalka-pokrzywnik', pokarm: 'kwiat', dlaczego: 'Rusałka pokrzywnik żywi się nektarem kwiatów.' },
   { zjada: 'niedzwiedz-brunatny', pokarm: 'jelen', dlaczego: 'Niedźwiedź brunatny zjada m.in. duże ssaki, np. jelenie.' },
   { zjada: 'orzel-przedni', pokarm: 'lis', dlaczego: 'Orzeł przedni jest drapieżnikiem: poluje m.in. na lisy.' },
-  { zjada: 'wrobel', pokarm: 'rusalka-pokrzywnik', dlaczego: 'Wróbel latem zjada także owady, np. motyle.' },
+  { zjada: 'wrobel', pokarm: 'rusalka-pokrzywnik', dlaczego: 'Wróbel latem zjada także owady, a pisklęta karmi larwami owadów, np. gąsienicami motyli.' },
 ];
 
 export default { wezly: WEZLY, zaleznosci: ZALEZNOSCI };

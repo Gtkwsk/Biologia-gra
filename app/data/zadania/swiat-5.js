@@ -505,7 +505,7 @@ export default [
             pytanie: 'Które organizmy zostały usunięte z lasu?',
             opcje: [
               { tekst: 'drobne zwierzęta, bakterie i grzyby', poprawna: true },
-              { tekst: 'drapieżniki i padlinożercy', wyjasnienie: 'Drapieżniki polują na zwierzęta, a padlinożercy żywią się ciałami martwych zwierząt, a nie szczątkami roślin.' },
+              { tekst: 'drapieżniki i padlinożercy', wyjasnienie: 'Drapieżniki polują na zwierzęta, padlinożercy żywią się ciałami martwych zwierząt. Szczątki roślin rozkładają organizmy odżywiające się szczątkami.' },
               { tekst: 'rośliny i sinice', wyjasnienie: 'Rośliny i sinice są samożywne: same wytwarzają pokarm.' },
             ],
             wyjasnienie: 'Organizmy odżywiające się szczątkami to drobne zwierzęta (np. dżdżownice), bakterie i grzyby (np. pleśniak biały).',
