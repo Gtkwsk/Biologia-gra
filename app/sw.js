@@ -2,7 +2,7 @@
 // WERSJA i PLIKI uzupełnia narzędzie: node tools/wersja.js (nie edytować ręcznie).
 // Każda zmiana w app/ zmienia WERSJA, więc przeglądarka pobiera nową wersję gry.
 
-const WERSJA = 'b490e426ac99';
+const WERSJA = 'effc97002d55';
 const PLIKI = [
   './',
   'assets/fonts/OFL-lexend.txt',
@@ -44,6 +44,7 @@ const PLIKI = [
   'data/zadania/swiat-2.js',
   'data/zadania/swiat-3.js',
   'data/zadania/swiat-4.js',
+  'data/zadania/swiat-6.js',
   'index.html',
   'js/components/detektyw-logika.js',
   'js/components/detektyw.js',

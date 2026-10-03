@@ -183,3 +183,23 @@ test('wykrywa organizm z kategorią inną niż w tabeli TRESCI.md', async () => 
   dane.organizmy.find((o) => o.id === 'sinice').kategoria = 'organizm samożywny (roślina)';
   zawiera(walidujDane(dane, kontekst), 'według TRESCI.md, sekcja 7');
 });
+
+test('wykrywa sprint bez niedoboru tlenu i bez odpoczynku, po którym kwas mlekowy trafia do wątroby', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const z = dane.zadania.find((x) => x.id === 's6-sprint-1');
+  z.etapy = z.etapy.filter((e) => e.tempo !== 'sprint');
+  zawiera(walidujDane(dane, kontekst), 'żaden etap nie pokazuje niedoboru tlenu');
+  const { dane: d2 } = await zaladuj();
+  const z2 = d2.zadania.find((x) => x.id === 's6-sprint-1');
+  z2.etapy = z2.etapy.filter((e) => e.czas !== 'kilkadziesiat-minut');
+  zawiera(walidujDane(d2, kontekst), 'kwas mlekowy zostaje w mięśniach');
+});
+
+test('wykrywa nieznaną porę doby i nieistniejącą ikonę kategorii sortera', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.zadania.find((x) => x.id === 's6-doba-1').etapy.push({ pora: 'zmierzch' });
+  dane.zadania.find((x) => x.id === 's6-sorter-doba-1').kategorie[1].ikona = 'gwiazda';
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'pora „zmierzch” spoza listy');
+  zawiera(bledy, 'nie ma rysunku „gwiazda”');
+});
