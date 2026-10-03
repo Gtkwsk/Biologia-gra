@@ -5,7 +5,8 @@
 // świat 1), wszystkie misje i bossa świata 1, przejście mapa → świat → misja → podsumowanie,
 // przeciąganie myszą i palcem, stuknięcia, zapis postępu, wszystkie misje świata 2 i jego bossa
 // (przegrana i wygrana), atlas, mikroskop, bramkę panelu rodzica, wszystkie misje i bossów
-// światów 3-6 (każdy świat otwiera się po bossie poprzedniego), próbny sprawdzian, domowe
+// światów 3-6 (każdy świat otwiera się po bossie poprzedniego), wykłady Profesora Pomyłki
+// (wykrywacz bzdur, z podpowiedzią po pomyłkach), próbny sprawdzian, domowe
 // laboratorium, raport w panelu rodzica, pracę offline, układ na telefonie oraz brak błędów
 // w konsoli (w tym naruszeń CSP).
 // Zadania rozwiązuje tools/rozwiazania.js na podstawie danych gry.
@@ -153,7 +154,8 @@ async function przyporzadkujZBledem(strona) {
 // Przechodzi całą misję; zwraca tytuły wyników kolejnych zadań.
 async function przejdzMisje(strona, idSwiata, idMisji) {
   await strona.goto(`${adres}#/swiat/${idSwiata}/misja/${idMisji}`);
-  const misja = swiaty.find((s) => s.id === idSwiata).misje.find((m) => m.id === idMisji);
+  const sw = swiaty.find((s) => s.id === idSwiata);
+  const misja = sw.misje.find((m) => m.id === idMisji) ?? (sw.wyklad?.id === idMisji ? sw.wyklad : null);
   const tytuly = [];
   for (let i = 0; i < misja.zadania.length; i++) {
     await rozwiazBiezace(strona);
@@ -191,12 +193,20 @@ console.log('Tablet poziomo (mysz)');
     sprawdz((await strona.locator('h1').textContent()) === 'Alfabet życia', 'wstęp świata 1');
     sprawdz((await strona.locator('.misja-karta').count()) === 6, 'świat 1 ma sześć misji');
     sprawdz((await strona.locator('.sluchowisko').count()) === 0, 'bez nagrania nie ma odtwarzacza słuchowiska');
+    sprawdz((await strona.locator('.wyklad-wejscie[data-stan="zamkniety"]').count()) === 1, 'wykład Profesora Pomyłki zamknięty przed ukończeniem misji');
     await zrzut(strona, '01a-swiat-1');
     const zrzutyMisji1 = { 's1-sklad': '01b-sklad-ciala', 's1-ratuj': '01c-ratuj-organizm', 's1-sortownia': '01d-sortownia' };
     for (const m of sw.misje) {
       const tytuly = await przejdzMisje(strona, 1, m.id);
       sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat 1, misja „${m.nazwa}”: od razu dobrze (wyzwania: ${tytuly.length})`);
       if (zrzutyMisji1[m.id]) await zrzut(strona, zrzutyMisji1[m.id]);
+    }
+    await strona.goto(`${adres}#/swiat/1`);
+    sprawdz((await strona.locator('a.wyklad-wejscie').count()) === 1, 'po misjach świata 1 wykład Profesora Pomyłki jest otwarty');
+    {
+      const tytuly = await przejdzMisje(strona, 1, sw.wyklad.id);
+      sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat 1, wykład Profesora Pomyłki: od razu dobrze (wyzwania: ${tytuly.length})`);
+      await zrzut(strona, '01d2-wyklad');
     }
     await strona.goto(`${adres}#/swiat/1`);
     await strona.locator('a.boss-wejscie').click();
@@ -298,6 +308,27 @@ console.log('Tablet poziomo (mysz)');
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
   sprawdz((await strona.locator('.swiat[data-swiat="2"] .ostrosc__klocek[data-pelny="true"]').count()) === 5, 'opanowany świat ma pełną ostrość');
+
+  // Wykład świata 2: dwa prawdziwe słowa zakwestionowane z rzędu dają podpowiedź.
+  {
+    const wyklad = zadaniePoId.get('s2-wyklad-1').wyklad.filter((f) => typeof f !== 'string');
+    const prawdziwe = wyklad.flatMap((s, i) => (s.poprawka === undefined ? [i] : []));
+    await strona.goto(`${adres}#/swiat/2/misja/s2-wyklad`);
+    await strona.locator('.wykrywacz__tekst').waitFor();
+    sprawdz((await strona.locator('.komunikat').textContent()).includes('W wykładzie są 2 bzdury.'), 'wykład mówi, ile jest bzdur');
+    await strona.locator(`.wykrywacz__slowo[data-slowo="${prawdziwe[0]}"]`).click();
+    sprawdz((await strona.locator('.komunikat').textContent()).includes('to nie bzdura'), 'prawdziwe słowo: komunikat z przyczyną');
+    await strona.locator(`.wykrywacz__slowo[data-slowo="${prawdziwe[1]}"]`).click();
+    sprawdz((await strona.locator('.wykrywacz__slowo--podpowiedz').count()) === 1, 'po dwóch pomyłkach podpowiedź wskazuje bzdurę');
+    await zrzut(strona, '08a-wyklad-podpowiedz');
+    await rozwiazBiezace(strona);
+    const tytul = (await strona.locator('.misja__wynik-tytul').textContent()).trim();
+    sprawdz(tytul === `Od razu dobrze: ${wyklad.length - 3} z ${wyklad.length}`, `wykład: pomyłki i podpowiedź obniżają wynik (${tytul})`);
+    sprawdz((await strona.locator('.wykrywacz__poprawione').count()) === 2, 'poprawione bzdury zostają w tekście obok poprawek');
+    await strona.locator('.misja__wynik button', { hasText: 'Dalej' }).click();
+    await rozwiazBiezace(strona);
+    sprawdz((await strona.locator('.misja__wynik-tytul').textContent()).trim() === 'Wszystko od razu dobrze!', 'drugi wykład świata 2 od razu dobrze');
+  }
 
   // Boss świata 2: przegrana, potem wygrana
   await strona.goto(`${adres}#/swiat/2`);
@@ -410,6 +441,10 @@ console.log('Tablet poziomo (mysz)');
       const tytuly = await przejdzMisje(strona, idSwiata, m.id);
       sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat ${idSwiata}, misja „${m.nazwa}”: od razu dobrze (wyzwania: ${tytuly.length})`);
       if (zrzutyMisji[m.id]) await zrzut(strona, zrzutyMisji[m.id]);
+    }
+    {
+      const tytuly = await przejdzMisje(strona, idSwiata, sw.wyklad.id);
+      sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat ${idSwiata}, wykład Profesora Pomyłki: od razu dobrze (wyzwania: ${tytuly.length})`);
     }
     await strona.goto(`${adres}#/swiat/${idSwiata}`);
     await strona.locator('a.boss-wejscie').click();
@@ -578,8 +613,9 @@ console.log('Telefon');
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
   await zrzut(strona, '18-mapa-telefon');
-  // Ustawienie z panelu rodzica „odblokuj wszystkie gotowe światy”, żeby obejrzeć misje wszystkich światów.
-  await strona.evaluate((klucz) => localStorage.setItem(klucz, JSON.stringify({ wersja: 2, ustawienia: { odblokujWszystkie: true } })), KLUCZ);
+  // Ustawienie z panelu rodzica „odblokuj wszystkie gotowe światy”, żeby obejrzeć misje wszystkich światów;
+  // pokonany boss świata 2 otwiera wykład Profesora Pomyłki w tym świecie.
+  await strona.evaluate((klucz) => localStorage.setItem(klucz, JSON.stringify({ wersja: 2, ustawienia: { odblokujWszystkie: true }, bossowie: [2] })), KLUCZ);
   await wejdzDoMisji(strona);
   const zrzutyTelefonu = {
     'skład ciała': '19a-telefon-sklad-ciala',
@@ -588,6 +624,7 @@ console.log('Telefon');
     'łańcuchy pokarmowe': '19d-telefon-lancuchy',
     'trawienie jako rozbiórka': '19e-telefon-rozbiorka',
     'las bez sprzątaczy': '19f-telefon-las',
+    'wykład Profesora Pomyłki': '19g-telefon-wyklad',
   };
   for (const [adresEkranu, nazwa] of [
     [null, 'misja'],
@@ -598,6 +635,7 @@ console.log('Telefon');
     ['#/swiat/1/misja/s1-sortownia', 'sortownia'],
     ['#/swiat/2/misja/s2-mikroskop', 'klasyfikacja ze sceną'],
     ['#/swiat/2/misja/s2-budowa-miasta', 'budowa miasta'],
+    ['#/swiat/2/misja/s2-wyklad', 'wykład Profesora Pomyłki'],
     ['#/swiat/4/misja/s4-przepis', 'przepis fotosyntezy'],
     ['#/swiat/4/misja/s4-drogi', 'trzy drogi glukozy'],
     ['#/swiat/4/misja/s4-laboratorium', 'laboratorium fotosyntezy'],

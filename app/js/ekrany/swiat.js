@@ -1,8 +1,8 @@
 // Wstęp do świata: scena w soczewce, kilka zdań fabuły, odtwarzacz słuchowiska (jeśli jest plik),
-// misje, ciekawostka albo przewodnik.
+// misje, wykład Profesora Pomyłki, boss, ciekawostka albo przewodnik.
 
 import { h, ikona } from '../core/dom.js';
-import { otwarteSwiaty, statusSwiata, opanowanieSwiata } from '../core/swiaty.js';
+import { otwarteSwiaty, statusSwiata, opanowanieSwiata, wykladDostepny } from '../core/swiaty.js';
 import { PROG_OPANOWANIA } from '../core/stan.js';
 import { bossDostepny, misjeUkonczone } from '../core/boss.js';
 import { NAGRANIA } from '../wersja.js';
@@ -32,6 +32,34 @@ function kartaBossa(sw, stan) {
   return h('a', { class: 'boss-wejscie', href: `#/swiat/${sw.id}/boss`, 'data-stan': pokonany ? 'pokonany' : 'gotowy' }, [
     h('span', { class: 'boss-wejscie__znak' }, ikona(pokonany ? 'dobrze' : 'serce')),
     h('span', { class: 'boss-wejscie__tresc' }, tresc),
+  ]);
+}
+
+// Wykład Profesora Pomyłki: dodatkowa misja otwarta po ukończeniu misji świata. Nie blokuje
+// bossa: można go pominąć.
+function kartaWykladu(sw, stan) {
+  if (!sw.wyklad) return null;
+  const w = sw.wyklad;
+  const portret = h('span', { class: 'wyklad-wejscie__portret' }, rysunekKarty('profesor-pomylka', 'wyklad-wejscie__rysunek'));
+  const naglowek = [h('span', { class: 'wyklad-wejscie__etykieta' }, 'Dodatkowa misja'), h('span', { class: 'wyklad-wejscie__nazwa' }, w.nazwa)];
+  if (!wykladDostepny(sw, stan)) {
+    return h('div', { class: 'wyklad-wejscie', 'data-stan': 'zamkniety' }, [
+      portret,
+      h('span', { class: 'wyklad-wejscie__tresc' }, [
+        ...naglowek,
+        h('span', { class: 'wyklad-wejscie__opis' }, `Profesor Pomyłka przyjedzie, gdy ukończysz wszystkie misje. Ukończone: ${misjeUkonczone(sw, stan)} z ${sw.misje.length}.`),
+      ]),
+      h('span', { class: 'wyklad-wejscie__klodka' }, ikona('klodka')),
+    ]);
+  }
+  const stanW = stanMisji(w, stan);
+  return h('a', { class: 'wyklad-wejscie', href: `#/swiat/${sw.id}/misja/${encodeURIComponent(w.id)}`, 'data-stan': stanW.klasa }, [
+    portret,
+    h('span', { class: 'wyklad-wejscie__tresc' }, [
+      ...naglowek,
+      h('span', { class: 'wyklad-wejscie__opis' }, w.opis),
+      h('span', { class: 'misja-karta__meta' }, [h('span', {}, liczbaWyzwan(w.zadania.length)), h('span', { class: 'misja-karta__stan' }, stanW.tekst)]),
+    ]),
   ]);
 }
 
@@ -125,7 +153,7 @@ export function render(kontener, ctx, cel) {
         ]),
       ]),
       h('div', { class: 'swiat-tresc' }, [
-        h('section', { class: 'misje', 'aria-labelledby': 'misje-naglowek' }, [h('h2', { id: 'misje-naglowek' }, 'Misje'), misje, kartaBossa(sw, ctx.stan)]),
+        h('section', { class: 'misje', 'aria-labelledby': 'misje-naglowek' }, [h('h2', { id: 'misje-naglowek' }, 'Misje'), misje, kartaWykladu(sw, ctx.stan), kartaBossa(sw, ctx.stan)]),
         h('div', { class: 'swiat-dodatki' }, [
           sw.coZbadasz.length
             ? h('section', { class: 'co-zbadasz' }, [h('h2', {}, 'Co tu zbadasz'), h('ul', {}, sw.coZbadasz.map((t) => h('li', {}, t)))])

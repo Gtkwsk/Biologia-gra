@@ -8,6 +8,7 @@
 // - w panelu rodzica włączono odblokowanie wszystkich światów.
 
 import { PROG_OPANOWANIA } from './stan.js';
+import { misjeUkonczone } from './boss.js';
 
 function gotoweWKolejnosci(swiaty) {
   return swiaty.filter((s) => s.gotowy).sort((a, b) => a.id - b.id);
@@ -49,6 +50,14 @@ export function poprzedniGotowy(swiaty, swiat) {
   const gotowe = gotoweWKolejnosci(swiaty);
   const i = gotowe.findIndex((s) => s.id === swiat.id);
   return i > 0 ? gotowe[i - 1] : null;
+}
+
+// Wykład Profesora Pomyłki (dodatkowa misja świata, SPEC.md, sekcja 12): otwiera się po
+// ukończeniu wszystkich misji świata albo po pokonaniu jego bossa. Nie blokuje bossa i nie
+// wchodzi do opanowania świata ani do liczby wyzwań.
+export function wykladDostepny(swiat, stan) {
+  if (!swiat.wyklad) return false;
+  return stan.bossowie.includes(swiat.id) || misjeUkonczone(swiat, stan) === swiat.misje.length;
 }
 
 export function zadaniaSwiata(swiat) {

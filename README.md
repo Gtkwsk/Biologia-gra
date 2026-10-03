@@ -2,7 +2,7 @@
 
 Gra przeglądarkowa do nauki biologii: klasa 5, dział II „Budowa i czynności życiowe organizmów”. Adres: https://biologia-gra.netlify.app Działa offline po pierwszym uruchomieniu i instaluje się na ekranie głównym tabletu. Bez kont, reklam i analityki; postęp zapisuje się tylko na urządzeniu.
 
-Gotowe wszystkie sześć światów z misjami i bossami: świat 1 (składniki chemiczne organizmów), świat 2 (budowa komórki zwierzęcej), świat 3 (komórka roślinna, grzybowa i bakteryjna), świat 4 (samożywność i fotosynteza), świat 5 (cudzożywność) i świat 6 (oddychanie komórkowe, wymiana gazowa, fermentacja), a także atlas kart, mikroskop, próbny sprawdzian (14 zadań, 29 punktów, otwarty po pokonaniu bossów wszystkich światów), domowe laboratorium (9 doświadczeń z dorosłym) i przewodnicy ze słuchowiska. Nowy gracz zaczyna od świata 1; kolejny świat otwiera boss poprzedniego. Krótkie dźwięki po odpowiedziach można wyłączyć w panelu rodzica.
+Gotowe wszystkie sześć światów z misjami i bossami: świat 1 (składniki chemiczne organizmów), świat 2 (budowa komórki zwierzęcej), świat 3 (komórka roślinna, grzybowa i bakteryjna), świat 4 (samożywność i fotosynteza), świat 5 (cudzożywność) i świat 6 (oddychanie komórkowe, wymiana gazowa, fermentacja), a także atlas kart, mikroskop, próbny sprawdzian (14 zadań, 29 punktów, otwarty po pokonaniu bossów wszystkich światów), domowe laboratorium (9 doświadczeń z dorosłym), przewodnicy ze słuchowiska i wykłady Profesora Pomyłki (dodatkowa misja w każdym świecie: znajdowanie i poprawianie bzdur). Nowy gracz zaczyna od świata 1; kolejny świat otwiera boss poprzedniego. Krótkie dźwięki po odpowiedziach można wyłączyć w panelu rodzica.
 
 ## Wdrożenie na Netlify
 

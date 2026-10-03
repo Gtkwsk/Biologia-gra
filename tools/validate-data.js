@@ -37,6 +37,7 @@ import * as LN from '../app/js/components/lancuch-logika.js';
 import * as LS from '../app/js/components/las-logika.js';
 import { ID_SCEN_SKLADNIKOW } from '../app/js/components/sceny-skladnikow.js';
 import { ID_RYSUNKOW } from '../app/js/components/rysunki.js';
+import * as WK from '../app/js/components/wykrywacz-logika.js';
 
 const KORZEN = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const KATALOG_APP = path.join(KORZEN, 'app');
@@ -66,10 +67,11 @@ export const TYPY_ZADAN = [
   'diagnoza',
   'siatka',
   'slupki',
+  'wykrywacz',
 ];
 
 // Typy zadań w formatach sprawdzianu (SPEC.md, sekcja 5); mechaniki to pozostałe.
-const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola', 'przepis', 'laboratorium', 'projektant', 'sprint', 'doba', 'lancuch', 'las', 'rozbiorka', 'diagnoza', 'siatka', 'slupki'];
+const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola', 'przepis', 'laboratorium', 'projektant', 'sprint', 'doba', 'lancuch', 'las', 'rozbiorka', 'diagnoza', 'siatka', 'slupki', 'wykrywacz'];
 
 const OBECNOSC = ['tak', 'nie', 'czasem'];
 
@@ -309,6 +311,22 @@ export function walidujDane(dane, kontekst) {
         const z = zadaniePoId.get(idZ);
         if (!z) blad(gm, `zadanie „${idZ}” nie istnieje`);
         else if (z.swiat !== s.id) blad(gm, `zadanie „${idZ}” należy do świata ${z.swiat}`);
+      }
+    }
+    // Wykład Profesora Pomyłki: dodatkowa misja z zadaniami typu wykrywacz z tego świata.
+    if (s.wyklad !== undefined) {
+      const w = s.wyklad;
+      const gw = `${gdzie}.wyklad`;
+      if (!niepustyTekst(w?.id)) blad(gw, 'wykład bez id');
+      else if (idMisji.has(w.id)) blad(gw, 'id wykładu powtarza id misji');
+      else idMisji.add(w.id);
+      if (!niepustyTekst(w?.nazwa) || !niepustyTekst(w?.opis)) blad(gw, 'wykład wymaga nazwy i opisu');
+      if (!w?.zadania?.length) blad(gw, 'wykład bez zadań');
+      for (const idZ of w?.zadania || []) {
+        const z = zadaniePoId.get(idZ);
+        if (!z) blad(gw, `zadanie „${idZ}” nie istnieje`);
+        else if (z.swiat !== s.id) blad(gw, `zadanie „${idZ}” należy do świata ${z.swiat}`);
+        else if (z.typ !== 'wykrywacz') blad(gw, `zadanie „${idZ}” nie jest wykładem (typ ${z.typ})`);
       }
     }
     ciekawostka(`${gdzie}.ciekawostka`, s.ciekawostka);
@@ -1056,6 +1074,40 @@ export function walidujDane(dane, kontekst) {
           const e = elementPoId.get(idE);
           if (e && regula(t, e).decyzja === 'nieznana') blad(gdzie, `${t.nazwa}: brak reguły dla części „${idE}” (obecnosc albo zdania)`);
         }
+      }
+    },
+
+    // Wykrywacz bzdur (SPEC.md, sekcja 5, typ 2, wariant): 1-3 bzdury, co najmniej dwa prawdziwe
+    // słowa do sprawdzenia, poprawka jedną z opcji, tekst wykładu bez podwójnych spacji.
+    wykrywacz(z, gdzie) {
+      if (!Array.isArray(z.wyklad) || !z.wyklad.length) {
+        blad(gdzie, 'brak wykładu');
+        return;
+      }
+      const slowa = WK.slowaWykladu(z.wyklad);
+      const liczba = WK.liczbaBzdur(z.wyklad);
+      if (liczba < 1 || liczba > 3) blad(gdzie, `bzdur ${liczba}, wymagane 1-3 (SPEC.md, sekcja 5)`);
+      if (slowa.length - liczba < 2) blad(gdzie, 'potrzebne co najmniej dwa prawdziwe słowa do sprawdzenia');
+      z.wyklad.forEach((f, i) => {
+        const gs = `${gdzie}.wyklad[${i}]`;
+        if (typeof f === 'string') {
+          if (!f.length) blad(gs, 'pusty fragment tekstu');
+          return;
+        }
+        if (!niepustyTekst(f.slowo)) blad(gs, 'brak słowa');
+        if (!f.karta) blad(gs, 'słowo do sprawdzenia wymaga karty atlasu');
+        else karta(gs, f.karta);
+        if (!pelneZdanie(f.wyjasnienie)) blad(gs, 'wyjaśnienie musi być pełnym zdaniem');
+        if (!WK.czyBzdura(f)) return;
+        const opcje = f.opcje || [];
+        if (opcje.length < 2 || opcje.length > 4) blad(gs, 'bzdura wymaga 2-4 opcji poprawki');
+        if (!opcje.includes(f.poprawka)) blad(gs, 'poprawka musi być jedną z opcji');
+        if (new Set(opcje).size !== opcje.length) blad(gs, 'powtórzona opcja poprawki');
+        if (opcje.includes(f.slowo)) blad(gs, 'bzdura nie może być opcją poprawki');
+      });
+      for (const [nazwa, tekst] of [['wykład', WK.tekstWykladu(z.wyklad)], ['wykład po poprawkach', WK.tekstPoprawiony(z.wyklad)]]) {
+        if (!/^[A-ZĄĆĘŁŃÓŚŹŻ]/u.test(tekst) || !/[.!?]$/.test(tekst)) blad(gdzie, `${nazwa}: wielka litera na początku i kropka, wykrzyknik albo pytajnik na końcu`);
+        if (/\s{2}|\s[.,;:!?]/.test(tekst)) blad(gdzie, `${nazwa}: podwójna spacja albo spacja przed znakiem interpunkcyjnym`);
       }
     },
 
