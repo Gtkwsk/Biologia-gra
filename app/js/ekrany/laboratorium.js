@@ -23,7 +23,7 @@ export function render(kontener, ctx) {
     dolacz(ekran, [
       pasek({ wstecz: { tekst: 'Baza', href: '#/baza' } }),
       h('h1', {}, 'Domowe laboratorium'),
-      h('p', { class: 'lab-dom__wstep' }, 'Doświadczenia do zrobienia w domu razem z dorosłym. Po doświadczeniu stuknij „Zrobione z dorosłym”.'),
+      h('p', { class: 'lab-dom__wstep' }, 'Doświadczenia do zrobienia w domu razem z dorosłym. Przed doświadczeniem dorosły czyta całą instrukcję. Po doświadczeniu stuknij „Zrobione z dorosłym”.'),
       h('p', { class: 'lab-dom__licznik' }, `Zrobione: ${zrobione} z ${laboratorium.length}.`),
       h('ul', { class: 'lab-dom__lista' }, laboratorium.map(doswiadczenie)),
     ]);
@@ -56,9 +56,9 @@ export function render(kontener, ctx) {
           h('ul', {}, d.potrzebne.map((p) => h('li', {}, p))),
           h('h3', {}, 'Kroki'),
           h('ol', {}, d.kroki.map((k) => h('li', {}, k))),
-          h('h3', {}, 'Co zobaczysz'),
+          h('h3', {}, 'Co zauważysz'),
           h('p', {}, d.obserwacja),
-          h('h3', {}, 'Dlaczego tak się dzieje'),
+          h('h3', {}, 'Wyjaśnienie'),
           h('p', {}, d.wyjasnienie),
           d.ciekawostka ? h('aside', { class: 'ciekawostka' }, [h('h4', { class: 'ciekawostka__naglowek' }, 'Ciekawostka'), h('p', {}, d.ciekawostka)]) : null,
           kiedy
