@@ -230,7 +230,7 @@ Wymagania wspólne: dotyk i mysz (Pointer Events); alternatywa dla przeciągania
 - **Dane:** `data/` jako moduły ES lub JSON: pojęcia, elementy komórek, typy komórek, organizmy, pytania dla światów 1-6, ciekawostki. Każde pytanie ma: `id`, `swiat`, `typ`, treść, poprawną odpowiedź, wyjaśnienie, odwołanie do sekcji `TRESCI.md`.
 - **Walidator danych** (`tools/validate-data.js`): unikalne id, kompletność pól, terminy zgodne ze słownikiem kanonicznym (`TRESCI.md`, sekcja 9), kategorie organizmów z dozwolonej listy.
 - **Testy** (`node --test`): logika powtórek (awanse, spadki, terminy, skracanie odstępów przed sprawdzianem; zawieszone decyzją z 2026-10-03, zob. sekcja 12), punktacja, model fotosyntezy (wynik maleje przy niedoborze i nadmiarze każdego czynnika), model sprintu.
-- **Struktura (stan po etapie 1):**
+- **Struktura (stan po etapie 2):**
 
 ```
 netlify.toml            publikacja katalogu app/, testy i walidator przed wdrożeniem
@@ -238,16 +238,17 @@ app/                    publikowana gra (tylko ten katalog trafia na stronę)
   index.html
   manifest.webmanifest
   sw.js                 service worker; WERSJA i PLIKI generuje tools/wersja.js
-  css/                  tokeny, podstawy, ekrany, zadania, podpisywanie, mechaniki
+  css/                  tokeny, podstawy, ekrany, zadania, podpisywanie, mechaniki, procesy
   js/core/              stan, zapis, adresy ekranów, światy, boss, karty atlasu, DOM
   js/components/        typy zadań (sekcja 5) i mechaniki światów; logika (*-logika.js)
                         oddzielona od widoku; zadania.js wybiera komponent według typu
   js/ekrany/            mapa, świat, misja, boss, podsumowanie, baza, atlas, mikroskop,
                         panel rodzica
   data/                 moduły ES z treściami: światy (misje, bossowie), elementy i typy
-                        komórek, pojęcia, schematy, miasto, wskazówki detektywa, części
-                        konstruktora, zadania/swiat-N.js
-  assets/svg/           schematy komórek rysowane od zera
+                        komórek, pojęcia, organizmy, procesy (zapisy słowne), tabela
+                        oddychania tlenowego i fermentacji, schematy, miasto, wskazówki
+                        detektywa, części konstruktora, zadania/swiat-N.js
+  assets/svg/           schematy komórek i fotosyntezy rysowane od zera
   assets/fonts/         kroje OFL z licencjami
   assets/ikony/
   audio/                opcjonalnie, poza pamięcią offline
@@ -278,7 +279,7 @@ tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, rozwiaza
 
 0. **Fundament:** plan wizualny do akceptacji; szkielet PWA, router ekranów, stan, moduł powtórek z testami, podstawowy panel rodzica, komponent podpisywania schematu, walidator danych, `netlify.toml`. Zrealizowany 2026-10-03 bez modułu powtórek (zob. sekcja 12).
 1. **Wersja do pierwszego testu z Mikołajem:** świat 2 i świat 3 (komórki, najważniejsze dla sprawdzianu), mikroskop z dwoma poziomami, atlas elementów komórek, dwóch bossów. Po etapie: obserwacja gry Mikołaja i notatki. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 2 z pięcioma misjami, świat 3 z siedmioma, dwóch bossów, atlas, mikroskop, baza.
-2. **Świat 4 i świat 6:** procesy (fotosynteza, oddychanie, fermentacja), symulacje.
+2. **Świat 4 i świat 6:** procesy (fotosynteza, oddychanie, fermentacja), symulacje. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 4 z siedmioma misjami, świat 6 z ośmioma, dwóch bossów, karty procesów, substancji i organizmów w atlasie.
 3. **Świat 5 i świat 1:** atlas organizmów, łańcuchy pokarmowe, składniki chemiczne.
 4. **Domknięcie:** próbny sprawdzian, domowe laboratorium, audio, dopracowanie oprawy i dźwięku.
 
@@ -325,3 +326,15 @@ Odpowiedzi z 2026-10-03 są dopisane przy pytaniach; wynikające z nich decyzje 
 - 2026-10-03, etap 1, rzęska: tabela w `TRESCI.md` (sekcja 2.3) podaje rzęskę tylko „u części” bakterii, a w pozostałych komórkach ✗. Jako zdanie ogólne „komórka zwierzęca nie ma rzęski” jest nieprawdziwe (rzęski mają np. komórki nabłonka dróg oddechowych), a sekcja 5 nie wymienia tego uproszczenia. Dlatego rzęska nie jest dystraktorem przy schematach komórek zwierzęcej i roślinnej, nie ma jej w tabelach do wypełnienia ani wśród części konstruktora; występuje tylko jako element komórki bakteryjnej. Do decyzji Roberta: dopisanie uproszczenia do `TRESCI.md`, sekcja 5.
 - 2026-10-03, etap 1, przegląd treści względem `TRESCI.md` (niezależny przegląd wszystkich tekstów światów 2 i 3): poprawione m.in. „wszystkie komórki” na „wszystkie cztery rodzaje komórek”, opisy funkcji, które pasowały do dwóch elementów (rybosomy i siateczka śródplazmatyczna, wakuole i błona komórkowa), zdania spoza `TRESCI.md` (pofałdowane wnętrze mitochondrium, położenie ściany bakterii, powierzchnia włośników), fałszywe zdanie o największej komórce (komórka nerwowa bywa rozumiana jako najdłuższa), wyjaśnienia w scenie wakuoli (funkcja wakuoli w komórce roślinnej), forma gramatyczna komunikatów.
 - 2026-10-03, etap 1, dwa rysunki komórki roślinnej (prostokątna i wydłużona, inny układ elementów), żeby rozpoznawanie nie opierało się na jednym obrazie; oba w misji „Zielona twierdza” i w puli bossa (siedem wariantów podpisywania). Do rozważenia po teście z Mikołajem: dźwięki, liczba serc u bossa.
+- 2026-10-03, etap 2, zakres: świat 4 (misje: Przepis kuchenny, Trzy drogi glukozy, Laboratorium fotosyntezy, Najsłabsze ogniwo, Projektant doświadczeń, Samożywni, Dno oceanu; 28 zadań, w tym 12 tylko u bossa) i świat 6 (Sprint, Oddychanie czy wymiana gazowa?, Piekarnia drożdżowa, Woda wapienna, Liść przez dobę, Lustro, Tabela porównawcza, Rozmnażanie a energia; 31 zadań, w tym 12 tylko u bossa). Bossowie: „Szef kuchni” (schematy fotosyntezy i zapis słowny, wykorzystanie substancji pokarmowych, doświadczenia z dwutlenkiem węgla i światłem) i „Strażnik ognia” (oddychanie komórkowe czy wymiana gazowa, tabela porównawcza, produkty procesów, prawda/fałsz). Boss świata 3 otwiera świat 4, a boss świata 4 świat 6, dopóki świat 5 jest w budowie; otwarty świat zostaje otwarty także po dodaniu świata 5 (lista otwartych światów jest w zapisie). Mikroskop ulepszają nadal tylko bossowie światów 2 i 3.
+- 2026-10-03, etap 2, nowe formaty sprawdzianowe w bossach: przyporządkowanie zdań do dwóch albo trzech grup (szybki sorter), tabela porównawcza z wartościami do wpisania, tabela ✓/✗ produktów procesów, doświadczenie z pytaniami. Mechaniki (przepis, laboratorium, projektant, sprint, liść przez dobę) są tylko w misjach.
+- 2026-10-03, etap 2, procesy jako dane: `data/procesy.js` opisuje fotosyntezę, oddychanie tlenowe, fermentację alkoholową i mlekową (składniki, warunki, produkty, miejsce w komórce, zapis słowny dosłownie z `TRESCI.md`). Walidator sprawdza, czy zapis złożony z nazw kart jest identyczny z zapisem w `TRESCI.md`, a tabelę oddychania tlenowego i fermentacji porównuje z tabelą w sekcji 2.6. W fotosyntezie glukoza jest równoważna „substancjom pokarmowym” (sekcja 2.4: substancje pokarmowe, głównie glukoza), dzięki czemu lustro łączy fotosyntezę z oddychaniem tlenowym przez glukozę, a zapis słowny zostaje podręcznikowy.
+- 2026-10-03, etap 2, model fotosyntezy w laboratorium: pięć czynników z sekcji 2.4, każdy na pięciu poziomach; niedobór i nadmiar zmniejszają intensywność, a całość wyznacza czynnik najsłabszy (w grze: łańcuch jest tak mocny, jak jego najsłabsze ogniwo). Model jest poglądowy, nie fizjologiczny; testy pilnują zgodności z `TRESCI.md` (w ciemności brak pęcherzyków tlenu, w wodzie gazowanej więcej). Moczarka żyje w wodzie, więc w akwarium nie ma suwaka wody; woda jest czynnikiem tylko w szklarni. Liczby pęcherzyków w tabelach wyników są przykładowe; kierunek różnicy wynika z `TRESCI.md`.
+- 2026-10-03, etap 2, doświadczenia: o próbę badawczą i kontrolną gra pyta tam, gdzie `TRESCI.md` je wskazuje (woda gazowana i woda z kranu, słoik z drożdżami i bez nich) albo gdzie wynikają wprost z definicji (szklarnie z dodatkowym dwutlenkiem węgla i bez niego). W doświadczeniu ze światłem gra nie pyta, która próba jest kontrolna, bo `TRESCI.md` tego nie rozstrzyga; pyta o problem badawczy, różnicę między próbami i wynik. Projektant doświadczeń planuje tylko doświadczenie ze światłem: przy modelu czynnika najsłabszego niektóre poprawne plany z dwutlenkiem węgla dawałyby równe wyniki obu prób (walidator sprawdza wszystkie dobre plany).
+- 2026-10-03, etap 2, luki: w sąsiednich lukach nie stoją słowa równorzędne (np. dwa składniki fotosyntezy), bo zamiana ich kolejności byłaby poprawna, a gra uznałaby ją za błąd. Takie zadania przepisane tak, by każda luka miała jednoznaczną rolę w zdaniu.
+- 2026-10-03, etap 2, sprint: wersja ze słuchowiska dopuszczona w `TRESCI.md`, sekcja 5: przy niedoborze tlenu część energii pochodzi z fermentacji mlekowej, a oddychanie tlenowe trwa dalej. Bieg to trening z długim finiszem, a nie bieg na 60 m ze słuchowiska, bo `TRESCI.md` wiąże fermentację mlekową z długą, bardzo intensywną pracą. Kwas mlekowy zostaje w mięśniach tuż po wysiłku i znika po kilkudziesięciu minutach odpoczynku (krew przenosi go do wątroby). Zakwasy tylko jako ciekawostka na karcie kwasu mlekowego.
+- 2026-10-03, etap 2, piekarnia drożdżowa: przepis fermentacji alkoholowej z rosnącym ciastem (dwutlenek węgla spulchnia ciasto). Temperatura wody i odparowanie alkoholu przy pieczeniu (słuchowisko, sekcja 3.2) nie weszły do zadań, bo nie ma ich w `TRESCI.md`.
+- 2026-10-03, etap 2, liść przez dobę: pytania tylko w południe i o północy, bo `TRESCI.md` nie opisuje świtu ani zmierzchu. W dzień zachodzą fotosynteza i oddychanie, liść oddaje tlen i pobiera dwutlenek węgla do fotosyntezy; w nocy zachodzi tylko oddychanie, liść pobiera tlen i oddaje dwutlenek węgla.
+- 2026-10-03, etap 2, sorter „oddychanie komórkowe czy wymiana gazowa”: zdania grupy „oddychanie komórkowe” są prawdziwe dla całego oddychania komórkowego, także fermentacji (np. „Zachodzi wewnątrz komórek, m.in. w mitochondriach”, „U większości organizmów zużywa w komórkach glukozę i tlen”). Część z nich celowo zawiera słowa „tlen” i „dwutlenek węgla”, żeby ćwiczyć typowy błąd z sekcji 4. W klasyfikacji sposobów wymiany gazowej kot i człowiek mają dopisek „(ssak)”, bo `TRESCI.md` podaje płuca dla ssaków, a nie dla konkretnych zwierząt.
+- 2026-10-03, etap 2, lustro: światło wchodzi do chloroplastu, glukoza i tlen wędrują do mitochondrium, dwutlenek węgla i woda wracają do chloroplastu, energia wychodzi z mitochondrium. Informacja zwrotna nazywa rolę substancji w obu procesach i kierunek jej wędrówki (np. „Tlen to produkt fotosyntezy i składnik oddychania tlenowego”).
+- 2026-10-03, etap 2, atlas: nowe grupy kart: procesy, substancje i organizmy (14 organizmów z `TRESCI.md`, sekcja 7, z kategoriami dosłownie z tabeli). Ciekawostki z sekcji 6 trafiły na karty (m.in. połowa tlenu z mórz i oceanów, ogień bez płomienia, lustro, paliwo z alkoholu, zakwasy, odkrycie z 1977 roku) i do wstępów światów (van Helmont, Priestley).
