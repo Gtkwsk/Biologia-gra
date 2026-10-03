@@ -1,9 +1,11 @@
-// Baza wyprawy: atlas, mikroskop, domowe laboratorium (SPEC.md, sekcja 3.1).
-// Stanowiska pokazują postęp: liczbę odkrytych kart i poziom mikroskopu.
+// Baza wyprawy: atlas, mikroskop, próbny sprawdzian, domowe laboratorium (SPEC.md, sekcja 3.1).
+// Stanowiska pokazują postęp: odkryte karty, poziom mikroskopu, najlepszy wynik sprawdzianu
+// i zrobione doświadczenia.
 
 import { h, ikona } from '../core/dom.js';
 import { poziomKarty } from '../core/karty.js';
 import { POZIOMY_MIKROSKOPU, poziomMikroskopu } from '../core/boss.js';
+import { sprawdzianDostepny, sumaPunktow, podsumuj } from '../core/sprawdzian.js';
 import { pasek } from './wspolne.js';
 
 export function render(kontener, ctx) {
@@ -13,6 +15,10 @@ export function render(kontener, ctx) {
   const zlote = poziomy.filter((p) => p === 'zlota').length;
   const mikroskop = POZIOMY_MIKROSKOPU[poziomMikroskopu(ctx.stan)];
   const pokonani = ctx.dane.swiaty.filter((s) => s.boss && ctx.stan.bossowie.includes(s.id));
+  const maksSprawdzianu = sumaPunktow(ctx.dane.sprawdzian);
+  const sprawdziany = ctx.stan.sprawdziany;
+  const najlepszy = sprawdziany.length ? Math.max(...sprawdziany.map((s) => podsumuj(s).zdobyte)) : null;
+  const zrobione = ctx.dane.laboratorium.filter((d) => ctx.stan.laboratorium[d.id]).length;
 
   const stanowiska = [
     {
@@ -30,11 +36,22 @@ export function render(kontener, ctx) {
       href: '#/mikroskop',
     },
     {
+      id: 'sprawdzian',
+      nazwa: 'Próbny sprawdzian',
+      opis: `Czternaście zadań ze wszystkich światów, jak na sprawdzianie z działu. Razem ${maksSprawdzianu} punktów.`,
+      stan: !sprawdzianDostepny(ctx.dane.swiaty, ctx.stan)
+        ? 'Otworzy się po pokonaniu bossów wszystkich światów.'
+        : najlepszy === null
+          ? 'Gotowy do rozwiązania.'
+          : `Najlepszy wynik: ${najlepszy} z ${maksSprawdzianu}.`,
+      href: sprawdzianDostepny(ctx.dane.swiaty, ctx.stan) ? '#/sprawdzian' : null,
+    },
+    {
       id: 'laboratorium',
       nazwa: 'Domowe laboratorium',
       opis: 'Doświadczenia do zrobienia w domu razem z dorosłym.',
-      stan: 'W budowie',
-      href: null,
+      stan: `Zrobione: ${zrobione} z ${ctx.dane.laboratorium.length}.`,
+      href: '#/laboratorium',
     },
   ];
 
