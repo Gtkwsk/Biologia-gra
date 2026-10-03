@@ -1,7 +1,7 @@
 // Stan gry: jeden obiekt zapisywany lokalnie na urządzeniu.
 // Funkcje czyste, bez DOM i bez localStorage (zapis: magazyn.js).
 
-export const WERSJA_SCHEMATU = 3;
+export const WERSJA_SCHEMATU = 4;
 export const ID_GRY = 'wyprawa-do-wnetrza-zycia';
 export const PROG_OPANOWANIA = 0.8;
 export const DOMYSLNE_IMIE = 'Mikołaj';
@@ -20,6 +20,7 @@ export function nowyStan(dzien) {
     ustawienia: { imie: DOMYSLNE_IMIE, odblokujWszystkie: false, dzwiek: true },
     odblokowane: [],
     bossowie: [],
+    mistrzowie: [],
     zadania: {},
     pomylki: {},
     karty: {},
@@ -35,6 +36,8 @@ export const MIGRACJE = {
   1: (dane) => ({ ...dane, karty: {} }),
   // Wersja 3: wyniki próbnego sprawdzianu, domowe laboratorium i dźwięki (domyślnie włączone).
   2: (dane) => ({ ...dane, sprawdziany: [], laboratorium: {}, ustawienia: { ...dane.ustawienia, dzwiek: true } }),
+  // Wersja 4: światy z wygranym rewanżem mistrzowskim (boss z jednym sercem).
+  3: (dane) => ({ ...dane, mistrzowie: [] }),
 };
 
 export function migruj(dane, migracje = MIGRACJE, docelowa = WERSJA_SCHEMATU) {
@@ -149,6 +152,7 @@ export function normalizuj(dane, dzien) {
     },
     odblokowane: idSwiatow(d.odblokowane),
     bossowie: idSwiatow(d.bossowie),
+    mistrzowie: idSwiatow(d.mistrzowie),
     zadania: wynikiZadan(d.zadania),
     pomylki: liczniki(d.pomylki),
     karty: stanKart(d.karty),
@@ -227,6 +231,12 @@ export function ustawOdblokujWszystkie(stan, wartosc) {
 export function zaliczBossa(stan, idSwiata) {
   if (stan.bossowie.includes(idSwiata)) return stan;
   return { ...stan, bossowie: [...stan.bossowie, idSwiata].sort((a, b) => a - b) };
+}
+
+// Rewanż mistrzowski wygrany (boss pokonany z jednym sercem, bez błędu w żadnym wyzwaniu).
+export function zaliczMistrza(stan, idSwiata) {
+  if (stan.mistrzowie.includes(idSwiata)) return stan;
+  return { ...stan, mistrzowie: [...stan.mistrzowie, idSwiata].sort((a, b) => a - b) };
 }
 
 export function ustawDzwiek(stan, wartosc) {

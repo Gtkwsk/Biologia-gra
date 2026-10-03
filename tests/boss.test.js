@@ -40,6 +40,20 @@ test('wyzwanie z błędem kosztuje jedno serce, trzy stracone kończą podejści
   assert.equal(B.stanPodejscia(p), 'przegrane');
 });
 
+test('rewanż mistrzowski: jedno serce, pierwszy błąd kończy podejście; życie bossa maleje z każdym wyzwaniem', () => {
+  let p = B.nowePodejscie(4, { serca: B.SERCA_MISTRZA });
+  assert.equal(p.serca, 1);
+  assert.equal(p.maksSerca, 1);
+  assert.equal(B.zycieBossa(p), 4);
+  p = B.poWyzwaniu(p, { poprawne: 5, wszystkie: 5, karty: [] });
+  assert.equal(B.zycieBossa(p), 3, 'wyzwanie bez błędu zabiera segment życia');
+  assert.equal(B.stanPodejscia(p), 'trwa');
+  p = B.poWyzwaniu(p, { poprawne: 4, wszystkie: 5, karty: [] });
+  assert.equal(B.zycieBossa(p), 2, 'wyzwanie z błędem też zabiera segment');
+  assert.equal(B.stanPodejscia(p), 'przegrane');
+  assert.equal(B.nowePodejscie(3).maksSerca, B.SERCA);
+});
+
 test('ukończenie wszystkich wyzwań z co najmniej jednym sercem to wygrana', () => {
   let p = B.nowePodejscie(2);
   p = B.poWyzwaniu(p, { poprawne: 1, wszystkie: 3, karty: [] });

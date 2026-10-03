@@ -5,7 +5,8 @@
 // wyklad: dodatkowa misja z wykładem Profesora Pomyłki (zadania typu wykrywacz); otwiera się po
 // ukończeniu misji świata, nie blokuje bossa i nie wchodzi do opanowania świata.
 // boss: wyzwania w formatach sprawdzianu (SPEC.md, sekcja 4.3); z każdej puli losowane jest
-// jedno zadanie, więc kolejne podejścia różnią się wariantami.
+// jedno zadanie, więc kolejne podejścia różnią się wariantami; rysunek: portret bossa
+// (components/rysunki.js), widoczny na wstępie, w pasku życia i na ekranie wygranej.
 
 export default [
   {
@@ -73,6 +74,7 @@ export default [
       zadania: ['s1-wyklad-1', 's1-wyklad-2'],
     },
     boss: {
+      rysunek: 'boss-bibliotekarz',
       nazwa: 'Bibliotekarz',
       opis: 'Bibliotekarz pilnuje alfabetu życia i sprawdza, czy wiesz, do czego służą woda, sole mineralne, cukry, białka i tłuszcze.',
       wyzwania: [
@@ -142,6 +144,7 @@ export default [
       zadania: ['s2-wyklad-1', 's2-wyklad-2'],
     },
     boss: {
+      rysunek: 'boss-inspektor',
       nazwa: 'Inspektor miasta',
       opis: 'Inspektor sprawdza, czy znasz miasto-komórkę: plan, funkcje elementów i organizmy jedno- i wielokomórkowe.',
       wyzwania: [
@@ -224,6 +227,7 @@ export default [
       zadania: ['s3-wyklad-1', 's3-wyklad-2'],
     },
     boss: {
+      rysunek: 'boss-straznik-twierdzy',
       nazwa: 'Strażnik twierdzy',
       opis: 'Strażnik sprawdza schemat komórki roślinnej, zdania o budowie komórek i siatkę porównawczą.',
       wyzwania: [
@@ -307,6 +311,7 @@ export default [
       zadania: ['s4-wyklad-1', 's4-wyklad-2'],
     },
     boss: {
+      rysunek: 'boss-szef-kuchni',
       nazwa: 'Szef kuchni',
       opis: 'Szef kuchni sprawdza schemat fotosyntezy, wykorzystanie substancji pokarmowych i doświadczenia z dwutlenkiem węgla.',
       wyzwania: [
@@ -394,6 +399,7 @@ export default [
       zadania: ['s5-wyklad-1', 's5-wyklad-2'],
     },
     boss: {
+      rysunek: 'boss-krol-bieszczadow',
       nazwa: 'Król Bieszczadów',
       opis: 'Król Bieszczadów sprawdza, czy wiesz, kto co je, jak żyją pasożyty i po co organizmy trawią pokarm.',
       wyzwania: [
@@ -483,6 +489,7 @@ export default [
       zadania: ['s6-wyklad-1', 's6-wyklad-2'],
     },
     boss: {
+      rysunek: 'boss-straznik-ognia',
       nazwa: 'Strażnik ognia',
       opis: 'Strażnik ognia sprawdza, czy odróżniasz oddychanie komórkowe od wymiany gazowej, a oddychanie tlenowe od fermentacji.',
       wyzwania: [

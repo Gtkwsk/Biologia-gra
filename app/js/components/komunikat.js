@@ -4,6 +4,7 @@
 
 import { h, ikona, wyczysc } from '../core/dom.js';
 import { graj } from '../core/dzwieki.js';
+import { iskry } from '../core/efekty.js';
 
 function tresc(k) {
   return h('div', { class: 'komunikat__tresc' }, [
@@ -25,6 +26,7 @@ export function utworzKomunikat() {
       el.classList.remove('komunikat--nowy');
       void el.offsetWidth;
       el.classList.add('komunikat--nowy');
+      if (k.rodzaj === 'dobrze') iskry(el.querySelector('.komunikat__ikona'), { ile: 7 });
     },
     pokazListe(lista) {
       wyczysc(el);
@@ -37,6 +39,7 @@ export function utworzKomunikat() {
           lista.map((k) => h('li', { 'data-rodzaj': k.rodzaj }, [ikona(k.rodzaj, 'komunikat__ikona'), tresc(k)])),
         ),
       );
+      if (el.dataset.rodzaj === 'dobrze') iskry(el.querySelector('.komunikat__ikona'), { ile: 14, zasieg: 1.4 });
     },
   };
 }

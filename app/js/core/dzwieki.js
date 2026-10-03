@@ -1,8 +1,13 @@
 // Krótkie dźwięki gry (SPEC.md, sekcja 6.3: krótkie i wyłączalne). Syntezowane w Web Audio,
-// bez plików, więc działają offline. Włączanie i wyłączanie: panel rodzica (stan.ustawienia.dzwiek).
-// Dźwięk błędu jest cichy i niski: informuje, nie karze.
+// bez plików, więc działają offline. Włączanie i wyłączanie: panel rodzica (stan.ustawienia.dzwiek);
+// ten sam przełącznik steruje wibracją (Android; Safari na iPadzie jej nie obsługuje).
+// Dźwięk błędu jest cichy i niski: informuje, nie karze. Kolejne dobre odpowiedzi bez błędu
+// brzmią coraz wyżej (seria bez kary: błąd tylko wraca do pierwszego tonu).
 
 const GLOSNOSC = 0.12;
+const MAKS_SERIA = 4;
+// Mnożniki wysokości kolejnych dobrych odpowiedzi (interwały tercja, kwinta, oktawa).
+const SERIA = [1, 1.2, 1.5, 2];
 
 // Nuty: [częstotliwość w Hz, początek w s, długość w s, kształt fali].
 const DZWIEKI = {
@@ -26,12 +31,44 @@ const DZWIEKI = {
     [784, 0.22, 0.11, 'sine'],
     [1047, 0.33, 0.32, 'sine'],
   ],
+  // Fanfara: pokonany boss (po eksplozji) i komplet punktów w próbnym sprawdzianie.
+  fanfara: [
+    [523, 0, 0.14, 'triangle'],
+    [523, 0.16, 0.1, 'triangle'],
+    [659, 0.28, 0.14, 'triangle'],
+    [784, 0.44, 0.14, 'triangle'],
+    [1047, 0.6, 0.5, 'triangle'],
+    [659, 0.6, 0.5, 'sine'],
+    [784, 0.6, 0.5, 'sine'],
+  ],
+  // Nowa albo lepsza karta w atlasie.
+  karta: [
+    [784, 0, 0.08, 'triangle'],
+    [1175, 0.09, 0.08, 'triangle'],
+    [1568, 0.18, 0.22, 'sine'],
+  ],
+  // Cios zadany bossowi: krótkie, niskie uderzenie.
+  cios: [
+    [160, 0, 0.07, 'square'],
+    [110, 0.04, 0.16, 'triangle'],
+  ],
+};
+
+const WIBRACJE = {
+  dobrze: [14],
+  zle: [24, 40, 24],
+  koniec: [18, 30, 36],
+  wygrana: [30, 40, 30, 40, 80],
+  fanfara: [30, 40, 30, 40, 120],
+  karta: [16, 30, 16],
+  cios: [40],
 };
 
 export const NAZWY_DZWIEKOW = Object.keys(DZWIEKI);
 
 let wlaczone = true;
 let kontekst = null;
+let seria = 0;
 
 export function ustawDzwieki(tak) {
   wlaczone = tak === true;
@@ -41,9 +78,36 @@ export function dzwiekiWlaczone() {
   return wlaczone;
 }
 
+// Mnożnik wysokości dla kolejnej dobrej odpowiedzi w serii (funkcja czysta, do testów).
+export function mnoznikSerii(n) {
+  return SERIA[Math.min(Math.max(n, 1), MAKS_SERIA) - 1];
+}
+
+export function zerujSerie() {
+  seria = 0;
+}
+
+function wibruj(nazwa) {
+  const wzor = WIBRACJE[nazwa];
+  if (!wzor || typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') return;
+  try {
+    navigator.vibrate(wzor);
+  } catch {
+    // Brak wibracji nie przerywa gry.
+  }
+}
+
 export function graj(nazwa) {
   const nuty = DZWIEKI[nazwa];
   if (!wlaczone || !nuty) return;
+  let mnoznik = 1;
+  if (nazwa === 'dobrze') {
+    seria = Math.min(seria + 1, MAKS_SERIA);
+    mnoznik = mnoznikSerii(seria);
+  } else if (nazwa === 'zle' || nazwa === 'koniec' || nazwa === 'wygrana' || nazwa === 'fanfara') {
+    seria = 0;
+  }
+  wibruj(nazwa);
   const AC = globalThis.AudioContext ?? globalThis.webkitAudioContext;
   if (!AC) return;
   try {
@@ -54,7 +118,7 @@ export function graj(nazwa) {
       const oscylator = kontekst.createOscillator();
       const wzmocnienie = kontekst.createGain();
       oscylator.type = ksztalt;
-      oscylator.frequency.value = czestotliwosc;
+      oscylator.frequency.value = czestotliwosc * mnoznik;
       const start = t0 + poczatek;
       wzmocnienie.gain.setValueAtTime(0.0001, start);
       wzmocnienie.gain.exponentialRampToValueAtTime(GLOSNOSC, start + 0.015);

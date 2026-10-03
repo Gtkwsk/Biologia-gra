@@ -1,7 +1,7 @@
 // Mapa wyprawy: sześć światów jako soczewki połączone ścieżką.
 // Przytrzymanie logo przez 3 sekundy otwiera wejście do panelu rodzica.
 
-import { h, s } from '../core/dom.js';
+import { h, s, ikona } from '../core/dom.js';
 import { otwarteSwiaty, statusSwiata, opanowanieSwiata, poprzedniGotowy } from '../core/swiaty.js';
 import { soczewka, miernikOstrosci, logoSoczewki, powiadom, potrzasnij, przytrzymanie } from './wspolne.js';
 
@@ -75,22 +75,25 @@ export function render(kontener, ctx) {
     const opanowanie = opanowanieSwiata(sw, ctx.stan);
     const otwartyDoGry = status === 'otwarty' || status === 'pokonany';
     const lupa = soczewka(sw, { status, opanowanie });
+    // Gwiazda mistrza: wygrany rewanż mistrzowski (boss z jednym sercem).
+    const mistrz = ctx.stan.mistrzowie.includes(sw.id);
+    const ramka = h('span', { class: 'soczewka-ramka' }, [lupa, mistrz ? h('span', { class: 'soczewka__gwiazda', 'aria-hidden': 'true' }, ikona('gwiazda')) : null]);
     let opisStanu;
     if (otwartyDoGry) opisStanu = miernikOstrosci(opanowanie);
     else if (status === 'w-budowie') opisStanu = h('span', { class: 'swiat__stan' }, 'W budowie');
     else opisStanu = h('span', { class: 'swiat__stan' }, `Pokonaj bossa: ${poprzedniGotowy(swiaty, sw)?.tytul ?? ''}`);
 
-    const li = h('li', { class: 'swiat', 'data-swiat': sw.id, 'data-status': status });
+    const li = h('li', { class: 'swiat', 'data-swiat': sw.id, 'data-status': status, 'data-mistrz': String(ctx.stan.mistrzowie.includes(sw.id)) });
     const przycisk = h(
       'button',
       {
         type: 'button',
         class: 'swiat__przycisk',
-        'aria-label': `Część ${sw.czesc}: ${sw.tytul}. ${OPIS_STATUSU[status]}.`,
+        'aria-label': `Część ${sw.czesc}: ${sw.tytul}. ${OPIS_STATUSU[status]}${mistrz ? ', mistrz' : ''}.`,
         onclick: () => wybierz(sw, status, lupa, li),
       },
       [
-        lupa,
+        ramka,
         h('span', { class: 'swiat__opis' }, [
           h('span', { class: 'swiat__czesc' }, `Część ${sw.czesc}`),
           h('span', { class: 'swiat__tytul' }, sw.tytul),

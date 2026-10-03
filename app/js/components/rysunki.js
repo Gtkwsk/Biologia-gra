@@ -1437,6 +1437,108 @@ const R = {
     <path d="M70.5 82 L89.5 23.5" fill="none" stroke="#7D5310" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
     <circle cx="89.8" cy="22.6" r="2.8" fill="#D2434E" stroke="#8C1F2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
     <rect x="65" y="75" width="11" height="11" rx="4.5" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`,
+  // Bossowie światów (SPEC.md, sekcja 4.3): portrety na wstępie, w pasku życia i na ekranie
+  // wygranej. Postacie wymyślone do gry, w paletach swoich światów.
+  // Świat 1, Bibliotekarz: sowa w kamizelce, z binoklami i księgą.
+  'boss-bibliotekarz': `
+    <ellipse cx="50" cy="72" rx="31" ry="25" fill="#8B5E3C" stroke="#3A2214" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M31 62 Q50 55 69 62 L66 95 L34 95 Z" fill="#6B4FA0" stroke="#2E2050" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 64 L50 94" fill="none" stroke="#2E2050" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <g fill="#E5B248"><circle cx="45" cy="74" r="2.2"/><circle cx="55" cy="74" r="2.2"/><circle cx="45" cy="84" r="2.2"/><circle cx="55" cy="84" r="2.2"/></g>
+    <ellipse cx="22" cy="72" rx="8" ry="17" fill="#6E4426" stroke="#3A2214" stroke-width="3" transform="rotate(12 22 72)" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="78" cy="72" rx="8" ry="17" fill="#6E4426" stroke="#3A2214" stroke-width="3" transform="rotate(-12 78 72)" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M28 24 L22 8 L40 18 Z M72 24 L78 8 L60 18 Z" fill="#8B5E3C" stroke="#3A2214" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="50" cy="38" r="27" fill="#A5724A" stroke="#3A2214" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="38" cy="41" r="13.5" fill="#EAD8B8" stroke="#3A2214" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="62" cy="41" r="13.5" fill="#EAD8B8" stroke="#3A2214" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="38" cy="41" r="7.5" fill="#FFFFFF" stroke="#3A2214" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="62" cy="41" r="7.5" fill="#FFFFFF" stroke="#3A2214" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="39.5" cy="42" r="3.6" fill="#11191B"/><circle cx="60.5" cy="42" r="3.6" fill="#11191B"/>
+    <circle cx="41" cy="40.2" r="1.2" fill="#FFFFFF"/><circle cx="62" cy="40.2" r="1.2" fill="#FFFFFF"/>
+    <g fill="none" stroke="#2E2050" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="38" cy="41" r="11"/><circle cx="62" cy="41" r="11"/><path d="M49 41 L51 41 M27 39 L21 36 M73 39 L79 36"/></g>
+    <path d="M27 29 Q33 25 39 29 M61 29 Q67 25 73 29" fill="none" stroke="#3A2214" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 49 L45.5 55 L54.5 55 Z" fill="#E5A33A" stroke="#8F4A0C" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <g transform="rotate(-10 78 84)"><rect x="63" y="72" width="30" height="22" rx="3" fill="#2E2050" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="66" y="75" width="24" height="16" rx="2" fill="#F3EDE0" stroke="#11191B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><path d="M78 75 L78 91 M70 80 L75 80 M70 85 L75 85 M81 80 L86 80 M81 85 L86 85" fill="none" stroke="#6B4FA0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></g>`,
+  // Świat 2, Inspektor miasta: płaszcz, kapelusz, lupa i notatnik z kontrolą.
+  'boss-inspektor': `
+    <path d="M8 94 L8 76 C8 64 18 58 30 57 L70 57 C82 58 92 64 92 76 L92 94 Z" fill="#2E4A6B" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M30 57 L42 72 L50 60 L58 72 L70 57" fill="#3C5F85" stroke="#11191B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <g fill="#F2B33D" stroke="#7D5310" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><circle cx="50" cy="78" r="2.8"/><circle cx="50" cy="88" r="2.8"/></g>
+    <path d="M38 46 L62 46 L62 60 L38 60 Z" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="50" cy="40" rx="16" ry="17" fill="#F1C7A0" stroke="#A0623A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M38 32 Q44 29 48 33 M52 33 Q56 29 62 32" fill="none" stroke="#3A2618" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="44" cy="39" r="2.4" fill="#11191B"/><circle cx="56" cy="39" r="2.4" fill="#11191B"/>
+    <path d="M50 41 Q48 46 51 46.5" fill="none" stroke="#A0623A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M41 51 Q50 47 59 51 Q50 55 41 51 Z" fill="#3A2618" stroke="#1C120B" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M22 28 Q50 20 78 28 L74 23 Q50 16 26 23 Z" fill="#1E2236" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M30 24 C30 10 70 10 70 24 Q50 29 30 24 Z" fill="#1E2236" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M30 22 Q50 27 70 22 L70 19 Q50 24 30 19 Z" fill="#F2B33D" stroke="#7D5310" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <g transform="rotate(-20 80 60)"><rect x="77" y="66" width="6" height="24" rx="2.5" fill="#7D5310" stroke="#3A2618" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="80" cy="56" r="12" fill="#CBEAF6" fill-opacity="0.85" stroke="#F2B33D" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="80" cy="56" r="12" fill="none" stroke="#11191B" stroke-width="1.5"/><path d="M74 51 Q77 47 82 48" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></g>
+    <g transform="rotate(8 20 70)"><rect x="9" y="57" width="21" height="27" rx="2" fill="#E8D5B5" stroke="#11191B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="14" y="54" width="11" height="6" rx="2" fill="#2E4A6B" stroke="#11191B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><path d="M13 67 L26 67 M13 73 L26 73 M13 79 L22 79" fill="none" stroke="#8A98A3" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><path d="M14 66 L16.5 68.5 L21 63" fill="none" stroke="#2E7D46" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></g>`,
+  // Świat 3, Strażnik twierdzy: rycerz z tarczą w kształcie komórki roślinnej i liściem w hełmie.
+  'boss-straznik-twierdzy': `
+    <path d="M14 94 L14 78 C14 66 24 60 36 59 L64 59 C76 60 86 66 86 78 L86 94 Z" fill="#6B8F5E" stroke="#1F3A24" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M36 59 L50 68 L64 59" fill="none" stroke="#1F3A24" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M42 50 L58 50 L58 62 L42 62 Z" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M28 44 C28 22 72 22 72 44 L72 50 C72 56 66 58 60 58 L40 58 C34 58 28 56 28 50 Z" fill="#8FA37A" stroke="#1F3A24" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M34 40 L66 40 L66 50 L34 50 Z" fill="#F1C7A0" stroke="#1F3A24" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="43" cy="45" r="2.4" fill="#11191B"/><circle cx="57" cy="45" r="2.4" fill="#11191B"/>
+    <path d="M38 41 Q43 38.5 47 41 M53 41 Q57 38.5 62 41" fill="none" stroke="#3A2618" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 50 L50 58" fill="none" stroke="#1F3A24" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M28 36 L72 36" fill="none" stroke="#1F3A24" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 24 C44 14 52 6 60 4 C64 12 60 20 50 24 Z" fill="#3C9A47" stroke="#1F5A32" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 24 C54 16 57 11 60 4" fill="none" stroke="#1F5A32" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <g transform="rotate(-6 22 72)"><rect x="4" y="52" width="36" height="42" rx="9" fill="#F2F7EC" stroke="#1F5A32" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M4 66 L40 66 M4 80 L40 80 M16 52 L16 66 M28 66 L28 80 M16 80 L16 94" fill="none" stroke="#4F6B2E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><rect x="14" y="62" width="16" height="22" rx="6" fill="#D7F0F7" stroke="#2F7F99" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><g fill="#3C9A47" stroke="#1F5A32" stroke-width="1.5"><ellipse cx="11" cy="58" rx="4" ry="2.5"/><ellipse cx="33" cy="58" rx="4" ry="2.5"/><ellipse cx="11" cy="88" rx="4" ry="2.5"/><ellipse cx="33" cy="88" rx="4" ry="2.5"/></g></g>
+    <path d="M82 94 L82 46 M74 54 L90 54" fill="none" stroke="#7D5310" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M82 46 L78 32 L86 32 Z" fill="#D3DAE1" stroke="#4F5B66" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`,
+  // Świat 4, Szef kuchni: czapka ze słońcem, patelnia z liściem.
+  'boss-szef-kuchni': `
+    <path d="M10 94 L10 78 C10 66 20 60 32 59 L68 59 C80 60 90 66 90 78 L90 94 Z" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M32 59 L44 94 M68 59 L56 94" fill="none" stroke="#D0D5D8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <g fill="#F2B33D" stroke="#7D5310" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><circle cx="40" cy="72" r="2.6"/><circle cx="60" cy="72" r="2.6"/><circle cx="40" cy="84" r="2.6"/><circle cx="60" cy="84" r="2.6"/></g>
+    <path d="M36 57 Q50 64 64 57 L60 66 L50 62 L40 66 Z" fill="#D99A00" stroke="#7D5310" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M38 46 L62 46 L62 60 L38 60 Z" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="50" cy="39" rx="16" ry="17" fill="#F1C7A0" stroke="#A0623A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M38 31 Q44 28.5 48 32 M52 32 Q56 28.5 62 31" fill="none" stroke="#5A3A24" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="44" cy="38" r="2.4" fill="#11191B"/><circle cx="56" cy="38" r="2.4" fill="#11191B"/>
+    <path d="M50 40 Q48 45 51 45.5" fill="none" stroke="#A0623A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 48 C45 44 36 44 34 49 C33 52 36 53 38 51 C42 48 46 50 50 50 C54 50 58 48 62 51 C64 53 67 52 66 49 C64 44 55 44 50 48 Z" fill="#5A3A24" stroke="#3A2618" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M46 54 Q50 57 54 54" fill="none" stroke="#A0623A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M30 26 L70 26 L70 20 L30 20 Z" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M30 20 C22 20 20 10 28 8 C30 2 42 1 46 6 C50 0 62 1 64 7 C72 5 76 14 68 20 Z" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="50" cy="13" r="5" fill="#F5B800" stroke="#9C6B00" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 4 L50 6 M43 7 L44.5 8.5 M57 7 L55.5 8.5 M41 13 L43 13 M59 13 L57 13" fill="none" stroke="#9C6B00" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <g transform="rotate(-18 80 70)"><rect x="86" y="44" width="6" height="22" rx="2.5" fill="#5A3A24" stroke="#11191B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="80" cy="74" rx="17" ry="9" fill="#3A3A3A" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="80" cy="72" rx="12" ry="5.5" fill="#5E5E5E"/><path d="M72 72 C72 64 82 60 90 64 C88 72 80 76 72 72 Z" fill="#3C9A47" stroke="#1F5A32" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><path d="M74 71 C78 68 83 66 88 65" fill="none" stroke="#1F5A32" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></g>`,
+  // Świat 5, Król Bieszczadów: niedźwiedź brunatny w koronie z gałązek i pelerynie.
+  'boss-krol-bieszczadow': `
+    <path d="M6 94 L6 74 C6 64 16 58 28 56 L72 56 C84 58 94 64 94 74 L94 94 Z" fill="#8C1F2A" stroke="#36101C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="50" cy="80" rx="30" ry="22" fill="#6E4A2E" stroke="#2E1A0E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="50" cy="84" rx="16" ry="13" fill="#8E6A48" stroke="#2E1A0E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="26" cy="30" r="9" fill="#6E4A2E" stroke="#2E1A0E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="74" cy="30" r="9" fill="#6E4A2E" stroke="#2E1A0E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="26" cy="30" r="4" fill="#C8A27C"/><circle cx="74" cy="30" r="4" fill="#C8A27C"/>
+    <circle cx="50" cy="44" r="26" fill="#7A5234" stroke="#2E1A0E" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="50" cy="53" rx="13" ry="10" fill="#C8A27C" stroke="#2E1A0E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M44 50 C44 45 56 45 56 50 C56 54 50 55 50 55 C50 55 44 54 44 50 Z" fill="#11191B"/>
+    <path d="M50 55 L50 59 M46 60 Q50 63 54 60" fill="none" stroke="#2E1A0E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="40" cy="40" r="2.8" fill="#11191B"/><circle cx="60" cy="40" r="2.8" fill="#11191B"/>
+    <path d="M35 35 Q40 32.5 44 35 M56 35 Q60 32.5 65 35" fill="none" stroke="#2E1A0E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M30 22 L34 8 L42 18 L50 4 L58 18 L66 8 L70 22 Z" fill="#E5B248" stroke="#7D5310" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M30 22 L70 22 L68 28 L32 28 Z" fill="#C38E2C" stroke="#7D5310" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <g fill="#3C9A47" stroke="#1F5A32" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="38" cy="22" rx="4" ry="2.3" transform="rotate(-30 38 22)"/><ellipse cx="62" cy="22" rx="4" ry="2.3" transform="rotate(30 62 22)"/></g>
+    <g fill="#D2434E" stroke="#8C1F2A" stroke-width="1.5"><circle cx="50" cy="20" r="2.4"/><circle cx="36" cy="25" r="1.8"/><circle cx="64" cy="25" r="1.8"/></g>`,
+  // Świat 6, Strażnik ognia: zakapturzona postać z żarzącymi się oczami i latarnią.
+  'boss-straznik-ognia': `
+    <path d="M12 94 L12 72 C12 56 26 46 40 44 L60 44 C74 46 88 56 88 72 L88 94 Z" fill="#4A1218" stroke="#1D0A0C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 10 C34 10 26 24 26 38 L26 50 C32 44 40 42 50 42 C60 42 68 44 74 50 L74 38 C74 24 66 10 50 10 Z" fill="#6B1C25" stroke="#1D0A0C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M34 44 C34 30 40 22 50 22 C60 22 66 30 66 44 C60 40 40 40 34 44 Z" fill="#1D1416" stroke="#1D0A0C" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="43" cy="35" rx="4.5" ry="3" fill="#FFB000"/><ellipse cx="57" cy="35" rx="4.5" ry="3" fill="#FFB000"/>
+    <ellipse cx="43" cy="35" rx="2" ry="1.4" fill="#FFF3C4"/><ellipse cx="57" cy="35" rx="2" ry="1.4" fill="#FFF3C4"/>
+    <path d="M50 2 C56 9 62 14 60 22 C58 28 52 30 50 30 C48 30 42 28 40 22 C38 14 44 9 50 2 Z" fill="#F05A28" stroke="#B5330E" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M50 12 C53 16 56 19 55 23 C54 26 51 27 50 27 C49 27 46 26 45 23 C44 19 47 16 50 12 Z" fill="#FFB000"/>
+    <path d="M22 50 C26 44 30 43 32 48 C33 52 29 56 24 58 C20 56 20 53 22 50 Z M78 50 C74 44 70 43 68 48 C67 52 71 56 76 58 C80 56 80 53 78 50 Z" fill="#F05A28" stroke="#B5330E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <g transform="rotate(6 84 76)"><path d="M78 60 L90 60 L90 64 L78 64 Z" fill="#3A3A3A" stroke="#11191B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="76" y="64" width="16" height="22" rx="2" fill="#FFE07A" stroke="#11191B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M84 68 C87 72 88 75 86.5 78 C85.5 80 82.5 80 81.5 78 C80 75 81 72 84 68 Z" fill="#F05A28" stroke="#B5330E" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M78 86 L90 86 L90 90 L78 90 Z" fill="#3A3A3A" stroke="#11191B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M84 60 L84 54 M80 54 L88 54" fill="none" stroke="#3A3A3A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></g>
+    <path d="M40 60 L60 60" fill="none" stroke="#1D0A0C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`,
 };
 
 const pamiec = new Map();

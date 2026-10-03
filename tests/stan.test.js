@@ -15,6 +15,8 @@ import {
   ustawDzwiek,
   zapiszSprawdzian,
   oznaczDoswiadczenie,
+  zaliczBossa,
+  zaliczMistrza,
 } from '../app/js/core/stan.js';
 import { dzisiaj } from '../app/js/core/daty.js';
 
@@ -173,6 +175,17 @@ test('migracja z wersji 2 dodaje wyniki sprawdzianów, laboratorium i włączone
   assert.equal(s.ustawienia.dzwiek, true);
   assert.deepEqual(s.karty, v2.karty);
   assert.deepEqual(s.odblokowane, [2, 3]);
+  assert.deepEqual(s.mistrzowie, [], 'migracja do wersji 4 dodaje listę mistrzów');
+});
+
+test('rewanż mistrzowski: lista światów z gwiazdą, bez powtórzeń i tylko znane światy', () => {
+  let s = nowyStan(DZIEN);
+  s = zaliczBossa(s, 2);
+  s = zaliczMistrza(s, 2);
+  s = zaliczMistrza(s, 2);
+  assert.deepEqual(s.mistrzowie, [2]);
+  assert.deepEqual(normalizuj({ mistrzowie: [3, 3, 'x', 9, 1] }, DZIEN).mistrzowie, [1, 3]);
+  assert.deepEqual(zImportu(doEksportu(s, DZIEN), DZIEN).mistrzowie, [2]);
 });
 
 test('normalizacja odrzuca złe wyniki sprawdzianu i złe daty laboratorium', () => {
