@@ -1,0 +1,330 @@
+/* Mechaniki świata 5 „Wielka uczta” (cudzożywność): łańcuchy pokarmowe, rozbiórka (trawienie),
+   las bez sprzątaczy. */
+
+/* ---------- Łańcuchy pokarmowe ---------- */
+
+.lancuch__panel {
+  display: grid;
+  gap: 12px;
+  padding: 1rem 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+.lancuch__plansza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 8px;
+  background: #f1f7ea;
+  border-radius: 10px;
+}
+
+.lancuch__ogniwo {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 7.5rem;
+  min-height: 7.5rem;
+  padding: 8px 6px;
+  text-align: center;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.lancuch__ogniwo--luka {
+  align-content: center;
+  background: var(--papier);
+  border-style: dashed;
+}
+
+.lancuch__plansza--gotowa .lancuch__ogniwo {
+  border-color: var(--chlorofil);
+  animation: ozywienie 0.9s ease-out;
+}
+
+.lancuch__znak {
+  font-family: var(--font-tytul);
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--atrament-jasny);
+}
+
+.lancuch__nazwa {
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.lancuch__rysunek {
+  width: 64px;
+  height: 64px;
+}
+
+.lancuch__strzalka {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 18px;
+  background: var(--okular);
+  clip-path: polygon(0 35%, 60% 35%, 60% 0, 100% 50%, 60% 100%, 60% 65%, 0 65%);
+}
+
+.lancuch__legenda {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--atrament-jasny);
+}
+
+.lancuch__opcje {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 10px;
+}
+
+.lancuch__opcja {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 6px 10px;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  color: var(--atrament);
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 10px;
+  box-shadow: 0 4px 0 var(--okular);
+  cursor: pointer;
+}
+
+.lancuch__opcja .lancuch__rysunek {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+}
+
+.lancuch__opcja:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--okular);
+}
+
+.lancuch__opcja:disabled {
+  cursor: default;
+}
+
+.lancuch__opcja[data-stan='dobrze'] {
+  background: var(--chlorofil-jasny);
+  border-color: var(--chlorofil);
+}
+
+.lancuch__opcja[data-stan='zle'] {
+  color: var(--atrament-jasny);
+  text-decoration: line-through;
+  background: var(--eozyna-jasna);
+  border-color: var(--eozyna);
+}
+
+/* Telefon: łańcuch w kolumnie, strzałki w dół. */
+@media (max-width: 479px) {
+  .lancuch__plansza {
+    flex-direction: column;
+  }
+  .lancuch__ogniwo {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    width: 100%;
+    min-height: 0;
+    text-align: left;
+  }
+  .lancuch__ogniwo .lancuch__rysunek {
+    width: 48px;
+    height: 48px;
+  }
+  .lancuch__strzalka {
+    transform: rotate(90deg);
+  }
+}
+
+/* ---------- Trawienie jako rozbiórka ---------- */
+
+.rozbiorka__stol {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.rozbiorka__narzedzia {
+  display: flex;
+  justify-content: center;
+}
+
+.rozbiorka__enzym {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 6px 16px;
+  font: inherit;
+  font-weight: 800;
+  color: var(--atrament);
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 999px;
+  box-shadow: 0 4px 0 var(--okular);
+  cursor: pointer;
+}
+
+.rozbiorka__enzym[aria-pressed='true'] {
+  background: var(--zolty-wybor);
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--okular);
+}
+
+.rozbiorka__enzym:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.rozbiorka__ikona {
+  width: 40px;
+  height: 40px;
+}
+
+.rozbiorka__tace {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.rozbiorka__taca {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px 6px;
+  font: inherit;
+  color: var(--atrament);
+  background: #fff8e6;
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.rozbiorka__taca:disabled {
+  cursor: default;
+}
+
+.rozbiorka__taca--rozlozona {
+  background: var(--chlorofil-jasny);
+  border-color: var(--chlorofil);
+}
+
+.rozbiorka__svg {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+}
+
+.rozbiorka__podpis {
+  display: grid;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.rozbiorka__stan {
+  font-size: 0.8rem;
+  color: var(--atrament-jasny);
+}
+
+.rozbiorka__klocek {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.9s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.rozbiorka__taca--rozlozona .rozbiorka__klocek {
+  transform: translate(var(--dx, 0), var(--dy, 0)) rotate(var(--obrot, 0deg));
+}
+
+.rozbiorka__wiazania {
+  transition: opacity 0.4s;
+}
+
+.rozbiorka__taca--rozlozona .rozbiorka__wiazania {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rozbiorka__klocek,
+  .rozbiorka__wiazania {
+    transition: none;
+  }
+}
+
+@media (max-width: 479px) {
+  .rozbiorka__tace {
+    gap: 6px;
+  }
+  .rozbiorka__taca {
+    padding: 6px 2px;
+  }
+}
+
+/* ---------- Las bez sprzątaczy ---------- */
+
+.las__widok {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 10px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.las__scena {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+.las__rok {
+  font-family: var(--font-tytul);
+  font-size: 20px;
+  fill: var(--atrament);
+}
+
+.las__sol {
+  transition: opacity 0.4s;
+}
+
+.las__sol--brak {
+  opacity: 0.12;
+}
+
+.las__sprzatacze--brak {
+  display: none;
+}
+
+.las__status {
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+}
+
+.las[data-sprzatacze='false'] .las__status {
+  color: var(--eozyna);
+}
