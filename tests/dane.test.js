@@ -48,7 +48,7 @@ test('wykrywa etykietę spoza słownika kanonicznego', async () => {
 
 test('wykrywa dystraktor, który dany typ komórki ma', async () => {
   const { dane, kontekst } = await zaladuj();
-  const z = dane.zadania[0];
+  const z = dane.zadania.find((x) => x.id === 's2-podpis-zwierzeca-1');
   z.punkty = z.punkty.filter((p) => p !== 'mitochondrium');
   z.dystraktory = ['mitochondrium'];
   zawiera(walidujDane(dane, kontekst), 'nie wyklucza tego elementu');
@@ -220,4 +220,35 @@ test('wykrywa światło wśród składników przepisu fotosyntezy', async () => 
   const { dane, kontekst } = await zaladuj();
   dane.zadania.find((x) => x.id === 's4-przepis-1').pola.find((p) => p.id === 'swiatlo').strefa = 'wejscie';
   zawiera(walidujDane(dane, kontekst), '„swiatlo” nie pasuje do strefy „wejscie”');
+});
+
+test('wykrywa w łańcuchu dystraktor, którego definicja kategorii nie wyklucza', async () => {
+  const { dane, kontekst } = await zaladuj();
+  // Rośliny → [jeleń] → niedźwiedź brunatny: łoś też jest roślinożercą, więc mógłby pasować do luki.
+  dane.zadania.find((x) => x.id === 's5-lancuchy-1').lancuchy[0].opcje.push({ karta: 'los', wyjasnienie: 'Łoś tu nie pasuje.' });
+  zawiera(walidujDane(dane, kontekst), 'nie da się wykluczyć definicją kategorii');
+});
+
+test('wykrywa zależność pokarmową sprzeczną z definicją kategorii', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.pokarm.zaleznosci.push({ zjada: 'zubr', pokarm: 'lis', dlaczego: 'Żubr zjada lisy.' });
+  zawiera(walidujDane(dane, kontekst), 'przeczy definicji kategorii');
+});
+
+test('wykrywa w składzie ciała wartość niezgodną z TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.zadania.find((x) => x.id === 's1-slupki-1').skladniki.find((s) => s.id === 'woda').procent = 70;
+  zawiera(walidujDane(dane, kontekst), 'a w TRESCI.md 65');
+});
+
+test('wykrywa dopisek przy organizmie, którego uproszczenia nie ma w TRESCI.md, sekcja 5', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.organizmy.find((o) => o.id === 'wilk').uwaga = 'W rzeczywistości wilk zjada też owoce.';
+  zawiera(walidujDane(dane, kontekst), 'uwaga tylko przy uproszczeniach');
+});
+
+test('wykrywa las, w którym szczątki nigdy się nie gromadzą', async () => {
+  const { dane, kontekst } = await zaladuj();
+  for (const e of dane.zadania.find((x) => x.id === 's5-las-1').etapy) e.sprzatacze = true;
+  zawiera(walidujDane(dane, kontekst), 'żaden etap nie pokazuje gromadzenia się szczątków');
 });

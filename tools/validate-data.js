@@ -31,6 +31,9 @@ import { pasujeDoStrefy, rola } from '../app/js/components/przepis-logika.js';
 import * as F from '../app/js/components/fotosynteza-logika.js';
 import * as SP from '../app/js/components/sprint-logika.js';
 import { PORY } from '../app/js/components/doba-logika.js';
+import * as LN from '../app/js/components/lancuch-logika.js';
+import * as LS from '../app/js/components/las-logika.js';
+import { ID_SCEN_SKLADNIKOW } from '../app/js/components/sceny-skladnikow.js';
 import { ID_RYSUNKOW } from '../app/js/components/rysunki.js';
 
 const KORZEN = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -55,15 +58,21 @@ export const TYPY_ZADAN = [
   'projektant',
   'sprint',
   'doba',
+  'lancuch',
+  'las',
+  'rozbiorka',
+  'diagnoza',
+  'siatka',
+  'slupki',
 ];
 
 // Typy zadań w formatach sprawdzianu (SPEC.md, sekcja 5); mechaniki to pozostałe.
-const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola', 'przepis', 'laboratorium', 'projektant', 'sprint', 'doba'];
+const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola', 'przepis', 'laboratorium', 'projektant', 'sprint', 'doba', 'lancuch', 'las', 'rozbiorka', 'diagnoza', 'siatka', 'slupki'];
 
 const OBECNOSC = ['tak', 'nie', 'czasem'];
 
 // Rodzaje kart w data/pojecia.js (grupy w atlasie). Organizmy mają własny plik.
-const RODZAJE_POJEC = ['pojecie', 'ksztalt', 'proces', 'substancja'];
+const RODZAJE_POJEC = ['pojecie', 'ksztalt', 'proces', 'substancja', 'pierwiastek', 'zwiazek', 'sposob'];
 
 // Pełne zdanie: wielka litera na początku, kropka na końcu.
 const pelneZdanie = (t) => /^[A-ZĄĆĘŁŃÓŚŹŻ].*\.$/u.test(t ?? '');
@@ -217,6 +226,7 @@ export function walidujDane(dane, kontekst) {
     organizmy,
     procesy = [],
     porownanie = null,
+    pokarm = null,
   } = dane;
   const {
     sekcje,
@@ -873,6 +883,111 @@ export function walidujDane(dane, kontekst) {
       else if (stan.kwas !== 0) blad(gdzie, 'na końcu biegu kwas mlekowy zostaje w mięśniach: brak odpoczynku przez kilkadziesiąt minut');
     },
 
+    siatka(z, gdzie) {
+      const idW = new Set((z.wiersze || []).map((w) => w.id));
+      const idK = new Set((z.kolumny || []).map((k) => k.id));
+      if (idW.size < 2 || idW.size !== (z.wiersze || []).length) blad(gdzie, 'co najmniej dwa wiersze o różnych id');
+      if (idK.size < 2 || idK.size !== (z.kolumny || []).length) blad(gdzie, 'co najmniej dwie kolumny o różnych id');
+      for (const w of z.wiersze || []) {
+        if (!niepustyTekst(w.nazwa)) blad(gdzie, `wiersz „${w.id}” bez nazwy`);
+        if (w.karta) karta(gdzie, w.karta);
+      }
+      for (const k of z.kolumny || []) if (!niepustyTekst(k.nazwa)) blad(gdzie, `kolumna „${k.id}” bez nazwy`);
+      if (!(z.elementy?.length >= 4)) blad(gdzie, 'co najmniej cztery przykłady');
+      const teksty = new Set();
+      for (const el of z.elementy || []) {
+        if (!niepustyTekst(el.tekst) || teksty.has(el.tekst)) blad(gdzie, `przykład bez tekstu albo powtórzony: „${el.tekst}”`);
+        teksty.add(el.tekst);
+        if (!idW.has(el.wiersz) || !idK.has(el.kolumna)) blad(gdzie, `przykład „${el.tekst}”: nieznany wiersz albo kolumna`);
+        if (!pelneZdanie(el.wyjasnienie)) blad(gdzie, `przykład „${el.tekst}”: wyjaśnienie musi być pełnym zdaniem`);
+        if (el.karta) karta(gdzie, el.karta);
+      }
+    },
+
+    slupki(z, gdzie) {
+      // Skład ciała człowieka: wartości z TRESCI.md, sekcja 2.1 (np. „woda 65, białka 18, ...”).
+      const linia = tekstTresci.split('\n').find((l) => l.includes('Skład ciała człowieka')) ?? '';
+      const wartosciT = new Map([...linia.matchAll(/([a-ząćęłńóśźż ]+?) (\d+)(?=,|\.|$)/giu)].map((m) => [m[1].replace(/^.*: /, '').trim(), Number(m[2])]));
+      const sk = z.skladniki || [];
+      if (sk.length < 3) blad(gdzie, 'co najmniej trzy składniki');
+      if (new Set(sk.map((x) => x.id)).size !== sk.length) blad(gdzie, 'powtórzone id składnika');
+      if (new Set(sk.map((x) => x.procent)).size !== sk.length) blad(gdzie, 'dwa składniki z tym samym procentem: kolejność byłaby niejednoznaczna');
+      for (const x of sk) {
+        if (!wartosciT.has(x.nazwa)) blad(gdzie, `składnik „${x.nazwa}” nie występuje w składzie ciała w TRESCI.md, sekcja 2.1`);
+        else if (wartosciT.get(x.nazwa) !== x.procent) blad(gdzie, `składnik „${x.nazwa}”: ${x.procent}, a w TRESCI.md ${wartosciT.get(x.nazwa)}`);
+        if (x.karta) karta(gdzie, x.karta);
+      }
+      if (z.porownanie) {
+        if (!tekstTresci.includes(`${z.porownanie.procent}%`)) blad(gdzie, `porównanie: wartości ${z.porownanie.procent}% nie ma w TRESCI.md`);
+        if (!pelneZdanie(z.porownanie.opis)) blad(gdzie, 'porównanie: opis musi być pełnym zdaniem');
+        if (z.porownanie.karta) karta(gdzie, z.porownanie.karta);
+      }
+    },
+
+    diagnoza(z, gdzie) {
+      if (!z.przypadki?.length) blad(gdzie, 'brak przypadków');
+      (z.przypadki || []).forEach((p, i) => {
+        const gp = `${gdzie}.przypadki[${i}]`;
+        if (!ID_SCEN_SKLADNIKOW.includes(p.scena)) blad(gp, `nieznana scena „${p.scena}”`);
+        if (!pelneZdanie(p.objaw) || !pelneZdanie(p.wyjasnienie)) blad(gp, 'objaw i wyjaśnienie muszą być pełnymi zdaniami');
+        const sk = p.skladnik || {};
+        if (!niepustyTekst(sk.pytanie)) blad(gp, 'składnik: brak pytania');
+        const dobre = (sk.opcje || []).filter((o) => o.poprawna === true);
+        if (dobre.length !== 1) blad(gp, `składnik: opcji poprawnych jest ${dobre.length}, a musi być dokładnie jedna`);
+        if ((sk.opcje || []).length < 3) blad(gp, 'składnik: co najmniej trzy opcje');
+        for (const o of sk.opcje || []) {
+          karta(gp, o.karta);
+          if (!o.poprawna && !pelneZdanie(o.wyjasnienie)) blad(gp, `składnik „${o.karta}” bez wyjaśnienia, dlaczego nie pasuje`);
+        }
+        WALIDATORY.doswiadczenie({ opis: p.objaw, kroki: [{ ...p.funkcja, wyjasnienie: p.wyjasnienie }] }, gp);
+        ciekawostka(`${gp}.ciekawostka`, p.ciekawostka);
+      });
+    },
+
+    las(z, gdzie) {
+      if (!z.etapy?.length) {
+        blad(gdzie, 'brak etapów');
+        return;
+      }
+      let stan = LS.nowyLas();
+      let gromadzenie = false;
+      z.etapy.forEach((e, i) => {
+        const ge = `${gdzie}.etapy[${i}]`;
+        if (typeof e.sprzatacze !== 'boolean') blad(ge, 'sprzatacze musi być true albo false');
+        if (!Number.isInteger(e.lata) || e.lata < 1 || e.lata > 5) blad(ge, 'lata: liczba od 1 do 5');
+        if (!niepustyTekst(e.polecenie) || !niepustyTekst(e.akcja)) blad(ge, 'etap wymaga polecenia i napisu na przycisku (akcja)');
+        if (!e.pytania?.length) blad(ge, 'etap bez pytań');
+        else WALIDATORY.doswiadczenie({ opis: e.polecenie, kroki: e.pytania }, ge);
+        const przed = stan.szczatki;
+        for (const s of LS.lata(stan, Boolean(e.sprzatacze), Math.max(1, e.lata | 0))) stan = s;
+        if (!e.sprzatacze && stan.szczatki > przed) gromadzenie = true;
+      });
+      // Mechanika ma pokazać fakt z TRESCI.md, sekcja 2.5: bez tych organizmów szczątki się gromadzą.
+      if (!gromadzenie) blad(gdzie, 'żaden etap nie pokazuje gromadzenia się szczątków bez organizmów odżywiających się szczątkami');
+      ciekawostka(`${gdzie}.ciekawostka`, z.ciekawostka);
+    },
+
+    rozbiorka(z, gdzie) {
+      const zwiazki = z.zwiazki || [];
+      if (zwiazki.length < 2) blad(gdzie, 'co najmniej dwa związki do rozłożenia');
+      for (const id of zwiazki) if (!['cukry', 'bialka', 'tluszcze'].includes(id)) blad(gdzie, `związek „${id}” spoza listy cukry, bialka, tluszcze (TRESCI.md, 2.5)`);
+      if (new Set(zwiazki).size !== zwiazki.length) blad(gdzie, 'powtórzony związek');
+      if (!z.pytania?.length) blad(gdzie, 'brak pytań');
+      else WALIDATORY.doswiadczenie({ opis: z.tresc, kroki: z.pytania }, gdzie);
+    },
+
+    lancuch(z, gdzie) {
+      if (!pokarm) {
+        blad(gdzie, 'brak danych data/pokarm.js');
+        return;
+      }
+      const dane = { katalog, wezly: pokarm.wezly || [], zaleznosci: pokarm.zaleznosci || [] };
+      if (!z.lancuchy?.length) blad(gdzie, 'brak łańcuchów');
+      (z.lancuchy || []).forEach((l, i) => {
+        for (const p of LN.problemy(l, dane)) blad(`${gdzie}.lancuchy[${i}]`, p);
+      });
+    },
+
     doba(z, gdzie) {
       const pory = (z.etapy || []).map((e) => e.pora);
       if (!pory.length) blad(gdzie, 'brak etapów (pór doby)');
@@ -990,6 +1105,7 @@ export function walidujDane(dane, kontekst) {
   }
 
   // Organizmy (karty atlasu)
+  const sekcja5 = tekstTresci.split(/^## 5\./m)[1]?.split(/^## 6\./m)[0] ?? '';
   if (organizmy) {
     unikalne(organizmy, 'organizmy');
     for (const o of organizmy) {
@@ -1005,6 +1121,33 @@ export function walidujDane(dane, kontekst) {
         zrodlo(gdzie, o);
       }
       ciekawostka(`${gdzie}.ciekawostka`, o.ciekawostka);
+      // Dopisek o rzeczywistości tylko przy uproszczeniach wymienionych w TRESCI.md, sekcja 5.
+      if (o.uwaga !== undefined) {
+        const rdzen = o.nazwa.slice(0, Math.max(5, o.nazwa.length - 2)).toLowerCase();
+        if (!pelneZdanie(o.uwaga)) blad(gdzie, 'uwaga musi być pełnym zdaniem');
+        if (!sekcja5.toLowerCase().includes(rdzen)) blad(gdzie, 'uwaga tylko przy uproszczeniach z TRESCI.md, sekcja 5');
+      }
+    }
+  }
+
+  // Zależności pokarmowe (łańcuchy w świecie 5)
+  if (pokarm) {
+    const idWezlow = new Set();
+    for (const w of pokarm.wezly || []) {
+      const gw = `pokarm.wezly[${w.id}]`;
+      if (idWezlow.has(w.id) || katalog.has(w.id)) blad(gw, 'id węzła powtórzone albo zajęte przez kartę atlasu');
+      idWezlow.add(w.id);
+      if (!niepustyTekst(w.nazwa)) blad(gw, 'brak nazwy');
+      if (!['roslinny', 'padlina', 'szczatki'].includes(w.typ)) blad(gw, `typ „${w.typ}” spoza listy roslinny, padlina, szczatki`);
+      if (!ID_RYSUNKOW.includes(w.ikona)) blad(gw, `nie ma rysunku „${w.ikona}”`);
+    }
+    const daneP = { katalog, wezly: pokarm.wezly || [], zaleznosci: [] };
+    for (const z of pokarm.zaleznosci || []) {
+      const gz = `pokarm.zaleznosci[${z.zjada}→${z.pokarm}]`;
+      if (katalog.get(z.zjada)?.rodzaj !== 'organizm') blad(gz, `„${z.zjada}” nie jest kartą organizmu`);
+      if (!idWezlow.has(z.pokarm) && katalog.get(z.pokarm)?.rodzaj !== 'organizm') blad(gz, `nieznany pokarm „${z.pokarm}”`);
+      if (!pelneZdanie(z.dlaczego)) blad(gz, 'dlaczego: potrzebne pełne zdanie');
+      else if (LN.relacja(z.zjada, z.pokarm, daneP) === 'nie') blad(gz, 'zależność przeczy definicji kategorii organizmu');
     }
   }
 
@@ -1127,6 +1270,7 @@ export async function wczytajWszystko() {
     organizmy: await modul('organizmy.js'),
     procesy: await modul('procesy.js'),
     porownanie: await modul('porownanie.js'),
+    pokarm: await modul('pokarm.js'),
   };
   const svg = new Map();
   const pliki = [...(dane.schematy || []).map((s) => s.plik), ...(dane.typyKomorek || []).map((t) => t.rysunek)].filter(Boolean);
