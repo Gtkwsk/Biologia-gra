@@ -190,7 +190,7 @@ export default [
       {
         id: 's4-laboratorium',
         nazwa: 'Laboratorium fotosyntezy',
-        opis: 'Steruj światłem, dwutlenkiem węgla i temperaturą. Licz pęcherzyki tlenu.',
+        opis: 'Steruj światłem, dwutlenkiem węgla, temperaturą i solami mineralnymi. Licz pęcherzyki tlenu.',
         zadania: ['s4-lab-1', 's4-pf-czynniki-1'],
       },
       {

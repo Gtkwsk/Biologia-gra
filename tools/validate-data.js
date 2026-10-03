@@ -65,6 +65,9 @@ const OBECNOSC = ['tak', 'nie', 'czasem'];
 // Rodzaje kart w data/pojecia.js (grupy w atlasie). Organizmy mają własny plik.
 const RODZAJE_POJEC = ['pojecie', 'ksztalt', 'proces', 'substancja'];
 
+// Pełne zdanie: wielka litera na początku, kropka na końcu.
+const pelneZdanie = (t) => /^[A-ZĄĆĘŁŃÓŚŹŻ].*\.$/u.test(t ?? '');
+
 // Elementy, których „nie ma” w tabeli TRESCI.md jest uproszczeniem: jako zdanie ogólne byłoby
 // fałszywe (rzęski mają np. komórki nabłonka dróg oddechowych). Nie mogą być dystraktorami,
 // wierszami tabel do wypełnienia ani częściami konstruktora (SPEC.md, sekcja 12).
@@ -723,7 +726,7 @@ export function walidujDane(dane, kontekst) {
         karta(gdzie, g.karta);
         if (!niepustyTekst(g.podpis)) blad(gdzie, 'garnek bez podpisu');
       }
-      const strefy = procesyZ.length === 2 ? ['wejscie-lewe', 'gora', 'dol', 'wyjscie-prawe'] : ['wejscie', 'wyjscie'];
+      const strefy = procesyZ.length === 2 ? ['wejscie-lewe', 'gora', 'dol', 'wyjscie-prawe'] : ['wejscie', 'warunek', 'wyjscie'];
       if (!['pole', 'strefa', undefined].includes(z.dopasowanie)) blad(gdzie, `dopasowanie „${z.dopasowanie}” spoza listy pole, strefa`);
       const idPol = new Set();
       const substancje = [];
@@ -757,6 +760,13 @@ export function walidujDane(dane, kontekst) {
         if (!ID_SCEN_PROCESOW.includes(z.scena.id)) blad(gdzie, `nieznana scena „${z.scena.id}”`);
         if (!substancje.includes(z.scena.substancja)) blad(gdzie, `scena: substancji „${z.scena.substancja}” nie ma w przepisie`);
       }
+      if (z.wyjasnienia !== undefined) {
+        if (procesyZ.length !== 2) blad(gdzie, 'wyjasnienia substancji są tylko w lustrze');
+        for (const [id, t] of Object.entries(z.wyjasnienia)) {
+          if (!substancje.includes(id)) blad(gdzie, `wyjasnienia: substancji „${id}” nie ma w przepisie`);
+          if (!pelneZdanie(t)) blad(gdzie, `wyjasnienia[${id}]: potrzebne pełne zdanie`);
+        }
+      }
       ciekawostka(`${gdzie}.ciekawostka`, z.ciekawostka);
     },
 
@@ -786,6 +796,9 @@ export function walidujDane(dane, kontekst) {
           }
           if (!(k.poziom >= 0 && k.poziom < F.CZYNNIK[k.czynnik].poziomy.length)) blad(gk, 'poziom spoza zakresu');
           if (u[k.czynnik] === k.poziom) blad(gk, 'krok niczego nie zmienia');
+          // Przewidywanie ma wynikać wprost z TRESCI.md, sekcja 2.4 (niedobór i nadmiar zmniejszają
+          // intensywność), więc wynik kroku nie może zależeć od innego czynnika, który hamuje bardziej.
+          else if (F.skutek(u, k.czynnik, k.poziom) === 'bez-zmian') blad(gk, 'krok nie zmienia wyniku, bo inny czynnik hamuje bardziej: przewidywanie nie wynika wprost z TRESCI.md');
           u = { ...u, [k.czynnik]: k.poziom };
         });
         if (z.cel !== undefined && typeof z.cel !== 'boolean') blad(gdzie, 'cel musi być true albo false');
@@ -1019,7 +1032,7 @@ export function walidujDane(dane, kontekst) {
     const uczestnicy = new Set([...(pr.substraty || []), ...(pr.warunki || []), ...(pr.produkty || []), ...Object.keys(pr.rownowazne || {})]);
     for (const [id, zd] of Object.entries(pr.opisy || {})) {
       if (!uczestnicy.has(id)) blad(`${gdzie}.opisy`, `„${id}” nie bierze udziału w tym procesie`);
-      if (!/^[A-ZĄĆĘŁŃÓŚŹŻ].*\.$/u.test(zd ?? '')) blad(`${gdzie}.opisy.${id}`, 'opis musi być pełnym zdaniem');
+      if (!pelneZdanie(zd)) blad(`${gdzie}.opisy.${id}`, 'opis musi być pełnym zdaniem');
     }
   }
 

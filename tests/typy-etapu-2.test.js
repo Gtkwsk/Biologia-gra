@@ -121,3 +121,14 @@ test('tabela wartości: pola z tabeli w TRESCI.md, krótkie etykiety długich wa
   assert.equal(pola.find((p) => p.klucz === 'tlen|fermentacja').tekst, 'niewymagany');
   assert.equal(pola.find((p) => p.klucz === 'produkty|fermentacja').tekst, 'alkohol etylowy i dwutlenek węgla albo kwas mlekowy');
 });
+
+test('przepis: światło to warunek (zasilanie nad garnkiem), a nie składnik fotosyntezy', async () => {
+  const P = await import('../app/js/components/przepis-logika.js');
+  const fotosynteza = [procesy.find((p) => p.id === 'fotosynteza')];
+  assert.equal(P.pasujeDoStrefy('warunek', 'swiatlo', fotosynteza), true);
+  assert.equal(P.pasujeDoStrefy('wejscie', 'swiatlo', fotosynteza), false);
+  assert.equal(P.pasujeDoStrefy('wejscie', 'woda', fotosynteza), true);
+  assert.match(P.powodBledu({ strefa: 'wejscie' }, 'swiatlo', fotosynteza), /^To nie składnik fotosyntezy, tylko warunek: w zapisie słownym stoi nad strzałką\./);
+  assert.match(P.powodBledu({ strefa: 'warunek' }, 'woda', fotosynteza), /^To składnik fotosyntezy, a nie warunek: w zapisie słownym stoi przed strzałką\./);
+  assert.match(P.powodBledu({ strefa: 'warunek' }, 'tlen', fotosynteza), /^To produkt fotosyntezy, a nie warunek\./);
+});

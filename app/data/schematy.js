@@ -96,7 +96,7 @@ export default [
     szerokosc: 640,
     wysokosc: 480,
     punkty: [
-      { id: 'swiatlo', element: 'swiatlo', cel: [214, 124], znacznik: [38, 140], opis: 'źródło energii, które pochłania chlorofil w liściach' },
+      { id: 'swiatlo', element: 'swiatlo', cel: [214, 124], znacznik: [38, 140], opis: 'źródło energii pochłaniane przez chlorofil w liściach' },
       { id: 'tlen', element: 'tlen', cel: [492, 166], znacznik: [602, 110], opis: 'gaz, który powstaje w liściach i trafia do atmosfery' },
       { id: 'pokarm', element: 'substancje-pokarmowe', cel: [358, 380], znacznik: [602, 400], opis: 'produkt fotosyntezy, który z liści trafia do wszystkich komórek rośliny' },
       { id: 'woda', element: 'woda', cel: [284, 400], znacznik: [38, 400], opis: 'substancja, którą korzenie pobierają z gleby' },
@@ -111,7 +111,7 @@ export default [
     szerokosc: 640,
     wysokosc: 480,
     punkty: [
-      { id: 'swiatlo', element: 'swiatlo', cel: [176, 116], znacznik: [38, 150], opis: 'źródło energii, które pochłania chlorofil' },
+      { id: 'swiatlo', element: 'swiatlo', cel: [176, 116], znacznik: [38, 150], opis: 'źródło energii pochłaniane przez chlorofil' },
       { id: 'tlen', element: 'tlen', cel: [424, 80], znacznik: [602, 70], opis: 'gaz, który powstaje w liściu i trafia do atmosfery' },
       { id: 'chloroplast', element: 'chloroplast', cel: [528, 258], znacznik: [602, 200], opis: 'zielony element komórki liścia, w którym zachodzi fotosynteza' },
       { id: 'pokarm', element: 'substancje-pokarmowe', cel: [318, 420], znacznik: [602, 430], opis: 'produkt fotosyntezy, który z liścia trafia do wszystkich komórek rośliny' },

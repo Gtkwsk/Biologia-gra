@@ -203,3 +203,21 @@ test('wykrywa nieznaną porę doby i nieistniejącą ikonę kategorii sortera', 
   zawiera(bledy, 'pora „zmierzch” spoza listy');
   zawiera(bledy, 'nie ma rysunku „gwiazda”');
 });
+
+test('wykrywa krok laboratorium, którego wyniku nie da się przewidzieć wprost z TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const z = dane.zadania.find((x) => x.id === 's4-lab-1');
+  // Nadmiar soli przy upale: wynik się nie zmienia, choć TRESCI.md mówi, że nadmiar zmniejsza intensywność.
+  z.kroki = [
+    { czynnik: 'swiatlo', poziom: 3 },
+    { czynnik: 'temperatura', poziom: 4 },
+    { czynnik: 'sole', poziom: 3 },
+  ];
+  zawiera(walidujDane(dane, kontekst), 'inny czynnik hamuje bardziej');
+});
+
+test('wykrywa światło wśród składników przepisu fotosyntezy', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.zadania.find((x) => x.id === 's4-przepis-1').pola.find((p) => p.id === 'swiatlo').strefa = 'wejscie';
+  zawiera(walidujDane(dane, kontekst), '„swiatlo” nie pasuje do strefy „wejscie”');
+});

@@ -32,7 +32,7 @@ export default {
       cecha: 'rozkład glukozy',
       wartosci: { 'oddychanie-tlenowe': 'całkowity', fermentacja: 'częściowy' },
       zdania: {
-        'oddychanie-tlenowe': 'W oddychaniu tlenowym glukoza jest rozkładana stopniowo, aż do dwutlenku węgla i wody.',
+        'oddychanie-tlenowe': 'W oddychaniu tlenowym glukoza jest rozkładana całkowicie, aż do dwutlenku węgla i wody.',
         fermentacja: 'W fermentacji glukoza jest rozkładana tylko częściowo, do nieco prostszego związku.',
       },
     },

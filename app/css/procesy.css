@@ -730,13 +730,16 @@
   }
 }
 
-/* Lustro: światło wchodzi z góry do chloroplastu, energia wychodzi w dół z mitochondrium. */
+/* Zasilanie (np. światło) i lustro: światło wchodzi z góry do garnka (chloroplastu),
+   energia wychodzi w dół z mitochondrium. */
+.przepis__strefa--warunek .przepis__miejsce,
 .przepis__strefa--wejscie-lewe .przepis__miejsce,
 .przepis__strefa--wyjscie-prawe .przepis__miejsce {
   grid-template-columns: minmax(9rem, auto);
   justify-items: center;
 }
 
+.przepis__strefa--warunek .przepis__strzalka,
 .przepis__strefa--wejscie-lewe .przepis__strzalka,
 .przepis__strefa--wyjscie-prawe .przepis__strzalka {
   grid-row: auto;
@@ -744,8 +747,24 @@
   transform: rotate(90deg);
 }
 
+.przepis__strefa--warunek .przepis__strzalka,
 .przepis__strefa--wejscie-lewe .przepis__strzalka {
   order: 1;
+}
+
+.przepis__strefa--warunek .przepis__pole,
+.przepis__strefa--wejscie-lewe .przepis__pole,
+.przepis__strefa--wyjscie-prawe .przepis__pole {
+  min-width: 10rem;
+}
+
+.przepis__strefa--warunek .przepis__naglowek {
+  text-align: center;
+}
+
+.przepis__strefa--warunek .przepis__podpis {
+  grid-column: 1;
+  text-align: center;
 }
 
 .przepis__garnek {

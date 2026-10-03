@@ -83,8 +83,8 @@ export function utworzLaboratorium(kontener, { zadanie, onKoniec }) {
     for (const c of czynniki) {
       const { input, wartosc } = suwaki.get(c.id);
       input.value = String(u[c.id]);
-      wartosc.textContent = c.poziomy[u[c.id]];
-      input.setAttribute('aria-valuetext', c.poziomy[u[c.id]]);
+      wartosc.textContent = F.nazwaPoziomu(c.id, u[c.id], zadanie.roslina);
+      input.setAttribute('aria-valuetext', F.nazwaPoziomu(c.id, u[c.id], zadanie.roslina));
     }
     if (moczarka) {
       licznik.replaceChildren(h('span', { class: 'lab__licznik-napis' }, 'Pęcherzyki tlenu: '), h('strong', {}, String(F.pecherzyki(u))), ' na minutę');
@@ -143,7 +143,7 @@ export function utworzLaboratorium(kontener, { zadanie, onKoniec }) {
       const pytanie = moczarka ? 'Co stanie się z liczbą pęcherzyków tlenu?' : 'Co stanie się z intensywnością fotosyntezy?';
       panel.replaceChildren(
         h('p', { class: 'lab__krok' }, `Doświadczenie ${indeks + 1} z ${kroki.length}`),
-        h('p', { class: 'lab__polecenie' }, [`Zmienisz czynnik „${c.nazwa}”: z „${c.poziomy[u[c.id]]}” na „${c.poziomy[k.poziom]}”. `, h('strong', {}, pytanie)]),
+        h('p', { class: 'lab__polecenie' }, [`Zmienisz czynnik „${c.nazwa}”: z „${F.nazwaPoziomu(c.id, u[c.id], zadanie.roslina)}” na „${F.nazwaPoziomu(c.id, k.poziom, zadanie.roslina)}”. `, h('strong', {}, pytanie)]),
         h(
           'div',
           { class: 'lab__opcje' },
@@ -167,8 +167,8 @@ export function utworzLaboratorium(kontener, { zadanie, onKoniec }) {
       const c = F.CZYNNIK[k.czynnik];
       komunikat.pokaz(
         dobrze
-          ? { rodzaj: 'dobrze', tytul: 'Dobre przewidywanie. Sprawdź je.', tekst: `Przesuń suwak „${c.nazwa}” na „${c.poziomy[k.poziom]}”.` }
-          : { rodzaj: 'zle', tytul: 'Sprawdź, co się naprawdę stanie.', tekst: `Przesuń suwak „${c.nazwa}” na „${c.poziomy[k.poziom]}” i obserwuj ${moczarka ? 'pęcherzyki' : 'miernik'}.` },
+          ? { rodzaj: 'dobrze', tytul: 'Dobre przewidywanie. Sprawdź je.', tekst: `Przesuń suwak „${c.nazwa}” na „${F.nazwaPoziomu(c.id, k.poziom, zadanie.roslina)}”.` }
+          : { rodzaj: 'zle', tytul: 'Sprawdź, co się naprawdę stanie.', tekst: `Przesuń suwak „${c.nazwa}” na „${F.nazwaPoziomu(c.id, k.poziom, zadanie.roslina)}” i obserwuj ${moczarka ? 'pęcherzyki' : 'miernik'}.` },
       );
       suwaki.get(k.czynnik).input.focus({ preventScroll: true });
     }
@@ -308,7 +308,7 @@ export function utworzLaboratorium(kontener, { zadanie, onKoniec }) {
         : `Intensywność fotosyntezy: ${Math.round(F.intensywnosc(przed) * 10)} → ${Math.round(F.intensywnosc(u) * 10)} z 10.`;
       const nastepny = F.najslabsze(u);
       const tekst = nastepny.length
-        ? `${F.wyjasnienieCzynnika(id, v)} Teraz najsłabszym ogniwem jest: ${nastepny.map((x) => F.CZYNNIK[x].nazwa).join(' i ')}.`
+        ? `${F.wyjasnienieCzynnika(id, v)} Teraz ${nastepny.length === 1 ? 'najsłabszym ogniwem jest' : 'najsłabszymi ogniwami są'} ${nastepny.map((x) => F.CZYNNIK[x].nazwa).join(' i ')}.`
         : `${F.wyjasnienieCzynnika(id, v)} Wszystkie czynniki są teraz w sam raz.`;
       komunikat.pokaz({ rodzaj: 'dobrze', tytul, tekst });
       dalej.textContent = indeks === przypadki.length - 1 ? 'Gotowe' : 'Następny przypadek';

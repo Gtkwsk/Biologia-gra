@@ -199,7 +199,7 @@ export default [
     rodzaj: 'pojecie',
     swiat: 4,
     opis: 'próba w doświadczeniu, w której zmienia się badany czynnik',
-    zdanie: 'Próba badawcza to próba w doświadczeniu, w której zmienia się badany czynnik. W doświadczeniu z moczarką to gałązka w wodzie gazowanej.',
+    zdanie: 'Próba badawcza to próba w doświadczeniu, w której zmienia się badany czynnik. W doświadczeniu z moczarką, które bada wpływ dwutlenku węgla, to gałązka w wodzie gazowanej.',
     zrodlo: '3',
   },
   {
@@ -208,7 +208,7 @@ export default [
     rodzaj: 'pojecie',
     swiat: 4,
     opis: 'próba bez zmiany badanego czynnika, punkt odniesienia dla próby badawczej',
-    zdanie: 'Próba kontrolna to próba bez zmiany badanego czynnika, punkt odniesienia dla próby badawczej. W doświadczeniu z moczarką to gałązka w wodzie z kranu.',
+    zdanie: 'Próba kontrolna to próba bez zmiany badanego czynnika, punkt odniesienia dla próby badawczej. W doświadczeniu z moczarką, które bada wpływ dwutlenku węgla, to gałązka w wodzie z kranu.',
     zrodlo: '3',
   },
   {
@@ -263,7 +263,7 @@ export default [
     rodzaj: 'substancja',
     swiat: 4,
     opis: 'cukier, główna substancja pokarmowa powstająca w fotosyntezie',
-    zdanie: 'Glukoza to cukier, główna substancja pokarmowa powstająca w fotosyntezie. Rozkładana w komórkach uwalnia energię.',
+    zdanie: 'Glukoza to cukier, główna substancja pokarmowa powstająca w fotosyntezie. Gdy komórki ją rozkładają, uwalnia się energia.',
     zrodlo: '2.4',
   },
 
@@ -284,7 +284,7 @@ export default [
     rodzaj: 'proces',
     swiat: 6,
     opis: 'rozkład glukozy z udziałem tlenu do dwutlenku węgla i wody, z uwolnieniem dużej ilości energii',
-    zdanie: 'Oddychanie tlenowe wymaga tlenu. Glukoza jest rozkładana stopniowo do dwutlenku węgla i wody i uwalnia się dużo energii. Główne etapy zachodzą w mitochondriach.',
+    zdanie: 'Oddychanie tlenowe wymaga tlenu. Glukoza jest rozkładana stopniowo do dwutlenku węgla i wody; uwalnia się przy tym dużo energii. Główne etapy zachodzą w mitochondriach.',
     zrodlo: '2.6',
     ciekawostka: 'Fotosynteza i oddychanie tlenowe są jak odbicia w lustrze: produkty jednego procesu są substratami drugiego.',
   },
@@ -379,7 +379,7 @@ export default [
     rodzaj: 'substancja',
     swiat: 6,
     opis: 'płyn, który mętnieje, gdy dotrze do niego dwutlenek węgla',
-    zdanie: 'Mętnienie wody wapiennej oznacza obecność dwutlenku węgla. Dlatego służy do wykrywania tego gazu w doświadczeniu z drożdżami.',
+    zdanie: 'Mętnienie wody wapiennej oznacza obecność dwutlenku węgla. Dlatego woda wapienna służy do wykrywania tego gazu w doświadczeniu z drożdżami.',
     zrodlo: '2.6',
   },
   {

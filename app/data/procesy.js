@@ -29,7 +29,7 @@ export default [
     opisy: {
       'dwutlenek-wegla': 'Dwutlenek węgla wnika do liści z powietrza przez aparaty szparkowe.',
       woda: 'Wodę pobierają z gleby korzenie, a do liści doprowadzają ją komórki przewodzące.',
-      swiatlo: 'Światło pochłania chlorofil w chloroplastach.',
+      swiatlo: 'Chlorofil w chloroplastach pochłania światło.',
       'substancje-pokarmowe': 'Substancje pokarmowe (głównie glukoza) są transportowane do wszystkich komórek rośliny.',
       glukoza: 'Glukoza to główna substancja pokarmowa, która powstaje w fotosyntezie.',
       tlen: 'Tlen powstający w fotosyntezie trafia do atmosfery.',
@@ -51,7 +51,7 @@ export default [
     opisy: {
       glukoza: 'Glukoza u roślin powstaje w fotosyntezie, a u zwierząt pochodzi z trawienia pokarmu.',
       tlen: 'Oddychanie tlenowe wymaga tlenu.',
-      'dwutlenek-wegla': 'Dwutlenek węgla powstaje, gdy glukoza jest rozkładana całkowicie.',
+      'dwutlenek-wegla': 'W oddychaniu tlenowym glukoza jest rozkładana do dwutlenku węgla i wody.',
       woda: 'Woda powstaje razem z dwutlenkiem węgla, gdy glukoza jest rozkładana całkowicie.',
       energia: 'Uwalnia się dużo energii, bo glukoza jest rozkładana całkowicie.',
     },

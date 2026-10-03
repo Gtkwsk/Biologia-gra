@@ -4,11 +4,13 @@
 //
 // zadanie.procesy:     [id] albo [lewy, prawy] (lustro),
 // zadanie.garnki:      [{ karta, podpis }] – rysunek „garnka” każdego procesu,
-// zadanie.pola:        [{ id, substancja, strefa, podpis? }] (przepis-logika.js),
+// zadanie.pola:        [{ id, substancja, strefa, podpis? }] (przepis-logika.js); strefa 'warunek'
+//                      (np. światło) to „zasilanie” nad garnkiem, jak warunek nad strzałką,
 // zadanie.dopasowanie: 'pole' (domyślnie) albo 'strefa',
 // zadanie.dystraktory: [{ karta, wyjasnienie }],
 // zadanie.scena:       opcjonalna scena ożywiana dobrze położoną substancją (np. 'ciasto' rośnie,
 //                      gdy w przepisie pojawi się dwutlenek węgla): { id, substancja },
+// zadanie.wyjasnienia: opcjonalnie (lustro) { idKarty: zdanie } zamiast zdania o drodze substancji,
 // zadanie.ciekawostka: opcjonalnie, dosłownie z TRESCI.md, sekcja 6.
 // Po ułożeniu całego przepisu pojawia się zapis słowny procesu z TRESCI.md.
 
@@ -20,11 +22,12 @@ import * as P from './przepis-logika.js';
 
 const NAGLOWKI = {
   wejscie: 'Składniki',
+  warunek: 'Zasilanie',
   wyjscie: 'Powstaje',
-  'wejscie-lewe': 'Składnik',
+  'wejscie-lewe': 'Wchodzi z zewnątrz',
   gora: 'Z lewej na prawą',
   dol: 'Z prawej na lewą',
-  'wyjscie-prawe': 'Powstaje',
+  'wyjscie-prawe': 'Wychodzi na zewnątrz',
 };
 
 export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKoniec }) {
@@ -73,7 +76,11 @@ export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKon
         h('div', { class: 'przepis__srodek' }, [strefa('gora'), strefa('dol')]),
         h('div', { class: 'przepis__kolumna' }, [garnek(zadanie.garnki[1]), strefa('wyjscie-prawe')]),
       ])
-    : h('div', { class: 'przepis__plansza' }, [strefa('wejscie'), garnek(zadanie.garnki[0]), strefa('wyjscie')]);
+    : h('div', { class: 'przepis__plansza' }, [
+        strefa('wejscie'),
+        h('div', { class: 'przepis__kolumna' }, [strefa('warunek'), garnek(zadanie.garnki[0])]),
+        strefa('wyjscie'),
+      ]);
 
   const caloscPlanszy = h('div', { class: 'przepis__calosc' }, [
     plansza,
@@ -85,10 +92,13 @@ export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKon
   ]);
 
   const opisPola = (p) => p.podpis ?? NAGLOWKI[p.strefa];
-  const wyjasnienieEtykiety = (e, p) => P.powodBledu(p, e, procesy, dystraktory.get(e) ?? null, nazwa(e));
-  // Po dobrym położeniu: w lustrze droga substancji między procesami, w przepisie jej opis.
+  // W lustrze: rola substancji w obu procesach i jej droga między nimi (albo zdanie z zadania).
+  const zdanieLustra = (e) => zadanie.wyjasnienia?.[e] ?? P.drogaWLustrze(e, nazwa(e), procesy);
+  const wyjasnienieEtykiety = (e, p) =>
+    lustro && !dystraktory.has(e) ? zdanieLustra(e) : P.powodBledu(p, e, procesy, dystraktory.get(e) ?? null, nazwa(e));
+  // Po dobrym położeniu: w lustrze droga substancji, w przepisie jej opis.
   const zdanieEtykiety = (e) =>
-    lustro ? P.drogaWLustrze(e, nazwa(e), procesy) : procesy.map((pr) => pr.opisy?.[e]).filter(Boolean).join(' ') || katalog.get(e).zdanie;
+    lustro ? zdanieLustra(e) : procesy.map((pr) => pr.opisy?.[e]).filter(Boolean).join(' ') || katalog.get(e).zdanie;
 
   return utworzZadanieEtykiet(kontener, {
     klasa: `przepis${lustro ? ' przepis--lustro' : ''}`,
@@ -119,7 +129,11 @@ export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKon
     komunikaty: {
       wstep: {
         rodzaj: 'info',
-        tytul: lustro ? 'Ułóż oba przepisy na strzałkach między procesami.' : 'Ułóż przepis: przeciągnij składniki i produkty na pola.',
+        tytul: lustro
+          ? 'Ułóż oba przepisy na strzałkach między procesami.'
+          : pola.some((p) => p.strefa === 'warunek')
+            ? 'Ułóż przepis: przeciągnij składniki, zasilanie i produkty na pola.'
+            : 'Ułóż przepis: przeciągnij składniki i produkty na pola.',
         tekst: 'Możesz też stuknąć etykietę, a potem pole.',
       },
       wybor: (e) => ({ rodzaj: 'info', tytul: `Wybrana etykieta: ${nazwa(e)}.`, tekst: 'Stuknij pole w przepisie.' }),

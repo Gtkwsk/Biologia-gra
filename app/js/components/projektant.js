@@ -168,7 +168,7 @@ export function utworzProjektanta(kontener, { zadanie, onKoniec }) {
     }
     const tekst = {
       zadna: `Próby niczym się nie różnią. Takie doświadczenie nie pokaże wpływu czynnika „${nazwaBadanego}”.`,
-      wiele: `Próby różnią się kilkoma czynnikami: ${nazwy(o.roznice)}. Gdyby wyniki były różne, nie wiadomo by było, który czynnik je spowodował. Różnić się może tylko czynnik „${nazwaBadanego}”, a pozostałe warunki muszą być identyczne.`,
+      wiele: `Próby różnią się kilkoma czynnikami: ${nazwy(o.roznice)}. Gdyby wyniki były różne, nie byłoby wiadomo, który czynnik je spowodował. Różnić się może tylko czynnik „${nazwaBadanego}”, a pozostałe warunki muszą być identyczne.`,
       inny: `Próby różnią się czynnikiem ${nazwy(o.roznice)}, a doświadczenie ma badać czynnik „${nazwaBadanego}”.`,
     }[o.powod];
     komunikat.pokaz({ rodzaj: 'zle', tytul: 'Ten plan trzeba poprawić.', tekst });

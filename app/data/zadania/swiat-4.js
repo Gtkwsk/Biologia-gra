@@ -19,13 +19,13 @@ export default [
     id: 's4-przepis-1',
     swiat: 4,
     typ: 'przepis',
-    tresc: 'Kuchnia w chloroplaście: ułóż przepis na fotosyntezę. Skąd biorą się składniki i dokąd trafia to, co powstaje?',
+    tresc: 'Kuchnia w chloroplaście: ułóż przepis na fotosyntezę. Skąd biorą się składniki, co zasila kuchnię i dokąd trafia to, co powstaje?',
     procesy: ['fotosynteza'],
     garnki: [{ karta: 'chloroplast', podpis: 'chloroplast w komórce liścia' }],
     pola: [
       { id: 'co2', substancja: 'dwutlenek-wegla', strefa: 'wejscie', podpis: 'z powietrza przez aparaty szparkowe' },
       { id: 'woda', substancja: 'woda', strefa: 'wejscie', podpis: 'z gleby przez korzenie i komórki przewodzące' },
-      { id: 'swiatlo', substancja: 'swiatlo', strefa: 'wejscie', podpis: 'pochłania je chlorofil' },
+      { id: 'swiatlo', substancja: 'swiatlo', strefa: 'warunek', podpis: 'pochłania je chlorofil' },
       { id: 'pokarm', substancja: 'substancje-pokarmowe', strefa: 'wyjscie', podpis: 'do wszystkich komórek rośliny' },
       { id: 'tlen', substancja: 'tlen', strefa: 'wyjscie', podpis: 'do atmosfery' },
     ],
@@ -41,7 +41,7 @@ export default [
     schemat: 'fotosynteza-roslina',
     punkty: ['swiatlo', 'tlen', 'pokarm', 'woda', 'co2'],
     wyjasnienie:
-      'Dwutlenek węgla wnika do liści z powietrza, wodę pobierają z gleby korzenie, a światło pochłania chlorofil. Powstają substancje pokarmowe, transportowane do wszystkich komórek rośliny, i tlen, który trafia do atmosfery.',
+      'Dwutlenek węgla wnika do liści z powietrza, wodę pobierają z gleby korzenie, a chlorofil pochłania światło. Powstają substancje pokarmowe, transportowane do wszystkich komórek rośliny, i tlen, który trafia do atmosfery.',
     zrodlo: '2.4',
   },
   {
@@ -50,10 +50,10 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdanie o fotosyntezie.',
     tekst:
-      'Do fotosyntezy roślina potrzebuje [dwutlenku węgla|dwutlenek-wegla|Ten gaz wnika do liści z powietrza przez aparaty szparkowe.], który wnika do liści z powietrza, i [wody|woda|Tę substancję korzenie pobierają z gleby.], którą korzenie pobierają z gleby. Energii dostarcza światło, które pochłania [chlorofil|chlorofil|To zielony barwnik zawarty w chloroplastach.]. Powstają [substancje pokarmowe|substancje-pokarmowe|To głównie glukoza.], transportowane do wszystkich komórek rośliny, oraz [tlen|tlen|Ten gaz trafia do atmosfery.], który trafia do atmosfery.',
+      'Do fotosyntezy roślina potrzebuje [dwutlenku węgla|dwutlenek-wegla|Ten gaz wnika do liści z powietrza przez aparaty szparkowe.], który wnika do liści z powietrza, i [wody|woda|Tę substancję korzenie pobierają z gleby.], którą korzenie pobierają z gleby. Energii dostarcza światło pochłaniane przez [chlorofil|chlorofil|To zielony barwnik zawarty w chloroplastach.]. Powstają [substancje pokarmowe|substancje-pokarmowe|To głównie glukoza.], transportowane do wszystkich komórek rośliny, oraz [tlen|tlen|Ten gaz trafia do atmosfery.], który trafia do atmosfery.',
     dystraktory: [
       { tekst: 'tlenu', wyjasnienie: 'Tlen powstaje w fotosyntezie; nie jest jej składnikiem.' },
-      { tekst: 'mitochondria', wyjasnienie: 'Mitochondria dostarczają komórce energii; światło pochłania zielony barwnik.' },
+      { tekst: 'mitochondria', wyjasnienie: 'Mitochondria dostarczają komórce energii. Światło jest pochłaniane przez zielony barwnik zawarty w chloroplastach.' },
     ],
     wyjasnienie: 'Zapis słowny fotosyntezy: dwutlenek węgla + woda → (światło, chlorofil) → substancje pokarmowe + tlen.',
     zrodlo: '2.4',
@@ -70,7 +70,7 @@ export default [
     zdania: [
       { tekst: 'Kwiaty słonecznika obracają się w stronę słońca.', kategoria: 'energia', karta: 'slonecznik', wyjasnienie: 'Ruch kwiatów słonecznika w stronę słońca wymaga energii z substancji pokarmowych.' },
       { tekst: 'Młody słonecznik w ciągu dnia obraca się ku słońcu.', kategoria: 'energia', karta: 'slonecznik', wyjasnienie: 'Na ruch roślina zużywa energię z substancji pokarmowych.' },
-      { tekst: 'Truskawka wytwarza słodkie owoce.', kategoria: 'budowa', karta: 'truskawka', wyjasnienie: 'Z substancji pokarmowych roślina buduje ciało w czasie wzrostu i rozwoju, np. owoce truskawki.' },
+      { tekst: 'Truskawka wytwarza owoce.', kategoria: 'budowa', karta: 'truskawka', wyjasnienie: 'Z substancji pokarmowych roślina buduje ciało w czasie wzrostu i rozwoju, np. owoce truskawki.' },
       { tekst: 'Roślina rośnie i wytwarza nowe liście.', kategoria: 'budowa', wyjasnienie: 'Nowe liście to budowa ciała w czasie wzrostu i rozwoju.' },
       { tekst: 'Roślina wytwarza kwiaty.', kategoria: 'budowa', wyjasnienie: 'Kwiaty powstają z substancji pokarmowych w czasie rozwoju rośliny.' },
       { tekst: 'Ziemniak gromadzi skrobię w bulwach.', kategoria: 'zapas', karta: 'ziemniak', wyjasnienie: 'Skrobia w bulwach ziemniaka to materiał zapasowy.' },
@@ -122,13 +122,13 @@ export default [
     kroki: [
       { czynnik: 'swiatlo', poziom: 3 },
       { czynnik: 'dwutlenek', poziom: 3 },
+      { czynnik: 'sole', poziom: 3 },
       { czynnik: 'swiatlo', poziom: 4 },
       { czynnik: 'temperatura', poziom: 4 },
-      { czynnik: 'sole', poziom: 3 },
     ],
     cel: true,
     wyjasnienie:
-      'W ciemności fotosynteza nie zachodzi. Więcej dwutlenku węgla zwiększa jej intensywność, a nadmiar każdego czynnika ją zmniejsza. O intensywności decyduje czynnik najmniej korzystny.',
+      'W ciemności fotosynteza nie zachodzi. Więcej dwutlenku węgla zwiększa jej intensywność, a nadmiar każdego czynnika ją zmniejsza.',
     zrodlo: '2.4',
   },
   {
@@ -192,7 +192,7 @@ export default [
       { opis: 'Pochmurny dzień, a lampy są zgaszone: w szklarni panuje półmrok.', ustawienia: { swiatlo: 1, dwutlenek: 3, woda: 2, temperatura: 2, sole: 2 } },
     ],
     wyjasnienie:
-      'Fotosyntezę hamuje czynnik najmniej korzystny, jak łańcuch, który jest tak mocny jak jego najsłabsze ogniwo. Niedobór i nadmiar każdego czynnika zmniejsza intensywność fotosyntezy.',
+      'W tych szklarniach fotosyntezę najbardziej hamuje czynnik najmniej korzystny, tak jak łańcuch jest tak mocny jak jego najsłabsze ogniwo. Niedobór i nadmiar każdego czynnika zmniejsza intensywność fotosyntezy.',
     zrodlo: '2.4',
   },
   {
@@ -202,7 +202,7 @@ export default [
     tresc: 'Ogrodnik bada swoje szklarnie. Co pokazuje jego doświadczenie?',
     scena: 'szklarnie-co2',
     opis:
-      'Ogrodnik ma dwie takie same szklarnie z takimi samymi roślinami. W obu jest tak samo jasno, ciepło i wilgotno. Do szklarni A doprowadził dodatkowy dwutlenek węgla, a w szklarni B zostawił zwykłe powietrze. Po kilku tygodniach porównał rośliny.',
+      'Ogrodnik ma dwie takie same szklarnie z takimi samymi roślinami. W obu jest tak samo jasno, ciepło i wilgotno. Do szklarni A doprowadził dodatkowy dwutlenek węgla, a w szklarni B zostawił zwykłe powietrze. Po kilku tygodniach porównał rośliny: w szklarni A były wyraźnie większe niż w szklarni B.',
     kroki: [
       {
         pytanie: 'Który czynnik ogrodnik zmienił w szklarni A?',
@@ -279,7 +279,7 @@ export default [
         pytanie: 'Co pokazały wyniki?',
         opcje: [
           { tekst: 'W świetle gałązka wydzielała pęcherzyki tlenu, a w ciemności nie wydzielała ich wcale.', poprawna: true },
-          { tekst: 'W obu próbach pęcherzyków było tyle samo.', wyjasnienie: 'Porównaj liczby w tabeli wyników.' },
+          { tekst: 'W obu próbach pęcherzyków było tyle samo.', wyjasnienie: 'W ciemności nie pojawił się ani jeden pęcherzyk tlenu, a w świetle pęcherzyki się pojawiały.' },
           { tekst: 'W ciemności pęcherzyków było więcej.', wyjasnienie: 'W ciemności nie było ani jednego pęcherzyka tlenu.' },
         ],
         wyjasnienie: 'W ciemności nie powstaje tlen, bo nie zachodzi fotosynteza.',
@@ -567,7 +567,7 @@ export default [
     schemat: 'fotosynteza-lisc',
     punkty: ['swiatlo', 'tlen', 'chloroplast', 'pokarm', 'woda', 'co2'],
     dystraktory: [{ karta: 'mitochondrium', wyjasnienie: 'Mitochondria dostarczają komórce energii, a fotosynteza zachodzi w chloroplastach.' }],
-    wyjasnienie: 'Fotosynteza zachodzi w chloroplastach. Dwutlenek węgla wnika z powietrza, woda dopływa przez komórki przewodzące, a powstają substancje pokarmowe i tlen.',
+    wyjasnienie: 'Fotosynteza zachodzi w chloroplastach. Dwutlenek węgla wnika z powietrza, a woda dopływa przez komórki przewodzące. Powstają przy tym substancje pokarmowe i tlen.',
     zrodlo: '2.4',
   },
   {
@@ -811,7 +811,7 @@ export default [
         tekst: 'Fotosynteza zachodzi głównie w liściach, w chloroplastach.',
         prawda: true,
         karta: 'fotosynteza',
-        wyjasnienie: 'Komórki liści są pełne chloroplastów z chlorofilem.',
+        wyjasnienie: 'Chloroplasty zawierają chlorofil, a fotosynteza zachodzi głównie w liściach.',
       },
       {
         tekst: 'Dwutlenek węgla roślina pobiera z gleby przez korzenie.',
@@ -822,7 +822,7 @@ export default [
         wyjasnienie: 'Z gleby korzenie pobierają wodę, a dwutlenek węgla pochodzi z powietrza.',
       },
       {
-        tekst: 'Światło pochłania chlorofil.',
+        tekst: 'Chlorofil pochłania światło.',
         prawda: true,
         karta: 'chlorofil',
         wyjasnienie: 'Chlorofil to zielony barwnik zawarty w chloroplastach.',

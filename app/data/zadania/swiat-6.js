@@ -11,7 +11,7 @@ const OW = [
 ];
 
 const DEF_W = 'Wymiana gazowa to dostarczanie organizmowi tlenu i usuwanie z niego dwutlenku węgla.';
-const DEF_O = 'Oddychanie komórkowe to rozkład substancji pokarmowych i uwalnianie zawartej w nich energii, w każdej żywej komórce.';
+const DEF_O = 'Oddychanie komórkowe to proces zachodzący w każdej żywej komórce: rozkład substancji pokarmowych i uwalnianie zawartej w nich energii.';
 
 // Zdania do sortera O/W (TRESCI.md, sekcja 2.6). Talie składają się z nich po osiem.
 const Z = {
@@ -22,7 +22,7 @@ const Z = {
   o5: { tekst: 'Z udziałem tlenu rozkłada glukozę do dwutlenku węgla i wody.', kategoria: 'O', karta: 'oddychanie-tlenowe', wyjasnienie: 'To oddychanie tlenowe, czyli oddychanie komórkowe z udziałem tlenu. Wymiana gazowa niczego nie rozkłada: dostarcza tlen i usuwa dwutlenek węgla.' },
   o6: { tekst: 'Uwalnia energię potrzebną do wzrostu i rozwoju.', kategoria: 'O', karta: 'energia', wyjasnienie: 'Energię potrzebną m.in. do wzrostu i rozwoju uwalnia oddychanie komórkowe.' },
   o7: { tekst: 'Zachodzi w komórkach mięśni w czasie biegu.', kategoria: 'O', wyjasnienie: 'W komórkach mięśni zachodzi oddychanie komórkowe, które dostarcza im energii.' },
-  o8: { tekst: 'Zachodzi w komórkach roślin w dzień i w nocy.', kategoria: 'O', wyjasnienie: 'Rośliny oddychają cały czas: oddychanie komórkowe zachodzi w ich komórkach w dzień i w nocy.' },
+  o8: { tekst: 'W komórkach roślin uwalnia energię w dzień i w nocy.', kategoria: 'O', wyjasnienie: 'Rośliny oddychają cały czas: oddychanie komórkowe zachodzi w ich komórkach w dzień i w nocy.' },
   o9: { tekst: 'U większości organizmów zużywa w komórkach glukozę i tlen.', kategoria: 'O', karta: 'oddychanie-tlenowe', wyjasnienie: 'U większości organizmów oddychanie komórkowe zachodzi z udziałem tlenu: komórki zużywają glukozę i tlen. Wymiana gazowa tylko dostarcza tlen do organizmu.' },
   w1: { tekst: 'Dostarcza organizmowi tlenu.', kategoria: 'W', wyjasnienie: DEF_W },
   w2: { tekst: 'Usuwa z organizmu dwutlenek węgla.', kategoria: 'W', wyjasnienie: DEF_W },
@@ -167,7 +167,7 @@ export default [
             opcje: [
               { tekst: 'do wątroby, gdzie służy do produkcji glukozy', poprawna: true },
               { tekst: 'do płuc, gdzie zamienia się w tlen', wyjasnienie: 'W płucach zachodzi wymiana gazowa; kwas mlekowy nie zamienia się w tlen.' },
-              { tekst: 'do żołądka, gdzie jest trawiony', wyjasnienie: 'Krew przenosi kwas mlekowy do wątroby.' },
+              { tekst: 'do żołądka, gdzie jest trawiony', wyjasnienie: 'Trawienie to rozkład związków z pokarmu, a kwas mlekowy powstaje w mięśniach. Krew przenosi go do wątroby, gdzie służy do produkcji glukozy.' },
             ],
             wyjasnienie: 'W ciągu kilkudziesięciu minut krew przenosi kwas mlekowy z mięśni do wątroby, gdzie służy do produkcji glukozy.',
             karta: 'kwas-mlekowy',
@@ -183,7 +183,7 @@ export default [
     id: 's6-przepis-mlekowa-1',
     swiat: 6,
     typ: 'przepis',
-    tresc: 'Awaryjna kuchnia w mięśniu: ułóż przepis fermentacji mlekowej.',
+    tresc: 'Awaryjna kuchnia w mięśniu: ułóż przepis na fermentację mlekową.',
     procesy: ['fermentacja-mlekowa'],
     garnki: [{ karta: 'fermentacja-mlekowa', podpis: 'cytozol komórki mięśnia szkieletowego' }],
     pola: [
@@ -288,7 +288,7 @@ export default [
     id: 's6-piekarnia-1',
     swiat: 6,
     typ: 'przepis',
-    tresc: 'Piekarnia drożdżowa: ułóż przepis fermentacji alkoholowej i zobacz, co dzieje się z ciastem.',
+    tresc: 'Piekarnia drożdżowa: ułóż przepis na fermentację alkoholową i zobacz, co dzieje się z ciastem.',
     procesy: ['fermentacja-alkoholowa'],
     garnki: [{ karta: 'drozdze', podpis: 'komórka drożdży w cieście' }],
     pola: [
@@ -300,7 +300,7 @@ export default [
     dopasowanie: 'strefa',
     dystraktory: [
       { karta: 'tlen', wyjasnienie: 'Fermentacja to rozkład glukozy bez udziału tlenu.' },
-      { karta: 'woda', wyjasnienie: 'Woda nie bierze udziału w fermentacji alkoholowej: nie jest jej składnikiem ani produktem. Woda powstaje w oddychaniu tlenowym.' },
+      { karta: 'woda', wyjasnienie: 'Wody nie ma w zapisie fermentacji alkoholowej: nie jest jej składnikiem ani produktem. Woda powstaje w oddychaniu tlenowym.' },
       { karta: 'kwas-mlekowy', wyjasnienie: 'Kwas mlekowy powstaje w fermentacji mlekowej, np. w mięśniach.' },
     ],
     scena: { id: 'ciasto', substancja: 'dwutlenek-wegla' },
@@ -313,7 +313,7 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdania o drożdżach.',
     tekst:
-      'Drożdże to jednokomórkowe [grzyby|drozdze]. Przeprowadzają fermentację [alkoholową|fermentacja-alkoholowa], w której glukoza jest rozkładana bez udziału [tlenu|fermentacja]. Powstaje przy tym [alkohol etylowy|alkohol-etylowy], a dwutlenek węgla [spulchnia|drozdze|To słowo opisuje, co dzieje się z ciastem na pieczywo.] ciasto na pieczywo.',
+      'Drożdże to jednokomórkowe [grzyby|drozdze]. Przeprowadzają fermentację [alkoholową|fermentacja-alkoholowa], w której glukoza jest rozkładana bez udziału [tlenu|fermentacja]. Powstają przy tym [alkohol etylowy|alkohol-etylowy] i dwutlenek węgla, który [spulchnia|drozdze|To słowo opisuje, co dzieje się z ciastem na pieczywo.] ciasto na pieczywo.',
     dystraktory: [
       { tekst: 'kwas mlekowy', wyjasnienie: 'Kwas mlekowy powstaje w fermentacji mlekowej.' },
       { tekst: 'bakterie', wyjasnienie: 'Drożdże to grzyby, a nie bakterie.' },
@@ -368,7 +368,7 @@ export default [
     procesy: ['fotosynteza', 'oddychanie-tlenowe'],
     garnki: [
       { karta: 'chloroplast', podpis: 'fotosynteza w chloroplaście' },
-      { karta: 'mitochondrium', podpis: 'oddychanie tlenowe w mitochondrium' },
+      { karta: 'mitochondrium', podpis: 'oddychanie tlenowe, głównie w mitochondrium' },
     ],
     pola: [
       { id: 'swiatlo', substancja: 'swiatlo', strefa: 'wejscie-lewe' },
@@ -379,6 +379,11 @@ export default [
       { id: 'energia', substancja: 'energia', strefa: 'wyjscie-prawe' },
     ],
     dopasowanie: 'strefa',
+    // Energia z oddychania nie zasila fotosyntezy; fotosyntezę zasila energia świetlna (TRESCI.md, 2.4).
+    wyjasnienia: {
+      energia:
+        'Energia to produkt oddychania tlenowego: organizm zużywa ją m.in. do wzrostu i rozwoju. Fotosyntezę zasila energia świetlna, którą pochłania chlorofil, a nie energia z oddychania.',
+    },
     ciekawostka: 'Fotosynteza i oddychanie tlenowe są jak odbicia w lustrze: produkty jednego procesu są substratami drugiego.',
     wyjasnienie:
       'Fotosynteza: dwutlenek węgla + woda → (światło, chlorofil) → substancje pokarmowe (głównie glukoza) + tlen. Oddychanie tlenowe: glukoza + tlen → dwutlenek węgla + woda + energia.',

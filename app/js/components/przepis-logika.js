@@ -6,7 +6,9 @@
 // strzałkach między nimi: produkty jednego procesu są składnikami drugiego.
 //
 // Pole: { id, substancja, strefa, podpis }
-//   strefa: 'wejscie' | 'wyjscie' (jeden proces) albo 'wejscie-lewe' | 'gora' | 'dol' | 'wyjscie-prawe' (lustro).
+//   strefa: 'wejscie' (składniki) | 'warunek' (zasilanie, np. światło; w zapisie słownym nad
+//   strzałką) | 'wyjscie' (produkty) przy jednym procesie albo 'wejscie-lewe' | 'gora' | 'dol' |
+//   'wyjscie-prawe' w lustrze.
 // Dopasowanie: 'pole' – karta pasuje tylko do pola ze swoją substancją (pola różnią się drogą,
 //   np. dwutlenek węgla z powietrza, woda z gleby); 'strefa' – karty tej samej strefy są
 //   wymienne (np. dwa produkty fermentacji).
@@ -32,6 +34,9 @@ export function pasujeDoStrefy(strefa, idKarty, [lewy, prawy = null]) {
   const rp = prawy ? rola(prawy, idKarty) : null;
   switch (strefa) {
     case 'wejscie':
+      return rl === 'substrat';
+    case 'warunek':
+      return rl === 'warunek';
     case 'wejscie-lewe':
       return rl === 'substrat' || rl === 'warunek';
     case 'wyjscie':
@@ -78,6 +83,9 @@ export function powodBledu(pole, idKarty, procesy, dystraktor = null, nazwa = id
   const r = rola(lewy, idKarty);
   const opis = lewy.opisy?.[idKarty] ?? '';
   if (pole.strefa === 'wejscie' && r === 'produkt') return `To nie składnik ${lewy.dopelniacz}, tylko produkt. ${opis}`.trim();
+  if (pole.strefa === 'wejscie' && r === 'warunek') return `To nie składnik ${lewy.dopelniacz}, tylko warunek: w zapisie słownym stoi nad strzałką. ${opis}`.trim();
+  if (pole.strefa === 'warunek' && r === 'substrat') return `To składnik ${lewy.dopelniacz}, a nie warunek: w zapisie słownym stoi przed strzałką. ${opis}`.trim();
+  if (pole.strefa === 'warunek' && r === 'produkt') return `To produkt ${lewy.dopelniacz}, a nie warunek. ${opis}`.trim();
   if (pole.strefa === 'wyjscie' && (r === 'substrat' || r === 'warunek')) return `To nie produkt ${lewy.dopelniacz}. ${opis}`.trim();
   return pole.podpis ? `${opis} To pole: ${pole.podpis}.`.trim() : opis;
 }

@@ -12,7 +12,7 @@ export default [
     kategoria: 'organizm samożywny (roślina)',
     swiat: 4,
     opis: 'roślina, której gałązki w doświadczeniu wydzielają pęcherzyki tlenu',
-    zdanie: 'Moczarka kanadyjska to roślina, w której liściach widać chloroplasty. Jej gałązki zanurzone w wodzie wydzielają pęcherzyki tlenu, które można policzyć.',
+    zdanie: 'Moczarka kanadyjska to roślina, w której komórkach liści pod mikroskopem widać chloroplasty. Jej gałązki zanurzone w wodzie wydzielają pęcherzyki tlenu, które można policzyć.',
     zrodlo: '2.4',
   },
   {

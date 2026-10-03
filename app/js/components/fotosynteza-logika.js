@@ -27,6 +27,8 @@ export const CZYNNIKI = [
     karta: 'dwutlenek-wegla',
     ikona: 'dwutlenek-wegla',
     poziomy: ['brak', 'mało', 'tyle co w wodzie z kranu', 'więcej, jak w wodzie gazowanej', 'za dużo'],
+    // W szklarni dwutlenek węgla jest w powietrzu, nie w wodzie (TRESCI.md, 2.4).
+    poziomySzklarnia: ['brak', 'mało', 'tyle co w zwykłym powietrzu', 'więcej, jak po dodaniu dwutlenku węgla', 'za dużo'],
     wydajnosc: [0, 0.3, 0.6, 1, 0.55],
   },
   {
@@ -56,6 +58,12 @@ export const CZYNNIKI = [
 ];
 
 export const CZYNNIK = Object.fromEntries(CZYNNIKI.map((c) => [c.id, c]));
+
+// Nazwa poziomu czynnika; roslina: 'moczarka' (akwarium) albo 'szklarnia'.
+export function nazwaPoziomu(idCzynnika, poziom, roslina = 'moczarka') {
+  const c = CZYNNIK[idCzynnika];
+  return (roslina === 'szklarnia' && c.poziomySzklarnia ? c.poziomySzklarnia : c.poziomy)[poziom];
+}
 
 // Poziom o najwyższej wydajności.
 export function optimum(idCzynnika) {
@@ -110,7 +118,7 @@ const WYJASNIENIA = {
   swiatlo: {
     brak: 'W ciemności fotosynteza nie zachodzi: to światło dostarcza energii, którą pochłania chlorofil.',
     niedobor: 'Niedobór światła zmniejsza intensywność fotosyntezy.',
-    optimum: 'Pełne światło: chlorofil ma dość energii do fotosyntezy.',
+    optimum: 'Pełne światło: roślina ma dość energii świetlnej do fotosyntezy.',
     nadmiar: 'Nadmiar światła też zmniejsza intensywność fotosyntezy.',
   },
   dwutlenek: {
@@ -131,7 +139,7 @@ const WYJASNIENIA = {
     nadmiar: 'Zbyt wysoka temperatura zmniejsza intensywność fotosyntezy.',
   },
   sole: {
-    niedobor: 'Niedobór soli mineralnych zmniejsza intensywność fotosyntezy. Na przykład bez magnezu powstaje mniej chlorofilu.',
+    niedobor: 'Niedobór soli mineralnych zmniejsza intensywność fotosyntezy. Na przykład przy niedoborze magnezu powstaje mniej chlorofilu.',
     optimum: 'Soli mineralnych jest w sam raz.',
     nadmiar: 'Nadmiar soli mineralnych też zmniejsza intensywność fotosyntezy.',
   },
@@ -152,7 +160,9 @@ export function wyjasnienieSkutku(ustawienia, idCzynnika, poziom) {
   const hamuje = najslabsze(po).filter((id) => id !== idCzynnika);
   if (!hamuje.length) return wyjasnienieCzynnika(idCzynnika, poziom);
   const nazwy = hamuje.map((id) => CZYNNIK[id].nazwa).join(' i ');
-  return `Fotosyntezę hamuje teraz inny czynnik: ${nazwy}. Dopóki go nie poprawisz, zmiana tego czynnika nie pomoże, jak w łańcuchu, który pęka w najsłabszym ogniwie.`;
+  return hamuje.length === 1
+    ? `Fotosyntezę hamuje teraz inny czynnik: ${nazwy}. Dopóki go nie poprawisz, zmiana tego czynnika nic nie da, jak w łańcuchu, który pęka w najsłabszym ogniwie.`
+    : `Fotosyntezę hamują teraz inne czynniki: ${nazwy}. Dopóki ich nie poprawisz, zmiana tego czynnika nic nie da, jak w łańcuchu, który pęka w najsłabszym ogniwie.`;
 }
 
 // Plan doświadczenia: dwie próby { czynnik: poziom }. Zwraca czynniki, którymi się różnią.
