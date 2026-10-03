@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Wyprawa do wnętrza życia",
+  "short_name": "Wyprawa",
+  "description": "Gra do nauki biologii: budowa i czynności życiowe organizmów (klasa 5).",
+  "lang": "pl",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F4F6F1",
+  "theme_color": "#11191B",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "assets/ikony/ikona-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/ikony/ikona-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/ikony/ikona-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/ikony/ikona.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,757 @@
+/* Ekrany: mapa, wstęp świata, misja, podsumowanie, baza, panel rodzica. */
+
+/* ---------- Mapa ---------- */
+
+.ekran--mapa {
+  padding-top: 12px;
+}
+
+.mapa__naglowek {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 6px 0 8px;
+}
+
+.logo {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.logo__znak {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  background: var(--okular);
+  border-radius: 50%;
+  box-shadow: 0 4px 0 rgba(17, 25, 27, 0.3);
+}
+
+.logo__szklo {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  background: #fdebef;
+  border: 3px solid #5a6b6e;
+  border-radius: 50%;
+}
+
+.logo__szklo::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  background: #d6c4ee;
+  border: 2px solid #4e3684;
+  border-radius: 50%;
+}
+
+.logo__tytul {
+  margin: 0;
+  font-size: var(--r-4);
+  line-height: 1.05;
+}
+
+.logo__pierwszy {
+  color: var(--blekit);
+}
+
+.mapa__gracz {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.mapa__gracz-etykieta {
+  display: block;
+  font-size: var(--r-0);
+  font-weight: 600;
+  color: var(--atrament-jasny);
+}
+
+.mapa__baza {
+  margin-left: auto;
+}
+
+.mapa__plansza {
+  position: relative;
+  margin-top: 10px;
+}
+
+.mapa__sciezka {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.mapa__sciezka-linia {
+  fill: none;
+  stroke: var(--atrament);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 15;
+  opacity: 0.4;
+}
+
+.mapa__swiaty {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.swiat__przycisk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 6px 4px;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  background: none;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.swiat__opis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.swiat__czesc {
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.swiat__tytul {
+  max-width: 14em;
+  font-family: var(--font-tytul);
+  font-size: var(--r-2);
+  line-height: 1.15;
+}
+
+.swiat__stan {
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.swiat[data-status='w-budowie'] .swiat__tytul,
+.swiat[data-status='zablokowany'] .swiat__tytul {
+  color: var(--atrament-jasny);
+}
+
+.mapa__stopka {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+@media (min-width: 520px) {
+  .mapa__swiaty {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Ścieżka wężykiem: 1 → 2 → 3 → 4 → 5 → 6 */
+  .swiat:nth-child(1) {
+    grid-area: 1 / 1;
+  }
+  .swiat:nth-child(2) {
+    grid-area: 1 / 2;
+  }
+  .swiat:nth-child(3) {
+    grid-area: 2 / 2;
+  }
+  .swiat:nth-child(4) {
+    grid-area: 2 / 1;
+  }
+  .swiat:nth-child(5) {
+    grid-area: 3 / 1;
+  }
+  .swiat:nth-child(6) {
+    grid-area: 3 / 2;
+  }
+}
+
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .mapa__swiaty {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 24px;
+  }
+  .swiat:nth-child(1) {
+    grid-area: 1 / 1;
+  }
+  .swiat:nth-child(2) {
+    grid-area: 1 / 2;
+    margin-top: 44px;
+  }
+  .swiat:nth-child(3) {
+    grid-area: 1 / 3;
+  }
+  .swiat:nth-child(4) {
+    grid-area: 2 / 3;
+  }
+  .swiat:nth-child(5) {
+    grid-area: 2 / 2;
+    margin-top: 44px;
+  }
+  .swiat:nth-child(6) {
+    grid-area: 2 / 1;
+  }
+}
+
+/* ---------- Soczewka i ostrość ---------- */
+
+.soczewka {
+  --rozmiar: clamp(112px, 16vw, 156px);
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--rozmiar);
+  height: var(--rozmiar);
+  overflow: hidden;
+  background: var(--swiat-tlo);
+  border: 10px solid var(--okular);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 3px #5a6b6e, 0 6px 0 rgba(17, 25, 27, 0.28);
+  transition: transform 0.15s;
+}
+
+.soczewka--duza {
+  --rozmiar: clamp(150px, 24vw, 220px);
+  border-width: 14px;
+}
+
+.soczewka__scena,
+.soczewka__scena svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.soczewka__scena {
+  filter: blur(var(--rozmycie, 0px));
+  transform: scale(1.08);
+  transition: filter 0.6s;
+}
+
+.soczewka[data-status='w-budowie'] .soczewka__scena {
+  filter: blur(5px) grayscale(0.5);
+}
+
+.soczewka[data-status='zablokowany'] .soczewka__scena {
+  filter: blur(6px) grayscale(0.6);
+}
+
+.soczewka__tasma {
+  position: absolute;
+  top: 50%;
+  left: -12%;
+  right: -12%;
+  padding: 3px 0;
+  font-family: var(--font-tytul);
+  font-size: var(--r-0);
+  text-align: center;
+  color: var(--okular);
+  background: #f5c400;
+  border-top: 4px solid var(--okular);
+  border-bottom: 4px solid var(--okular);
+  transform: translateY(-50%) rotate(-12deg);
+}
+
+.soczewka__zaslepka {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-tytul);
+  font-size: calc(var(--rozmiar) * 0.35);
+  color: #8fa2a5;
+  background: #2a3436;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 8px #3a4a4d;
+}
+
+.swiat__przycisk:hover .soczewka,
+.swiat__przycisk:focus-visible .soczewka {
+  transform: scale(1.04);
+}
+
+.swiat__przycisk:active .soczewka {
+  transform: scale(0.97);
+}
+
+.ostrosc {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.ostrosc__pasek {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.ostrosc__klocek {
+  width: 15px;
+  height: 15px;
+  background: var(--bialy);
+  border: 2px solid var(--okular);
+  border-radius: 3px;
+}
+
+.ostrosc__klocek[data-pelny='true'] {
+  background: var(--chlorofil);
+}
+
+/* ---------- Wstęp świata ---------- */
+
+.swiat-wstep {
+  display: grid;
+  align-items: center;
+  gap: 1.25rem 2.25rem;
+  padding: 1.5rem;
+  color: var(--swiat-na-tle);
+  background: var(--swiat-tlo);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 14px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+@media (min-width: 760px) {
+  .swiat-wstep {
+    grid-template-columns: auto 1fr;
+    padding: 1.75rem 2.25rem;
+  }
+}
+
+.swiat-wstep__scena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.swiat-wstep .ostrosc {
+  color: inherit;
+}
+
+.swiat-wstep__czesc {
+  margin-bottom: 0.3rem;
+  font-size: var(--r-0);
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.swiat-wstep__tytul {
+  font-size: var(--r-5);
+  color: var(--swiat-tytul);
+}
+
+.swiat-wstep__akapit {
+  font-size: var(--r-2);
+  line-height: 1.45;
+}
+
+.swiat-tresc {
+  display: grid;
+  gap: 1.5rem 2rem;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 900px) {
+  .swiat-tresc {
+    grid-template-columns: 1.3fr 1fr;
+    align-items: start;
+  }
+}
+
+.misje__lista {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.misja-karta {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  min-height: 64px;
+  margin-bottom: 6px;
+  padding: 1rem 3.25rem 1rem 1.25rem;
+  color: var(--atrament);
+  text-decoration: none;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: var(--promien);
+  box-shadow: 0 6px 0 var(--okular);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.misja-karta::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 1.4rem;
+  width: 14px;
+  height: 14px;
+  border-right: 4px solid var(--atrament);
+  border-bottom: 4px solid var(--atrament);
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+.misja-karta:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--okular);
+}
+
+.misja-karta__nazwa {
+  font-family: var(--font-tytul);
+  font-size: var(--r-3);
+  line-height: 1.1;
+}
+
+.misja-karta__opis {
+  color: var(--atrament-jasny);
+}
+
+.misja-karta__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--r-0);
+  font-weight: 700;
+}
+
+.misja-karta__stan {
+  padding: 0.05em 0.65em;
+  background: var(--blekit-jasny);
+  border: 2px solid var(--okular);
+  border-radius: 999px;
+}
+
+.misja-karta[data-stan='ukonczona'] .misja-karta__stan {
+  background: #fff3c4;
+}
+
+.misja-karta[data-stan='opanowana'] .misja-karta__stan {
+  background: var(--chlorofil-jasny);
+}
+
+.co-zbadasz ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.co-zbadasz li {
+  margin-bottom: 0.35em;
+}
+
+.ciekawostka {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) dashed var(--atrament-jasny);
+  border-radius: var(--promien);
+}
+
+.ciekawostka__naglowek {
+  font-size: var(--r-2);
+  color: var(--blekit);
+}
+
+.ciekawostka p {
+  margin: 0;
+}
+
+/* ---------- Misja ---------- */
+
+.misja__polecenie {
+  margin: 0 0 10px;
+  font-size: var(--r-3);
+}
+
+.wczytywanie {
+  color: var(--atrament-jasny);
+}
+
+.misja__wynik {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+.misja__wynik-tytul {
+  color: var(--chlorofil);
+}
+
+.misja__koniec {
+  font-weight: 700;
+}
+
+/* ---------- Podsumowanie ---------- */
+
+.podsumowanie {
+  max-width: 46rem;
+  margin: 0.5rem auto;
+  padding: 1.5rem 1.75rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 14px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+.podsumowanie h1 {
+  color: var(--chlorofil);
+}
+
+.podsumowanie__wynik {
+  font-size: var(--r-2);
+  font-weight: 700;
+}
+
+.podsumowanie__sekcja {
+  margin-top: 1.25rem;
+}
+
+.podsumowanie__sekcja h2 {
+  font-size: var(--r-2);
+}
+
+.lista-etykiet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.znaczek {
+  padding: 0.2em 0.7em;
+  font-weight: 700;
+  background: var(--bialy);
+  border: 2px solid var(--okular);
+  border-radius: 6px;
+}
+
+.znaczek--dobrze {
+  background: var(--chlorofil-jasny);
+}
+
+.lista-opisow {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.lista-opisow li {
+  margin-bottom: 0.4em;
+}
+
+/* ---------- Baza ---------- */
+
+.baza__tytul {
+  margin-top: 0.25rem;
+}
+
+.baza__stanowiska {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.25rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stanowisko {
+  padding: 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.stanowisko__znak {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 0.75rem;
+  background: var(--blekit-jasny);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 10px;
+}
+
+.stanowisko[data-stanowisko='mikroskop'] .stanowisko__znak {
+  background: #fdebef;
+  border-width: 9px;
+  border-radius: 50%;
+}
+
+.stanowisko[data-stanowisko='laboratorium'] .stanowisko__znak {
+  background: var(--chlorofil-jasny);
+  border-radius: 10px 10px 26px 26px;
+}
+
+.stanowisko__nazwa {
+  font-size: var(--r-3);
+}
+
+.stanowisko__opis {
+  color: var(--atrament-jasny);
+}
+
+.stanowisko__stan {
+  display: inline-block;
+  padding: 0.15em 0.7em;
+  font-size: var(--r-0);
+  font-weight: 700;
+  background: #f5c400;
+  border: 2px solid var(--okular);
+  border-radius: 6px;
+}
+
+/* ---------- Panel rodzica (spokojny, bez klimatu gry) ---------- */
+
+.ekran--rodzic {
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+.bramka {
+  max-width: 30rem;
+  margin: 0.5rem auto;
+  padding: 1.5rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 14px;
+}
+
+.bramka__pytanie {
+  display: block;
+  margin: 0.75rem 0 0.5rem;
+  font-family: var(--font-tytul);
+  font-size: var(--r-3);
+}
+
+.bramka__blad {
+  min-height: 1.5em;
+  margin: 0.5rem 0 0;
+  font-weight: 700;
+  color: var(--eozyna);
+}
+
+.panel-sekcja {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--bialy);
+  border: 2px solid var(--papier-ciemny);
+  border-radius: 10px;
+}
+
+.panel-sekcja h2 {
+  font-size: var(--r-2);
+}
+
+.tabela-przewijana {
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  border-collapse: collapse;
+}
+
+.tabela th,
+.tabela td {
+  padding: 0.45em 0.6em;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #d5dbd3;
+}
+
+.tabela thead th {
+  font-size: var(--r-0);
+  color: var(--atrament-jasny);
+}
+
+.ustawienie {
+  margin: 0.75rem 0;
+}
+
+.ustawienie > label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+}
+
+.ustawienie__wiersz {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ustawienie__wiersz .przycisk {
+  margin-bottom: 4px;
+}
+
+.ustawienie--przelacznik {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ustawienie--przelacznik input {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  accent-color: var(--blekit);
+}
+
+.ustawienie--przelacznik label {
+  margin: 0;
+  font-weight: 600;
+}
+
+.potwierdzenie {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--eozyna-jasna);
+  border: var(--kontur) solid var(--eozyna);
+  border-radius: var(--promien);
+}
+
+.panel-wersja {
+  margin-top: 1.25rem;
+  font-size: var(--r-0);
+  color: var(--atrament-jasny);
+}
