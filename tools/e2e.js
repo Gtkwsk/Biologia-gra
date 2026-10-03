@@ -501,7 +501,7 @@ console.log('Telefon');
     ['#/swiat/4/misja/s4-ogniwo', 'najsłabsze ogniwo'],
     ['#/swiat/4/misja/s4-projektant', 'projektant doświadczeń'],
     ['#/swiat/5/misja/s5-uczta', 'wielka uczta'],
-    ['#/swiat/5/misja/s5-atlas', 'atlas Bieszczad'],
+    ['#/swiat/5/misja/s5-atlas', 'atlas Bieszczadów'],
     ['#/swiat/5/misja/s5-lancuchy', 'łańcuchy pokarmowe'],
     ['#/swiat/5/misja/s5-trawienie', 'trawienie jako rozbiórka'],
     ['#/swiat/5/misja/s5-las', 'las bez sprzątaczy'],

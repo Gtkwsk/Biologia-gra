@@ -22,7 +22,7 @@ export default [
       'z jakich pierwiastków chemicznych są zbudowane organizmy',
       'czego jest najwięcej w ciele człowieka, a czego najmniej',
       'do czego organizmom woda',
-      'po co roślinom magnez, a zwierzętom wapń',
+      'do czego organizmom wapń i magnez',
       'jakie funkcje pełnią cukry, białka, tłuszcze i kwasy nukleinowe',
     ],
     misje: [
@@ -322,7 +322,7 @@ export default [
       },
       {
         id: 's5-atlas',
-        nazwa: 'Atlas Bieszczad',
+        nazwa: 'Atlas Bieszczadów',
         opis: 'Roślinożercy, drapieżniki, padlinożercy i wszystkożercy: przyporządkuj zwierzęta.',
         zadania: ['s5-atlas-klas-1', 's5-atlas-przyp-1', 's5-atlas-klas-2'],
       },
@@ -358,8 +358,8 @@ export default [
       },
     ],
     boss: {
-      nazwa: 'Król Bieszczad',
-      opis: 'Król Bieszczad sprawdza, czy wiesz, kto co je, jak żyją pasożyty i po co organizmy trawią pokarm.',
+      nazwa: 'Król Bieszczadów',
+      opis: 'Król Bieszczadów sprawdza, czy wiesz, kto co je, jak żyją pasożyty i po co organizmy trawią pokarm.',
       wyzwania: [
         { pula: ['s5-luki-cudzozywnosc-1', 's5-boss-luki-2', 's5-boss-luki-3', 's5-boss-luki-4', 's5-boss-luki-5'] },
         { pula: ['s5-atlas-przyp-1', 's5-boss-przyp-2', 's5-boss-przyp-3', 's5-boss-przyp-4', 's5-boss-przyp-5'] },

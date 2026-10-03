@@ -113,7 +113,7 @@ export default [
     elementy: [
       { tekst: 'topola', kategoria: 'samozywny', karta: 'topola', wyjasnienie: 'Topola jest rośliną, a rośliny same wytwarzają pokarm.' },
       { tekst: 'podbiał', kategoria: 'samozywny', karta: 'podbial', wyjasnienie: 'Podbiał jest rośliną, a rośliny same wytwarzają pokarm.' },
-      { tekst: 'sinice', kategoria: 'samozywny', karta: 'sinice', wyjasnienie: 'Sinice to nieliczne bakterie samożywne.' },
+      { tekst: 'sinice', kategoria: 'samozywny', karta: 'sinice', wyjasnienie: 'Sinice należą do nielicznych bakterii samożywnych.' },
       { tekst: 'żubr', kategoria: 'cudzozywny', karta: 'zubr', wyjasnienie: 'Zwierzęta, np. żubr, pobierają gotowy pokarm z otoczenia.' },
       { tekst: 'pleśniak biały', kategoria: 'cudzozywny', karta: 'plesniak-bialy', wyjasnienie: 'Grzyby, np. pleśniak biały, są cudzożywne.' },
       { tekst: 'orzeł przedni', kategoria: 'cudzozywny', karta: 'orzel-przedni', wyjasnienie: 'Zwierzęta, np. orzeł przedni, pobierają gotowy pokarm z otoczenia.' },
@@ -128,7 +128,7 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdania o cudzożywności.',
     tekst:
-      'Organizmy cudzożywne nie wytwarzają pokarmu, tylko pobierają z otoczenia pokarm [gotowy|organizm-cudzozywny]. Należą do nich zwierzęta, [grzyby|organizm-cudzozywny], większość bakterii i niektóre protisty. Pokarm zawiera związki [złożone|trawienie], które organizm może wykorzystać dopiero po rozłożeniu na związki [proste|zwiazki-proste]. Ten rozkład zachodzi podczas [trawienia|trawienie].',
+      'Organizmy cudzożywne nie wytwarzają pokarmu, tylko pobierają [gotowy|organizm-cudzozywny] pokarm z otoczenia. Należą do nich zwierzęta, [grzyby|organizm-cudzozywny], większość bakterii i niektóre protisty. Pokarm zawiera związki [złożone|trawienie|Cukry, białka i tłuszcze z pokarmu to związki złożone.], które organizm może wykorzystać dopiero po rozłożeniu na związki [proste|zwiazki-proste|Trawienie rozkłada związki złożone na związki proste.]. Ten rozkład zachodzi podczas [trawienia|trawienie].',
     dystraktory: [
       { tekst: 'rośliny', wyjasnienie: 'Rośliny same wytwarzają pokarm: są samożywne.' },
       { tekst: 'fotosyntezy', wyjasnienie: 'W fotosyntezie roślina wytwarza pokarm; złożone związki z pokarmu rozkłada trawienie.' },
@@ -228,10 +228,10 @@ export default [
     zrodlo: '2.5',
   },
 
-  // ---------- Misja „Atlas Bieszczad” ----------
+  // ---------- Misja „Atlas Bieszczadów” ----------
   klasyfikacja(
     's5-atlas-klas-1',
-    'Atlas Bieszczad: przyporządkuj zwierzęta do grup.',
+    'Atlas Bieszczadów i sawanny: przyporządkuj zwierzęta do grup.',
     ZJADAJACY,
     ['zubr', 'wiewiorka', 'orzel', 'rys', 'sep', 'hiena', 'dzik', 'niedzwiedz'],
     'Roślinożercy żywią się pokarmem roślinnym, drapieżniki polują na ofiary i je zabijają, padlinożercy żywią się ciałami martwych zwierząt, a wszystkożercy zjadają pokarm roślinny i zwierzęcy.',
@@ -245,7 +245,7 @@ export default [
   ),
   klasyfikacja(
     's5-atlas-klas-2',
-    'Atlas Bieszczad i sawanny: przyporządkuj zwierzęta do grup.',
+    'Kto czym się żywi? Przyporządkuj zwierzęta do grup.',
     ZJADAJACY,
     ['zebra', 'gil', 'rusalka', 'wilk', 'zaba', 'sep', 'lis', 'wrobel', 'czlowiek'],
     'Zebra, gil i rusałka pokrzywnik to roślinożercy, wilk i żaba to drapieżniki, sęp to padlinożerca, a lis, wróbel i człowiek to wszystkożercy.',
@@ -272,7 +272,7 @@ export default [
     id: 's5-lancuchy-1',
     swiat: 5,
     typ: 'lancuch',
-    tresc: 'Uczta w Bieszczadach: kto pasuje do luki w łańcuchu pokarmowym?',
+    tresc: 'Uczta w Bieszczadach i na sawannie: kto pasuje do luki w łańcuchu pokarmowym?',
     lancuchy: [
       {
         ogniwa: ['rosliny', null, 'niedzwiedz-brunatny'],
@@ -280,7 +280,7 @@ export default [
           { karta: 'jelen', poprawna: true },
           { karta: 'orzel-przedni', wyjasnienie: 'Orzeł przedni jest drapieżnikiem: poluje na zwierzęta, a nie żywi się roślinami.' },
           { karta: 'sep', wyjasnienie: 'Sęp jest padlinożercą: żywi się ciałami martwych zwierząt, a nie roślinami.' },
-          { karta: 'wilk', wyjasnienie: 'Wilk jest drapieżnikiem: poluje na zwierzęta, a nie żywi się roślinami.' },
+          { karta: 'rys', wyjasnienie: 'Ryś jest drapieżnikiem: poluje na zwierzęta, a nie żywi się roślinami.' },
         ],
       },
       {
@@ -296,13 +296,13 @@ export default [
         ogniwa: ['kwiat', null, 'wrobel'],
         opcje: [
           { karta: 'rusalka-pokrzywnik', poprawna: true },
-          { karta: 'pajak', wyjasnienie: 'Pająk jest drapieżnikiem: poluje na zwierzęta, a nie pije nektaru kwiatów.' },
-          { karta: 'zaba', wyjasnienie: 'Żaba jest drapieżnikiem: poluje na zwierzęta, a nie pije nektaru kwiatów.' },
+          { karta: 'orzel-przedni', wyjasnienie: 'Orzeł przedni jest drapieżnikiem: poluje na zwierzęta, a nie żywi się nektarem kwiatów.' },
+          { karta: 'zaba', wyjasnienie: 'Żaba jest drapieżnikiem: poluje na zwierzęta, a nie żywi się nektarem kwiatów.' },
           { karta: 'hiena-cetkowana', wyjasnienie: 'Hiena cętkowana jest padlinożercą: żywi się ciałami martwych zwierząt, a nie nektarem.' },
         ],
       },
     ],
-    wyjasnienie: 'Łańcuch pokarmowy zaczyna się od organizmu samożywnego. Roślinożerca zjada rośliny, a drapieżnik poluje na zwierzęta.',
+    wyjasnienie: 'Łańcuch pokarmowy zaczyna się od organizmu samożywnego. Roślinożerca zjada rośliny, drapieżnik poluje na zwierzęta, a wszystkożerca zjada pokarm roślinny i zwierzęcy.',
     zrodlo: '2.5',
   },
   {
@@ -325,17 +325,17 @@ export default [
         opcje: [
           { karta: 'orzel-przedni', poprawna: true },
           { karta: 'zubr', wyjasnienie: 'Żubr jest roślinożercą: żywi się pokarmem roślinnym, a nie zwierzętami.' },
-          { karta: 'wiewiorka-pospolita', wyjasnienie: 'Wiewiórka pospolita jest roślinożercą: zjada owoce i nasiona, a nie zwierzęta.' },
-          { karta: 'gil', wyjasnienie: 'Gil jest roślinożercą: zjada nasiona, a nie zwierzęta.' },
+          { karta: 'los', wyjasnienie: 'Łoś jest roślinożercą: żywi się pokarmem roślinnym, a nie zwierzętami.' },
+          { karta: 'zebra', wyjasnienie: 'Zebra jest roślinożercą: zjada liście i łodygi traw, a nie zwierzęta.' },
         ],
       },
       {
         ogniwa: ['kwiat', 'rusalka-pokrzywnik', null],
         opcje: [
           { karta: 'wrobel', poprawna: true },
-          { karta: 'gil', wyjasnienie: 'Gil jest roślinożercą: zjada nasiona, a nie owady.' },
-          { karta: 'zieba', wyjasnienie: 'Zięba jest roślinożercą: zjada nasiona, a nie owady.' },
-          { karta: 'koliber', wyjasnienie: 'Koliber jest roślinożercą: żywi się nektarem, a nie owadami.' },
+          { karta: 'zubr', wyjasnienie: 'Żubr jest roślinożercą: żywi się pokarmem roślinnym, a nie owadami.' },
+          { karta: 'los', wyjasnienie: 'Łoś jest roślinożercą: żywi się pokarmem roślinnym, a nie owadami.' },
+          { karta: 'bawol', wyjasnienie: 'Bawół jest roślinożercą: żywi się pokarmem roślinnym, a nie owadami.' },
         ],
       },
     ],
@@ -346,7 +346,7 @@ export default [
   // ---------- Misja „Pasożyt szuka żywiciela” ----------
   klasyfikacja(
     's5-pasozyty-klas',
-    'Pasożyty z Bieszczad: przyporządkuj je do grup.',
+    'Pasożyty: przyporządkuj je do grup.',
     PASOZYTY,
     ['kleszcz', 'wesz', 'pchla', 'tasiemiec', 'owsik', 'glista', 'kanianka', 'zaraza', 'jemiola'],
     'Pasożyty zewnętrzne żyją na powierzchni ciała żywiciela, a wewnętrzne w jego wnętrzu. Rośliny pasożytnicze nie mają chlorofilu i biorą od żywiciela wszystko, a półpasożyty mają chlorofil i biorą tylko wodę i sole mineralne.',
@@ -360,9 +360,9 @@ export default [
     tresc: 'Pasożyt szuka żywiciela: dopasuj pasożyta do opisu.',
     etykiety: 'nazwy',
     pary: [
-      { karta: 'tasiemiec-uzbrojony', opis: 'żyje w jelicie człowieka i przyczepia się do jego ściany przyssawkami i haczykami' },
+      { karta: 'tasiemiec-uzbrojony', opis: 'żyje w jelicie człowieka i przyczepia się do ściany jelita przyssawkami i haczykami' },
       { karta: 'kleszcz', opis: 'przebija skórę żywiciela i odżywia się jego krwią' },
-      { karta: 'jemiola-pospolita', opis: 'rośnie np. na topoli i pobiera od niej wodę i sole mineralne' },
+      { karta: 'jemiola-pospolita', opis: 'rośnie na żywicielu, np. na topoli, i pobiera od niego wodę i sole mineralne' },
       { karta: 'zaraza-zolta', opis: 'nie ma chlorofilu i wszystkie potrzebne substancje pobiera np. od podbiału' },
     ],
     dystraktory: ['dzdzownica'],
@@ -473,7 +473,7 @@ export default [
       { tekst: 'Szczątki są trawione dopiero po zjedzeniu.', kategoria: 'wewnatrz', karta: 'dzdzownica', wyjasnienie: 'Dżdżownica najpierw zjada szczątki, a potem trawi je w przewodzie pokarmowym.' },
       { tekst: 'Pleśniak biały wydziela enzymy trawienne do otoczenia.', kategoria: 'zewnatrz', karta: 'plesniak-bialy', wyjasnienie: 'Grzyby wydzielają enzymy trawienne na zewnątrz i wchłaniają powstałe związki proste.' },
       { tekst: 'Bakterie wchłaniają związki proste powstałe w otoczeniu.', kategoria: 'zewnatrz', karta: 'zwiazki-proste', wyjasnienie: 'Bakterie wydzielają enzymy trawienne do otoczenia i wchłaniają powstałe związki proste.' },
-      { tekst: 'Enzymy rozkładają szczątki, zanim organizm je wchłonie.', kategoria: 'zewnatrz', karta: 'enzymy', wyjasnienie: 'Bakterie i grzyby najpierw rozkładają szczątki enzymami w otoczeniu, a potem wchłaniają związki proste.' },
+      { tekst: 'Enzymy rozkładają szczątki jeszcze poza ciałem organizmu.', kategoria: 'zewnatrz', karta: 'enzymy', wyjasnienie: 'Bakterie i grzyby najpierw rozkładają szczątki enzymami w otoczeniu, a potem wchłaniają związki proste.' },
     ],
     wyjasnienie: 'Dżdżownice trawią szczątki wewnątrz ciała, w przewodzie pokarmowym. Bakterie i grzyby, np. pleśniak biały, wydzielają enzymy trawienne do otoczenia, czyli trawią na zewnątrz ciała.',
     zrodlo: '2.5',
@@ -497,7 +497,7 @@ export default [
             opcje: [
               { tekst: 'Organizmy odżywiające się szczątkami je rozłożyły.', poprawna: true },
               { tekst: 'Liście wróciły na drzewa.', wyjasnienie: 'Opadłe liście zostają na ziemi jako szczątki.' },
-              { tekst: 'Liście zjadły drapieżniki.', wyjasnienie: 'Drapieżniki polują na zwierzęta, a nie żywią się szczątkami roślin.' },
+              { tekst: 'Drapieżniki zjadły liście.', wyjasnienie: 'Drapieżniki polują na zwierzęta, a nie żywią się szczątkami roślin.' },
             ],
             wyjasnienie: 'Organizmy odżywiające się szczątkami zapobiegają gromadzeniu się szczątków w przyrodzie.',
             karta: 'organizmy-odzywiajace-sie-szczatkami',
@@ -515,7 +515,7 @@ export default [
             opcje: [
               { tekst: 'Szczątki gromadzą się coraz grubszą warstwą.', poprawna: true },
               { tekst: 'Szczątki znikają same w ciągu roku.', wyjasnienie: 'Bez organizmów, które je rozkładają, szczątków przybywa z każdym rokiem.' },
-              { tekst: 'Nic się nie zmienia.', wyjasnienie: 'Spójrz na scenę: warstwa szczątków rośnie z roku na rok.' },
+              { tekst: 'Nic się nie zmienia.', wyjasnienie: 'Bez organizmów odżywiających się szczątkami nikt nie rozkłada opadłych liści, więc szczątków przybywa.' },
             ],
             wyjasnienie: 'Organizmy odżywiające się szczątkami zapobiegają gromadzeniu się szczątków. Bez nich szczątków przybywa.',
             karta: 'organizmy-odzywiajace-sie-szczatkami',
@@ -524,7 +524,7 @@ export default [
             pytanie: 'Które organizmy zostały usunięte z lasu?',
             opcje: [
               { tekst: 'drobne zwierzęta, bakterie i grzyby', poprawna: true },
-              { tekst: 'drapieżniki i padlinożercy', wyjasnienie: 'Drapieżniki polują na zwierzęta, padlinożercy żywią się ciałami martwych zwierząt. Szczątki roślin rozkładają organizmy odżywiające się szczątkami.' },
+              { tekst: 'drapieżniki i padlinożercy', wyjasnienie: 'Drapieżniki polują na zwierzęta, padlinożercy żywią się ciałami martwych zwierząt. Organizmy odżywiające się szczątkami rozkładają szczątki roślin.' },
               { tekst: 'rośliny i sinice', wyjasnienie: 'Rośliny i sinice są samożywne: same wytwarzają pokarm.' },
             ],
             wyjasnienie: 'Organizmy odżywiające się szczątkami to drobne zwierzęta (np. dżdżownice), bakterie i grzyby (np. pleśniak biały).',
@@ -563,7 +563,7 @@ export default [
     tekst:
       'Organizmy odżywiające się szczątkami to drobne zwierzęta, [bakterie|organizmy-odzywiajace-sie-szczatkami] i grzyby. Żyją w glebie, w [ściółce|organizmy-odzywiajace-sie-szczatkami] leśnej, na dnie zbiorników wodnych i w mule. Dżdżownice trawią szczątki [wewnątrz|dzdzownica] ciała, a pleśniak biały wydziela enzymy trawienne do [otoczenia|plesniak-bialy].',
     dystraktory: [
-      { tekst: 'mięsożercy', wyjasnienie: 'Mięsożercy żywią się innymi zwierzętami. Szczątki rozkładają drobne zwierzęta, bakterie i grzyby.' },
+      { tekst: 'mięsożercy', wyjasnienie: 'Mięsożercy żywią się innymi zwierzętami. Drobne zwierzęta, bakterie i grzyby rozkładają szczątki.' },
       { tekst: 'na zewnątrz', wyjasnienie: 'Dżdżownice trawią szczątki w przewodzie pokarmowym, czyli wewnątrz ciała.' },
     ],
     wyjasnienie: 'Drobne zwierzęta, bakterie i grzyby rozkładają szczątki. Dżdżownice trawią je wewnątrz ciała, a bakterie i grzyby na zewnątrz.',
@@ -577,7 +577,7 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdania o organizmach, które zjadają inne organizmy.',
     tekst:
-      'Roślinożercy żywią się pokarmem [roślinnym|roslinozerca]. Mięsożercy, którzy polują na ofiary i je zabijają, to [drapieżniki|drapieznik]. Mięsożercy żywiący się ciałami martwych zwierząt to [padlinożercy|padlinozerca]. Zwierzęta zjadające pokarm roślinny i zwierzęcy to [wszystkożercy|wszystkozerca].',
+      'Roślinożercy żywią się pokarmem [roślinnym|roslinozerca]. Mięsożercy, którzy polują na ofiary i je zabijają, to [drapieżniki|drapieznik|Drapieżniki polują na ofiary i je zabijają.]. Mięsożercy żywiący się ciałami martwych zwierząt to [padlinożercy|padlinozerca|Padlinożercy żywią się ciałami martwych zwierząt.]. Zwierzęta zjadające pokarm roślinny i zwierzęcy to [wszystkożercy|wszystkozerca].',
     dystraktory: [
       { tekst: 'pasożyty', wyjasnienie: 'Pasożyty pobierają składniki pokarmowe od żywego organizmu i zwykle go nie zabijają.' },
       { tekst: 'zwierzęcym', wyjasnienie: 'Pokarmem zwierzęcym żywią się mięsożercy.' },
@@ -619,7 +619,7 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdania o sposobach zdobywania pokarmu.',
     tekst:
-      'Organizmy cudzożywne pobierają z otoczenia [gotowy|organizm-cudzozywny] pokarm. Dzielimy je na trzy grupy: organizmy zjadające inne organizmy, [pasożyty|pasozyt] i organizmy odżywiające się szczątkami. Rośliny pasożytnicze nie mają [chlorofilu|roslina-pasozytnicza] i pobierają od żywiciela wszystkie potrzebne substancje za pomocą [ssawek|ssawki].',
+      'Organizmy cudzożywne pobierają z otoczenia [gotowy|organizm-cudzozywny] pokarm. Ze względu na sposób zdobywania pokarmu dzielimy je na trzy grupy: organizmy zjadające inne organizmy, [pasożyty|pasozyt] i organizmy odżywiające się szczątkami. Rośliny pasożytnicze nie mają [chlorofilu|roslina-pasozytnicza] i pobierają od żywiciela wszystkie potrzebne substancje za pomocą [ssawek|ssawki].',
     dystraktory: [
       { tekst: 'roślinożercy', wyjasnienie: 'Roślinożercy należą do organizmów zjadających inne organizmy.' },
       { tekst: 'korzeni', wyjasnienie: 'Rośliny pasożytnicze pobierają substancje od żywiciela za pomocą ssawek.' },
@@ -638,21 +638,21 @@ export default [
     's5-boss-przyp-3',
     'Dopasuj nazwy do opisów.',
     ['drapieznik', 'padlinozerca', 'pasozyt', 'organizmy-odzywiajace-sie-szczatkami'],
-    ['roslinozerca'],
+    ['zywiciel'],
     'Drapieżniki zabijają ofiary, padlinożercy żywią się ciałami martwych zwierząt, pasożyty zwykle nie zabijają żywiciela, a organizmy odżywiające się szczątkami rozkładają szczątki.',
   ),
   przyporzadkowanie(
     's5-boss-przyp-4',
     'Dopasuj nazwy do opisów.',
     ['roslinozerca', 'miesozerca', 'wszystkozerca', 'zywiciel'],
-    ['pasozyt'],
+    ['roslina-pasozytnicza'],
     'Roślinożercy żywią się pokarmem roślinnym, mięsożercy innymi zwierzętami, a wszystkożercy jednym i drugim. Żywiciel to organizm, od którego pasożyt pobiera pokarm.',
   ),
   przyporzadkowanie(
     's5-boss-przyp-5',
     'Dopasuj opisy do nazw.',
     ['wszystkozerca', 'padlinozerca', 'polpasozyt', 'roslina-pasozytnicza', 'organizmy-odzywiajace-sie-szczatkami'],
-    [{ tekst: 'organizm, który sam wytwarza pokarm', wyjasnienie: 'Tak można opisać organizm samożywny, np. roślinę, a nie żaden z organizmów cudzożywnych w tym zadaniu.' }],
+    [{ tekst: 'organizm, od którego pasożyt pobiera składniki pokarmowe', wyjasnienie: 'To opis żywiciela, a żywiciela nie ma wśród nazw w tym zadaniu.' }],
     'Półpasożyt ma chlorofil, roślina pasożytnicza go nie ma. Padlinożerca żywi się ciałami martwych zwierząt, a organizmy odżywiające się szczątkami rozkładają szczątki.',
     'opisy',
   ),
@@ -691,11 +691,11 @@ export default [
         wyjasnienie: 'Np. wróbel zimą zjada nasiona, a latem także owady.',
       },
       {
-        tekst: 'Drapieżnik żywi się ciałami martwych zwierząt.',
+        tekst: 'Drapieżnik to mięsożerca żywiący się ciałami martwych zwierząt.',
         prawda: false,
         karta: 'drapieznik',
-        poprawne: 'Drapieżnik poluje na ofiary i je zabija.',
-        bledne: ['Drapieżnik żywi się tylko roślinami.', 'Drapieżnik pobiera pokarm od żywiciela, nie zabijając go.'],
+        poprawne: 'Drapieżnik to mięsożerca, który poluje na ofiary i je zabija.',
+        bledne: ['Drapieżnik to zwierzę żywiące się tylko roślinami.', 'Drapieżnik to organizm pobierający pokarm od żywiciela, zwykle bez zabijania go.'],
         wyjasnienie: 'Ciałami martwych zwierząt żywią się padlinożercy.',
       },
     ],
