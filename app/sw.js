@@ -2,7 +2,7 @@
 // WERSJA i PLIKI uzupełnia narzędzie: node tools/wersja.js (nie edytować ręcznie).
 // Każda zmiana w app/ zmienia WERSJA, więc przeglądarka pobiera nową wersję gry.
 
-const WERSJA = '66bae1edfc10';
+const WERSJA = '7693e18c80ff';
 const PLIKI = [
   './',
   'assets/fonts/OFL-lexend.txt',
@@ -33,6 +33,7 @@ const PLIKI = [
   'css/zadania.css',
   'data/elementy-komorek.js',
   'data/konstruktor.js',
+  'data/laboratorium.js',
   'data/miasto.js',
   'data/organizmy.js',
   'data/pojecia.js',
@@ -40,6 +41,7 @@ const PLIKI = [
   'data/porownanie.js',
   'data/procesy.js',
   'data/schematy.js',
+  'data/sprawdzian.js',
   'data/swiaty.js',
   'data/typy-komorek.js',
   'data/wskazowki.js',
@@ -102,9 +104,11 @@ const PLIKI = [
   'js/core/boss.js',
   'js/core/daty.js',
   'js/core/dom.js',
+  'js/core/dzwieki.js',
   'js/core/karty.js',
   'js/core/magazyn.js',
   'js/core/router.js',
+  'js/core/sprawdzian.js',
   'js/core/stan.js',
   'js/core/swiaty.js',
   'js/core/tekst.js',
@@ -112,11 +116,13 @@ const PLIKI = [
   'js/ekrany/atlas.js',
   'js/ekrany/baza.js',
   'js/ekrany/boss.js',
+  'js/ekrany/laboratorium.js',
   'js/ekrany/mapa.js',
   'js/ekrany/mikroskop.js',
   'js/ekrany/misja.js',
   'js/ekrany/podsumowanie.js',
   'js/ekrany/rodzic.js',
+  'js/ekrany/sprawdzian.js',
   'js/ekrany/swiat.js',
   'js/ekrany/wspolne.js',
   'js/main.js',

@@ -13,12 +13,15 @@ import organizmy from '../data/organizmy.js';
 import procesy from '../data/procesy.js';
 import porownanie from '../data/porownanie.js';
 import pokarm from '../data/pokarm.js';
+import sprawdzian from '../data/sprawdzian.js';
+import laboratorium from '../data/laboratorium.js';
 import { katalogKart } from './core/karty.js';
 import { utworzMagazyn } from './core/magazyn.js';
 import { nowyStan } from './core/stan.js';
 import { dzisiaj } from './core/daty.js';
 import { parsujAdres, adres } from './core/router.js';
 import { utrwalOdblokowane } from './core/swiaty.js';
+import { ustawDzwieki } from './core/dzwieki.js';
 import { wyczysc, ograniczRuch } from './core/dom.js';
 import { zarejestrujServiceWorker } from './pwa.js';
 import { powiadom } from './ekrany/wspolne.js';
@@ -31,8 +34,22 @@ import * as atlas from './ekrany/atlas.js';
 import * as mikroskop from './ekrany/mikroskop.js';
 import * as boss from './ekrany/boss.js';
 import * as rodzic from './ekrany/rodzic.js';
+import * as ekranSprawdzianu from './ekrany/sprawdzian.js';
+import * as ekranLaboratorium from './ekrany/laboratorium.js';
 
-const EKRANY = { mapa, swiat, misja, boss, podsumowanie, baza, atlas, mikroskop, rodzic };
+const EKRANY = {
+  mapa,
+  swiat,
+  misja,
+  boss,
+  podsumowanie,
+  baza,
+  atlas,
+  mikroskop,
+  sprawdzian: ekranSprawdzianu,
+  laboratorium: ekranLaboratorium,
+  rodzic,
+};
 
 function dostepnyStorage() {
   try {
@@ -46,8 +63,10 @@ const magazyn = utworzMagazyn(dostepnyStorage());
 const wczytany = magazyn.wczytaj(dzisiaj());
 let stan = utrwalOdblokowane(swiaty, wczytany.stan);
 let ostrzezenieZapisu = false;
+ustawDzwieki(stan.ustawienia.dzwiek);
 
 function zapisz() {
+  ustawDzwieki(stan.ustawienia.dzwiek);
   if (magazyn.zapisz(stan) || ostrzezenieZapisu) return;
   ostrzezenieZapisu = true;
   powiadom('Nie udało się zapisać postępu na tym urządzeniu.', 'blad');
@@ -70,6 +89,8 @@ const ctx = {
     procesy,
     porownanie,
     pokarm,
+    sprawdzian,
+    laboratorium,
     katalog: katalogKart({ elementy, typyKomorek, pojecia, organizmy }),
   },
   get stan() {

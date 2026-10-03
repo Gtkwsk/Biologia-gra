@@ -1,9 +1,12 @@
-// Wstęp do świata: scena w soczewce, kilka zdań fabuły, misje, ciekawostka.
+// Wstęp do świata: scena w soczewce, kilka zdań fabuły, odtwarzacz słuchowiska (jeśli jest plik),
+// misje, ciekawostka albo przewodnik.
 
 import { h, ikona } from '../core/dom.js';
 import { otwarteSwiaty, statusSwiata, opanowanieSwiata } from '../core/swiaty.js';
 import { PROG_OPANOWANIA } from '../core/stan.js';
 import { bossDostepny, misjeUkonczone } from '../core/boss.js';
+import { NAGRANIA } from '../wersja.js';
+import { rysunekKarty } from '../components/rysunki.js';
 import { soczewka, miernikOstrosci, pasek, ekranNiedostepny } from './wspolne.js';
 
 function kartaBossa(sw, stan) {
@@ -29,6 +32,33 @@ function kartaBossa(sw, stan) {
   return h('a', { class: 'boss-wejscie', href: `#/swiat/${sw.id}/boss`, 'data-stan': pokonany ? 'pokonany' : 'gotowy' }, [
     h('span', { class: 'boss-wejscie__znak' }, ikona(pokonany ? 'dobrze' : 'serce')),
     h('span', { class: 'boss-wejscie__tresc' }, tresc),
+  ]);
+}
+
+// Nagranie części słuchowiska jest opcjonalne (SPEC.md, sekcja 4.6): plik audio/czesc-N.mp3.
+// Listę dostępnych nagrań zapisuje tools/wersja.js w js/wersja.js. Nagrania nie trafiają do
+// pamięci offline, więc odtwarzają się przy dostępie do internetu.
+function odtwarzacz(sw) {
+  if (!NAGRANIA.includes(sw.czesc)) return null;
+  return h('section', { class: 'sluchowisko', 'aria-label': 'Słuchowisko' }, [
+    h('p', { class: 'sluchowisko__tytul' }, `Słuchowisko, część ${sw.czesc}`),
+    h('audio', { class: 'sluchowisko__odtwarzacz', controls: true, preload: 'none', src: `audio/czesc-${sw.czesc}.mp3` }),
+  ]);
+}
+
+// Ciekawostka świata; w światach z przewodnikiem (SPEC.md, sekcja 4.4) opowiada ją uczony ze
+// słuchowiska: wizerunek, imię i kim był. Treść ciekawostki dosłownie z TRESCI.md, sekcja 6.
+function ciekawostkaSwiata(sw) {
+  if (!sw.ciekawostka) return null;
+  const tresc = [h('h2', { class: 'ciekawostka__naglowek' }, 'Ciekawostka'), h('p', {}, sw.ciekawostka)];
+  if (!sw.przewodnik) return h('aside', { class: 'ciekawostka' }, tresc);
+  const p = sw.przewodnik;
+  return h('aside', { class: 'ciekawostka przewodnik' }, [
+    h('div', { class: 'przewodnik__postac' }, [
+      rysunekKarty(p.rysunek, 'przewodnik__rysunek'),
+      h('p', { class: 'przewodnik__podpis' }, [h('span', { class: 'przewodnik__etykieta' }, 'Przewodnik'), h('strong', { class: 'przewodnik__imie' }, p.imie), h('span', { class: 'przewodnik__kim' }, p.kim)]),
+    ]),
+    ...tresc,
   ]);
 }
 
@@ -91,6 +121,7 @@ export function render(kontener, ctx, cel) {
           h('p', { class: 'swiat-wstep__czesc' }, `Część ${sw.czesc}. ${sw.temat}`),
           h('h1', { class: 'swiat-wstep__tytul' }, sw.tytul),
           ...sw.wstep.map((t) => h('p', { class: 'swiat-wstep__akapit' }, t)),
+          odtwarzacz(sw),
         ]),
       ]),
       h('div', { class: 'swiat-tresc' }, [
@@ -99,9 +130,7 @@ export function render(kontener, ctx, cel) {
           sw.coZbadasz.length
             ? h('section', { class: 'co-zbadasz' }, [h('h2', {}, 'Co tu zbadasz'), h('ul', {}, sw.coZbadasz.map((t) => h('li', {}, t)))])
             : null,
-          sw.ciekawostka
-            ? h('aside', { class: 'ciekawostka' }, [h('h2', { class: 'ciekawostka__naglowek' }, 'Ciekawostka'), h('p', {}, sw.ciekawostka)])
-            : null,
+          ciekawostkaSwiata(sw),
         ]),
       ]),
     ]),
