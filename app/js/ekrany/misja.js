@@ -2,6 +2,7 @@
 // misja.losuj: jeśli podane, misja wybiera tyle zadań z listy (przy każdym podejściu inne).
 
 import { h, dolacz, wyczysc, ograniczRuch } from '../core/dom.js';
+import { graj } from '../core/dzwieki.js';
 import { otwarteSwiaty } from '../core/swiaty.js';
 import { zapiszWynik } from '../core/stan.js';
 import { dzisiaj } from '../core/daty.js';
@@ -102,6 +103,7 @@ export function render(kontener, ctx, cel) {
     const ostatnie = indeks === zadania.length - 1;
     const wszystkieDobrze = w.poprawne === w.wszystkie;
     const doCwiczenia = kartyZBledem(w);
+    if (wszystkieDobrze) graj('koniec');
     wyczysc(wynik);
     dolacz(wynik, [
       h('h2', { class: 'misja__wynik-tytul' }, wszystkieDobrze ? 'Wszystko od razu dobrze!' : `Od razu dobrze: ${w.poprawne} z ${w.wszystkie}`),
