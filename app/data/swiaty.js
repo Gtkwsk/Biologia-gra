@@ -103,13 +103,13 @@ export default [
         id: 's3-twierdza',
         nazwa: 'Zielona twierdza',
         opis: 'Podpisz komórkę roślinną i znajdź różnice między nią a zwierzęcą.',
-        zadania: ['s3-podpis-roslinna-1', 's3-roslinna-zwierzeca', 's3-luki-1'],
+        zadania: ['s3-podpis-roslinna-1', 's3-podpis-roslinna-2', 's3-roslinna-zwierzeca'],
       },
       {
         id: 's3-detektyw',
         nazwa: 'Detektyw komórek',
-        opis: 'Rozpoznaj komórkę po jak najmniejszej liczbie wskazówek.',
-        zadania: ['s3-detektyw-1', 's3-detektyw-2'],
+        opis: 'Rozpoznaj komórkę po jak najmniejszej liczbie wskazówek i sprawdź zeznania świadków.',
+        zadania: ['s3-detektyw-1', 's3-detektyw-2', 's3-pf-1'],
       },
       {
         id: 's3-konstruktor',
@@ -121,7 +121,7 @@ export default [
         id: 's3-siatka',
         nazwa: 'Siatka porównawcza',
         opis: 'Porównaj komórki zwierzęcą, roślinną, grzybową i bakteryjną.',
-        zadania: ['s3-tabela-1', 's3-luki-3', 's3-pf-1'],
+        zadania: ['s3-tabela-1', 's3-luki-3', 's3-luki-1'],
       },
       {
         id: 's3-woda',
@@ -146,7 +146,7 @@ export default [
       nazwa: 'Strażnik twierdzy',
       opis: 'Strażnik sprawdza schemat komórki roślinnej, zdania o budowie komórek i siatkę porównawczą.',
       wyzwania: [
-        { pula: ['s3-podpis-roslinna-1', 's3-boss-podpis-2', 's3-boss-podpis-3', 's3-boss-podpis-4', 's3-boss-podpis-5'] },
+        { pula: ['s3-podpis-roslinna-1', 's3-podpis-roslinna-2', 's3-boss-podpis-2', 's3-boss-podpis-3', 's3-boss-podpis-4', 's3-boss-podpis-5', 's3-boss-podpis-6'] },
         { pula: ['s3-luki-1', 's3-luki-2', 's3-luki-3', 's3-boss-luki-4', 's3-boss-luki-5', 's3-boss-luki-6'] },
         { pula: ['s3-tabela-1', 's3-boss-tabela-2', 's3-boss-tabela-3'] },
         { pula: ['s3-boss-pf-1', 's3-boss-pf-2', 's3-pf-1'] },

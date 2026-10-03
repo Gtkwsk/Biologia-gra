@@ -23,6 +23,18 @@ export default [
     zrodlo: '2.3',
   },
   {
+    id: 's3-podpis-roslinna-2',
+    swiat: 3,
+    typ: 'podpisywanie',
+    tresc: 'Inna komórka roślinna, wydłużona. Podpisz jej elementy.',
+    schemat: 'komorka-roslinna-2',
+    punkty: ['mitochondrium', 'golgi', 'wakuola', 'rybosomy', 'siateczka', 'jadro', 'blona', 'cytozol', 'chloroplast', 'sciana'],
+    dystraktory: ['otoczka-sluzowa', 'rzeska'],
+    wyjasnienie:
+      'Komórki roślinne mają różne kształty, ale te same elementy. Duża wakuola spycha jądro komórkowe i chloroplasty pod ścianę komórkową.',
+    zrodlo: '2.3',
+  },
+  {
     id: 's3-roslinna-zwierzeca',
     swiat: 3,
     typ: 'klasyfikacja',
@@ -144,7 +156,7 @@ export default [
     id: 's3-pf-1',
     swiat: 3,
     typ: 'prawda-falsz',
-    tresc: 'Prawda czy fałsz? Popraw zdania fałszywe.',
+    tresc: 'Zeznania świadków: prawda czy fałsz? Popraw fałszywe zeznania.',
     zdania: [
       {
         tekst: 'Komórka bakteryjna ma jądro komórkowe.',
@@ -351,6 +363,17 @@ export default [
     punkty: ['mitochondrium', 'chloroplast', 'wakuola', 'cytozol', 'jadro', 'sciana'],
     dystraktory: ['otoczka-sluzowa'],
     wyjasnienie: 'Chloroplasty są zielone i owalne, mitochondria owalne z pofałdowanym wnętrzem, a wakuola zajmuje środek komórki.',
+    zrodlo: '2.3',
+  },
+  {
+    id: 's3-boss-podpis-6',
+    swiat: 3,
+    typ: 'podpisywanie',
+    tresc: 'Podpisz wskazane elementy komórki roślinnej.',
+    schemat: 'komorka-roslinna-2',
+    punkty: ['wakuola', 'jadro', 'blona', 'chloroplast', 'sciana', 'mitochondrium'],
+    dystraktory: ['otoczka-sluzowa', 'rzeska'],
+    wyjasnienie: 'Komórka roślinna ma ścianę komórkową, chloroplasty i zwykle jedną dużą wakuolę; nie ma otoczki śluzowej ani rzęski.',
     zrodlo: '2.3',
   },
   {
