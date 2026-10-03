@@ -162,3 +162,62 @@ test('wykrywa rzęskę jako dystraktor przy schemacie komórki zwierzęcej', asy
   z.dystraktory = [...z.dystraktory, 'rzeska'];
   zawiera(walidujDane(dane, kontekst), '„rzeska” nie może być dystraktorem');
 });
+
+test('wykrywa zapis słowny procesu niezgodny z TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const p = dane.procesy.find((x) => x.id === 'fermentacja-alkoholowa');
+  p.produkty = ['alkohol-etylowy', 'tlen', 'energia'];
+  zawiera(walidujDane(dane, kontekst), 'substraty, warunki i produkty dają zapis');
+  p.zapis = 'glukoza → alkohol etylowy + tlen + energia';
+  zawiera(walidujDane(dane, kontekst), 'nie występuje dosłownie w TRESCI.md');
+});
+
+test('wykrywa w tabeli oddychania tlenowego i fermentacji wartość niezgodną z TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.porownanie.cechy.find((c) => c.id === 'miejsce').wartosci.fermentacja = 'mitochondria';
+  zawiera(walidujDane(dane, kontekst), '„mitochondria”, a w TRESCI.md „cytozol”');
+});
+
+test('wykrywa organizm z kategorią inną niż w tabeli TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.organizmy.find((o) => o.id === 'sinice').kategoria = 'organizm samożywny (roślina)';
+  zawiera(walidujDane(dane, kontekst), 'według TRESCI.md, sekcja 7');
+});
+
+test('wykrywa sprint bez niedoboru tlenu i bez odpoczynku, po którym kwas mlekowy trafia do wątroby', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const z = dane.zadania.find((x) => x.id === 's6-sprint-1');
+  z.etapy = z.etapy.filter((e) => e.tempo !== 'sprint');
+  zawiera(walidujDane(dane, kontekst), 'żaden etap nie pokazuje niedoboru tlenu');
+  const { dane: d2 } = await zaladuj();
+  const z2 = d2.zadania.find((x) => x.id === 's6-sprint-1');
+  z2.etapy = z2.etapy.filter((e) => e.czas !== 'kilkadziesiat-minut');
+  zawiera(walidujDane(d2, kontekst), 'kwas mlekowy zostaje w mięśniach');
+});
+
+test('wykrywa nieznaną porę doby i nieistniejącą ikonę kategorii sortera', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.zadania.find((x) => x.id === 's6-doba-1').etapy.push({ pora: 'zmierzch' });
+  dane.zadania.find((x) => x.id === 's6-sorter-doba-1').kategorie[1].ikona = 'gwiazda';
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'pora „zmierzch” spoza listy');
+  zawiera(bledy, 'nie ma rysunku „gwiazda”');
+});
+
+test('wykrywa krok laboratorium, którego wyniku nie da się przewidzieć wprost z TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const z = dane.zadania.find((x) => x.id === 's4-lab-1');
+  // Nadmiar soli przy upale: wynik się nie zmienia, choć TRESCI.md mówi, że nadmiar zmniejsza intensywność.
+  z.kroki = [
+    { czynnik: 'swiatlo', poziom: 3 },
+    { czynnik: 'temperatura', poziom: 4 },
+    { czynnik: 'sole', poziom: 3 },
+  ];
+  zawiera(walidujDane(dane, kontekst), 'inny czynnik hamuje bardziej');
+});
+
+test('wykrywa światło wśród składników przepisu fotosyntezy', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.zadania.find((x) => x.id === 's4-przepis-1').pola.find((p) => p.id === 'swiatlo').strefa = 'wejscie';
+  zawiera(walidujDane(dane, kontekst), '„swiatlo” nie pasuje do strefy „wejscie”');
+});

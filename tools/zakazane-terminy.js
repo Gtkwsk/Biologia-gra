@@ -23,4 +23,11 @@ export const ZAKAZANE = [
   { wzorzec: /\bwić bakteri/i, zamiast: 'rzęska' },
   { wzorzec: /\bglikoliz/i, zamiast: 'rozkład glukozy (bez nazw etapów spoza TRESCI.md)' },
   { wzorzec: /\bcykl\p{L}* Krebsa/iu, zamiast: 'rozkład glukozy (bez nazw etapów spoza TRESCI.md)' },
+  { wzorzec: /\boddychani\p{L}* (zewnętrzn|wewnętrzn)/iu, zamiast: 'wymiana gazowa albo oddychanie komórkowe' },
+  { wzorzec: /\bATP\b/, zamiast: 'energia' },
+  { wzorzec: /\bpirogronian|\bkwas\p{L}* pirogronow/iu, zamiast: 'prostszy związek' },
+  { wzorzec: /\betanol/i, zamiast: 'alkohol etylowy' },
+  { wzorzec: /\bmleczan/i, zamiast: 'kwas mlekowy' },
+  { wzorzec: /\b(CO2|O2|H2O)\b|CO₂|H₂O/, zamiast: 'nazwy związków słowami (dwutlenek węgla, tlen, woda)' },
+  { wzorzec: /\bfotoliz/i, zamiast: 'fotosynteza (bez nazw etapów spoza TRESCI.md)' },
 ];

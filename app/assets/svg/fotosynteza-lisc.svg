@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480">
+  <!-- Schemat fotosyntezy: liść i powiększona komórka liścia, rysunek własny (SPEC.md, sekcja 6.2). -->
+  <!-- Według TRESCI.md, sekcja 2.4: fotosynteza zachodzi głównie w liściach, w chloroplastach; -->
+  <!-- dwutlenek węgla wnika z powietrza, woda dopływa ogonkiem liściowym z łodygi, tlen trafia -->
+  <!-- do atmosfery, a substancje pokarmowe odpływają do pozostałych części rośliny. -->
+
+  <!-- Ogonek liścia -->
+  <path d="M290 330 V468" stroke="#2E6B33" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Liść -->
+  <path d="M290 332 C222 300 176 236 186 166 C194 112 252 76 330 62 C378 110 414 170 404 236 C396 292 350 326 290 332 Z" fill="#3C9A47" stroke="#1F5A32" stroke-width="4" stroke-linejoin="round"/>
+  <g fill="none" stroke="#1F5A32" stroke-width="3" stroke-linecap="round">
+    <path d="M290 332 C300 250 312 160 330 64"/>
+    <path d="M296 286 C268 268 236 252 206 248"/>
+    <path d="M302 236 C276 216 246 196 214 186"/>
+    <path d="M310 180 C290 160 270 140 248 124"/>
+    <path d="M300 270 C330 260 360 250 392 248"/>
+    <path d="M306 216 C336 204 364 192 392 182"/>
+    <path d="M314 160 C338 148 356 134 372 118"/>
+  </g>
+
+  <!-- Lupa: powiększona komórka liścia -->
+  <circle cx="372" cy="232" r="14" fill="none" stroke="#11191B" stroke-width="3"/>
+  <path d="M384 224 L436 248 M380 244 L432 330" stroke="#11191B" stroke-width="2" stroke-dasharray="6 5"/>
+  <circle cx="500" cy="300" r="80" fill="#F4F6F1" stroke="#11191B" stroke-width="5"/>
+  <rect x="438" y="236" width="124" height="128" rx="10" fill="#F2F7EC" stroke="#4F6B2E" stroke-width="7"/>
+  <rect x="448" y="246" width="104" height="108" rx="6" fill="#E9F5DF" stroke="#9E3B5B" stroke-width="2"/>
+  <rect x="478" y="276" width="46" height="44" rx="12" fill="#D7F0F7" stroke="#2F7F99" stroke-width="2.5"/>
+  <ellipse cx="540" cy="290" rx="8" ry="10" fill="#D6C4EE" stroke="#4E3684" stroke-width="2.5"/>
+  <g data-element="chloroplast" fill="#3C9A47" stroke="#1F5A32" stroke-width="2"><ellipse cx="470" cy="262" rx="13" ry="8" transform="rotate(10 470 262)"/><ellipse cx="528" cy="258" rx="13" ry="8" transform="rotate(-8 528 258)"/><ellipse cx="462" cy="318" rx="13" ry="8" transform="rotate(-12 462 318)"/><ellipse cx="534" cy="322" rx="13" ry="8" transform="rotate(12 534 322)"/><ellipse cx="498" cy="342" rx="13" ry="8" transform="rotate(0 498 342)"/></g>
+
+  <!-- Światło -->
+  <g data-element="swiatlo">
+    <g stroke="#9C6B00" stroke-width="4" stroke-linecap="round">
+      <path d="M110 30v10M110 106v10M68 73h10M142 73h10M80 43l7 7M133 96l7 7M80 103l7 -7M133 50l7 -7"/>
+    </g>
+    <circle cx="110" cy="73" r="25" fill="#F5B800" stroke="#9C6B00" stroke-width="4"/>
+    <path d="M0 -3 H52.2 V-9 L67.2 0 L52.2 9 V3 H0 Z" transform="translate(146 98) rotate(30.4)" fill="#E0A400"/>
+    <path d="M0 -3 H57.8 V-9 L72.8 0 L57.8 9 V3 H0 Z" transform="translate(128 116) rotate(37.2)" fill="#E0A400"/>
+  </g>
+
+  <!-- Dwutlenek węgla: z powietrza do liścia -->
+  <g data-element="dwutlenek-wegla">
+    <path d="M0 -9 H96.7 V-20 L124.7 0 L96.7 20 V9 H0 Z" transform="translate(70 268) rotate(-15.8)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Tlen: z liścia do atmosfery -->
+  <g data-element="tlen">
+    <path d="M0 -9 H97.3 V-20 L125.3 0 L97.3 20 V9 H0 Z" transform="translate(368 104) rotate(-24.5)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Woda: ogonkiem liściowym do liścia -->
+  <g data-element="woda">
+    <path d="M0 -9 H98.0 V-20 L126.0 0 L98.0 20 V9 H0 Z" transform="translate(262 466) rotate(-90.0)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Substancje pokarmowe: z liścia ogonkiem do pozostałych części rośliny -->
+  <g data-element="substancje-pokarmowe">
+    <path d="M0 -9 H98.0 V-20 L126.0 0 L98.0 20 V9 H0 Z" transform="translate(318 340) rotate(90.0)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+</svg>

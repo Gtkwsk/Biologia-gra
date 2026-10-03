@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480">
+  <!-- Schemat fotosyntezy: cała roślina, rysunek własny (SPEC.md, sekcja 6.2). -->
+  <!-- Strzałki według TRESCI.md, sekcja 2.4: dwutlenek węgla z powietrza do liści, woda z gleby -->
+  <!-- przez korzenie w górę łodygi, światło pochłaniane w liściach, tlen do atmosfery, -->
+  <!-- substancje pokarmowe z liści do pozostałych części rośliny. Strzałki mają jeden kolor, -->
+  <!-- żeby o podpisie decydowały kierunek i droga, a nie barwa. -->
+
+  <path d="M70 366 C180 356 260 372 320 364 C400 356 480 370 570 362 V478 H70 Z" fill="#D9B98A" stroke="#7A5530" stroke-width="3"/>
+  <g fill="#B98F5E"><circle cx="120" cy="420" r="4"/><circle cx="200" cy="452" r="3"/><circle cx="430" cy="440" r="4"/><circle cx="520" cy="410" r="3"/><circle cx="470" cy="460" r="3"/><circle cx="160" cy="390" r="3"/></g>
+
+  <!-- Korzenie -->
+  <g fill="none" stroke="#8C6A3A" stroke-width="5" stroke-linecap="round">
+    <path d="M320 366 C318 396 322 424 318 462"/>
+    <path d="M318 392 C300 404 282 410 262 432"/>
+    <path d="M320 404 C342 414 362 424 380 446"/>
+    <path d="M300 404 C290 420 286 440 290 460"/>
+    <path d="M336 420 C346 432 350 448 348 462"/>
+  </g>
+
+  <!-- Łodyga i liście -->
+  <path d="M320 368 V118" stroke="#2E6B33" stroke-width="14" stroke-linecap="round"/>
+  <g fill="#3C9A47" stroke="#1F5A32" stroke-width="3" stroke-linejoin="round">
+    <path d="M318 176 C290 150 246 128 204 124 C222 158 262 182 318 176 Z"/>
+    <path d="M322 236 C352 206 400 190 452 194 C430 228 384 246 322 236 Z"/>
+    <path d="M318 296 C290 272 252 262 214 266 C234 298 270 310 318 296 Z"/>
+    <path d="M320 120 C306 102 304 86 314 70 C330 84 334 102 320 120 Z"/>
+  </g>
+  <g fill="none" stroke="#1F5A32" stroke-width="2" stroke-linecap="round">
+    <path d="M318 176 C290 160 252 142 214 128"/>
+    <path d="M322 236 C356 218 398 204 444 196"/>
+    <path d="M318 296 C292 284 256 274 222 268"/>
+  </g>
+
+  <!-- Światło -->
+  <g data-element="swiatlo">
+    <g stroke="#9C6B00" stroke-width="4" stroke-linecap="round">
+      <path d="M150 34v10M150 116v10M104 80h10M186 80h10M118 48l7 7M175 105l7 7M118 112l7 -7M175 55l7 -7"/>
+    </g>
+    <circle cx="150" cy="80" r="28" fill="#F5B800" stroke="#9C6B00" stroke-width="4"/>
+    <path d="M0 -3 H47.8 V-9 L62.8 0 L47.8 9 V3 H0 Z" transform="translate(190 106) rotate(37.2)" fill="#E0A400"/>
+    <path d="M0 -3 H47.3 V-9 L62.3 0 L47.3 9 V3 H0 Z" transform="translate(168 126) rotate(47.6)" fill="#E0A400"/>
+  </g>
+
+  <!-- Dwutlenek węgla: z powietrza do liścia -->
+  <g data-element="dwutlenek-wegla">
+    <path d="M0 -9 H127.7 V-20 L155.7 0 L127.7 20 V9 H0 Z" transform="translate(86 236) rotate(-20.3)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Tlen: z liścia do atmosfery -->
+  <g data-element="tlen">
+    <path d="M0 -9 H104.7 V-20 L132.7 0 L104.7 20 V9 H0 Z" transform="translate(446 190) rotate(-30.8)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Woda: z gleby przez korzenie w górę łodygi -->
+  <g data-element="woda">
+    <path d="M0 -9 H110.0 V-20 L138.0 0 L110.0 20 V9 H0 Z" transform="translate(284 456) rotate(-90.0)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Substancje pokarmowe: z liści w dół łodygi do pozostałych części rośliny -->
+  <g data-element="substancje-pokarmowe">
+    <path d="M0 -9 H174.0 V-20 L202.0 0 L174.0 20 V9 H0 Z" transform="translate(358 254) rotate(90.0)" fill="#FFFFFF" stroke="#11191B" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+</svg>

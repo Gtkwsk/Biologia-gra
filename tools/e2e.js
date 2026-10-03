@@ -4,7 +4,8 @@
 // Narzędzie deweloperskie (wymaga playwright). Sprawdza przejście mapa → świat → misja →
 // podsumowanie, przeciąganie myszą i palcem, stuknięcia, zapis postępu, wszystkie misje
 // świata 2 i jego bossa (przegrana i wygrana), otwarcie świata 3, atlas, mikroskop, bramkę
-// panelu rodzica, pracę offline oraz brak błędów w konsoli (w tym naruszeń CSP).
+// panelu rodzica, wszystkie misje i bossów światów 3, 4 i 6 (kolejne światy otwierają się po
+// bossach), pracę offline, układ na telefonie oraz brak błędów w konsoli (w tym naruszeń CSP).
 // Zadania rozwiązuje tools/rozwiazania.js na podstawie danych gry.
 // Każdy przebieg używa nowego, pustego profilu przeglądarki.
 
@@ -21,8 +22,11 @@ import typyKomorek from '../app/data/typy-komorek.js';
 import miasto from '../app/data/miasto.js';
 import wskazowki from '../app/data/wskazowki.js';
 import czesciKonstruktora from '../app/data/konstruktor.js';
+import procesy from '../app/data/procesy.js';
+import porownanie from '../app/data/porownanie.js';
+import { KLUCZ } from '../app/js/core/magazyn.js';
 
-const daneGry = { zadania, schematy, typyKomorek, miasto, wskazowki, czesciKonstruktora };
+const daneGry = { zadania, schematy, typyKomorek, miasto, wskazowki, czesciKonstruktora, procesy, porownanie };
 const zadaniePoId = new Map(zadania.map((z) => [z.id, z]));
 
 const { chromium } = wczytajPlaywright();
@@ -122,7 +126,9 @@ console.log('Tablet poziomo (mysz)');
   sprawdz((await strona.locator('.swiat').count()) === 6, 'mapa pokazuje sześć światów');
   sprawdz((await strona.locator('.swiat[data-swiat="2"]').getAttribute('data-status')) === 'otwarty', 'świat 2 jest otwarty');
   sprawdz((await strona.locator('.swiat[data-swiat="3"]').getAttribute('data-status')) === 'zablokowany', 'świat 3 czeka na bossa świata 2');
-  sprawdz((await strona.locator('.swiat[data-status="w-budowie"]').count()) === 4, 'pozostałe światy są w budowie');
+  sprawdz((await strona.locator('.swiat[data-status="w-budowie"]').count()) === 2, 'światy 1 i 5 są w budowie');
+  sprawdz((await strona.locator('.swiat[data-swiat="4"]').getAttribute('data-status')) === 'zablokowany', 'świat 4 czeka na bossa świata 3');
+  sprawdz((await strona.locator('.swiat[data-swiat="6"]').getAttribute('data-status')) === 'zablokowany', 'świat 6 czeka na bossa świata 4');
   await zrzut(strona, '01-mapa-tablet-poziomo');
 
   await strona.locator('.swiat[data-swiat="1"] .swiat__przycisk').click();
@@ -302,6 +308,49 @@ console.log('Tablet poziomo (mysz)');
   await strona.goto(`${adres}#/rodzic`);
   sprawdz((await strona.locator('.bramka').count()) === 1, 'po wyjściu panel znów wymaga bramki');
 
+  // Światy 3, 4 i 6: pozostałe misje i bossowie; kolejny gotowy świat otwiera się po bossie.
+  const przejdzione = new Set(['s3-twierdza', 's3-detektyw', 's3-konstruktor']);
+  const zrzutyMisji = { 's4-laboratorium': '16a-laboratorium', 's6-sprint': '16b-sprint', 's6-doba': '16c-doba' };
+  const nastepnySwiat = { 3: 'Kuchnia zasilana światłem', 4: 'Ogień bez płomienia' };
+  for (const idSwiata of [3, 4, 6]) {
+    const sw = swiaty.find((s) => s.id === idSwiata);
+    for (const m of sw.misje.filter((x) => !przejdzione.has(x.id))) {
+      const tytuly = await przejdzMisje(strona, idSwiata, m.id);
+      sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat ${idSwiata}, misja „${m.nazwa}”: od razu dobrze (wyzwania: ${tytuly.length})`);
+      if (zrzutyMisji[m.id]) await zrzut(strona, zrzutyMisji[m.id]);
+    }
+    await strona.goto(`${adres}#/swiat/${idSwiata}`);
+    await strona.locator('a.boss-wejscie').click();
+    await strona.locator('.boss-karta button', { hasText: 'Zaczynamy' }).click();
+    for (let i = 0; i < sw.boss.wyzwania.length; i++) {
+      await rozwiazBiezace(strona);
+      await strona.locator('.misja__wynik .przycisk--dalej').click();
+    }
+    await strona.locator('.boss-karta--wygrana').waitFor();
+    const tekstWygranej = await strona.locator('.boss-karta--wygrana').textContent();
+    sprawdz(tekstWygranej.includes(`${sw.boss.nazwa} pokonany!`), `boss świata ${idSwiata} („${sw.boss.nazwa}”) pokonany`);
+    if (nastepnySwiat[idSwiata]) {
+      sprawdz(tekstWygranej.includes(`Otwarty nowy świat: ${nastepnySwiat[idSwiata]}`), `po bossie świata ${idSwiata} otwiera się świat „${nastepnySwiat[idSwiata]}”`);
+    }
+    if (idSwiata === 6) await zrzut(strona, '16d-boss-swiata-6');
+  }
+  await strona.goto(adres);
+  await strona.locator('.mapa__swiaty').waitFor();
+  for (const id of [3, 4, 6]) {
+    sprawdz((await strona.locator(`.swiat[data-swiat="${id}"]`).getAttribute('data-status')) === 'pokonany', `świat ${id} oznaczony jako pokonany`);
+  }
+  await zrzut(strona, '16e-mapa-po-bossach');
+  await strona.goto(`${adres}#/atlas`);
+  await strona.locator('.ekran--atlas').waitFor();
+  const atlas = await strona.locator('.ekran--atlas').textContent();
+  sprawdz(['Procesy', 'Substancje', 'Organizmy'].every((g) => atlas.includes(g)), 'atlas ma grupy procesów, substancji i organizmów');
+  for (const k of ['fotosynteza', 'fermentacja-mlekowa', 'drozdze', 'woda-wapienna']) {
+    sprawdz((await strona.locator(`.karta-atlasu[data-karta="${k}"]`).getAttribute('data-poziom')) !== 'nieodkryta', `atlas: karta „${k}” odkryta`);
+  }
+  await strona.goto(`${adres}#/mikroskop`);
+  await strona.locator('.ekran--mikroskop').waitFor();
+  sprawdz(!(await strona.locator('.mikroskop__poziomy button', { hasText: '10 000' }).isDisabled()), 'mikroskop: 10 000 razy otwarte po bossie świata 3');
+
   // Praca offline
   await strona.goto(adres);
   await strona.evaluate(() => navigator.serviceWorker.ready.then(() => true));
@@ -314,6 +363,9 @@ console.log('Tablet poziomo (mysz)');
   await strona.goto(`${adres}#/swiat/3/misja/s3-bakterie`);
   await strona.locator('.podpis__rysunek').waitFor();
   sprawdz((await strona.locator('.bank .etykieta').count()) === 10, 'offline działa też schemat komórki bakteryjnej');
+  await strona.goto(`${adres}#/swiat/6/misja/s6-sprint`);
+  await strona.locator('.sprint__bieznia').waitFor();
+  sprawdz(await strona.locator('.sprint__akcja').isVisible(), 'offline działa też sprint w świecie 6');
   await kontekst.setOffline(false);
   await kontekst.close();
 }
@@ -356,11 +408,23 @@ console.log('Telefon');
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
   await zrzut(strona, '18-mapa-telefon');
+  // Ustawienie z panelu rodzica „odblokuj wszystkie gotowe światy”, żeby obejrzeć misje światów 4 i 6.
+  await strona.evaluate((klucz) => localStorage.setItem(klucz, JSON.stringify({ wersja: 2, ustawienia: { odblokujWszystkie: true } })), KLUCZ);
   await wejdzDoMisji(strona);
   for (const [adresEkranu, nazwa] of [
     [null, 'misja'],
     ['#/swiat/2/misja/s2-mikroskop', 'klasyfikacja ze sceną'],
     ['#/swiat/2/misja/s2-budowa-miasta', 'budowa miasta'],
+    ['#/swiat/4/misja/s4-przepis', 'przepis fotosyntezy'],
+    ['#/swiat/4/misja/s4-drogi', 'trzy drogi glukozy'],
+    ['#/swiat/4/misja/s4-laboratorium', 'laboratorium fotosyntezy'],
+    ['#/swiat/4/misja/s4-ogniwo', 'najsłabsze ogniwo'],
+    ['#/swiat/4/misja/s4-projektant', 'projektant doświadczeń'],
+    ['#/swiat/6/misja/s6-sprint', 'sprint'],
+    ['#/swiat/6/misja/s6-doba', 'liść przez dobę'],
+    ['#/swiat/6/misja/s6-lustro', 'lustro'],
+    ['#/swiat/6/misja/s6-tabela', 'tabela porównawcza'],
+    ['#/swiat/6/misja/s6-woda-wapienna', 'woda wapienna'],
     ['#/atlas', 'atlas'],
     ['#/mikroskop', 'mikroskop'],
     ['#/baza', 'baza'],
@@ -368,6 +432,9 @@ console.log('Telefon');
     if (adresEkranu) {
       await strona.goto(`${adres}${adresEkranu}`);
       await strona.waitForTimeout(400);
+    }
+    if (adresEkranu?.includes('/misja/')) {
+      await strona.locator('.misja__obszar .zadanie').first().waitFor();
     }
     const szerokosc = await strona.evaluate(() => document.documentElement.scrollWidth);
     sprawdz(szerokosc <= 390, `telefon, ${nazwa}: brak przewijania w poziomie (${szerokosc}px)`);

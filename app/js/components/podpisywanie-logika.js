@@ -28,14 +28,40 @@ export function wymieszaj(lista, losuj = Math.random) {
   return wynik;
 }
 
+export const idDystraktora = (d) => (typeof d === 'string' ? d : d.karta);
+
 // Punkty zadania z numerami 1…n w kolejności ze schematu, etykiety w banku i opisy elementów.
+// typKomorki: null dla schematu procesu (elementy z elementyProcesu).
 export function przygotujZadanie({ zadanie, schemat, elementy, typKomorki }) {
-  const elementPoId = new Map(elementy.map((e) => [e.id, elementWTypie(e, typKomorki.id)]));
+  const elementPoId = new Map(elementy.map((e) => [e.id, typKomorki ? elementWTypie(e, typKomorki.id) : e]));
   const punkty = schemat.punkty
     .filter((p) => zadanie.punkty.includes(p.id))
     .map((p, i) => ({ ...p, numer: i + 1 }));
-  const etykiety = [...punkty.map((p) => p.element), ...(zadanie.dystraktory ?? [])];
+  const etykiety = [...punkty.map((p) => p.element), ...(zadanie.dystraktory ?? []).map(idDystraktora)];
   return { punkty, etykiety, elementPoId, typKomorki, szerokosc: schemat.szerokosc, wysokosc: schemat.wysokosc };
+}
+
+// Etykiety schematu procesu (np. fotosyntezy) z kart atlasu. Punkt dostaje opis z danych schematu
+// (bez nazwy) i zdanie o swojej roli w procesie; dystraktor dostaje przyczynę błędu: własne
+// wyjaśnienie z zadania albo zdanie, że nie bierze udziału w procesie.
+export function elementyProcesu(schemat, proces, katalog, dystraktory = []) {
+  const elementy = schemat.punkty.map((p) => {
+    const k = katalog.get(p.element);
+    return { id: k.id, nazwa: k.nazwa, mnoga: k.mnoga, opis: p.opis, funkcja: proces.opisy?.[k.id] ?? k.zdanie };
+  });
+  for (const d of dystraktory) {
+    const k = katalog.get(idDystraktora(d));
+    const powod = typeof d === 'string' ? null : d.wyjasnienie;
+    elementy.push({
+      id: k.id,
+      nazwa: k.nazwa,
+      mnoga: k.mnoga,
+      opis: k.opis,
+      funkcja: k.zdanie,
+      powodBledu: powod ?? `${zWielkiej(k.nazwa)} nie ${k.mnoga ? 'biorą' : 'bierze'} udziału ${proces.miejscownik}.`,
+    });
+  }
+  return elementy;
 }
 
 export function nowyPrzebieg(przyg, tryb = 'trening') {
@@ -56,7 +82,8 @@ function el(przyg, id) {
 
 function przyczynaBledu(przyg, wybranyId) {
   const w = el(przyg, wybranyId);
-  if (przyg.typKomorki.obecnosc?.[wybranyId] === 'nie') {
+  if (w.powodBledu) return w.powodBledu;
+  if (przyg.typKomorki?.obecnosc?.[wybranyId] === 'nie') {
     return `${zWielkiej(przyg.typKomorki.nazwa)} nie ma ${w.brak}.`;
   }
   return `${zWielkiej(w.nazwa)} to ${w.opis}.`;

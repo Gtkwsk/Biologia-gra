@@ -1,4 +1,4 @@
-// Zadanie „tabela porównawcza” (SPEC.md, sekcja 5, typ 6): siatka ✓/✗.
+// Zadanie „tabela porównawcza” (SPEC.md, sekcja 5, typ 6): siatka ✓/✗ (typy komórek albo procesy).
 // Stuknięcie pola zmienia je kolejno: puste → ✓ → ✗ → puste.
 // Trening: po „Sprawdź” błędne pola są oznaczone i można je poprawić; wynik z pierwszego sprawdzenia.
 // Sprawdzian: jedno sprawdzenie.
@@ -6,13 +6,13 @@
 import { h, ikona } from '../core/dom.js';
 import { utworzKomunikat } from './komunikat.js';
 import { rysunekKarty } from './rysunki.js';
-import { idKartyTypu } from '../core/karty.js';
 import * as T from './tabela-logika.js';
 
 const KOLEJNOSC = [null, 'tak', 'nie'];
 
 export function utworzTabele(kontener, { zadanie, dane, tryb = 'trening', onKoniec }) {
   const przyg = T.przygotujTabele(zadanie, dane);
+  const opis = przyg.opis;
   const odpowiedzi = {};
   const pola = new Map();
   let pierwszaOcena = null;
@@ -20,10 +20,8 @@ export function utworzTabele(kontener, { zadanie, dane, tryb = 'trening', onKoni
   const komunikat = utworzKomunikat();
 
   const naglowek = h('tr', {}, [
-    h('th', { scope: 'col', class: 'tabela-zad__rog' }, 'Element'),
-    ...przyg.kolumny.map((k) =>
-      h('th', { scope: 'col' }, [rysunekKarty(idKartyTypu(k.id), 'tabela-zad__rysunek'), h('span', {}, k.nazwa.replace('komórka ', ''))]),
-    ),
+    h('th', { scope: 'col', class: 'tabela-zad__rog' }, opis.rog),
+    ...przyg.kolumny.map((k) => h('th', { scope: 'col' }, [rysunekKarty(opis.kartaKolumny(k), 'tabela-zad__rysunek'), h('span', {}, opis.nazwaKolumny(k))])),
   ]);
   const wiersze = przyg.wiersze.map((w) =>
     h('tr', {}, [
@@ -46,11 +44,7 @@ export function utworzTabele(kontener, { zadanie, dane, tryb = 'trening', onKoni
     h('div', { class: 'tacka' }, [komunikat.el, h('div', { class: 'tacka__akcje' }, przyciskSprawdz)]),
   ]);
   kontener.append(korzen);
-  komunikat.pokaz({
-    rodzaj: 'info',
-    tytul: 'Zaznacz, czy dana komórka ma ten element.',
-    tekst: 'Stuknij pole: raz to ✓ (ma), drugi raz ✗ (nie ma), trzeci raz czyści pole.',
-  });
+  komunikat.pokaz({ rodzaj: 'info', tytul: opis.instrukcja, tekst: opis.jakStukac });
 
   function pokazPole(kl, wynik = null) {
     const { pole, wiersz, kolumna } = pola.get(kl);
@@ -60,8 +54,8 @@ export function utworzTabele(kontener, { zadanie, dane, tryb = 'trening', onKoni
     else delete pole.dataset.wynik;
     const znak = pole.firstChild;
     znak.replaceChildren(wartosc ? ikona(wartosc === 'tak' ? 'dobrze' : 'zle') : '');
-    const opis = { tak: 'ma', nie: 'nie ma' }[wartosc] ?? 'puste';
-    pole.setAttribute('aria-label', `${kolumna.nazwa}, ${wiersz.wTabeli ?? wiersz.nazwa}: ${opis}`);
+    const stan = { tak: opis.tak, nie: opis.nie }[wartosc] ?? 'puste';
+    pole.setAttribute('aria-label', `${kolumna.nazwa}, ${wiersz.wTabeli ?? wiersz.nazwa}: ${stan}`);
   }
 
   function przelacz(kl) {
@@ -84,7 +78,7 @@ export function utworzTabele(kontener, { zadanie, dane, tryb = 'trening', onKoni
         bledne.length
           ? bledne.map((c) => {
               const { wiersz, kolumna } = pola.get(c.klucz);
-              return { rodzaj: 'zle', tytul: `${kolumna.nazwa}, ${wiersz.wTabeli ?? wiersz.nazwa}`, tekst: T.zdanieKomorki(kolumna, wiersz) };
+              return { rodzaj: 'zle', tytul: `${kolumna.nazwa}, ${wiersz.wTabeli ?? wiersz.nazwa}`, tekst: opis.zdanie(kolumna, wiersz) };
             })
           : [{ rodzaj: 'dobrze', tytul: 'Cała tabela poprawnie.' }],
       );
@@ -94,7 +88,7 @@ export function utworzTabele(kontener, { zadanie, dane, tryb = 'trening', onKoni
     komunikat.pokaz({
       rodzaj: 'zle',
       tytul: `Błędne pola: ${bledne.length}. Popraw pola z czerwoną ramką.`,
-      tekst: `Na przykład: ${T.zdanieKomorki(pierwszy.kolumna, pierwszy.wiersz)}`,
+      tekst: `Na przykład: ${opis.zdanie(pierwszy.kolumna, pierwszy.wiersz)}`,
     });
     przyciskSprawdz.textContent = 'Sprawdź ponownie';
   }
@@ -106,7 +100,7 @@ export function utworzTabele(kontener, { zadanie, dane, tryb = 'trening', onKoni
     const o = pierwszaOcena;
     const karty = [
       ...przyg.wiersze.map((w) => ({ karta: w.id, odRazu: o.wiersze[w.id], poprawnie: tryb === 'trening' || o.wiersze[w.id] })),
-      ...przyg.kolumny.map((k) => ({ karta: idKartyTypu(k.id), odRazu: o.kolumny[k.id], poprawnie: tryb === 'trening' || o.kolumny[k.id] })),
+      ...przyg.kolumny.map((k) => ({ karta: opis.kartaKolumny(k), odRazu: o.kolumny[k.id], poprawnie: tryb === 'trening' || o.kolumny[k.id] })),
     ];
     onKoniec?.({ poprawne: o.poprawne, wszystkie: o.wszystkie, karty });
   }
