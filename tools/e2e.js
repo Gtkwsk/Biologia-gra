@@ -132,6 +132,7 @@ console.log('Tablet poziomo (mysz)');
   sprawdz((await status(1)) === 'otwarty', 'świat 1 jest otwarty');
   for (const id of [2, 3, 4, 5, 6]) sprawdz((await status(id)) === 'zablokowany', `świat ${id} czeka na bossa poprzedniego świata`);
   sprawdz((await strona.locator('.swiat[data-status="w-budowie"]').count()) === 0, 'żaden świat nie jest w budowie');
+  sprawdz((await strona.locator('.mapa__autor').textContent()) === '© 2026 Robert Gutkowski', 'mapa ma oznaczenie autorstwa');
   await zrzut(strona, '01-mapa-tablet-poziomo');
 
   await strona.locator('.swiat[data-swiat="2"] .swiat__przycisk').click();
@@ -391,6 +392,9 @@ console.log('Tablet poziomo (mysz)');
   await strona.goto(`${adres}#/atlas`);
   await strona.locator('.ekran--atlas').waitFor();
   const atlas = await strona.locator('.ekran--atlas').textContent();
+  // Każdą kartę da się odkryć w misjach, więc po przejściu wszystkich misji odkryte są wszystkie.
+  const [odkryte, wszystkieKarty] = atlas.match(/Odkryte karty: (\d+) z (\d+)/).slice(1).map(Number);
+  sprawdz(odkryte === wszystkieKarty, `atlas: odkryte wszystkie karty (${odkryte} z ${wszystkieKarty})`);
   sprawdz(
     ['Pierwiastki', 'Związki chemiczne', 'Procesy', 'Substancje', 'Sposoby zdobywania pokarmu', 'Organizmy'].every((g) => atlas.includes(g)),
     'atlas ma grupy pierwiastków, związków, procesów, substancji, sposobów zdobywania pokarmu i organizmów',

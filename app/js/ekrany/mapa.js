@@ -56,7 +56,9 @@ export function render(kontener, ctx) {
     ? h('div', { class: 'mapa__stopka' }, h('a', { class: 'przycisk przycisk--dalej', href: '#/podsumowanie' }, 'Zakończ wyprawę'))
     : null;
 
-  kontener.append(h('div', { class: 'ekran ekran--mapa' }, [naglowek, plansza, stopka]));
+  const autor = h('footer', { class: 'mapa__autor' }, '© 2026 Robert Gutkowski');
+
+  kontener.append(h('div', { class: 'ekran ekran--mapa' }, [naglowek, plansza, stopka, autor]));
 
   const obserwator = new ResizeObserver(rysujSciezke);
   obserwator.observe(plansza);

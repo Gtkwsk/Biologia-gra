@@ -27,3 +27,5 @@ Gra zainstalowana na ekranie początkowym jest chroniona przed usuwaniem danych 
 - `git config core.hooksPath .githooks`: testy i walidator przed każdym commitem.
 
 Dokumenty: `CLAUDE.md` (zasady pracy), `SPEC.md` (projekt i dziennik decyzji), `TRESCI.md` (jedyne źródło treści), `AUDIOBOOK.md` (tekst słuchowiska).
+
+© 2026 Robert Gutkowski. Kroje pisma Lexend i Titan One mają własną licencję SIL Open Font License (pliki w `app/assets/fonts`).

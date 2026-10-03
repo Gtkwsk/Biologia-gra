@@ -168,6 +168,14 @@
   margin-top: 28px;
 }
 
+/* Oznaczenie autorstwa gry: małe i spokojne, na dole mapy. */
+.mapa__autor {
+  margin-top: 28px;
+  font-size: var(--r-0);
+  text-align: center;
+  color: var(--atrament-jasny);
+}
+
 @media (min-width: 520px) {
   .mapa__swiaty {
     grid-template-columns: repeat(2, 1fr);
