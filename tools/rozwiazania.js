@@ -255,6 +255,57 @@ const ROZWIAZANIA = {
       await dalej(strona, '.wakuola');
     }
   },
+  async lancuch(strona, z) {
+    for (const l of z.lancuchy) {
+      await strona.locator(`.lancuch__opcja[data-karta="${l.opcje.find((o) => o.poprawna).karta}"]`).click();
+      await dalej(strona, '.lancuch');
+    }
+  },
+
+  async rozbiorka(strona, z) {
+    await strona.locator('.rozbiorka__enzym').click();
+    for (const id of z.zwiazki) await strona.locator(`.rozbiorka__taca[data-zwiazek="${id}"]`).click();
+    await dalej(strona, '.rozbiorka');
+    for (const krok of z.pytania) {
+      await strona.locator(`.rozbiorka .dosw__opcja[data-opcja="${krok.opcje.findIndex((o) => o.poprawna)}"]`).click();
+      await dalej(strona, '.rozbiorka');
+    }
+  },
+
+  async las(strona, z) {
+    for (const e of z.etapy) {
+      await strona.locator('.las__akcja').click();
+      for (const krok of e.pytania) {
+        // Pytania pojawiają się dopiero po animacji kolejnych lat.
+        await strona.locator(`.las .dosw__opcja[data-opcja="${krok.opcje.findIndex((o) => o.poprawna)}"]`).click({ timeout: 15000 });
+        await dalej(strona, '.las');
+      }
+    }
+  },
+
+  async siatka(strona, z) {
+    for (const [i, e] of z.elementy.entries()) {
+      await stuknij(strona, `.bank .etykieta[data-element="el-${i}"]`, `.siatka__komorka[data-cel="${e.wiersz}|${e.kolumna}"]`);
+    }
+    await sprawdzJesliTrzeba(strona);
+  },
+
+  async slupki(strona, z) {
+    const ulozone = [...z.skladniki].sort((a, b) => b.procent - a.procent);
+    for (const [i, s] of ulozone.entries()) {
+      await stuknij(strona, `.bank .etykieta[data-element="${s.id}"]`, `.slupki__pole[data-cel="miejsce-${i + 1}"]`);
+    }
+    await sprawdzJesliTrzeba(strona);
+  },
+
+  async diagnoza(strona, z) {
+    for (const p of z.przypadki) {
+      await strona.locator(`.diag__skladnik[data-karta="${p.skladnik.opcje.find((o) => o.poprawna).karta}"]`).click();
+      await dalej(strona, '.diag');
+      await strona.locator(`.diag .dosw__opcja[data-opcja="${p.funkcja.opcje.findIndex((o) => o.poprawna)}"]`).click();
+      await dalej(strona, '.diag');
+    }
+  },
 };
 
 export async function rozwiaz(strona, zadanie, dane) {
