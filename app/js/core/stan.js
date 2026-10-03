@@ -1,13 +1,15 @@
 // Stan gry: jeden obiekt zapisywany lokalnie na urządzeniu.
 // Funkcje czyste, bez DOM i bez localStorage (zapis: magazyn.js).
 
-export const WERSJA_SCHEMATU = 2;
+export const WERSJA_SCHEMATU = 3;
 export const ID_GRY = 'wyprawa-do-wnetrza-zycia';
 export const PROG_OPANOWANIA = 0.8;
 export const DOMYSLNE_IMIE = 'Mikołaj';
 const MAKS_DLUGOSC_IMIENIA = 30;
 // Czas zadania liczony najwyżej do 15 minut, żeby przerwa przy otwartej grze nie zawyżała sumy.
 const MAKS_CZAS_ZADANIA_MS = 15 * 60 * 1000;
+// Pamiętane wyniki próbnego sprawdzianu (najnowsze na końcu).
+export const MAKS_SPRAWDZIANOW = 20;
 
 export class BladStanu extends Error {}
 
@@ -15,12 +17,14 @@ export function nowyStan(dzien) {
   return {
     wersja: WERSJA_SCHEMATU,
     utworzono: dzien,
-    ustawienia: { imie: DOMYSLNE_IMIE, odblokujWszystkie: false },
+    ustawienia: { imie: DOMYSLNE_IMIE, odblokujWszystkie: false, dzwiek: true },
     odblokowane: [],
     bossowie: [],
     zadania: {},
     pomylki: {},
     karty: {},
+    sprawdziany: [],
+    laboratorium: {},
     czasMs: 0,
   };
 }
@@ -29,6 +33,8 @@ export function nowyStan(dzien) {
 export const MIGRACJE = {
   // Wersja 2: karty atlasu. Wyników z wersji 1 nie da się rozbić na karty: atlas zaczyna od zera.
   1: (dane) => ({ ...dane, karty: {} }),
+  // Wersja 3: wyniki próbnego sprawdzianu, domowe laboratorium i dźwięki (domyślnie włączone).
+  2: (dane) => ({ ...dane, sprawdziany: [], laboratorium: {}, ustawienia: { ...dane.ustawienia, dzwiek: true } }),
 };
 
 export function migruj(dane, migracje = MIGRACJE, docelowa = WERSJA_SCHEMATU) {
@@ -100,6 +106,30 @@ function liczniki(v) {
   return wynik;
 }
 
+const czyDzien = (v) => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v);
+
+// Wynik próbnego sprawdzianu: { dzien, zadania: [{ punkt, zdobyte, maks }] } (punkty całkowite).
+function wynikiSprawdzianow(v) {
+  if (!Array.isArray(v)) return [];
+  const wynik = [];
+  for (const s of v) {
+    if (!czyObiekt(s) || !czyDzien(s.dzien) || !Array.isArray(s.zadania)) continue;
+    const zadania = s.zadania
+      .filter((z) => czyObiekt(z) && Number.isInteger(z.punkt) && Number.isInteger(z.maks) && z.maks > 0 && Number.isInteger(z.zdobyte))
+      .map((z) => ({ punkt: z.punkt, zdobyte: Math.min(z.maks, Math.max(0, z.zdobyte)), maks: z.maks }));
+    if (zadania.length) wynik.push({ dzien: s.dzien, zadania });
+  }
+  return wynik.slice(-MAKS_SPRAWDZIANOW);
+}
+
+// Domowe laboratorium: { id doświadczenia: dzień oznaczenia „Zrobione z dorosłym” }.
+function zrobioneDoswiadczenia(v) {
+  const wynik = {};
+  if (!czyObiekt(v)) return wynik;
+  for (const [id, dzien] of Object.entries(v)) if (czyDzien(dzien)) wynik[id] = dzien;
+  return wynik;
+}
+
 export function poprawImie(imie) {
   const t = typeof imie === 'string' ? imie.trim().replace(/\s+/g, ' ') : '';
   return t ? t.slice(0, MAKS_DLUGOSC_IMIENIA) : DOMYSLNE_IMIE;
@@ -115,12 +145,15 @@ export function normalizuj(dane, dzien) {
     ustawienia: {
       imie: poprawImie(ust.imie),
       odblokujWszystkie: ust.odblokujWszystkie === true,
+      dzwiek: ust.dzwiek !== false,
     },
     odblokowane: idSwiatow(d.odblokowane),
     bossowie: idSwiatow(d.bossowie),
     zadania: wynikiZadan(d.zadania),
     pomylki: liczniki(d.pomylki),
     karty: stanKart(d.karty),
+    sprawdziany: wynikiSprawdzianow(d.sprawdziany),
+    laboratorium: zrobioneDoswiadczenia(d.laboratorium),
     czasMs: liczbaNieujemna(d.czasMs),
   };
 }
@@ -194,4 +227,21 @@ export function ustawOdblokujWszystkie(stan, wartosc) {
 export function zaliczBossa(stan, idSwiata) {
   if (stan.bossowie.includes(idSwiata)) return stan;
   return { ...stan, bossowie: [...stan.bossowie, idSwiata].sort((a, b) => a - b) };
+}
+
+export function ustawDzwiek(stan, wartosc) {
+  return { ...stan, ustawienia: { ...stan.ustawienia, dzwiek: wartosc === true } };
+}
+
+// wynik: { dzien, zadania: [{ punkt, zdobyte, maks }] }; pamiętanych jest MAKS_SPRAWDZIANOW ostatnich.
+export function zapiszSprawdzian(stan, wynik) {
+  return { ...stan, sprawdziany: [...stan.sprawdziany, wynik].slice(-MAKS_SPRAWDZIANOW) };
+}
+
+// Oznaczenie doświadczenia z domowego laboratorium (zrobione: true) albo cofnięcie oznaczenia.
+export function oznaczDoswiadczenie(stan, id, dzien, zrobione = true) {
+  const laboratorium = { ...stan.laboratorium };
+  if (zrobione) laboratorium[id] = laboratorium[id] ?? dzien;
+  else delete laboratorium[id];
+  return { ...stan, laboratorium };
 }
