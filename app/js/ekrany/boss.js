@@ -17,6 +17,9 @@ const NAZWY_TYPOW = {
   klasyfikacja: 'klasyfikacja',
   'prawda-falsz': 'prawda czy fałsz',
   tabela: 'tabela porównawcza',
+  porownanie: 'tabela porównawcza',
+  doswiadczenie: 'doświadczenie',
+  sorter: 'przyporządkowanie zdań',
 };
 
 export function serca(liczba) {

@@ -4,6 +4,8 @@
 // karta: id karty atlasu (pojęcie, proces, substancja, organizm, element komórki).
 // Zadania z przedrostkiem s4-boss- należą tylko do puli bossa.
 // Liczby pęcherzyków w tabelach wyników są przykładowe; kierunek różnicy wynika z TRESCI.md.
+// Luki: każda luka ma jednoznaczną rolę w zdaniu. Słowa równorzędne (np. dwa substraty) nie stoją
+// w lukach obok siebie, bo zamiana ich kolejności byłaby poprawna, a gra uznałaby ją za błąd.
 
 const DROGI = [
   { id: 'energia', nazwa: 'źródło energii', karta: 'slonecznik' },
@@ -48,10 +50,10 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdanie o fotosyntezie.',
     tekst:
-      'W fotosyntezie z [dwutlenku węgla|dwutlenek-wegla|Ten gaz wnika do liści z powietrza przez aparaty szparkowe.] i [wody|woda|Tę substancję korzenie pobierają z gleby.], z udziałem energii [świetlnej|swiatlo|Tę energię pochłania chlorofil.], powstają [substancje pokarmowe|substancje-pokarmowe|To głównie glukoza.] i [tlen|tlen|Ten gaz trafia do atmosfery.].',
+      'Do fotosyntezy roślina potrzebuje [dwutlenku węgla|dwutlenek-wegla|Ten gaz wnika do liści z powietrza przez aparaty szparkowe.], który wnika do liści z powietrza, i [wody|woda|Tę substancję korzenie pobierają z gleby.], którą korzenie pobierają z gleby. Energii dostarcza światło, które pochłania [chlorofil|chlorofil|To zielony barwnik zawarty w chloroplastach.]. Powstają [substancje pokarmowe|substancje-pokarmowe|To głównie glukoza.], transportowane do wszystkich komórek rośliny, oraz [tlen|tlen|Ten gaz trafia do atmosfery.], który trafia do atmosfery.',
     dystraktory: [
-      { tekst: 'chemicznej', wyjasnienie: 'Energię chemiczną wykorzystują bakterie, które wytwarzają pokarm bez światła, w chemosyntezie.' },
-      { tekst: 'tlenu', wyjasnienie: 'Tlen powstaje w fotosyntezie; w zapisie słownym stoi po strzałce.' },
+      { tekst: 'tlenu', wyjasnienie: 'Tlen powstaje w fotosyntezie; nie jest jej składnikiem.' },
+      { tekst: 'mitochondria', wyjasnienie: 'Mitochondria dostarczają komórce energii; światło pochłania zielony barwnik.' },
     ],
     wyjasnienie: 'Zapis słowny fotosyntezy: dwutlenek węgla + woda → (światło, chlorofil) → substancje pokarmowe + tlen.',
     zrodlo: '2.4',
@@ -368,7 +370,7 @@ export default [
     zrodlo: '2.4',
   },
   {
-    id: 's4-dosw-swiatlo-1',
+    id: 's4-boss-dosw-swiatlo-1',
     swiat: 4,
     typ: 'doswiadczenie',
     tresc: 'Czy roślina potrzebuje światła? Odczytaj doświadczenie.',
@@ -551,6 +553,296 @@ export default [
       { tekst: 'tlenu', wyjasnienie: 'Tlen powstaje w fotosyntezie. Źródłem energii są substancje pokarmowe.' },
     ],
     wyjasnienie: 'Odżywianie się to dostarczanie substancji, które budują ciało i są źródłem energii. Organizmy samożywne same wytwarzają pokarm; większość z nich to rośliny.',
+    zrodlo: '2.4',
+  },
+
+  // ---------- Misja „Dno oceanu” ---------- (zadanie s4-dno-1 wyżej)
+
+  // ---------- Pule bossa ----------
+  {
+    id: 's4-boss-podpis-lisc-1',
+    swiat: 4,
+    typ: 'podpisywanie',
+    tresc: 'Podpisz schemat fotosyntezy w liściu.',
+    schemat: 'fotosynteza-lisc',
+    punkty: ['swiatlo', 'tlen', 'chloroplast', 'pokarm', 'woda', 'co2'],
+    dystraktory: [{ karta: 'mitochondrium', wyjasnienie: 'Mitochondria dostarczają komórce energii, a fotosynteza zachodzi w chloroplastach.' }],
+    wyjasnienie: 'Fotosynteza zachodzi w chloroplastach. Dwutlenek węgla wnika z powietrza, woda dopływa przez komórki przewodzące, a powstają substancje pokarmowe i tlen.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-podpis-lisc-2',
+    swiat: 4,
+    typ: 'podpisywanie',
+    tresc: 'Podpisz schemat fotosyntezy: co wchodzi do liścia, a co z niego wychodzi?',
+    schemat: 'fotosynteza-lisc',
+    punkty: ['swiatlo', 'tlen', 'pokarm', 'woda', 'co2'],
+    wyjasnienie: 'Do liścia docierają dwutlenek węgla, woda i światło. Z liścia wychodzą tlen (do atmosfery) i substancje pokarmowe (do wszystkich komórek rośliny).',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-podpis-roslina-2',
+    swiat: 4,
+    typ: 'podpisywanie',
+    tresc: 'Podpisz substancje na schemacie fotosyntezy.',
+    schemat: 'fotosynteza-roslina',
+    punkty: ['tlen', 'pokarm', 'woda', 'co2'],
+    wyjasnienie: 'Substraty fotosyntezy to dwutlenek węgla i woda, a produkty to substancje pokarmowe i tlen.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-luki-zapis-2',
+    swiat: 4,
+    typ: 'luki',
+    tresc: 'Uzupełnij zapis słowny fotosyntezy.',
+    tekst: 'dwutlenek węgla + [woda|woda] → (światło, [chlorofil|chlorofil]) → [substancje pokarmowe|substancje-pokarmowe] + tlen',
+    dystraktory: [
+      { tekst: 'sole mineralne', wyjasnienie: 'Sole mineralne wpływają na intensywność fotosyntezy, ale nie ma ich w jej zapisie słownym.' },
+      { tekst: 'mitochondria', wyjasnienie: 'Mitochondria dostarczają komórce energii. W zapisie fotosyntezy nad strzałką stoją światło i chlorofil.' },
+    ],
+    wyjasnienie: 'Zapis słowny fotosyntezy: dwutlenek węgla + woda → (światło, chlorofil) → substancje pokarmowe + tlen.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-klas-zapis-1',
+    swiat: 4,
+    typ: 'klasyfikacja',
+    tresc: 'Co jest potrzebne do fotosyntezy, a co w niej powstaje?',
+    kategorie: [
+      { id: 'potrzebne', nazwa: 'potrzebne do fotosyntezy' },
+      { id: 'powstaje', nazwa: 'powstaje w fotosyntezie', karta: 'fotosynteza' },
+    ],
+    elementy: [
+      { tekst: 'dwutlenek węgla', kategoria: 'potrzebne', karta: 'dwutlenek-wegla', wyjasnienie: 'Dwutlenek węgla wnika do liści z powietrza i jest potrzebny do fotosyntezy.' },
+      { tekst: 'woda', kategoria: 'potrzebne', karta: 'woda', wyjasnienie: 'Wodę pobierają z gleby korzenie; jest potrzebna do fotosyntezy.' },
+      { tekst: 'światło', kategoria: 'potrzebne', karta: 'swiatlo', wyjasnienie: 'Światło dostarcza energii; pochłania je chlorofil.' },
+      { tekst: 'substancje pokarmowe', kategoria: 'powstaje', karta: 'substancje-pokarmowe', wyjasnienie: 'Substancje pokarmowe powstają w fotosyntezie.' },
+      { tekst: 'glukoza', kategoria: 'powstaje', karta: 'glukoza', wyjasnienie: 'Glukoza to główna substancja pokarmowa powstająca w fotosyntezie.' },
+      { tekst: 'tlen', kategoria: 'powstaje', karta: 'tlen', wyjasnienie: 'Tlen powstaje w fotosyntezie i trafia do atmosfery.' },
+    ],
+    wyjasnienie: 'Do fotosyntezy potrzebne są dwutlenek węgla, woda i światło; powstają substancje pokarmowe (głównie glukoza) i tlen.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-drogi-klas-1',
+    swiat: 4,
+    typ: 'klasyfikacja',
+    tresc: 'Jak roślina wykorzystuje substancje pokarmowe? Przyporządkuj przykłady.',
+    kategorie: DROGI,
+    elementy: [
+      { tekst: 'ruch kwiatów słonecznika w stronę słońca', kategoria: 'energia', karta: 'slonecznik', wyjasnienie: 'Na ruch roślina zużywa energię z substancji pokarmowych.' },
+      { tekst: 'wzrost nowych liści', kategoria: 'budowa', wyjasnienie: 'Nowe liście to budowa ciała w czasie wzrostu i rozwoju.' },
+      { tekst: 'owoce truskawki', kategoria: 'budowa', karta: 'truskawka', wyjasnienie: 'Z substancji pokarmowych truskawka buduje owoce.' },
+      { tekst: 'skrobia w bulwach ziemniaka', kategoria: 'zapas', karta: 'ziemniak', wyjasnienie: 'Skrobia w bulwach ziemniaka to materiał zapasowy.' },
+      { tekst: 'zapasy na niekorzystne warunki', kategoria: 'zapas', wyjasnienie: 'Materiał zapasowy pomaga roślinie przetrwać niekorzystne warunki.' },
+    ],
+    wyjasnienie: 'Substancje pokarmowe są dla rośliny źródłem energii, materiałem do budowy ciała i materiałem zapasowym.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-pf-drogi-1',
+    swiat: 4,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz?',
+    zdania: [
+      {
+        tekst: 'Roślina wykorzystuje substancje pokarmowe jako źródło energii, do budowy ciała i jako materiał zapasowy.',
+        prawda: true,
+        karta: 'substancje-pokarmowe',
+        wyjasnienie: 'To trzy sposoby wykorzystania substancji pokarmowych przez roślinę.',
+      },
+      {
+        tekst: 'Skrobia w bulwach ziemniaka służy do ruchu kwiatów słonecznika.',
+        prawda: false,
+        karta: 'ziemniak',
+        poprawne: 'Skrobia w bulwach ziemniaka to materiał zapasowy.',
+        bledne: ['Skrobia w bulwach ziemniaka to źródło azotu.', 'Skrobia w bulwach ziemniaka powstaje z tlenu.'],
+        wyjasnienie: 'Ziemniak gromadzi skrobię w bulwach jako materiał zapasowy.',
+      },
+      {
+        tekst: 'Ruch kwiatów słonecznika w stronę słońca wymaga energii.',
+        prawda: true,
+        karta: 'slonecznik',
+        wyjasnienie: 'Energii dostarczają substancje pokarmowe.',
+      },
+      {
+        tekst: 'Substancje pokarmowe zostają tylko w liściach, w których powstały.',
+        prawda: false,
+        karta: 'substancje-pokarmowe',
+        poprawne: 'Substancje pokarmowe są transportowane do wszystkich komórek rośliny.',
+        bledne: ['Substancje pokarmowe są transportowane tylko do korzeni.', 'Substancje pokarmowe trafiają do atmosfery.'],
+        wyjasnienie: 'Do atmosfery trafia tlen, a substancje pokarmowe docierają do wszystkich komórek rośliny.',
+      },
+      {
+        tekst: 'Materiał zapasowy pomaga roślinie przetrwać niekorzystne warunki.',
+        prawda: true,
+        karta: 'ziemniak',
+        wyjasnienie: 'Umożliwia też wiosną rozwój nowych pędów.',
+      },
+    ],
+    wyjasnienie: 'Roślina wykorzystuje substancje pokarmowe jako źródło energii, do budowy ciała i jako materiał zapasowy; substancje pokarmowe docierają do wszystkich jej komórek.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-dosw-co2-2',
+    swiat: 4,
+    typ: 'doswiadczenie',
+    tresc: 'Uczniowie powtórzyli doświadczenie z moczarką trzy razy. Odczytaj wyniki.',
+    scena: 'moczarka-co2',
+    opis:
+      'Dwie takie same gałązki moczarki kanadyjskiej postawiono na parapecie: w szklance A z wodą gazowaną i w szklance B z wodą z kranu. Trzy razy liczono pęcherzyki tlenu wydzielane w ciągu minuty.',
+    wyniki: {
+      kolumny: ['Szklanka', 'Pomiar 1', 'Pomiar 2', 'Pomiar 3'],
+      wiersze: [
+        ['A: woda gazowana', '22', '25', '23'],
+        ['B: woda z kranu', '8', '10', '9'],
+      ],
+    },
+    kroki: [
+      {
+        pytanie: 'Czym różnią się próby?',
+        opcje: [
+          { tekst: 'ilością dwutlenku węgla w wodzie', poprawna: true },
+          { tekst: 'ilością światła', wyjasnienie: 'Obie szklanki stały na tym samym parapecie.' },
+          { tekst: 'wielkością gałązek', wyjasnienie: 'Gałązki były takie same.' },
+        ],
+        wyjasnienie: 'W wodzie gazowanej jest więcej dwutlenku węgla niż w wodzie z kranu.',
+        karta: 'dwutlenek-wegla',
+      },
+      {
+        pytanie: 'Która szklanka to próba kontrolna?',
+        kolejnosc: 'stala',
+        opcje: [
+          { tekst: 'A: woda gazowana', wyjasnienie: 'W szklance A zmieniono badany czynnik, więc to próba badawcza.' },
+          { tekst: 'B: woda z kranu', poprawna: true },
+        ],
+        wyjasnienie: 'Próba kontrolna to punkt odniesienia: nie zmienia się w niej badanego czynnika.',
+        karta: 'proba-kontrolna',
+      },
+      {
+        pytanie: 'Jak zmieni się liczba pęcherzyków w szklance B, gdy wodę z kranu zastąpimy wodą gazowaną?',
+        opcje: [
+          { tekst: 'Wzrośnie.', poprawna: true },
+          { tekst: 'Zmaleje.', wyjasnienie: 'Więcej dwutlenku węgla zwiększa intensywność fotosyntezy.' },
+          { tekst: 'Spadnie do zera.', wyjasnienie: 'Gałązka nadal ma światło i dwutlenek węgla, więc fotosynteza zachodzi.' },
+        ],
+        wyjasnienie: 'Gałązka w wodzie gazowanej wydziela więcej pęcherzyków tlenu.',
+        karta: 'intensywnosc-fotosyntezy',
+      },
+      {
+        pytanie: 'Jaki wniosek wynika z doświadczenia?',
+        opcje: [
+          { tekst: 'Większe stężenie dwutlenku węgla zwiększa intensywność fotosyntezy.', poprawna: true },
+          { tekst: 'Większe stężenie dwutlenku węgla zmniejsza intensywność fotosyntezy.', wyjasnienie: 'W wodzie gazowanej pęcherzyków było więcej, nie mniej.' },
+          { tekst: 'Dwutlenek węgla nie wpływa na fotosyntezę.', wyjasnienie: 'Liczby pęcherzyków w szklankach wyraźnie się różnią.' },
+        ],
+        wyjasnienie: 'We wszystkich pomiarach w wodzie gazowanej pęcherzyków było więcej.',
+        karta: 'intensywnosc-fotosyntezy',
+      },
+    ],
+    wyjasnienie: 'Większe stężenie dwutlenku węgla zwiększa intensywność fotosyntezy. Szklanka z wodą z kranu to próba kontrolna.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-luki-co2-1',
+    swiat: 4,
+    typ: 'luki',
+    tresc: 'Uzupełnij zdania o dwutlenku węgla i fotosyntezie.',
+    tekst:
+      'W szklarniach sztucznie [zwiększa|intensywnosc-fotosyntezy] się stężenie dwutlenku węgla, bo wtedy fotosynteza jest [intensywniejsza|intensywnosc-fotosyntezy]. W doświadczeniu z moczarką gałązka w wodzie [gazowanej|proba-badawcza] wydzielała więcej pęcherzyków [tlenu|tlen] niż gałązka w wodzie z kranu.',
+    dystraktory: [
+      { tekst: 'zmniejsza', wyjasnienie: 'Mniej dwutlenku węgla zmniejsza intensywność fotosyntezy, a ogrodnikom zależy na szybkim wzroście roślin.' },
+      { tekst: 'dwutlenku węgla', wyjasnienie: 'Gałązki wydzielają tlen, który powstaje w fotosyntezie.' },
+    ],
+    wyjasnienie: 'Większe stężenie dwutlenku węgla zwiększa intensywność fotosyntezy: dlatego w szklarniach się je zwiększa, a gałązka w wodzie gazowanej wydziela więcej tlenu.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-pf-co2-1',
+    swiat: 4,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz?',
+    zdania: [
+      {
+        tekst: 'W szklarniach sztucznie zwiększa się stężenie dwutlenku węgla.',
+        prawda: true,
+        karta: 'dwutlenek-wegla',
+        wyjasnienie: 'Dzięki temu fotosynteza jest intensywniejsza, a rośliny rosną szybciej.',
+      },
+      {
+        tekst: 'W doświadczeniu z moczarką próbą kontrolną jest szklanka z wodą gazowaną.',
+        prawda: false,
+        karta: 'proba-kontrolna',
+        poprawne: 'W doświadczeniu z moczarką próbą kontrolną jest szklanka z wodą z kranu.',
+        bledne: ['W doświadczeniu z moczarką próbą kontrolną jest szklanka bez gałązki.', 'W doświadczeniu z moczarką nie ma próby kontrolnej.'],
+        wyjasnienie: 'Woda gazowana to próba badawcza, bo zmieniono w niej badany czynnik: ilość dwutlenku węgla.',
+      },
+      {
+        tekst: 'Pęcherzyki wydzielane przez gałązkę moczarki to dwutlenek węgla.',
+        prawda: false,
+        karta: 'tlen',
+        poprawne: 'Pęcherzyki wydzielane przez gałązkę moczarki to tlen.',
+        bledne: ['Pęcherzyki wydzielane przez gałązkę moczarki to woda.', 'Pęcherzyki wydzielane przez gałązkę moczarki to chlorofil.'],
+        wyjasnienie: 'Gałązka wydziela tlen, który powstaje w fotosyntezie.',
+      },
+      {
+        tekst: 'Większe stężenie dwutlenku węgla zwiększa intensywność fotosyntezy.',
+        prawda: true,
+        karta: 'intensywnosc-fotosyntezy',
+        wyjasnienie: 'Pokazuje to doświadczenie z moczarką w wodzie gazowanej.',
+      },
+      {
+        tekst: 'Próba kontrolna jest punktem odniesienia dla próby badawczej.',
+        prawda: true,
+        karta: 'proba-kontrolna',
+        wyjasnienie: 'Bez próby kontrolnej nie byłoby wiadomo, czy różnicę spowodował badany czynnik.',
+      },
+    ],
+    wyjasnienie: 'Większe stężenie dwutlenku węgla zwiększa intensywność fotosyntezy. W doświadczeniu z moczarką woda z kranu to próba kontrolna.',
+    zrodlo: '2.4',
+  },
+  {
+    id: 's4-boss-pf-1',
+    swiat: 4,
+    typ: 'prawda-falsz',
+    tresc: 'Prawda czy fałsz?',
+    zdania: [
+      {
+        tekst: 'Fotosynteza zachodzi głównie w liściach, w chloroplastach.',
+        prawda: true,
+        karta: 'fotosynteza',
+        wyjasnienie: 'Komórki liści są pełne chloroplastów z chlorofilem.',
+      },
+      {
+        tekst: 'Dwutlenek węgla roślina pobiera z gleby przez korzenie.',
+        prawda: false,
+        karta: 'dwutlenek-wegla',
+        poprawne: 'Dwutlenek węgla wnika do liści z powietrza przez aparaty szparkowe.',
+        bledne: ['Dwutlenek węgla roślina pobiera z gleby przez włośniki.', 'Dwutlenek węgla roślina wytwarza w chloroplastach.'],
+        wyjasnienie: 'Z gleby korzenie pobierają wodę, a dwutlenek węgla pochodzi z powietrza.',
+      },
+      {
+        tekst: 'Światło pochłania chlorofil.',
+        prawda: true,
+        karta: 'chlorofil',
+        wyjasnienie: 'Chlorofil to zielony barwnik zawarty w chloroplastach.',
+      },
+      {
+        tekst: 'Rosiczka jest organizmem cudzożywnym, bo chwyta owady.',
+        prawda: false,
+        karta: 'rosiczka',
+        poprawne: 'Rosiczka jest organizmem samożywnym, choć chwyta owady i pobiera z nich azot.',
+        bledne: ['Rosiczka jest organizmem cudzożywnym i nie przeprowadza fotosyntezy.', 'Rosiczka pobiera z owadów tlen.'],
+        wyjasnienie: 'Rosiczka sama wytwarza pokarm; z owadów pobiera azot.',
+      },
+      {
+        tekst: 'Tlen powstający w fotosyntezie trafia do atmosfery.',
+        prawda: true,
+        karta: 'tlen',
+        wyjasnienie: 'Tlen jest produktem fotosyntezy.',
+      },
+    ],
+    wyjasnienie: 'Fotosynteza zachodzi głównie w liściach, w chloroplastach; dwutlenek węgla pochodzi z powietrza, a tlen trafia do atmosfery.',
     zrodlo: '2.4',
   },
 ];
