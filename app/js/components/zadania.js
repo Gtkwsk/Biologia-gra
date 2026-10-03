@@ -22,6 +22,12 @@ import { utworzLaboratorium } from './laboratorium.js';
 import { utworzProjektanta } from './projektant.js';
 import { utworzSprint } from './sprint.js';
 import { utworzDobe } from './doba.js';
+import { utworzLancuch } from './lancuch.js';
+import { utworzRozbiorke } from './rozbiorka.js';
+import { utworzLas } from './las.js';
+import { utworzSiatke } from './siatka.js';
+import { utworzSlupki } from './slupki.js';
+import { utworzDiagnoze } from './diagnoza.js';
 import { obrazSceny } from './obrazy.js';
 
 const TYPY = {
@@ -87,6 +93,24 @@ const TYPY = {
   },
   async doba(zadanie) {
     return (kontener, opcje) => utworzDobe(kontener, { zadanie, ...opcje });
+  },
+  async siatka(zadanie) {
+    return (kontener, opcje) => utworzSiatke(kontener, { zadanie, ...opcje });
+  },
+  async slupki(zadanie) {
+    return (kontener, opcje) => utworzSlupki(kontener, { zadanie, ...opcje });
+  },
+  async diagnoza(zadanie, dane) {
+    return (kontener, opcje) => utworzDiagnoze(kontener, { zadanie, dane, ...opcje });
+  },
+  async las(zadanie) {
+    return (kontener, opcje) => utworzLas(kontener, { zadanie, ...opcje });
+  },
+  async rozbiorka(zadanie) {
+    return (kontener, opcje) => utworzRozbiorke(kontener, { zadanie, ...opcje });
+  },
+  async lancuch(zadanie, dane) {
+    return (kontener, opcje) => utworzLancuch(kontener, { zadanie, dane, ...opcje });
   },
   async projektant(zadanie) {
     return (kontener, opcje) => utworzProjektanta(kontener, { zadanie, ...opcje });

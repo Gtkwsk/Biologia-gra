@@ -1,0 +1,342 @@
+/* Mechaniki świata 1 „Alfabet życia” (składniki chemiczne organizmów): sortownia (siatka),
+   skład ciała (słupki), ratuj organizm (diagnoza). */
+
+/* ---------- Sortownia: siatka związek × funkcja ---------- */
+
+.siatka__plansza {
+  overflow-x: auto;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.siatka__tabela {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.siatka__tabela th,
+.siatka__tabela td {
+  padding: 6px;
+  border: 1px solid #d5dbd3;
+  vertical-align: top;
+}
+
+.siatka__tabela thead th {
+  font-size: var(--r-0);
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.siatka__rog {
+  width: 8.5rem;
+  font-size: 0.8rem;
+  color: var(--atrament-jasny);
+}
+
+.siatka__tabela tbody th {
+  font-weight: 800;
+  text-align: left;
+}
+
+.siatka__tabela tbody th > * {
+  vertical-align: middle;
+}
+
+.siatka__rysunek {
+  width: 32px;
+  height: 32px;
+  margin-right: 6px;
+}
+
+.siatka__komorka {
+  min-width: 6rem;
+  height: 4.5rem;
+  background: #fbfcf8;
+  cursor: pointer;
+}
+
+.siatka__komorka[data-podswietl='true'] {
+  outline: 3px solid var(--chlorofil);
+  outline-offset: -3px;
+}
+
+.siatka__lista {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Telefon: każdy wiersz jako karta z kratkami podpisanymi nazwą funkcji. */
+@media (max-width: 599px) {
+  .siatka__tabela thead {
+    display: none;
+  }
+  .siatka__tabela,
+  .siatka__tabela tbody,
+  .siatka__tabela tr,
+  .siatka__tabela th,
+  .siatka__tabela td {
+    display: block;
+    width: auto;
+  }
+  .siatka__tabela tr {
+    padding: 8px;
+    border-bottom: 2px solid #d5dbd3;
+  }
+  .siatka__tabela th,
+  .siatka__tabela td {
+    border: 0;
+  }
+  .siatka__komorka {
+    height: auto;
+    min-height: 3rem;
+    margin-top: 6px;
+    border: 2px dashed #c9d3cb !important;
+    border-radius: 8px;
+  }
+  .siatka__komorka::before {
+    content: attr(data-kolumna);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--atrament-jasny);
+  }
+}
+
+/* ---------- Skład ciała: słupki ---------- */
+
+.slupki__plansza {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.slupki__lista {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slupki__kolumna {
+  display: grid;
+  grid-template-rows: auto 150px auto;
+  gap: 6px;
+  align-items: end;
+}
+
+.slupki__miejsce {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--atrament-jasny);
+}
+
+.slupki__wykres {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-items: end;
+  justify-items: center;
+  height: 100%;
+}
+
+.slupki__slupek {
+  width: 70%;
+  height: 0;
+  background: #5da9d6;
+  border: 2px solid #2f6f94;
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  transition: height 1s ease-out;
+}
+
+.slupki__plansza--gotowa .slupki__slupek,
+.slupki__porownanie:not([hidden]) .slupki__slupek {
+  height: var(--wysokosc, 0);
+}
+
+.slupki__slupek--porownanie {
+  background: #9ad0ec;
+}
+
+.slupki__wartosc {
+  font-family: var(--font-tytul);
+  font-size: 1.1rem;
+}
+
+.slupki__pole {
+  width: 100%;
+  min-height: 3.2rem;
+  font-size: 0.85rem;
+}
+
+.slupki__notka {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--atrament-jasny);
+}
+
+.slupki__porownanie {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  grid-template-rows: 150px;
+  align-items: end;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 2px dashed #d5dbd3;
+}
+
+.slupki__porownanie p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  align-self: center;
+}
+
+.slupki__rysunek {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+}
+
+@media (max-width: 599px) {
+  .slupki__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .slupki__kolumna {
+    grid-template-rows: auto 110px auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slupki__slupek {
+    transition: none;
+  }
+}
+
+/* ---------- Ratuj organizm: diagnoza ---------- */
+
+.diag__stol {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 760px) {
+  .diag__stol {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+
+.diag__widok {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.diag__scena {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  margin: 0 auto;
+  background: #f4f9f2;
+  border-radius: 10px;
+}
+
+.diag__objaw {
+  margin: 0;
+}
+
+.diag__lisc {
+  fill: #e3c34a;
+  transition: fill 1s;
+}
+
+.diag__scena--po .diag__lisc {
+  fill: #3c9a47;
+}
+
+.diag__kosc {
+  fill: #efe6d2;
+  transition: fill 1s;
+}
+
+.diag__scena--po .diag__kosc {
+  fill: #ffffff;
+}
+
+/* Po diagnozie znika objaw (pęknięcie, krople potu, zimno, zbędne substancje)
+   i pojawia się skutek (para, warstwa tłuszczu, droga skrobi, odpływ z wodą). */
+.diag__scena--po .diag__peknienie,
+.diag__scena--po .diag__krople,
+.diag__scena--po .diag__zimno,
+.diag__scena--po .diag__smieci {
+  opacity: 0;
+}
+
+.diag__para,
+.diag__tluszcz,
+.diag__droga,
+.diag__odplyw {
+  opacity: 0;
+}
+
+.diag__scena--po .diag__para,
+.diag__scena--po .diag__tluszcz,
+.diag__scena--po .diag__droga,
+.diag__scena--po .diag__odplyw {
+  opacity: 1;
+}
+
+.diag__twarz {
+  fill: #f29c86;
+  transition: fill 1s;
+}
+
+.diag__scena--po .diag__twarz {
+  fill: #f6c9a8;
+}
+
+.diag__tluszcz {
+  stroke: #f2d06b;
+  transition: opacity 0.8s;
+}
+
+.diag__scena--po .diag__skrobia ellipse:nth-child(odd) {
+  opacity: 0.25;
+}
+
+.diag__peknienie,
+.diag__krople,
+.diag__para,
+.diag__zimno,
+.diag__smieci,
+.diag__droga,
+.diag__odplyw,
+.diag__skrobia ellipse {
+  transition: opacity 0.8s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diag__lisc,
+  .diag__kosc,
+  .diag__twarz {
+    transition: none;
+  }
+}
