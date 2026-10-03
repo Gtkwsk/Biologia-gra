@@ -11,10 +11,13 @@ test('adresy ekranów są rozpoznawane', () => {
   assert.deepEqual(parsujAdres('#/podsumowanie'), { ekran: 'podsumowanie' });
   assert.deepEqual(parsujAdres('#/baza'), { ekran: 'baza' });
   assert.deepEqual(parsujAdres('#/rodzic'), { ekran: 'rodzic' });
+  assert.deepEqual(parsujAdres('#/swiat/3/boss'), { ekran: 'boss', swiat: 3 });
+  assert.deepEqual(parsujAdres('#/atlas'), { ekran: 'atlas' });
+  assert.deepEqual(parsujAdres('#/mikroskop'), { ekran: 'mikroskop' });
 });
 
 test('nieznane i niepełne adresy nie otwierają ekranów', () => {
-  for (const h of ['#/swiat/7', '#/swiat/x', '#/swiat/2/misja', '#/swiat/2/inne/a', '#/baza/x', '#/cos', '#/%E0%A4%A']) {
+  for (const h of ['#/swiat/7', '#/swiat/x', '#/swiat/2/misja', '#/swiat/2/inne/a', '#/swiat/2/boss/x', '#/baza/x', '#/atlas/2', '#/cos', '#/%E0%A4%A']) {
     assert.deepEqual(parsujAdres(h), { ekran: 'nieznany' }, h);
   }
 });
@@ -24,7 +27,10 @@ test('adres i parsowanie są odwrotne', () => {
     { ekran: 'mapa' },
     { ekran: 'swiat', swiat: 4 },
     { ekran: 'misja', swiat: 2, misja: 's2-plan-miasta' },
+    { ekran: 'boss', swiat: 2 },
     { ekran: 'baza' },
+    { ekran: 'atlas' },
+    { ekran: 'mikroskop' },
     { ekran: 'rodzic' },
     { ekran: 'podsumowanie' },
   ];

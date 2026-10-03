@@ -35,7 +35,8 @@ export default [
     },
     rysunek: 'assets/svg/komorka-zwierzeca.svg',
     opis: 'komórka z błoną komórkową, cytozolem, jądrem, mitochondriami i wieloma drobnymi wakuolami, bez ściany komórkowej',
-    swiat: 2,
+    // Karty typów komórek ćwiczy świat 3 (porównania), dlatego w atlasie są w świecie 3.
+    swiat: 3,
   },
   {
     id: 'roslinna',

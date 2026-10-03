@@ -1,9 +1,36 @@
 // Wstęp do świata: scena w soczewce, kilka zdań fabuły, misje, ciekawostka.
 
-import { h } from '../core/dom.js';
+import { h, ikona } from '../core/dom.js';
 import { otwarteSwiaty, statusSwiata, opanowanieSwiata } from '../core/swiaty.js';
 import { PROG_OPANOWANIA } from '../core/stan.js';
+import { bossDostepny, misjeUkonczone } from '../core/boss.js';
 import { soczewka, miernikOstrosci, pasek, ekranNiedostepny } from './wspolne.js';
+
+function kartaBossa(sw, stan) {
+  if (!sw.boss) return null;
+  const pokonany = stan.bossowie.includes(sw.id);
+  const dostepny = bossDostepny(sw, stan);
+  const tresc = [
+    h('span', { class: 'boss-wejscie__etykieta' }, pokonany ? 'Boss pokonany' : 'Boss świata'),
+    h('span', { class: 'boss-wejscie__nazwa' }, sw.boss.nazwa),
+    h(
+      'span',
+      { class: 'boss-wejscie__opis' },
+      dostepny
+        ? pokonany
+          ? 'Rewanż: nowe warianty zadań w formatach sprawdzianu.'
+          : sw.boss.opis
+        : `Ukończ wszystkie misje, żeby go wyzwać. Ukończone: ${misjeUkonczone(sw, stan)} z ${sw.misje.length}.`,
+    ),
+  ];
+  if (!dostepny) {
+    return h('div', { class: 'boss-wejscie', 'data-stan': 'zamkniety' }, [h('span', { class: 'boss-wejscie__znak' }, ikona('klodka')), h('span', { class: 'boss-wejscie__tresc' }, tresc)]);
+  }
+  return h('a', { class: 'boss-wejscie', href: `#/swiat/${sw.id}/boss`, 'data-stan': pokonany ? 'pokonany' : 'gotowy' }, [
+    h('span', { class: 'boss-wejscie__znak' }, ikona(pokonany ? 'dobrze' : 'serce')),
+    h('span', { class: 'boss-wejscie__tresc' }, tresc),
+  ]);
+}
 
 function stanMisji(misja, stan) {
   const wyniki = misja.zadania.map((id) => stan.zadania[id]);
@@ -67,7 +94,7 @@ export function render(kontener, ctx, cel) {
         ]),
       ]),
       h('div', { class: 'swiat-tresc' }, [
-        h('section', { class: 'misje', 'aria-labelledby': 'misje-naglowek' }, [h('h2', { id: 'misje-naglowek' }, 'Misje'), misje]),
+        h('section', { class: 'misje', 'aria-labelledby': 'misje-naglowek' }, [h('h2', { id: 'misje-naglowek' }, 'Misje'), misje, kartaBossa(sw, ctx.stan)]),
         h('div', { class: 'swiat-dodatki' }, [
           sw.coZbadasz.length
             ? h('section', { class: 'co-zbadasz' }, [h('h2', {}, 'Co tu zbadasz'), h('ul', {}, sw.coZbadasz.map((t) => h('li', {}, t)))])

@@ -40,8 +40,20 @@ function wielokat(cx, cy, r, los) {
   return punkty.join(' ');
 }
 
+// Podpis na scenie: linia od wskazanego miejsca do napisu na białym tle.
+function podpis([x1, y1], [x2, y2], tekst) {
+  const szer = tekst.length * 7 + 14;
+  return s('g', { class: 'scena__podpis' }, [
+    s('line', { x1, y1, x2, y2, stroke: '#11191B', 'stroke-width': 1.6 }),
+    s('circle', { cx: x1, cy: y1, r: 2.6, fill: '#11191B' }),
+    s('rect', { x: x2 - szer / 2, y: y2 - 11, width: szer, height: 22, rx: 5, fill: '#FFFFFF', stroke: '#11191B', 'stroke-width': 1.4 }),
+    s('text', { x: x2, y: y2 + 4.5, 'text-anchor': 'middle' }, tekst),
+  ]);
+}
+
 // Płaskie komórki nabłonka jamy ustnej, każda z jądrem (barwione).
-function nablonek400() {
+// Przy powiększeniu około 400 razy widać błonę komórkową, cytoplazmę i jądro (TRESCI.md, sekcja 2.2).
+function nablonek400({ podpisy = false } = {}) {
   const los = generator(7);
   const srodki = [
     [92, 96],
@@ -53,15 +65,30 @@ function nablonek400() {
     [96, 268],
     [250, 250],
   ];
-  const komorki = srodki.map(([cx, cy]) => {
+  const dane = srodki.map(([cx, cy]) => {
     const r = 46 + los() * 14;
+    const punkty = wielokat(cx, cy, r, los);
     const dx = (los() - 0.5) * 14;
     const dy = (los() - 0.5) * 14;
-    return s('g', { 'data-element': 'komorka' }, [
-      s('polygon', { points: wielokat(cx, cy, r, los), fill: '#F3D3DF', 'fill-opacity': 0.92, stroke: '#B57990', 'stroke-width': 2.2 }),
-      s('ellipse', { cx: cx + dx, cy: cy + dy, rx: 9 + los() * 3, ry: 7 + los() * 3, fill: '#7E5BB5', 'fill-opacity': 0.85, stroke: '#4E3684', 'stroke-width': 1.5 }),
-    ]);
+    return { cx, cy, punkty, jadro: [cx + dx, cy + dy], rx: 9 + los() * 3, ry: 7 + los() * 3 };
   });
+  // Komórka z podpisami (środkowa) rysowana na końcu, żeby jej brzeg był widoczny w całości.
+  const kolejnosc = [...dane.slice(0, 3), ...dane.slice(4), dane[3]];
+  const komorki = kolejnosc.map((k) =>
+    s('g', { 'data-element': 'komorka' }, [
+      s('polygon', { points: k.punkty, fill: '#F3D3DF', 'fill-opacity': 0.92, stroke: '#B57990', 'stroke-width': 2.2 }),
+      s('ellipse', { cx: k.jadro[0], cy: k.jadro[1], rx: k.rx, ry: k.ry, fill: '#7E5BB5', 'fill-opacity': 0.85, stroke: '#4E3684', 'stroke-width': 1.5 }),
+    ]),
+  );
+  if (podpisy) {
+    const k = dane[3];
+    const brzeg = k.punkty.split(' ')[3].split(',').map(Number);
+    komorki.push(
+      podpis(k.jadro, [214, 122], 'jądro komórkowe'),
+      podpis([k.cx + 16, k.cy + 22], [190, 214], 'cytoplazma'),
+      podpis(brzeg, [86, 132], 'błona komórkowa'),
+    );
+  }
   return okular(komorki, '#FBF6F8', 'Komórki nabłonka jamy ustnej pod mikroskopem, powiększenie około 400 razy');
 }
 
@@ -102,18 +129,76 @@ export function punktObwodu(k, t, odstep = 6) {
   return [x0, y0 + hgt - d, 90];
 }
 
-function moczarka400() {
+function ustawChloroplast(el, k, c) {
+  const [x, y, kat] = punktObwodu(k, c.t);
+  el.setAttribute('cx', x.toFixed(1));
+  el.setAttribute('cy', y.toFixed(1));
+  el.setAttribute('transform', `rotate(${kat} ${x.toFixed(1)} ${y.toFixed(1)})`);
+}
+
+// Komórki liścia moczarki: przy ruch = true chloroplasty krążą wzdłuż ścian (ciekawostka z TRESCI.md,
+// sekcja 6). Zwraca { svg, zatrzymaj }.
+export function scenaMoczarki({ ruch = false, podpisy = false } = {}) {
   const komorki = chloroplastyMoczarki();
+  const ruchome = [];
   const zawartosc = komorki.map((k) =>
     s('g', {}, [
       s('rect', { x: k.x, y: k.y, width: k.szer, height: k.wys, fill: '#EAF6E0', stroke: '#5E8A3A', 'stroke-width': 2.6 }),
       ...k.chloroplasty.map((c) => {
-        const [x, y, kat] = punktObwodu(k, c.t);
-        return s('ellipse', { class: 'chloroplast-moczarki', cx: x, cy: y, rx: c.rx, ry: c.ry, transform: `rotate(${kat} ${x} ${y})`, fill: '#3C9A47', stroke: '#1F5A32', 'stroke-width': 1 });
+        const el = s('ellipse', { class: 'chloroplast-moczarki', rx: c.rx, ry: c.ry, fill: '#3C9A47', stroke: '#1F5A32', 'stroke-width': 1 });
+        ustawChloroplast(el, k, c);
+        ruchome.push({ el, k, c: { ...c } });
+        return el;
       }),
     ]),
   );
-  return okular(zawartosc, '#F4FBEF', 'Komórki liścia moczarki kanadyjskiej pod mikroskopem, powiększenie około 400 razy');
+  // Podpis wskazuje chloroplast najbliżej środka i podąża za nim, gdy chloroplasty krążą.
+  let sledzony = null;
+  let linia = null;
+  let kropka = null;
+  if (podpisy) {
+    const odleglosc = (r) => {
+      const [x, y] = punktObwodu(r.k, r.c.t);
+      return Math.hypot(x - 150, y - 160);
+    };
+    sledzony = ruchome.reduce((a, b) => (odleglosc(b) < odleglosc(a) ? b : a));
+    const etykieta = podpis(punktObwodu(sledzony.k, sledzony.c.t), [150, 52], 'chloroplasty');
+    [linia, kropka] = [etykieta.querySelector('line'), etykieta.querySelector('circle')];
+    zawartosc.push(etykieta);
+  }
+  const svg = okular(zawartosc, '#F4FBEF', 'Komórki liścia moczarki kanadyjskiej pod mikroskopem, powiększenie około 400 razy');
+  let klatka = null;
+  if (ruch && typeof requestAnimationFrame === 'function') {
+    let poprzedni = null;
+    const krok = (teraz) => {
+      const dt = poprzedni === null ? 0 : Math.min(0.1, (teraz - poprzedni) / 1000);
+      poprzedni = teraz;
+      for (const r of ruchome) {
+        r.c.t += dt * 0.03;
+        ustawChloroplast(r.el, r.k, r.c);
+      }
+      if (sledzony) {
+        const [x, y] = punktObwodu(sledzony.k, sledzony.c.t);
+        linia.setAttribute('x1', x.toFixed(1));
+        linia.setAttribute('y1', y.toFixed(1));
+        kropka.setAttribute('cx', x.toFixed(1));
+        kropka.setAttribute('cy', y.toFixed(1));
+      }
+      klatka = requestAnimationFrame(krok);
+    };
+    klatka = requestAnimationFrame(krok);
+  }
+  return {
+    svg,
+    zatrzymaj() {
+      if (klatka !== null) cancelAnimationFrame(klatka);
+      klatka = null;
+    },
+  };
+}
+
+function moczarka400() {
+  return scenaMoczarki().svg;
 }
 
 // Lupa: komórek nie widać, są za małe.
@@ -133,6 +218,19 @@ function lupaLisc() {
   return okular(s('g', { class: 'scena__rozmyta' }, plamy), '#DDEFD2', 'Widok przez lupę: komórek nie widać');
 }
 
+// Schemat komórki (plik SVG) w okularze: widok przy bardzo dużym powiększeniu.
+export function schematWOkularze(svgSchematu, opis) {
+  const wewn = svgSchematu.cloneNode(true);
+  wewn.setAttribute('x', '-14');
+  wewn.setAttribute('y', '36');
+  wewn.setAttribute('width', '328');
+  wewn.setAttribute('height', '246');
+  wewn.removeAttribute('class');
+  wewn.removeAttribute('role');
+  wewn.removeAttribute('aria-label');
+  return okular(wewn, '#FFFFFF', opis);
+}
+
 const SCENY = {
   'nablonek-400': nablonek400,
   'moczarka-400': moczarka400,
@@ -142,6 +240,6 @@ const SCENY = {
 
 export const ID_SCEN = Object.keys(SCENY);
 
-export function obrazSceny(id) {
-  return SCENY[id]?.() ?? null;
+export function obrazSceny(id, opcje) {
+  return SCENY[id]?.(opcje) ?? null;
 }

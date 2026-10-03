@@ -23,9 +23,12 @@ import * as swiat from './ekrany/swiat.js';
 import * as misja from './ekrany/misja.js';
 import * as podsumowanie from './ekrany/podsumowanie.js';
 import * as baza from './ekrany/baza.js';
+import * as atlas from './ekrany/atlas.js';
+import * as mikroskop from './ekrany/mikroskop.js';
+import * as boss from './ekrany/boss.js';
 import * as rodzic from './ekrany/rodzic.js';
 
-const EKRANY = { mapa, swiat, misja, podsumowanie, baza, rodzic };
+const EKRANY = { mapa, swiat, misja, boss, podsumowanie, baza, atlas, mikroskop, rodzic };
 
 function dostepnyStorage() {
   try {

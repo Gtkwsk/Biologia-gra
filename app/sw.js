@@ -2,7 +2,7 @@
 // WERSJA i PLIKI uzupełnia narzędzie: node tools/wersja.js (nie edytować ręcznie).
 // Każda zmiana w app/ zmienia WERSJA, więc przeglądarka pobiera nową wersję gry.
 
-const WERSJA = 'ececa4bfd7aa';
+const WERSJA = '9f2ac50ea579';
 const PLIKI = [
   './',
   'assets/fonts/OFL-lexend.txt',
@@ -60,6 +60,7 @@ const PLIKI = [
   'js/components/wakuola.js',
   'js/components/zadania.js',
   'js/components/zadanie-etykiet.js',
+  'js/core/boss.js',
   'js/core/daty.js',
   'js/core/dom.js',
   'js/core/karty.js',
@@ -69,8 +70,11 @@ const PLIKI = [
   'js/core/swiaty.js',
   'js/core/tekst.js',
   'js/core/zasoby.js',
+  'js/ekrany/atlas.js',
   'js/ekrany/baza.js',
+  'js/ekrany/boss.js',
   'js/ekrany/mapa.js',
+  'js/ekrany/mikroskop.js',
   'js/ekrany/misja.js',
   'js/ekrany/podsumowanie.js',
   'js/ekrany/rodzic.js',

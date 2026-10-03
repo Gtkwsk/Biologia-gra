@@ -89,7 +89,7 @@ function panel(ekran, ctx) {
     wyczysc(ekran);
     panel(ekran, ctx);
   };
-  const { swiaty, elementy } = ctx.dane;
+  const { swiaty } = ctx.dane;
   const stan = ctx.stan;
   const otwarte = otwarteSwiaty(swiaty, stan);
 
@@ -112,7 +112,7 @@ function panel(ekran, ctx) {
   const pomylki = Object.entries(stan.pomylki)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
-  const nazwa = (id) => elementy.find((e) => e.id === id)?.nazwa ?? id;
+  const nazwa = (id) => ctx.dane.katalog.get(id)?.nazwa ?? id;
 
   // Ustawienia
   const poleImienia = h('input', { id: 'imie', class: 'pole', type: 'text', value: stan.ustawienia.imie, maxlength: '30', autocomplete: 'off' });

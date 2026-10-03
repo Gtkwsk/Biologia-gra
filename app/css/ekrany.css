@@ -755,3 +755,569 @@
   font-size: var(--r-0);
   color: var(--atrament-jasny);
 }
+
+/* ---------- Boss: wejście na ekranie świata ---------- */
+
+.boss-wejscie {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  color: #f4f6f1;
+  text-decoration: none;
+  background: #2a1d33;
+  border: var(--kontur) solid var(--okular);
+  border-radius: var(--promien);
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+a.boss-wejscie:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--okular);
+}
+
+.boss-wejscie[data-stan='zamkniety'] {
+  color: var(--atrament);
+  background: var(--papier-ciemny);
+  box-shadow: none;
+}
+
+.boss-wejscie[data-stan='pokonany'] {
+  background: #1f4d2c;
+}
+
+.boss-wejscie__znak {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  color: var(--okular);
+  background: #f5c400;
+  border: var(--kontur) solid var(--okular);
+  border-radius: 50%;
+}
+
+.boss-wejscie[data-stan='zamkniety'] .boss-wejscie__znak {
+  color: var(--atrament-jasny);
+  background: var(--bialy);
+}
+
+.boss-wejscie__znak .ikona {
+  width: 30px;
+  height: 30px;
+}
+
+.boss-wejscie__tresc {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.boss-wejscie__etykieta {
+  font-size: var(--r-0);
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.boss-wejscie__nazwa {
+  font-family: var(--font-tytul);
+  font-size: var(--r-3);
+  line-height: 1.1;
+}
+
+/* ---------- Boss: ekran ---------- */
+
+.serca {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+
+.serce {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: #c9ced0;
+}
+
+.serce .ikona {
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
+  stroke: var(--okular);
+  stroke-width: 2;
+}
+
+.serce[data-pelne='true'] {
+  color: var(--eozyna);
+}
+
+.boss-karta {
+  display: grid;
+  gap: 1rem 2rem;
+  align-items: center;
+  max-width: 60rem;
+  margin: 0.5rem auto;
+  padding: 1.5rem 1.75rem;
+  color: var(--swiat-na-tle);
+  background: var(--swiat-tlo);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 14px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+@media (min-width: 760px) {
+  .boss-karta--wstep {
+    grid-template-columns: auto 1fr;
+  }
+}
+
+.boss-karta h1 {
+  color: var(--swiat-tytul);
+}
+
+.boss-karta__swiat {
+  margin: 0;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.boss-karta__zasady {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.boss-karta__zasady li {
+  padding: 0.5rem 0.75rem;
+  color: var(--atrament);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+}
+
+.boss-karta__pokonany {
+  font-weight: 700;
+}
+
+.boss-karta__nagrody {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.boss-karta__nagrody li {
+  padding: 0.6rem 0.9rem;
+  color: var(--atrament);
+  background: #fff3c4;
+  border: 2px solid var(--okular);
+  border-radius: 8px;
+}
+
+.boss-karta--koniec,
+.boss-karta--wygrana {
+  text-align: left;
+}
+
+.ekran--boss .pasek__prawa {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.misja__wynik-tytul[data-stracone='true'] {
+  color: var(--eozyna);
+}
+
+/* ---------- Atlas ---------- */
+
+.atlas__podsumowanie {
+  font-size: var(--r-2);
+  font-weight: 700;
+}
+
+.atlas__legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  font-size: var(--r-0);
+}
+
+.atlas__legenda li {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.atlas__probka {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 4px solid var(--kolor-poziomu);
+  border-radius: 4px;
+}
+
+[data-poziom='nieodkryta'] {
+  --kolor-poziomu: #a9b3b5;
+  --tlo-poziomu: var(--papier-ciemny);
+}
+
+[data-poziom='brazowa'] {
+  --kolor-poziomu: #a0652d;
+  --tlo-poziomu: #f6e7d6;
+}
+
+[data-poziom='srebrna'] {
+  --kolor-poziomu: #8a98a3;
+  --tlo-poziomu: #eef2f5;
+}
+
+[data-poziom='zlota'] {
+  --kolor-poziomu: #d29b00;
+  --tlo-poziomu: #fff3c4;
+}
+
+.atlas__swiat {
+  margin-top: 1.5rem;
+}
+
+.atlas__swiat-tytul {
+  font-size: var(--r-3);
+}
+
+.atlas__grupa-tytul {
+  margin: 1rem 0 0.5rem;
+  font-size: var(--r-2);
+  color: var(--atrament-jasny);
+}
+
+.atlas__karty {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.karta-atlasu {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  padding: 10px 8px 8px;
+  font: inherit;
+  color: var(--atrament);
+  background: var(--tlo-poziomu);
+  border: 5px solid var(--kolor-poziomu);
+  border-radius: 12px;
+  box-shadow: 0 4px 0 var(--okular);
+  cursor: pointer;
+}
+
+.karta-atlasu[data-poziom='zlota'] {
+  box-shadow: 0 4px 0 var(--okular), 0 0 0 3px #fff3c4 inset;
+}
+
+.karta-atlasu[data-poziom='nieodkryta'] {
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.karta-atlasu__rysunek {
+  display: block;
+  width: 72px;
+  height: 72px;
+}
+
+.karta-atlasu__svg {
+  width: 100%;
+  height: 100%;
+}
+
+.karta-atlasu[data-poziom='nieodkryta'] .karta-atlasu__svg {
+  filter: grayscale(1) brightness(0.3);
+  opacity: 0.25;
+}
+
+.karta-atlasu__nazwa {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.karta-atlasu__poziom {
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.karta-szczegoly {
+  width: min(32rem, calc(100vw - 32px));
+  padding: 0;
+  color: var(--atrament);
+  background: transparent;
+  border: 0;
+}
+
+.karta-szczegoly::backdrop {
+  background: rgba(17, 25, 27, 0.55);
+}
+
+.karta-szczegoly__karta {
+  display: grid;
+  justify-items: start;
+  gap: 0.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--bialy);
+  border: 6px solid var(--kolor-poziomu);
+  border-radius: 16px;
+}
+
+.karta-szczegoly__rysunek {
+  justify-self: center;
+  width: 140px;
+  height: 140px;
+}
+
+.karta-szczegoly__svg {
+  width: 100%;
+  height: 100%;
+}
+
+.karta-szczegoly__karta[data-poziom='nieodkryta'] .karta-szczegoly__svg {
+  filter: grayscale(1) brightness(0.3);
+  opacity: 0.25;
+}
+
+.karta-szczegoly__poziom {
+  margin: 0;
+  font-size: var(--r-0);
+  font-weight: 800;
+  color: var(--kolor-poziomu);
+  text-transform: none;
+}
+
+.karta-szczegoly h2 {
+  margin: 0;
+}
+
+.karta-szczegoly__zasada {
+  color: var(--atrament-jasny);
+}
+
+.karta-szczegoly__zagadka {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 700;
+}
+
+.karta-szczegoly__zagadka .ikona {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+/* ---------- Mikroskop ---------- */
+
+.mikroskop__drabina {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 10px;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.mikroskop__drabina li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 10px;
+}
+
+.mikroskop__drabina li[data-odblokowany='false'] {
+  color: var(--atrament-jasny);
+  background: var(--papier-ciemny);
+  border-style: dashed;
+}
+
+.mikroskop__szczebel {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  color: var(--bialy);
+  background: var(--chlorofil);
+  border-radius: 50%;
+}
+
+li[data-odblokowany='false'] .mikroskop__szczebel {
+  color: var(--atrament-jasny);
+  background: var(--bialy);
+  border: 2px solid var(--atrament-jasny);
+}
+
+.mikroskop__szczebel .ikona {
+  width: 20px;
+  height: 20px;
+}
+
+.mikroskop__warunek {
+  font-size: var(--r-0);
+}
+
+.mikroskop__stol {
+  display: grid;
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .mikroskop__stol {
+    grid-template-columns: minmax(14rem, 18rem) minmax(0, 1fr);
+    grid-template-areas:
+      'sterowanie widok'
+      'opis widok';
+  }
+  .mikroskop__sterowanie {
+    grid-area: sterowanie;
+  }
+  .mikroskop__widok {
+    grid-area: widok;
+  }
+  .mikroskop__opis {
+    grid-area: opis;
+  }
+}
+
+.mikroskop__sterowanie h2 {
+  margin: 0.25rem 0 0.4rem;
+  font-size: var(--r-2);
+}
+
+.mikroskop__preparaty,
+.mikroskop__poziomy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mikroskop__sterowanie .przycisk[aria-pressed='true'] {
+  color: var(--bialy);
+  background: var(--blekit);
+}
+
+.mikroskop__sterowanie .przycisk .ikona {
+  width: 1em;
+  height: 1em;
+}
+
+.mikroskop__widok {
+  justify-self: center;
+  width: min(100%, 560px);
+}
+
+.mikroskop__widok .scena {
+  filter: drop-shadow(0 8px 0 rgba(17, 25, 27, 0.25));
+}
+
+.scena--dotyk {
+  cursor: pointer;
+}
+
+.mikroskop__zaznaczony {
+  filter: drop-shadow(0 0 6px #f5c400) drop-shadow(0 0 2px #f5c400);
+}
+
+.mikroskop__wskazany {
+  min-height: 3em;
+  font-size: var(--r-2);
+}
+
+.scena__podpis text {
+  font-family: var(--font-tekst);
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--atrament);
+}
+
+/* ---------- Baza: aktywne stanowiska i trofea ---------- */
+
+.stanowisko:has(> .stanowisko__link) {
+  padding: 0;
+  box-shadow: 0 6px 0 var(--okular);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.stanowisko:has(> .stanowisko__link):active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--okular);
+}
+
+.stanowisko__link {
+  display: block;
+  height: 100%;
+  padding: 1.25rem;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 9px;
+}
+
+.stanowisko__stan[data-aktywne='true'] {
+  background: var(--chlorofil-jasny);
+}
+
+.trofea {
+  margin-top: 1.75rem;
+}
+
+.trofea__lista {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trofeum {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #fff3c4;
+  border: var(--kontur) solid var(--okular);
+  border-radius: 10px;
+}
+
+.trofeum__znak {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--bialy);
+  background: #d29b00;
+  border: 2px solid var(--okular);
+  border-radius: 50%;
+}
+
+.trofeum__znak .ikona {
+  width: 24px;
+  height: 24px;
+}

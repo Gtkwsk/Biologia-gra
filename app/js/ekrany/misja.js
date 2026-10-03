@@ -55,6 +55,7 @@ export function render(kontener, ctx, cel) {
     const zadanie = zadania[indeks];
     licznik.textContent = `Wyzwanie ${indeks + 1} z ${zadania.length}`;
     polecenie.textContent = zadanie.tresc;
+    obszar.dataset.zadanie = zadanie.id;
     wynik.hidden = true;
     wyczysc(wynik);
     komponent?.zniszcz();

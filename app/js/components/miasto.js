@@ -12,7 +12,7 @@ import { utworzRysunek, dodajZnaczniki } from './podpisywanie.js';
 import { utworzZadanieEtykiet } from './zadanie-etykiet.js';
 import { utworzKomunikat } from './komunikat.js';
 import { rysunekKarty } from './rysunki.js';
-import { wymieszaj, zWielkiej } from './podpisywanie-logika.js';
+import { wymieszaj, zWielkiej, jest } from './podpisywanie-logika.js';
 
 export function utworzMiasto(kontener, opcje) {
   return opcje.zadanie.faza === 'awarie' ? utworzAwarie(kontener, opcje) : utworzBudowe(kontener, opcje);
@@ -205,7 +205,7 @@ function utworzAwarie(kontener, { zadanie, dane, miasto, svgTekst, onKoniec }) {
     }, 900);
     const wybrany = elementPoId.get(p.element);
     const poprawny = punktElementu.get(u.element);
-    let tekst = `Pod numerem ${p.numer} jest ${wybrany.nazwa}. ${wybrany.funkcja}`;
+    let tekst = `Pod numerem ${p.numer} ${jest(wybrany)} ${wybrany.nazwa}. ${wybrany.funkcja}`;
     if (proby >= 2) {
       znaczniki.get(poprawny.id).classList.add('znacznik--aktywny');
       tekst += ` Awarię spowodował element pod numerem ${poprawny.numer}.`;

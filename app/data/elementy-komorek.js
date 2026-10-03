@@ -6,6 +6,7 @@
 // brak:    dopełniacz do zdania „Komórka … nie ma …”
 // biernik: forma do zdania „Komórka … ma …”
 // wTabeli: nazwa wiersza w tabeli porównawczej, jeśli inna niż etykieta (jak w TRESCI.md, sekcja 2.3)
+// mnoga:   nazwa w liczbie mnogiej (np. „Pod numerem 2 są rybosomy.”)
 // wTypie:  inny opis lub funkcja w danym typie komórki
 // ciekawostka: dosłownie z TRESCI.md, sekcja 6 (pokazywana na złotej karcie atlasu)
 
@@ -53,6 +54,7 @@ export default [
   {
     id: 'rybosomy',
     nazwa: 'rybosomy',
+    mnoga: true,
     opis: 'drobne ziarenka',
     funkcja: 'Rybosomy wytwarzają białka.',
     brak: 'rybosomów',

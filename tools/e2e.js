@@ -2,8 +2,10 @@
 //   node tools/e2e.js [katalog-na-zrzuty] [--adres=https://biologia-gra.netlify.app/]
 // Bez --adres test uruchamia lokalny serwer z katalogiem app/.
 // Narzędzie deweloperskie (wymaga playwright). Sprawdza przejście mapa → świat → misja →
-// podsumowanie, przeciąganie myszą i palcem, stuknięcia, zapis postępu, bramkę panelu
-// rodzica, pracę offline oraz brak błędów w konsoli (w tym naruszeń CSP).
+// podsumowanie, przeciąganie myszą i palcem, stuknięcia, zapis postępu, wszystkie misje
+// świata 2 i jego bossa (przegrana i wygrana), otwarcie świata 3, atlas, mikroskop, bramkę
+// panelu rodzica, pracę offline oraz brak błędów w konsoli (w tym naruszeń CSP).
+// Zadania rozwiązuje tools/rozwiazania.js na podstawie danych gry.
 // Każdy przebieg używa nowego, pustego profilu przeglądarki.
 
 import path from 'node:path';
@@ -11,8 +13,17 @@ import { mkdir, readFile } from 'node:fs/promises';
 import { X509Certificate, createHash } from 'node:crypto';
 import { uruchomSerwer } from './serwer.js';
 import { wczytajPlaywright } from './playwright.js';
+import { rozwiaz } from './rozwiazania.js';
 import schematy from '../app/data/schematy.js';
 import zadania from '../app/data/zadania.js';
+import swiaty from '../app/data/swiaty.js';
+import typyKomorek from '../app/data/typy-komorek.js';
+import miasto from '../app/data/miasto.js';
+import wskazowki from '../app/data/wskazowki.js';
+import czesciKonstruktora from '../app/data/konstruktor.js';
+
+const daneGry = { zadania, schematy, typyKomorek, miasto, wskazowki, czesciKonstruktora };
+const zadaniePoId = new Map(zadania.map((z) => [z.id, z]));
 
 const { chromium } = wczytajPlaywright();
 const argumenty = process.argv.slice(2);
@@ -79,6 +90,29 @@ async function wejdzDoMisji(strona) {
   await strona.locator('.podpis__rysunek').waitFor();
 }
 
+// Rozwiązuje bieżące zadanie (misji albo bossa) i czeka na wynik.
+async function rozwiazBiezace(strona) {
+  const obszar = strona.locator('.misja__obszar');
+  await obszar.locator('.zadanie').first().waitFor();
+  const id = await obszar.getAttribute('data-zadanie');
+  await rozwiaz(strona, zadaniePoId.get(id), daneGry);
+  await strona.locator('.misja__wynik:not([hidden])').waitFor();
+  return id;
+}
+
+// Przechodzi całą misję; zwraca tytuły wyników kolejnych zadań.
+async function przejdzMisje(strona, idSwiata, idMisji) {
+  await strona.goto(`${adres}#/swiat/${idSwiata}/misja/${idMisji}`);
+  const misja = swiaty.find((s) => s.id === idSwiata).misje.find((m) => m.id === idMisji);
+  const tytuly = [];
+  for (let i = 0; i < misja.zadania.length; i++) {
+    await rozwiazBiezace(strona);
+    tytuly.push((await strona.locator('.misja__wynik-tytul').textContent()).trim());
+    if (i < misja.zadania.length - 1) await strona.locator('.misja__wynik button', { hasText: 'Dalej' }).click();
+  }
+  return tytuly;
+}
+
 // ---------- Tablet poziomo, mysz ----------
 console.log('Tablet poziomo (mysz)');
 {
@@ -87,7 +121,8 @@ console.log('Tablet poziomo (mysz)');
   await strona.locator('.mapa__swiaty').waitFor();
   sprawdz((await strona.locator('.swiat').count()) === 6, 'mapa pokazuje sześć światów');
   sprawdz((await strona.locator('.swiat[data-swiat="2"]').getAttribute('data-status')) === 'otwarty', 'świat 2 jest otwarty');
-  sprawdz((await strona.locator('.swiat[data-status="w-budowie"]').count()) === 5, 'pozostałe światy są w budowie');
+  sprawdz((await strona.locator('.swiat[data-swiat="3"]').getAttribute('data-status')) === 'zablokowany', 'świat 3 czeka na bossa świata 2');
+  sprawdz((await strona.locator('.swiat[data-status="w-budowie"]').count()) === 4, 'pozostałe światy są w budowie');
   await zrzut(strona, '01-mapa-tablet-poziomo');
 
   await strona.locator('.swiat[data-swiat="1"] .swiat__przycisk').click();
@@ -96,6 +131,8 @@ console.log('Tablet poziomo (mysz)');
   await strona.locator('.swiat[data-swiat="2"] .swiat__przycisk').click();
   await strona.locator('.swiat-wstep').waitFor();
   sprawdz((await strona.locator('h1').textContent()) === 'Miasto, którego nie widać', 'wstęp świata 2');
+  sprawdz((await strona.locator('.misja-karta').count()) === 5, 'świat 2 ma pięć misji');
+  sprawdz((await strona.locator('.boss-wejscie[data-stan="zamkniety"]').count()) === 1, 'boss zamknięty przed ukończeniem misji');
   await zrzut(strona, '02-swiat-2');
 
   await strona.locator('.misja-karta').first().click();
@@ -145,9 +182,13 @@ console.log('Tablet poziomo (mysz)');
   sprawdz(wynik.includes('siateczka śródplazmatyczna'), 'wynik wskazuje element do poćwiczenia');
   await zrzut(strona, '05-misja-wynik');
 
+  // Drugie wyzwanie misji i koniec wyprawy
+  await strona.locator('.misja__wynik button', { hasText: 'Dalej' }).click();
+  await rozwiazBiezace(strona);
+  sprawdz((await strona.locator('.misja__wynik-tytul').textContent()) === 'Wszystko od razu dobrze!', 'drugie wyzwanie misji rozwiązane stuknięciami');
   await strona.locator('.misja__wynik a', { hasText: 'Zakończ wyprawę' }).click();
   await strona.locator('.podsumowanie').waitFor();
-  sprawdz((await strona.locator('.podsumowanie').textContent()).includes('Ukończone wyzwania: 1. Od razu dobrze: 6 z 8.'), 'podsumowanie wyprawy');
+  sprawdz((await strona.locator('.podsumowanie').textContent()).includes('Ukończone wyzwania: 2. Od razu dobrze: 12 z 14.'), 'podsumowanie wyprawy');
   await zrzut(strona, '06-podsumowanie');
   await strona.locator('.podsumowanie button', { hasText: 'Wróć na mapę' }).click();
 
@@ -155,22 +196,88 @@ console.log('Tablet poziomo (mysz)');
   await strona.reload();
   await strona.locator('.mapa__swiaty').waitFor();
   const klocki = await strona.locator('.swiat[data-swiat="2"] .ostrosc__klocek[data-pelny="true"]').count();
-  sprawdz(klocki === 0, `postęp po przeładowaniu: 6 z 8 to poniżej progu, ostrość ${klocki} z 5`);
+  sprawdz(klocki === 0, `postęp po przeładowaniu: jedno z 11 wyzwań opanowane, ostrość ${klocki} z 5`);
 
-  // Drugie podejście: komplet od razu
-  await wejdzDoMisji(strona);
-  for (const p of zadanie.punkty) {
-    await strona.locator(`.etykieta[data-element="${elementPunktu[p]}"]`).click();
-    await strona.locator(`.miejsce__pole[data-punkt="${p}"]`).click();
+  // Wszystkie misje świata 2 od razu dobrze
+  for (const m of swiaty.find((s) => s.id === 2).misje) {
+    const tytuly = await przejdzMisje(strona, 2, m.id);
+    sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `misja „${m.nazwa}”: od razu dobrze (wyzwania: ${tytuly.length})`);
+    if (m.id === 's2-budowa-miasta') await zrzut(strona, '07-misja-miasto');
   }
-  await strona.locator('.misja__wynik').waitFor();
-  sprawdz((await strona.locator('.misja__wynik-tytul').textContent()) === 'Wszystko od razu dobrze!', 'komplet za drugim podejściem');
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
   sprawdz((await strona.locator('.swiat[data-swiat="2"] .ostrosc__klocek[data-pelny="true"]').count()) === 5, 'opanowany świat ma pełną ostrość');
-  await zrzut(strona, '07-mapa-po-misji');
+
+  // Boss świata 2: przegrana, potem wygrana
+  await strona.goto(`${adres}#/swiat/2`);
+  await strona.locator('a.boss-wejscie').click();
+  await strona.locator('.boss-karta--wstep').waitFor();
+  await zrzut(strona, '08-boss-wstep');
+  await strona.locator('.boss-karta button', { hasText: 'Zaczynamy' }).click();
+  while (!(await strona.locator('.boss-karta--koniec').count())) {
+    await strona.locator('.misja__obszar .zadanie').first().waitFor();
+    if (await strona.locator('.pf__prawda').count()) {
+      // Prawda/fałsz: „Prawda” przy każdym zdaniu (każde zadanie ma zdania fałszywe).
+      while (await strona.locator('.pf__prawda').count()) {
+        await strona.locator('.pf__prawda').click();
+        await strona.locator('.pf__akcje .przycisk--dalej').click();
+      }
+    } else {
+      await strona.locator('.tacka__akcje button', { hasText: 'Sprawdź' }).click();
+    }
+    await strona.locator('.misja__wynik:not([hidden])').waitFor();
+    await strona.locator('.misja__wynik .przycisk--dalej').click();
+  }
+  sprawdz((await strona.locator('.boss-karta--koniec h1').textContent()).includes('wygrał boss'), 'trzy wyzwania z błędem kończą podejście');
+  await zrzut(strona, '09-boss-przegrana');
+  await strona.locator('.boss-karta button', { hasText: 'Spróbuj ponownie' }).click();
+  await strona.locator('.boss-karta button', { hasText: 'Zaczynamy' }).click();
+  for (let i = 0; i < swiaty.find((s) => s.id === 2).boss.wyzwania.length; i++) {
+    await rozwiazBiezace(strona);
+    if (i === 0) await zrzut(strona, '10-boss-wyzwanie');
+    await strona.locator('.misja__wynik .przycisk--dalej').click();
+  }
+  await strona.locator('.boss-karta--wygrana').waitFor();
+  const wygrana = await strona.locator('.boss-karta--wygrana').textContent();
+  sprawdz(wygrana.includes('Inspektor miasta pokonany!'), 'boss świata 2 pokonany');
+  sprawdz(wygrana.includes('Mikroskop ulepszony') && wygrana.includes('Otwarty nowy świat: Zielone twierdze'), 'nagrody: mikroskop i nowy świat');
+  await zrzut(strona, '11-boss-wygrana');
+
+  // Świat 3 otwarty, misja detektywa
+  await strona.goto(adres);
+  await strona.locator('.mapa__swiaty').waitFor();
+  sprawdz((await strona.locator('.swiat[data-swiat="3"]').getAttribute('data-status')) === 'otwarty', 'świat 3 otwarty po bossie świata 2');
+  sprawdz((await strona.locator('.swiat[data-swiat="2"]').getAttribute('data-status')) === 'pokonany', 'świat 2 oznaczony jako pokonany');
+  await zrzut(strona, '12-mapa-swiat-3');
+  for (const idMisji of ['s3-twierdza', 's3-detektyw', 's3-konstruktor']) {
+    const tytuly = await przejdzMisje(strona, 3, idMisji);
+    sprawdz(tytuly.every((t) => t === 'Wszystko od razu dobrze!'), `świat 3, misja ${idMisji}: od razu dobrze`);
+  }
+  await zrzut(strona, '13-misja-konstruktor');
+
+  // Atlas i mikroskop
+  await strona.goto(`${adres}#/atlas`);
+  await strona.locator('.ekran--atlas').waitFor();
+  const zlote = await strona.locator('.karta-atlasu[data-poziom="zlota"]').count();
+  sprawdz(zlote > 0, `atlas: złote karty po bossie (${zlote})`);
+  await strona.locator('.karta-atlasu[data-karta="blona-komorkowa"]').click();
+  sprawdz((await strona.locator('dialog.karta-szczegoly').textContent()).includes('Ciekawostka'), 'złota karta odsłania ciekawostkę');
+  await zrzut(strona, '14-atlas');
+  await strona.locator('dialog.karta-szczegoly button', { hasText: 'Zamknij' }).click();
+  await strona.goto(`${adres}#/mikroskop`);
+  await strona.locator('.ekran--mikroskop').waitFor();
+  sprawdz(await strona.locator('.mikroskop__poziomy button', { hasText: '10 000' }).isDisabled(), 'mikroskop: 10 000 razy jeszcze zamknięte');
+  await strona.locator('.mikroskop__poziomy button', { hasText: '400' }).click();
+  await strona.locator('.mikroskop__preparaty button', { hasText: 'moczarki' }).click();
+  const chloroplast = strona.locator('.chloroplast-moczarki').first();
+  const przed = await chloroplast.getAttribute('cx');
+  await strona.waitForTimeout(600);
+  sprawdz((await chloroplast.getAttribute('cx')) !== przed, 'chloroplasty moczarki krążą');
+  await zrzut(strona, '15-mikroskop');
 
   // Bramka i panel rodzica
+  await strona.goto(adres);
+  await strona.locator('.mapa__swiaty').waitFor();
   const logo = await srodek(strona.locator('.logo'));
   await strona.mouse.move(logo.x, logo.y);
   await strona.mouse.down();
@@ -186,9 +293,9 @@ console.log('Tablet poziomo (mysz)');
   await strona.locator('.bramka button[type="submit"]').click();
   await strona.locator('.tabela').waitFor();
   const panel = await strona.locator('.ekran--rodzic').textContent();
-  sprawdz(panel.includes('siateczka śródplazmatyczna: 1'), 'panel pokazuje najczęstsze pomyłki');
-  sprawdz(panel.includes('1 z 1'), 'panel pokazuje ukończone wyzwania');
-  await zrzut(strona, '08-panel-rodzica');
+  sprawdz(panel.includes('siateczka śródplazmatyczna'), 'panel pokazuje najczęstsze pomyłki');
+  sprawdz(panel.includes('11 z 11'), 'panel pokazuje ukończone wyzwania świata 2');
+  await zrzut(strona, '16-panel-rodzica');
   await strona.locator('.ekran--rodzic a', { hasText: 'Wróć do gry' }).last().click();
   await strona.locator('.mapa__swiaty').waitFor();
   await strona.goto(`${adres}#/rodzic`);
@@ -203,6 +310,9 @@ console.log('Tablet poziomo (mysz)');
   await strona.locator('.mapa__swiaty').waitFor();
   await wejdzDoMisji(strona);
   sprawdz((await strona.locator('.bank .etykieta').count()) === 10, 'gra działa offline (mapa i misja z rysunkiem)');
+  await strona.goto(`${adres}#/swiat/3/misja/s3-bakterie`);
+  await strona.locator('.podpis__rysunek').waitFor();
+  sprawdz((await strona.locator('.bank .etykieta').count()) === 10, 'offline działa też schemat komórki bakteryjnej');
   await kontekst.setOffline(false);
   await kontekst.close();
 }
@@ -213,7 +323,7 @@ console.log('Tablet pionowo (dotyk)');
   const { kontekst, strona } = await nowaStrona({ viewport: { width: 768, height: 1024 }, hasTouch: true, isMobile: true });
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
-  await zrzut(strona, '09-mapa-tablet-pionowo');
+  await zrzut(strona, '17-mapa-tablet-pionowo');
   await wejdzDoMisji(strona);
   const cdp = await kontekst.newCDPSession(strona);
   const dotyk = (type, x, y) =>
@@ -234,7 +344,7 @@ console.log('Tablet pionowo (dotyk)');
   const tacka = await strona.locator('.tacka').boundingBox();
   const rysunek = await strona.locator('.podpis__rysunek').boundingBox();
   sprawdz(rysunek.y + rysunek.height <= tacka.y, 'w pionie rysunek mieści się nad tacką z etykietami');
-  await zrzut(strona, '10-misja-tablet-pionowo');
+  await zrzut(strona, '18-misja-tablet-pionowo');
   await kontekst.close();
 }
 
@@ -244,11 +354,26 @@ console.log('Telefon');
   const { kontekst, strona } = await nowaStrona({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
   await strona.goto(adres);
   await strona.locator('.mapa__swiaty').waitFor();
-  await zrzut(strona, '11-mapa-telefon');
+  await zrzut(strona, '18-mapa-telefon');
   await wejdzDoMisji(strona);
-  const szerokosc = await strona.evaluate(() => document.documentElement.scrollWidth);
-  sprawdz(szerokosc <= 390, `brak przewijania w poziomie na telefonie (${szerokosc}px)`);
-  await zrzut(strona, '12-misja-telefon');
+  for (const [adresEkranu, nazwa] of [
+    [null, 'misja'],
+    ['#/swiat/2/misja/s2-mikroskop', 'klasyfikacja ze sceną'],
+    ['#/swiat/2/misja/s2-budowa-miasta', 'budowa miasta'],
+    ['#/atlas', 'atlas'],
+    ['#/mikroskop', 'mikroskop'],
+    ['#/baza', 'baza'],
+  ]) {
+    if (adresEkranu) {
+      await strona.goto(`${adres}${adresEkranu}`);
+      await strona.waitForTimeout(400);
+    }
+    const szerokosc = await strona.evaluate(() => document.documentElement.scrollWidth);
+    sprawdz(szerokosc <= 390, `telefon, ${nazwa}: brak przewijania w poziomie (${szerokosc}px)`);
+  }
+  await strona.goto(`${adres}#/swiat/2/misja/s2-plan-miasta`);
+  await strona.locator('.podpis__rysunek').waitFor();
+  await zrzut(strona, '19-misja-telefon');
   await kontekst.close();
 }
 

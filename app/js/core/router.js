@@ -3,8 +3,11 @@
 // #/                         mapa
 // #/swiat/2                  wstęp świata
 // #/swiat/2/misja/<id>       misja
+// #/swiat/2/boss             boss świata
 // #/podsumowanie             koniec wyprawy
 // #/baza                     baza
+// #/atlas                    atlas kart
+// #/mikroskop                mikroskop
 // #/rodzic                   panel rodzica
 
 export function parsujAdres(hash = '') {
@@ -23,8 +26,9 @@ export function parsujAdres(hash = '') {
   if (a === 'swiat' && /^[1-6]$/.test(b ?? '')) {
     if (czesci.length === 2) return { ekran: 'swiat', swiat: Number(b) };
     if (c === 'misja' && d && czesci.length === 4) return { ekran: 'misja', swiat: Number(b), misja: d };
+    if (c === 'boss' && czesci.length === 3) return { ekran: 'boss', swiat: Number(b) };
   }
-  if (czesci.length === 1 && ['podsumowanie', 'baza', 'rodzic'].includes(a)) return { ekran: a };
+  if (czesci.length === 1 && ['podsumowanie', 'baza', 'atlas', 'mikroskop', 'rodzic'].includes(a)) return { ekran: a };
   return { ekran: 'nieznany' };
 }
 
@@ -36,6 +40,8 @@ export function adres(cel) {
       return `#/swiat/${cel.swiat}`;
     case 'misja':
       return `#/swiat/${cel.swiat}/misja/${encodeURIComponent(cel.misja)}`;
+    case 'boss':
+      return `#/swiat/${cel.swiat}/boss`;
     default:
       return `#/${cel.ekran}`;
   }

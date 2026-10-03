@@ -10,6 +10,11 @@ export function zWielkiej(tekst) {
   return tekst.charAt(0).toUpperCase() + tekst.slice(1);
 }
 
+// „jest” albo „są” zależnie od liczby w nazwie elementu.
+export function jest(element) {
+  return element.mnoga ? 'są' : 'jest';
+}
+
 export function elementWTypie(element, idTypu) {
   return { ...element, ...(element.wTypie?.[idTypu] ?? {}) };
 }
@@ -67,7 +72,7 @@ export function komunikatBledu(przyg, punkt, wybranyId, proba) {
   const p = el(przyg, punkt.element);
   const wskazany =
     proba >= 2
-      ? `Pod numerem ${punkt.numer} jest ${p.nazwa}: ${p.opis}.`
+      ? `Pod numerem ${punkt.numer} ${jest(p)} ${p.nazwa}: ${p.opis}.`
       : `Pod numerem ${punkt.numer}: ${p.opis}.`;
   return { rodzaj: 'zle', tytul: `To nie ${w.nazwa}.`, tekst: `${przyczynaBledu(przyg, wybranyId)} ${wskazany}` };
 }
@@ -75,12 +80,12 @@ export function komunikatBledu(przyg, punkt, wybranyId, proba) {
 export function komunikatSprawdzianu(przyg, punkt, wybranyId) {
   const p = el(przyg, punkt.element);
   if (!wybranyId) {
-    return { rodzaj: 'zle', tytul: `Pod numerem ${punkt.numer} jest ${p.nazwa}.`, tekst: `${zWielkiej(p.nazwa)} to ${p.opis}.` };
+    return { rodzaj: 'zle', tytul: `Pod numerem ${punkt.numer} ${jest(p)} ${p.nazwa}.`, tekst: `${zWielkiej(p.nazwa)} to ${p.opis}.` };
   }
   const w = el(przyg, wybranyId);
   return {
     rodzaj: 'zle',
-    tytul: `Pod numerem ${punkt.numer} jest ${p.nazwa}, nie ${w.nazwa}.`,
+    tytul: `Pod numerem ${punkt.numer} ${jest(p)} ${p.nazwa}, nie ${w.nazwa}.`,
     tekst: przyczynaBledu(przyg, wybranyId),
   };
 }
