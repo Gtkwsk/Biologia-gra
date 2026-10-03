@@ -1,0 +1,309 @@
+/* ---------- Wykład Profesora Pomyłki: karta na ekranie świata ---------- */
+
+.wyklad-wejscie {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 0.85rem 3.25rem 0.85rem 1rem;
+  color: var(--atrament);
+  text-decoration: none;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: var(--promien);
+  box-shadow: 0 6px 0 var(--okular);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+a.wyklad-wejscie::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 1.4rem;
+  width: 14px;
+  height: 14px;
+  border-right: 4px solid var(--atrament);
+  border-bottom: 4px solid var(--atrament);
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+a.wyklad-wejscie:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--okular);
+}
+
+.wyklad-wejscie[data-stan='zamkniety'] {
+  padding-right: 1rem;
+  background: var(--papier-ciemny);
+  box-shadow: none;
+}
+
+.wyklad-wejscie__portret {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  background: var(--blekit-jasny);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.wyklad-wejscie[data-stan='zamkniety'] .wyklad-wejscie__portret {
+  filter: grayscale(1);
+  opacity: 0.7;
+}
+
+.wyklad-wejscie__rysunek {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wyklad-wejscie__tresc {
+  display: grid;
+  flex: 1;
+  gap: 0.2rem;
+}
+
+.wyklad-wejscie__etykieta {
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.wyklad-wejscie__nazwa {
+  font-family: var(--font-tytul);
+  font-size: var(--r-3);
+  line-height: 1.1;
+}
+
+.wyklad-wejscie__opis {
+  color: var(--atrament-jasny);
+}
+
+.wyklad-wejscie[data-stan='ukonczona'] .misja-karta__stan {
+  background: #fff3c4;
+}
+
+.wyklad-wejscie[data-stan='opanowana'] .misja-karta__stan {
+  background: var(--chlorofil-jasny);
+}
+
+.wyklad-wejscie__klodka {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--atrament-jasny);
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 50%;
+}
+
+.wyklad-wejscie__klodka .ikona {
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- Wykrywacz bzdur: wykład Profesora Pomyłki ---------- */
+
+.wykrywacz__scena {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem 1.25rem;
+  align-items: start;
+}
+
+.wykrywacz__postac {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  width: 120px;
+}
+
+.wykrywacz__profesor {
+  width: 120px;
+  height: 120px;
+}
+
+.wykrywacz__kto {
+  margin: 0;
+  font-size: var(--r-0);
+  font-weight: 700;
+  text-align: center;
+  color: var(--atrament-jasny);
+}
+
+.wykrywacz__dymek {
+  position: relative;
+  padding: 1rem 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+/* Ogonek dymka w stronę profesora. */
+.wykrywacz__dymek::before {
+  content: '';
+  position: absolute;
+  top: 34px;
+  left: -12px;
+  width: 20px;
+  height: 20px;
+  background: var(--bialy);
+  border-bottom: var(--kontur) solid var(--okular);
+  border-left: var(--kontur) solid var(--okular);
+  transform: rotate(45deg);
+}
+
+.wykrywacz__tekst {
+  max-width: 62ch;
+  margin: 0;
+  font-size: var(--r-2);
+  line-height: 2.2;
+}
+
+.wykrywacz__slowo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 0.3em;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--atrament);
+  vertical-align: middle;
+  background: var(--bialy);
+  border: 2px dashed var(--atrament-jasny);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.wykrywacz__slowo:disabled {
+  cursor: default;
+}
+
+.wykrywacz__slowo--prawdziwe {
+  font-weight: 600;
+  color: var(--atrament-jasny);
+  border-style: solid;
+  border-color: var(--papier-ciemny);
+}
+
+.wykrywacz__znak {
+  flex: none;
+  width: 0.9em;
+  height: 0.9em;
+  color: var(--chlorofil);
+}
+
+.wykrywacz__slowo--bzdura {
+  background: var(--eozyna-jasna);
+  border-style: solid;
+  border-color: var(--eozyna);
+}
+
+.wykrywacz__slowo--podpowiedz {
+  border-style: solid;
+  border-color: var(--blekit);
+  box-shadow: 0 0 0 4px var(--blekit-jasny);
+  animation: wykrywacz-puls 1.4s ease-in-out infinite;
+}
+
+@keyframes wykrywacz-puls {
+  50% {
+    box-shadow: 0 0 0 7px var(--blekit-jasny);
+  }
+}
+
+.wykrywacz__poprawione del {
+  color: var(--eozyna);
+  text-decoration-thickness: 2px;
+}
+
+.wykrywacz__poprawione ins {
+  padding: 0.1em 0.3em;
+  font-weight: 700;
+  color: var(--atrament);
+  text-decoration: none;
+  background: var(--chlorofil-jasny);
+  border: 2px solid var(--chlorofil);
+  border-radius: 6px;
+}
+
+.wykrywacz__licznik {
+  margin: 1rem 0 0.5rem;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.wykrywacz__poprawka {
+  padding: 0.85rem 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--eozyna);
+  border-radius: 12px;
+}
+
+.wykrywacz__pytanie {
+  margin: 0 0 0.75rem;
+  font-weight: 700;
+}
+
+.wykrywacz__opcje {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.wykrywacz__opcja {
+  min-height: 48px;
+  font-family: var(--font-tekst);
+  font-weight: 600;
+  white-space: normal;
+}
+
+.wykrywacz__opcja--zle {
+  color: var(--atrament-jasny);
+  text-decoration: line-through;
+  background: var(--eozyna-jasna);
+}
+
+@media (max-width: 600px) {
+  .wykrywacz__scena {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wykrywacz__postac {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    align-items: center;
+    width: auto;
+  }
+
+  .wykrywacz__profesor {
+    width: 76px;
+    height: 76px;
+  }
+
+  .wykrywacz__dymek::before {
+    top: -12px;
+    left: 26px;
+    transform: rotate(135deg);
+  }
+
+  .wykrywacz__tekst {
+    font-size: var(--r-1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wykrywacz__slowo--podpowiedz {
+    animation: none;
+  }
+}

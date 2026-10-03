@@ -1,9 +1,11 @@
 // Misja: kolejne wyzwania świata. Wynik zapisywany po każdym wyzwaniu.
 // misja.losuj: jeśli podane, misja wybiera tyle zadań z listy (przy każdym podejściu inne).
+// Wykład Profesora Pomyłki (swiat.wyklad) działa jak misja, ale otwiera się dopiero po
+// ukończeniu misji świata (core/swiaty.js, wykladDostepny).
 
 import { h, dolacz, wyczysc, ograniczRuch } from '../core/dom.js';
 import { graj } from '../core/dzwieki.js';
-import { otwarteSwiaty } from '../core/swiaty.js';
+import { otwarteSwiaty, wykladDostepny } from '../core/swiaty.js';
 import { zapiszWynik } from '../core/stan.js';
 import { dzisiaj } from '../core/daty.js';
 import { kartyZBledem } from '../core/karty.js';
@@ -18,9 +20,14 @@ export function wybierzZadania(misja, zadania) {
 
 export function render(kontener, ctx, cel) {
   const sw = ctx.dane.swiaty.find((s) => s.id === cel.swiat);
-  const misja = sw?.misje.find((m) => m.id === cel.misja);
+  const wyklad = sw?.wyklad?.id === cel.misja ? sw.wyklad : null;
+  const misja = sw?.misje.find((m) => m.id === cel.misja) ?? wyklad;
   if (!sw?.gotowy || !misja || !otwarteSwiaty(ctx.dane.swiaty, ctx.stan).has(sw.id)) {
     ekranNiedostepny(kontener, { tytul: 'Nie ma takiej misji', tekst: 'Wybierz misję na mapie wyprawy.' });
+    return null;
+  }
+  if (wyklad && !wykladDostepny(sw, ctx.stan)) {
+    ekranNiedostepny(kontener, { tytul: 'Wykład jeszcze się nie zaczął', tekst: 'Profesor Pomyłka przyjedzie, gdy ukończysz wszystkie misje tego świata.' });
     return null;
   }
   const zadania = wybierzZadania(misja, ctx.dane.zadania);

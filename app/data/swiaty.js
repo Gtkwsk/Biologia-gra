@@ -2,6 +2,8 @@
 // gotowy: świat ma treść do grania. Świat niegotowy jest na mapie oznaczony „W budowie”.
 // ciekawostka: dosłownie z TRESCI.md, sekcja 6.
 // przewodnik: uczony ze słuchowiska, o którym jest ciekawostka (SPEC.md, sekcja 4.4): imie, kim, rysunek.
+// wyklad: dodatkowa misja z wykładem Profesora Pomyłki (zadania typu wykrywacz); otwiera się po
+// ukończeniu misji świata, nie blokuje bossa i nie wchodzi do opanowania świata.
 // boss: wyzwania w formatach sprawdzianu (SPEC.md, sekcja 4.3); z każdej puli losowane jest
 // jedno zadanie, więc kolejne podejścia różnią się wariantami.
 
@@ -64,6 +66,12 @@ export default [
         zadania: ['s1-pf-funkcje-1', 's1-funkcje-przyp', 's1-dna-luki'],
       },
     ],
+    wyklad: {
+      id: 's1-wyklad',
+      nazwa: 'Wykład Profesora Pomyłki',
+      opis: 'Profesor pomylił fakty o składnikach organizmów. Znajdź bzdury i popraw je.',
+      zadania: ['s1-wyklad-1', 's1-wyklad-2'],
+    },
     boss: {
       nazwa: 'Bibliotekarz',
       opis: 'Bibliotekarz pilnuje alfabetu życia i sprawdza, czy wiesz, do czego służą woda, sole mineralne, cukry, białka i tłuszcze.',
@@ -127,6 +135,12 @@ export default [
         zadania: ['s2-mikroskop-1', 's2-jeden-czy-wielu', 's2-pf-1'],
       },
     ],
+    wyklad: {
+      id: 's2-wyklad',
+      nazwa: 'Wykład Profesora Pomyłki',
+      opis: 'Profesor pomylił fakty o komórce zwierzęcej. Znajdź bzdury i popraw je.',
+      zadania: ['s2-wyklad-1', 's2-wyklad-2'],
+    },
     boss: {
       nazwa: 'Inspektor miasta',
       opis: 'Inspektor sprawdza, czy znasz miasto-komórkę: plan, funkcje elementów i organizmy jedno- i wielokomórkowe.',
@@ -203,6 +217,12 @@ export default [
         zadania: ['s3-podpis-bakteryjna-1', 's3-luki-2', 's3-jadrowe'],
       },
     ],
+    wyklad: {
+      id: 's3-wyklad',
+      nazwa: 'Wykład Profesora Pomyłki',
+      opis: 'Profesor pomylił fakty o komórkach roślin, grzybów i bakterii. Znajdź bzdury i popraw je.',
+      zadania: ['s3-wyklad-1', 's3-wyklad-2'],
+    },
     boss: {
       nazwa: 'Strażnik twierdzy',
       opis: 'Strażnik sprawdza schemat komórki roślinnej, zdania o budowie komórek i siatkę porównawczą.',
@@ -280,6 +300,12 @@ export default [
         zadania: ['s4-dno-1'],
       },
     ],
+    wyklad: {
+      id: 's4-wyklad',
+      nazwa: 'Wykład Profesora Pomyłki',
+      opis: 'Profesor pomylił fakty o samożywności i fotosyntezie. Znajdź bzdury i popraw je.',
+      zadania: ['s4-wyklad-1', 's4-wyklad-2'],
+    },
     boss: {
       nazwa: 'Szef kuchni',
       opis: 'Szef kuchni sprawdza schemat fotosyntezy, wykorzystanie substancji pokarmowych i doświadczenia z dwutlenkiem węgla.',
@@ -361,6 +387,12 @@ export default [
         zadania: ['s5-las-1', 's5-szczatki-luki'],
       },
     ],
+    wyklad: {
+      id: 's5-wyklad',
+      nazwa: 'Wykład Profesora Pomyłki',
+      opis: 'Profesor pomylił fakty o cudzożywności. Znajdź bzdury i popraw je.',
+      zadania: ['s5-wyklad-1', 's5-wyklad-2'],
+    },
     boss: {
       nazwa: 'Król Bieszczadów',
       opis: 'Król Bieszczadów sprawdza, czy wiesz, kto co je, jak żyją pasożyty i po co organizmy trawią pokarm.',
@@ -444,6 +476,12 @@ export default [
         zadania: ['s6-rozmnazanie-klas-1', 's6-luki-rozmnazanie-1'],
       },
     ],
+    wyklad: {
+      id: 's6-wyklad',
+      nazwa: 'Wykład Profesora Pomyłki',
+      opis: 'Profesor pomylił fakty o oddychaniu i fermentacji. Znajdź bzdury i popraw je.',
+      zadania: ['s6-wyklad-1', 's6-wyklad-2'],
+    },
     boss: {
       nazwa: 'Strażnik ognia',
       opis: 'Strażnik ognia sprawdza, czy odróżniasz oddychanie komórkowe od wymiany gazowej, a oddychanie tlenowe od fermentacji.',

@@ -6,6 +6,7 @@ import {
   statusSwiata,
   poprzedniGotowy,
   opanowanieSwiata,
+  wykladDostepny,
 } from '../app/js/core/swiaty.js';
 import { nowyStan, zaliczBossa, zapiszWynik, ustawOdblokujWszystkie } from '../app/js/core/stan.js';
 
@@ -80,4 +81,17 @@ test('opanowanie świata to część zadań rozwiązanych co najmniej w 80%', ()
   s = zapiszWynik(s, { idZadania: 'z2b', poprawne: 6, wszystkie: 8, dzien: DZIEN });
   assert.equal(opanowanieSwiata(sw[1], s), 0.5);
   assert.equal(opanowanieSwiata(sw[0], s), 0);
+});
+
+test('wykład Profesora Pomyłki otwiera się po misjach świata albo po bossie i nie zmienia opanowania', () => {
+  const sw = { ...swiaty([2])[1], wyklad: { id: 'w2', zadania: ['w2a'] } };
+  let s = nowyStan(DZIEN);
+  assert.equal(wykladDostepny(sw, s), false);
+  s = zapiszWynik(s, { idZadania: 'z2a', poprawne: 8, wszystkie: 8, dzien: DZIEN });
+  assert.equal(wykladDostepny(sw, s), false, 'misja ukończona tylko w części');
+  s = zapiszWynik(s, { idZadania: 'z2b', poprawne: 8, wszystkie: 8, dzien: DZIEN });
+  assert.equal(wykladDostepny(sw, s), true);
+  assert.equal(opanowanieSwiata(sw, s), 1, 'nierozwiązany wykład nie obniża opanowania świata');
+  assert.equal(wykladDostepny(sw, zaliczBossa(nowyStan(DZIEN), 2)), true, 'po pokonanym bossie wykład jest otwarty');
+  assert.equal(wykladDostepny(swiaty([2])[1], s), false, 'świat bez wykładu');
 });

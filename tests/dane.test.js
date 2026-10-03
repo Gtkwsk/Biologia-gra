@@ -270,6 +270,29 @@ test('wykrywa w próbnym sprawdzianie mapę kart z nieznaną kartą albo misją 
   zawiera(bledy, 'nieznana karta atlasu „smok”');
 });
 
+test('wykrywa wykład bez bzdur, poprawkę spoza opcji i wykład z zadaniem innego typu', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const z = dane.zadania.find((x) => x.id === 's2-wyklad-1');
+  for (const f of z.wyklad) if (typeof f !== 'string') delete f.poprawka;
+  const z2 = dane.zadania.find((x) => x.id === 's2-wyklad-2');
+  z2.wyklad.find((f) => f.poprawka).opcje = ['wróbla', 'kury'];
+  dane.swiaty.find((s) => s.id === 3).wyklad.zadania.push('s3-luki-1');
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'zadania[s2-wyklad-1]: bzdur 0, wymagane 1-3');
+  zawiera(bledy, 'poprawka musi być jedną z opcji');
+  zawiera(bledy, 'bzdura nie może być opcją poprawki');
+  zawiera(bledy, 'zadanie „s3-luki-1” nie jest wykładem');
+});
+
+test('wykład nie może trafić do puli bossa ani próbnego sprawdzianu', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.swiaty.find((s) => s.id === 2).boss.wyzwania[0].pula.push('s2-wyklad-1');
+  dane.sprawdzian[3].pula.push('s2-wyklad-2');
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'zadanie „s2-wyklad-1” nie jest w formacie sprawdzianu');
+  zawiera(bledy, '„s2-wyklad-2” to mechanika (wykrywacz)');
+});
+
 test('wykrywa w domowym laboratorium ciekawostkę spoza TRESCI.md i krok bez kropki', async () => {
   const { dane, kontekst } = await zaladuj();
   dane.laboratorium[0].ciekawostka = 'Chleb jest pyszny.';

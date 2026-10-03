@@ -55,6 +55,15 @@ const ROZWIAZANIA = {
     await sprawdzJesliTrzeba(strona);
   },
 
+  async wykrywacz(strona, z) {
+    const slowa = z.wyklad.filter((f) => typeof f !== 'string');
+    for (const [i, s] of slowa.entries()) {
+      if (s.poprawka === undefined) continue;
+      await strona.locator(`.wykrywacz__slowo[data-slowo="${i}"]`).click();
+      await strona.locator(`.wykrywacz__opcja[data-opcja="${s.poprawka}"]`).click();
+    }
+  },
+
   async 'prawda-falsz'(strona, z) {
     for (const zd of z.zdania) {
       await strona.locator(zd.prawda ? '.pf__prawda' : '.pf__falsz').click();

@@ -1408,6 +1408,35 @@ const R = {
     <path d="M64.5 88 L64.5 62 C64.5 50 70.5 44 78.5 44 C86.5 44 92.5 50 92.5 62 L92.5 88" fill="none" stroke="#3F86AD" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
     <path d="M68.5 80 L68.5 62 C68.5 56 71 52 74 50" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
     <circle cx="78.5" cy="41" r="3" fill="#CBEAF6" stroke="#3F86AD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`,
+  // Profesor Pomyłka (wykrywacz bzdur, SPEC.md, sekcja 5): postać wymyślona do gry, pewna siebie
+  // i myląca fakty; pęknięte szkło w okularach i wskaźnik.
+  'profesor-pomylka': `
+    <path d="M8 94 L8 82 C8 70 17 63 28 61 L48 61 C59 63 68 70 68 82 L68 94 Z" fill="#F4F6F7" stroke="#66717C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M28.5 61.5 L36 82 M47.5 61.5 L40 82" fill="none" stroke="#66717C" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="50" y="73" width="10" height="9" rx="1.5" fill="#F4F6F7" stroke="#66717C" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M53 73 L53 68.5 M57 73 L57 69.5" fill="none" stroke="#3F86AD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M32 47 L44 47 L44 61 L32 61 Z" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M38 61.5 L29.5 56.5 L29.5 66.5 Z M38 61.5 L46.5 56.5 L46.5 66.5 Z" fill="#D2434E" stroke="#8C1F2A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="38" cy="61.5" r="2.7" fill="#D2434E" stroke="#8C1F2A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="23.8" cy="38.5" r="3.4" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="52.2" cy="38.5" r="3.4" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="38" cy="36" rx="14" ry="15.5" fill="#F1C7A0" stroke="#A0623A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M25 30 Q16 24.5 17.5 32 Q11 34.5 17 38.5 Q13 44 21.5 43 Q22.5 36 25 30 Z" fill="#EEF1F3" stroke="#8E99A3" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M51 30 Q60 24.5 58.5 32 Q65 34.5 59 38.5 Q63 44 54.5 43 Q53.5 36 51 30 Z" fill="#EEF1F3" stroke="#8E99A3" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M36.5 21.2 Q33.5 15.5 38.5 15 Q43.5 15 41 19.5" fill="none" stroke="#8E99A3" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M27.5 29.5 Q32 25.5 36.2 28.5 M39.8 28.5 Q44 25.5 48.5 29.5" fill="none" stroke="#8E99A3" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="28.4" cy="44" r="2.2" fill="#F09A8C"/><circle cx="47.6" cy="44" r="2.2" fill="#F09A8C"/>
+    <circle cx="32.3" cy="37" r="5.3" fill="#D9F1F8" stroke="#2E3A44" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="43.7" cy="37" r="5.3" fill="#D9F1F8" stroke="#2E3A44" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M37.6 36.5 L38.4 36.5 M27 36 L24.5 35 M49 36 L51.5 35" fill="none" stroke="#2E3A44" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="32.3" cy="37.6" r="1.8" fill="#11191B"/><circle cx="43.7" cy="37.6" r="1.8" fill="#11191B"/>
+    <path d="M41.2 33 L43.6 35.8 L42.2 37.4 L45.6 40.6" fill="none" stroke="#2E3A44" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M38.4 40.5 Q36.2 43.6 39 43.9" fill="none" stroke="#A0623A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M38 46.2 C35 44.2 30.5 44.2 29 47 C28.2 48.6 26.4 48.4 26.2 47 C26.8 50.2 31 51 33.2 49.4 C35 48.2 36.8 47.8 38 47.8 C39.2 47.8 41 48.2 42.8 49.4 C45 51 49.2 50.2 49.8 47 C49.6 48.4 47.8 48.6 47 47 C45.5 44.2 41 44.2 38 46.2 Z" fill="#EEF1F3" stroke="#8E99A3" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M35 51.6 Q38 54.2 41 51.6" fill="none" stroke="#A0623A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M70.5 82 L89.5 23.5" fill="none" stroke="#7D5310" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="89.8" cy="22.6" r="2.8" fill="#D2434E" stroke="#8C1F2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="65" y="75" width="11" height="11" rx="4.5" fill="#F1C7A0" stroke="#A0623A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`,
 };
 
 const pamiec = new Map();

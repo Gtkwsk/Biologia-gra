@@ -28,6 +28,7 @@ import { utworzLas } from './las.js';
 import { utworzSiatke } from './siatka.js';
 import { utworzSlupki } from './slupki.js';
 import { utworzDiagnoze } from './diagnoza.js';
+import { utworzWykrywacz } from './wykrywacz.js';
 import { obrazSceny } from './obrazy.js';
 
 const TYPY = {
@@ -56,6 +57,9 @@ const TYPY = {
   },
   async 'prawda-falsz'(zadanie) {
     return (kontener, opcje) => utworzPrawdaFalsz(kontener, { zadanie, ...opcje });
+  },
+  async wykrywacz(zadanie) {
+    return (kontener, opcje) => utworzWykrywacz(kontener, { zadanie, ...opcje });
   },
   async tabela(zadanie, dane) {
     return (kontener, opcje) => utworzTabele(kontener, { zadanie, dane, ...opcje });
