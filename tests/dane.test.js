@@ -270,3 +270,13 @@ test('wykrywa w domowym laboratorium ciekawostkę spoza TRESCI.md i krok bez kro
   zawiera(bledy, 'laboratorium[chleb].ciekawostka');
   zawiera(bledy, 'krok „żuj dalej” musi być pełnym zdaniem');
 });
+
+test('wykrywa przewodnika bez rysunku i ciekawostkę, która nie mówi o przewodniku', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const sw2 = dane.swiaty.find((s) => s.id === 2);
+  sw2.przewodnik = { ...sw2.przewodnik, rysunek: 'przewodnik-nieznany' };
+  dane.swiaty.find((s) => s.id === 6).przewodnik.imie = 'Antoni van Leeuwenhoek';
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'nie ma rysunku „przewodnik-nieznany”');
+  zawiera(bledy, 'ciekawostka świata nie mówi o przewodniku');
+});

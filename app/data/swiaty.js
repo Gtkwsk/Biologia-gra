@@ -1,6 +1,7 @@
 // Sześć światów w kolejności części słuchowiska. Treści: TRESCI.md, sekcje 2.1-2.6.
 // gotowy: świat ma treść do grania. Świat niegotowy jest na mapie oznaczony „W budowie”.
 // ciekawostka: dosłownie z TRESCI.md, sekcja 6.
+// przewodnik: uczony ze słuchowiska, o którym jest ciekawostka (SPEC.md, sekcja 4.4): imie, kim, rysunek.
 // boss: wyzwania w formatach sprawdzianu (SPEC.md, sekcja 4.3); z każdej puli losowane jest
 // jedno zadanie, więc kolejne podejścia różnią się wariantami.
 
@@ -86,6 +87,7 @@ export default [
       'Komórka to podstawowa jednostka życia. Działa jak miasto: ma granicę z przejściami, centrum dowodzenia, elektrownie i fabryki.',
       'Zacznij od planu miasta.',
     ],
+    przewodnik: { imie: 'Robert Hooke', kim: 'angielski uczony sprzed ponad 350 lat', rysunek: 'przewodnik-hooke' },
     ciekawostka:
       'Robert Hooke ponad 350 lat temu zobaczył pod mikroskopem w plasterku korka setki pustych komór i nazwał je słowem oznaczającym małą izbę; po polsku to „komórki”. Oglądał puste ściany martwych komórek.',
     coZbadasz: [
@@ -148,6 +150,7 @@ export default [
       'Odpowiedź kryje się w komórkach: w zielonych twierdzach roślin, w komórkach grzybów i w maleńkich bakteriach, które nie mają nawet jądra.',
       'Zacznij od planu zielonej twierdzy.',
     ],
+    przewodnik: { imie: 'Antoni van Leeuwenhoek', kim: 'kupiec z Delft, który budował mikroskopy', rysunek: 'przewodnik-leeuwenhoek' },
     ciekawostka:
       'Antoni van Leeuwenhoek, kupiec handlujący suknem w Delft, budował najlepsze mikroskopy swoich czasów. W nalocie z własnych zębów zobaczył mnóstwo poruszających się „zwierzątek”, czyli bakterii; pisał, że jest ich tam więcej niż ludzi w całym królestwie.',
     coZbadasz: [
@@ -223,6 +226,7 @@ export default [
       'Same wytwarzają pokarm w zielonych kuchniach zasilanych światłem.',
       'Zajrzyj do takiej kuchni i poznaj jej przepis.',
     ],
+    przewodnik: { imie: 'Jan Baptysta van Helmont', kim: 'flamandzki lekarz i przyrodnik sprzed prawie 400 lat', rysunek: 'przewodnik-helmont' },
     ciekawostka:
       'Jan Baptysta van Helmont posadził wierzbę w zważonej ziemi; po pięciu latach wierzba była cięższa o ponad 70 kg, a ziemi ubyło około 60 g. Dziś wiadomo, że większość suchej masy drzewa pochodzi z dwutlenku węgla z powietrza.',
     coZbadasz: [
@@ -380,6 +384,7 @@ export default [
       'Komórki mięśni potrzebowały energii natychmiast, a przecież w pokarmie jest ona zamknięta.',
       'Zajrzyj do komórek i zobacz, jak płonie ogień bez płomienia.',
     ],
+    przewodnik: { imie: 'Joseph Priestley', kim: 'angielski uczony sprzed ponad 250 lat', rysunek: 'przewodnik-priestley' },
     ciekawostka:
       'Joseph Priestley w 1771 roku zamknął świecę pod kloszem; zgasła. Po dziesięciu dniach z gałązką mięty w tym samym powietrzu świeca znów mogła się palić.',
     coZbadasz: [
