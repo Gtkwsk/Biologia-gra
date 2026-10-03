@@ -2,7 +2,7 @@
 // „związek × funkcja” (np. miód → cukry, funkcja energetyczna).
 //
 // zadanie.wiersze:  [{ id, nazwa, karta? }]  – związki,
-// zadanie.kolumny:  [{ id, nazwa }]          – funkcje,
+// zadanie.kolumny:  [{ id, nazwa, opis? }]   – funkcje (opis: nazwa w komunikatach, domyślnie „funkcja <nazwa>”),
 // zadanie.elementy: [{ tekst, wiersz, kolumna, karta?, wyjasnienie }].
 // Komunikat o błędzie mówi, czy nie zgadza się związek, funkcja, czy jedno i drugie.
 
@@ -11,6 +11,7 @@ import { rysunekKarty } from './rysunki.js';
 import { utworzZadanieEtykiet } from './zadanie-etykiet.js';
 
 export const kluczKomorki = (wiersz, kolumna) => `${wiersz}|${kolumna}`;
+const opisKolumny = (k) => k.opis ?? `funkcja ${k.nazwa}`;
 
 // Opis błędu umieszczenia elementu w komórce (wiersz, kolumna): 'wiersz', 'kolumna' albo 'oba'.
 export function rodzajBledu(element, komorka) {
@@ -44,7 +45,7 @@ export function utworzSiatke(kontener, { zadanie, tryb = 'trening', onKoniec }) 
             const klucz = kluczKomorki(w.id, k.id);
             const lista = h('ul', { class: 'siatka__lista' });
             listy.set(klucz, lista);
-            const komorka = h('td', { class: 'siatka__komorka', 'data-cel': klucz, 'data-kolumna': k.nazwa, 'aria-label': `${w.nazwa}, funkcja ${k.nazwa}` }, lista);
+            const komorka = h('td', { class: 'siatka__komorka', 'data-cel': klucz, 'data-kolumna': k.nazwa, 'aria-label': `${w.nazwa}, ${opisKolumny(k)}` }, lista);
             komorki.push(komorka);
             return komorka;
           }),
@@ -56,7 +57,7 @@ export function utworzSiatke(kontener, { zadanie, tryb = 'trening', onKoniec }) 
 
   const opisKomorki = (klucz) => {
     const [w, k] = klucz.split('|');
-    return `${wiersze.get(w).nazwa}, funkcja ${kolumny.get(k).nazwa}`;
+    return `${wiersze.get(w).nazwa}, ${opisKolumny(kolumny.get(k))}`;
   };
 
   return utworzZadanieEtykiet(kontener, {

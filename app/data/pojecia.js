@@ -509,7 +509,7 @@ export default [
     rodzaj: 'zwiazek',
     swiat: 1,
     opis: 'najbogatsze źródło energii i materiał zapasowy',
-    zdanie: 'Tłuszcze to najbogatsze źródło energii: dają około dwa razy więcej energii niż cukry. Są materiałem zapasowym, a pod skórą ssaków i ptaków tworzą warstwę ochronną, która chroni przed zimnem i urazami.',
+    zdanie: 'Tłuszcze to najbogatsze źródło energii: z takiej samej ilości tłuszczów organizm uzyskuje około dwa razy więcej energii niż z cukrów. Są materiałem zapasowym, a pod skórą ssaków i ptaków tworzą warstwę ochronną, która chroni przed zimnem i urazami.',
     zrodlo: '2.1',
   },
   {
@@ -538,7 +538,7 @@ export default [
     rodzaj: 'pojecie',
     swiat: 5,
     opis: 'organizm pobierający gotowy pokarm z otoczenia',
-    zdanie: 'Organizm cudzożywny nie wytwarza pokarmu, tylko pobiera gotowy pokarm z otoczenia. Należą do nich zwierzęta, grzyby, większość bakterii i niektóre protisty.',
+    zdanie: 'Organizm cudzożywny nie wytwarza pokarmu, tylko pobiera gotowy pokarm z otoczenia. Do organizmów cudzożywnych należą zwierzęta, grzyby, większość bakterii i niektóre protisty.',
     zrodlo: '3',
   },
   {
@@ -556,7 +556,7 @@ export default [
     rodzaj: 'pojecie',
     swiat: 5,
     opis: 'związki, na które podczas trawienia rozkładane są złożone związki z pokarmu',
-    zdanie: 'Podczas trawienia złożone związki z pokarmu są rozkładane na związki proste. Dopiero je organizm może wykorzystać.',
+    zdanie: 'Podczas trawienia złożone związki z pokarmu są rozkładane na związki proste. Dopiero takie związki organizm może wykorzystać.',
     zrodlo: '2.5',
   },
   {
@@ -565,7 +565,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'zwierzę żywiące się pokarmem roślinnym',
-    zdanie: 'Roślinożerca to zwierzę żywiące się pokarmem roślinnym, np. żubr, zebra, wiewiórka pospolita. Pokarm roślinny jest łatwo dostępny, ale mało pożywny i trudny do strawienia.',
+    zdanie: 'Roślinożerca, np. żubr, zebra albo wiewiórka pospolita, to zwierzę żywiące się pokarmem roślinnym. Pokarm roślinny jest łatwo dostępny, ale mało pożywny i trudny do strawienia.',
     zrodlo: '3',
   },
   {
@@ -583,7 +583,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'mięsożerca, który poluje na ofiary i je zabija',
-    zdanie: 'Drapieżnik to mięsożerca, który poluje na ofiary i je zabija, np. orzeł przedni, wilk i ryś. Ma ostre zęby lub dziób, silne pazury, dobry refleks i jest sprawny fizycznie.',
+    zdanie: 'Drapieżnik, np. orzeł przedni, wilk albo ryś, to mięsożerca, który poluje na ofiary i je zabija. Ma ostre zęby lub dziób, silne pazury, dobry refleks i jest sprawny fizycznie.',
     zrodlo: '3',
   },
   {
@@ -592,7 +592,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'mięsożerca żywiący się ciałami martwych zwierząt',
-    zdanie: 'Padlinożerca to mięsożerca żywiący się ciałami martwych zwierząt, np. hiena cętkowana i sęp.',
+    zdanie: 'Padlinożerca, np. hiena cętkowana albo sęp, to mięsożerca żywiący się ciałami martwych zwierząt.',
     zrodlo: '3',
   },
   {
@@ -601,7 +601,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'zwierzę zjadające pokarm roślinny i zwierzęcy',
-    zdanie: 'Wszystkożerca zjada pokarm roślinny i zwierzęcy i może zmieniać pokarm zależnie od tego, co jest dostępne, np. niedźwiedź brunatny, dzik, lis, wróbel i człowiek.',
+    zdanie: 'Wszystkożerca, np. niedźwiedź brunatny, dzik, lis, wróbel albo człowiek, zjada pokarm roślinny i zwierzęcy. Może zmieniać pokarm zależnie od tego, co jest dostępne.',
     zrodlo: '3',
   },
   {
@@ -628,7 +628,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'pasożyt żyjący na powierzchni ciała żywiciela',
-    zdanie: 'Pasożyt zewnętrzny żyje na powierzchni ciała żywiciela, np. kleszcz, wesz i pchła.',
+    zdanie: 'Pasożyt zewnętrzny, np. kleszcz, wesz albo pchła, żyje na powierzchni ciała żywiciela.',
     zrodlo: '3',
   },
   {
@@ -637,7 +637,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'pasożyt żyjący wewnątrz ciała żywiciela',
-    zdanie: 'Pasożyt wewnętrzny żyje wewnątrz ciała żywiciela, np. tasiemiec uzbrojony, owsik ludzki i glista ludzka.',
+    zdanie: 'Pasożyt wewnętrzny, np. tasiemiec uzbrojony, owsik ludzki albo glista ludzka, żyje wewnątrz ciała żywiciela.',
     zrodlo: '3',
   },
   {
@@ -646,7 +646,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'roślina bez chlorofilu, która pobiera od żywiciela wszystkie potrzebne substancje za pomocą ssawek',
-    zdanie: 'Roślina pasożytnicza nie ma chlorofilu i pobiera od żywiciela wszystkie potrzebne substancje (substancje pokarmowe, wodę, sole mineralne) za pomocą ssawek, np. kanianka pospolita i zaraza żółta.',
+    zdanie: 'Roślina pasożytnicza, np. kanianka pospolita albo zaraza żółta, nie ma chlorofilu. Wszystkie potrzebne substancje (substancje pokarmowe, wodę, sole mineralne) pobiera od żywiciela za pomocą ssawek.',
     zrodlo: '3',
   },
   {
@@ -655,7 +655,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'roślina z chlorofilem, która sama wytwarza substancje pokarmowe, ale wodę i sole mineralne pobiera od żywiciela',
-    zdanie: 'Półpasożyt ma chlorofil i sam wytwarza substancje pokarmowe, ale wodę i sole mineralne pobiera od żywiciela, np. jemioła pospolita rosnąca na topoli.',
+    zdanie: 'Półpasożyt, np. jemioła pospolita rosnąca na topoli, ma chlorofil i sam wytwarza substancje pokarmowe, ale wodę i sole mineralne pobiera od żywiciela.',
     zrodlo: '3',
   },
   {
@@ -663,7 +663,7 @@ export default [
     nazwa: 'ssawki',
     rodzaj: 'pojecie',
     swiat: 5,
-    opis: 'wyrostki, za pomocą których rośliny pasożytnicze pobierają substancje od żywiciela',
+    opis: 'części rośliny pasożytniczej, za pomocą których pobiera ona substancje od żywiciela',
     zdanie: 'Rośliny pasożytnicze pobierają od żywiciela wszystkie potrzebne substancje za pomocą ssawek.',
     zrodlo: '2.5',
   },
@@ -673,7 +673,7 @@ export default [
     rodzaj: 'sposob',
     swiat: 5,
     opis: 'drobne zwierzęta, bakterie i grzyby rozkładające szczątki innych organizmów',
-    zdanie: 'Organizmy odżywiające się szczątkami to drobne zwierzęta, bakterie i grzyby. Żyją w glebie, w ściółce leśnej, na dnie zbiorników wodnych i w mule i zapobiegają gromadzeniu się szczątków w przyrodzie.',
+    zdanie: 'Organizmy odżywiające się szczątkami to drobne zwierzęta, bakterie i grzyby. Żyją w glebie, w ściółce leśnej, na dnie zbiorników wodnych i w mule. Zapobiegają gromadzeniu się szczątków w przyrodzie.',
     zrodlo: '3',
     ciekawostka: 'Bez organizmów odżywiających się szczątkami las z czasem utonąłby we własnych szczątkach; organizmy te zwracają też glebie sole mineralne.',
   },
