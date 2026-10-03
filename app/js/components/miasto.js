@@ -48,7 +48,7 @@ function utworzBudowe(kontener, { zadanie, dane, miasto, svgTekst, tryb = 'treni
       const pole = h('span', { class: 'pole-celu__tekst' });
       const stanIkona = h('span', { class: 'pole-celu__ikona' });
       const slot = h('span', { class: 'pole-celu usluga__slot', 'data-stan': 'puste' }, [pole, stanIkona]);
-      const li = h('li', { class: 'usluga', 'data-cel': u.element, 'data-stan': 'puste', role: 'button', tabindex: '0', 'aria-label': `${u.nazwa}: ${u.zlecenie}` }, [
+      const li = h('li', { class: 'usluga', 'data-cel': u.element, 'data-stan': 'puste', 'aria-label': `${u.nazwa}: ${u.zlecenie}` }, [
         h('span', { class: 'usluga__nazwa' }, u.nazwa),
         h('span', { class: 'usluga__zlecenie' }, u.zlecenie),
         slot,

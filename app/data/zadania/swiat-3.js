@@ -359,7 +359,7 @@ export default [
     typ: 'luki',
     tresc: 'Uzupełnij zdania o budowie komórek.',
     tekst:
-      'Komórki zwierzęce, roślinne i grzybowe to komórki [jądrowe|komorka-jadrowa]. Komórki bakterii to komórki [bezjądrowe|komorka-bezjadrowa]. Komórka grzybowa ma ścianę komórkową zbudowaną z [chityny|komorka-grzybowa]. Komórka grzybowa nie ma [chloroplastów|chloroplast].',
+      'Komórki zwierzęce, roślinne i grzybowe to komórki [jądrowe|komorka-jadrowa]. Komórki bakterii to komórki [bezjądrowe|komorka-bezjadrowa]. Komórka grzybowa ma ścianę komórkową zbudowaną z [chityny|komorka-grzybowa]. W komórce grzybowej nie ma [chloroplastów|chloroplast], więc nie zachodzi w niej fotosynteza.',
     dystraktory: [
       { tekst: 'celulozy', wyjasnienie: 'Z celulozy jest zbudowana ściana komórkowa roślin.' },
       { tekst: 'mitochondriów', wyjasnienie: 'Komórka grzybowa ma mitochondria.' },

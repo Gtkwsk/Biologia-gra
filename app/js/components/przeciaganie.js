@@ -88,6 +88,17 @@ export function utworzPrzeciaganie({ korzen, aktywne = () => true, onUpusc, onWy
       const cel = ustalCel(e);
       if (cel) stuknijCel(cel);
     });
+    // Cel, który nie jest przyciskiem (kolumna, wiersz, plan), działa też z klawiatury.
+    if (el.tagName !== 'BUTTON' && el.dataset.cel) {
+      if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+      el.addEventListener('keydown', (e) => {
+        if ((e.key !== 'Enter' && e.key !== ' ') || e.target !== el) return;
+        e.preventDefault();
+        const cel = ustalCel(e);
+        if (cel) stuknijCel(cel);
+      });
+    }
   }
 
   function podlaczEtykiete(el, id) {
