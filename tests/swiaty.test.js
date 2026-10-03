@@ -42,6 +42,15 @@ test('raz otwarty świat zostaje otwarty, gdy wcześniej pojawi się nowy gotowy
   assert.deepEqual([...otwarteSwiaty(pozniej, s)].sort(), [1, 2]);
 });
 
+test('świat z wynikami zostaje otwarty, choć zapis nie ma listy otwartych światów', () => {
+  // Zapis z wersji, w której pierwszym gotowym światem był świat 2 (przed listą odblokowane).
+  let s = zapiszWynik(nowyStan(DZIEN), { idZadania: 'z2a', poprawne: 3, wszystkie: 8, dzien: DZIEN });
+  const pozniej = swiaty([1, 2, 3]);
+  assert.deepEqual([...otwarteSwiaty(pozniej, s)].sort(), [1, 2]);
+  s = utrwalOdblokowane(pozniej, s);
+  assert.deepEqual(s.odblokowane, [1, 2]);
+});
+
 test('przełącznik w panelu otwiera wszystkie gotowe światy, ale nie jest utrwalany', () => {
   const sw = swiaty([2, 3]);
   let s = ustawOdblokujWszystkie(nowyStan(DZIEN), true);

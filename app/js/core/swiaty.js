@@ -3,6 +3,7 @@
 // Świat jest otwarty, gdy jest gotowy i:
 // - jest pierwszym gotowym światem w kolejności albo
 // - boss poprzedniego gotowego świata jest pokonany albo
+// - gracz ma w nim już wyniki (np. zapis z wersji gry, w której był to pierwszy gotowy świat) albo
 // - został otwarty wcześniej (raz otwarty świat zostaje otwarty) albo
 // - w panelu rodzica włączono odblokowanie wszystkich światów.
 
@@ -14,9 +15,10 @@ function gotoweWKolejnosci(swiaty) {
 
 export function otwartePrzezReguly(swiaty, stan) {
   const gotowe = gotoweWKolejnosci(swiaty);
+  const maWyniki = (s) => stan.bossowie.includes(s.id) || zadaniaSwiata(s).some((id) => stan.zadania[id]);
   const wynik = new Set();
   gotowe.forEach((s, i) => {
-    if (i === 0 || stan.bossowie.includes(gotowe[i - 1].id)) wynik.add(s.id);
+    if (i === 0 || stan.bossowie.includes(gotowe[i - 1].id) || maWyniki(s)) wynik.add(s.id);
   });
   return wynik;
 }
