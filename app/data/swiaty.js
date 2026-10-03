@@ -327,6 +327,12 @@ export default [
         zadania: ['s5-atlas-klas-1', 's5-atlas-przyp-1', 's5-atlas-klas-2'],
       },
       {
+        id: 's5-atlas-swiata',
+        nazwa: 'Atlas świata',
+        opis: 'Antylopy, bawoły, kolibry i nektarniki: kto czym się żywi?',
+        zadania: ['s5-atlas-klas-3', 's5-atlas-klas-4'],
+      },
+      {
         id: 's5-lancuchy',
         nazwa: 'Łańcuchy pokarmowe',
         opis: 'Kto kogo zjada? Uzupełnij łańcuchy, które zaczynają się od organizmu samożywnego.',
@@ -357,7 +363,7 @@ export default [
       wyzwania: [
         { pula: ['s5-luki-cudzozywnosc-1', 's5-boss-luki-2', 's5-boss-luki-3', 's5-boss-luki-4', 's5-boss-luki-5'] },
         { pula: ['s5-atlas-przyp-1', 's5-boss-przyp-2', 's5-boss-przyp-3', 's5-boss-przyp-4', 's5-boss-przyp-5'] },
-        { pula: ['s5-atlas-klas-1', 's5-atlas-klas-2', 's5-pasozyty-klas', 's5-boss-klas-4', 's5-boss-klas-5'] },
+        { pula: ['s5-atlas-klas-1', 's5-atlas-klas-2', 's5-pasozyty-klas', 's5-atlas-klas-3', 's5-atlas-klas-4'] },
         { pula: ['s5-pf-uczta-1', 's5-pf-pasozyty-1', 's5-boss-pf-3', 's5-boss-pf-4', 's5-trawienie-sorter'] },
       ],
     },

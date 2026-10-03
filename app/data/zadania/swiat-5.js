@@ -60,13 +60,14 @@ const O = {
   jemiola: { tekst: 'jemioła pospolita', kategoria: 'polpasozyt', karta: 'jemiola-pospolita', wyjasnienie: 'Jemioła pospolita ma chlorofil i sama wytwarza substancje pokarmowe, ale wodę i sole mineralne pobiera od żywiciela.' },
 };
 
-const klasyfikacja = (id, tresc, kategorie, klucze, wyjasnienie) => ({
+// karty: dla wybranych elementów inna karta atlasu niż organizm, np. pojęcie, które element ćwiczy.
+const klasyfikacja = (id, tresc, kategorie, klucze, wyjasnienie, karty = {}) => ({
   id,
   swiat: 5,
   typ: 'klasyfikacja',
   tresc,
   kategorie,
-  elementy: klucze.map((k) => O[k]),
+  elementy: klucze.map((k) => (karty[k] ? { ...O[k], karta: karty[k] } : O[k])),
   wyjasnienie,
   zrodlo: '2.5',
 });
@@ -250,6 +251,22 @@ export default [
     'Zebra, gil i rusałka pokrzywnik to roślinożercy, wilk i żaba to drapieżniki, sęp to padlinożerca, a lis, wróbel i człowiek to wszystkożercy.',
   ),
 
+  // ---------- Misja „Atlas świata” ----------
+  klasyfikacja(
+    's5-atlas-klas-3',
+    'Atlas świata: przyporządkuj zwierzęta do grup.',
+    ZJADAJACY.slice(0, 2).concat(ZJADAJACY[3]),
+    ['antylopa', 'bawol', 'zieba', 'pajak', 'waz', 'rys', 'niedzwiedz', 'czlowiek'],
+    'Antylopy, bawoły i zięby to roślinożercy, pająki, węże i rysie to drapieżniki, a niedźwiedź brunatny i człowiek to wszystkożercy.',
+  ),
+  klasyfikacja(
+    's5-atlas-klas-4',
+    'Atlas świata: przyporządkuj organizmy do grup.',
+    [ZJADAJACY[0], ZJADAJACY[2], PASOZYTY[0], PASOZYTY[3]],
+    ['koliber', 'nektarnik', 'nietoperz', 'orzesznica', 'los', 'hiena', 'sep', 'pchla', 'wesz', 'jemiola'],
+    'Kolibry, nektarniki, niektóre nietoperze, orzesznica i łoś to roślinożercy, hiena cętkowana i sęp to padlinożercy, pchła i wesz to pasożyty zewnętrzne, a jemioła pospolita to półpasożyt.',
+  ),
+
   // ---------- Misja „Łańcuchy pokarmowe” ----------
   {
     id: 's5-lancuchy-1',
@@ -333,6 +350,8 @@ export default [
     PASOZYTY,
     ['kleszcz', 'wesz', 'pchla', 'tasiemiec', 'owsik', 'glista', 'kanianka', 'zaraza', 'jemiola'],
     'Pasożyty zewnętrzne żyją na powierzchni ciała żywiciela, a wewnętrzne w jego wnętrzu. Rośliny pasożytnicze nie mają chlorofilu i biorą od żywiciela wszystko, a półpasożyty mają chlorofil i biorą tylko wodę i sole mineralne.',
+    // Kleszcza i tasiemca odkrywa misja w zadaniu „Pasożyt szuka żywiciela”; tu ćwiczą pojęcia.
+    { kleszcz: 'pasozyt-zewnetrzny', tasiemiec: 'pasozyt-wewnetrzny' },
   ),
   {
     id: 's5-zywiciel-przyp',
@@ -636,20 +655,6 @@ export default [
     [{ tekst: 'organizm, który sam wytwarza pokarm', wyjasnienie: 'Tak można opisać organizm samożywny, np. roślinę, a nie żaden z organizmów cudzożywnych w tym zadaniu.' }],
     'Półpasożyt ma chlorofil, roślina pasożytnicza go nie ma. Padlinożerca żywi się ciałami martwych zwierząt, a organizmy odżywiające się szczątkami rozkładają szczątki.',
     'opisy',
-  ),
-  klasyfikacja(
-    's5-boss-klas-4',
-    'Przyporządkuj zwierzęta do grup.',
-    ZJADAJACY.slice(0, 2).concat(ZJADAJACY[3]),
-    ['antylopa', 'bawol', 'zieba', 'pajak', 'waz', 'rys', 'niedzwiedz', 'czlowiek'],
-    'Antylopy, bawoły i zięby to roślinożercy, pająki, węże i rysie to drapieżniki, a niedźwiedź brunatny i człowiek to wszystkożercy.',
-  ),
-  klasyfikacja(
-    's5-boss-klas-5',
-    'Przyporządkuj organizmy do grup.',
-    [ZJADAJACY[0], ZJADAJACY[2], PASOZYTY[0], PASOZYTY[3]],
-    ['koliber', 'nektarnik', 'nietoperz', 'orzesznica', 'los', 'hiena', 'sep', 'pchla', 'wesz', 'jemiola'],
-    'Kolibry, nektarniki, niektóre nietoperze, orzesznica i łoś to roślinożercy, hiena cętkowana i sęp to padlinożercy, pchła i wesz to pasożyty zewnętrzne, a jemioła pospolita to półpasożyt.',
   ),
   {
     id: 's5-boss-pf-3',
