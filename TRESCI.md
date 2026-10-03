@@ -298,6 +298,8 @@ Wszystkie cztery typy mają błonę komórkową, cytozol i rybosomy.
 - Łoś zjadający około 50 kg roślin na dobę (liczba podręcznikowa).
 - Skład ciała człowieka w procentach (wartości orientacyjne z podręcznika).
 - Gałęzatka kulista nazywana rośliną.
+- Gil, zięba, kolibry i nektarniki jako roślinożercy (nasiona, nektar). W rzeczywistości ptaki te zjadają też drobne zwierzęta, np. owady (zięba karmi nimi pisklęta); dopisek dozwolony w karcie atlasu, nie w zadaniu.
+- Sześć pierwiastków występujących w organizmach w największej ilości: węgiel, wodór, tlen, azot, siarka, fosfor (lista podręcznikowa). W ciele człowieka wapń występuje w rzeczywistości w większej ilości niż siarka i fosfor; w zadaniach obowiązuje lista podręcznikowa, dopisek dozwolony w karcie atlasu.
 
 ## 6. Ciekawostki z audiobooka (opisy, sceny, karty; nie w zadaniach sprawdzianowych)
 

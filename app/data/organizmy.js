@@ -310,6 +310,7 @@ export default [
     swiat: 5,
     opis: 'ptak, który zjada nasiona',
     zdanie: 'Gil jest roślinożercą: żywi się nasionami.',
+    uwaga: 'W rzeczywistości gil zjada też drobne zwierzęta, np. owady, zwłaszcza gdy karmi pisklęta.',
     zrodlo: '2.5',
   },
   {
@@ -319,6 +320,7 @@ export default [
     swiat: 5,
     opis: 'ptak, który zjada nasiona',
     zdanie: 'Zięba jest roślinożercą: żywi się nasionami.',
+    uwaga: 'W rzeczywistości zięba zjada też owady i karmi nimi pisklęta.',
     zrodlo: '2.5',
   },
   {
@@ -337,6 +339,7 @@ export default [
     swiat: 5,
     opis: 'ptak, który żywi się nektarem',
     zdanie: 'Kolibry żywią się nektarem kwiatów, więc są roślinożercami.',
+    uwaga: 'W rzeczywistości kolibry chwytają też drobne owady.',
     zrodlo: '2.5',
   },
   {
@@ -346,6 +349,7 @@ export default [
     swiat: 5,
     opis: 'ptak, który żywi się nektarem',
     zdanie: 'Nektarniki żywią się nektarem kwiatów, więc są roślinożercami.',
+    uwaga: 'W rzeczywistości nektarniki zjadają też drobne owady.',
     zrodlo: '2.5',
   },
   {

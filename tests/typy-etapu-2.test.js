@@ -128,7 +128,7 @@ test('przepis: światło to warunek (zasilanie nad garnkiem), a nie składnik fo
   assert.equal(P.pasujeDoStrefy('warunek', 'swiatlo', fotosynteza), true);
   assert.equal(P.pasujeDoStrefy('wejscie', 'swiatlo', fotosynteza), false);
   assert.equal(P.pasujeDoStrefy('wejscie', 'woda', fotosynteza), true);
-  assert.match(P.powodBledu({ strefa: 'wejscie' }, 'swiatlo', fotosynteza), /^To nie składnik fotosyntezy, tylko warunek: w zapisie słownym stoi nad strzałką\./);
-  assert.match(P.powodBledu({ strefa: 'warunek' }, 'woda', fotosynteza), /^To składnik fotosyntezy, a nie warunek: w zapisie słownym stoi przed strzałką\./);
+  assert.match(P.powodBledu({ strefa: 'wejscie' }, 'swiatlo', fotosynteza), /^To nie składnik \(substrat\) fotosyntezy, tylko warunek: w zapisie słownym stoi nad strzałką\./);
+  assert.match(P.powodBledu({ strefa: 'warunek' }, 'woda', fotosynteza), /^To składnik \(substrat\) fotosyntezy, a nie warunek: w zapisie słownym stoi przed strzałką\./);
   assert.match(P.powodBledu({ strefa: 'warunek' }, 'tlen', fotosynteza), /^To produkt fotosyntezy, a nie warunek\./);
 });

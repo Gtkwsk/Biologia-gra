@@ -19,7 +19,7 @@ export default [
     id: 's4-przepis-1',
     swiat: 4,
     typ: 'przepis',
-    tresc: 'Kuchnia w chloroplaście: ułóż przepis na fotosyntezę. Skąd biorą się składniki, co zasila kuchnię i dokąd trafia to, co powstaje?',
+    tresc: 'Kuchnia w chloroplaście: ułóż przepis na fotosyntezę. Skąd biorą się składniki (substraty), co zasila kuchnię i dokąd trafia to, co powstaje?',
     procesy: ['fotosynteza'],
     garnki: [{ karta: 'chloroplast', podpis: 'chloroplast w komórce liścia' }],
     pola: [
@@ -52,7 +52,7 @@ export default [
     tekst:
       'Do fotosyntezy roślina potrzebuje [dwutlenku węgla|dwutlenek-wegla|Ten gaz wnika do liści z powietrza przez aparaty szparkowe.], który wnika do liści z powietrza, i [wody|woda|Tę substancję korzenie pobierają z gleby.], którą korzenie pobierają z gleby. Energii dostarcza światło pochłaniane przez [chlorofil|chlorofil|To zielony barwnik zawarty w chloroplastach.]. Powstają [substancje pokarmowe|substancje-pokarmowe|To głównie glukoza.], transportowane do wszystkich komórek rośliny, oraz [tlen|tlen|Ten gaz trafia do atmosfery.], który trafia do atmosfery.',
     dystraktory: [
-      { tekst: 'tlenu', wyjasnienie: 'Tlen powstaje w fotosyntezie; nie jest jej składnikiem.' },
+      { tekst: 'tlenu', wyjasnienie: 'Tlen powstaje w fotosyntezie; nie jest jej składnikiem (substratem).' },
       { tekst: 'mitochondria', wyjasnienie: 'Mitochondria dostarczają komórce energii. Światło jest pochłaniane przez zielony barwnik zawarty w chloroplastach.' },
     ],
     wyjasnienie: 'Zapis słowny fotosyntezy: dwutlenek węgla + woda → (światło, chlorofil) → substancje pokarmowe + tlen.',

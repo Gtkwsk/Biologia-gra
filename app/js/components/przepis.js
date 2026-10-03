@@ -21,7 +21,7 @@ import { scenaProcesu } from './sceny-procesow.js';
 import * as P from './przepis-logika.js';
 
 const NAGLOWKI = {
-  wejscie: 'Składniki',
+  wejscie: 'Składniki (substraty)',
   warunek: 'Zasilanie',
   wyjscie: 'Powstaje',
   'wejscie-lewe': 'Wchodzi z zewnątrz',
@@ -132,8 +132,8 @@ export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKon
         tytul: lustro
           ? 'Ułóż oba przepisy na strzałkach między procesami.'
           : pola.some((p) => p.strefa === 'warunek')
-            ? 'Ułóż przepis: przeciągnij składniki, zasilanie i produkty na pola.'
-            : 'Ułóż przepis: przeciągnij składniki i produkty na pola.',
+            ? 'Ułóż przepis: przeciągnij składniki (substraty), zasilanie i produkty na pola.'
+            : 'Ułóż przepis: przeciągnij składniki (substraty) i produkty na pola.',
         tekst: 'Możesz też stuknąć etykietę, a potem pole.',
       },
       wybor: (e) => ({ rodzaj: 'info', tytul: `Wybrana etykieta: ${nazwa(e)}.`, tekst: 'Stuknij pole w przepisie.' }),
