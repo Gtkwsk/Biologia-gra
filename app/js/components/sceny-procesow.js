@@ -318,6 +318,35 @@ function dzienNoc() {
   };
 }
 
+// Ciasto w misce: rośnie, gdy drożdże wytwarzają dwutlenek węgla (TRESCI.md, sekcja 2.6:
+// dwutlenek węgla z fermentacji drożdży spulchnia ciasto).
+function ciasto() {
+  const pecherzyki = s(
+    'g',
+    { class: 'ciasto__pecherzyki' },
+    [[170, 120], [196, 104], [222, 124], [244, 108], [186, 138], [232, 142], [208, 96], [258, 128]].map(([x, y], i) =>
+      s('circle', { cx: x, cy: y, r: 4 + (i % 3), fill: '#FFF8E8', stroke: '#C9A86A', 'stroke-width': 1.5 }),
+    ),
+  );
+  const masa = s('g', { class: 'ciasto__masa' }, [
+    s('path', { d: 'M120 150 C120 112 160 92 210 92 C260 92 300 112 300 150 Z', fill: '#F3DDB0', stroke: '#B9852A', 'stroke-width': 3 }),
+    pecherzyki,
+  ]);
+  const el = svg('0 0 420 220', 'Miska z ciastem drożdżowym', [
+    s('rect', { x: 0, y: 0, width: 420, height: 220, fill: '#FFF8DC' }),
+    s('rect', { x: 0, y: 188, width: 420, height: 32, fill: '#D9C4A3', stroke: KONTUR, 'stroke-width': 2 }),
+    masa,
+    s('path', { d: 'M100 146 H320 C316 176 290 192 210 192 C130 192 104 176 100 146 Z', fill: '#C98B5E', stroke: KONTUR, 'stroke-width': 3, 'stroke-linejoin': 'round' }),
+    s('path', { d: 'M96 146 H324', stroke: KONTUR, 'stroke-width': 4, 'stroke-linecap': 'round' }),
+  ]);
+  return {
+    el,
+    pokaz(kategoria) {
+      if (kategoria === 'wyrasta') el.classList.add('ciasto--wyrosniete');
+    },
+  };
+}
+
 const STATYCZNE = {
   'moczarka-co2': moczarkaCo2,
   'moczarka-swiatlo': moczarkaSwiatlo,
@@ -329,6 +358,7 @@ const STATYCZNE = {
 const OZYWIANE = {
   'drogi-glukozy': drogiGlukozy,
   'dzien-noc': dzienNoc,
+  ciasto,
 };
 
 export const ID_SCEN_PROCESOW = [...Object.keys(STATYCZNE), ...Object.keys(OZYWIANE)];
@@ -337,6 +367,7 @@ export const ID_SCEN_PROCESOW = [...Object.keys(STATYCZNE), ...Object.keys(OZYWI
 export const KATEGORIE_SCEN = {
   'drogi-glukozy': ['energia', 'budowa', 'zapas'],
   'dzien-noc': ['dzien', 'noc', 'oba'],
+  ciasto: ['wyrasta'],
 };
 
 export function scenaProcesu(id) {

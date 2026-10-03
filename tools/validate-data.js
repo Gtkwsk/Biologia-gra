@@ -27,6 +27,8 @@ import { pasujaceTypy, potrzebneWskazowki, wyklucza } from '../app/js/components
 import { regula } from '../app/js/components/konstruktor-logika.js';
 import { ID_SCEN } from '../app/js/components/obrazy.js';
 import { ID_SCEN_PROCESOW, KATEGORIE_SCEN } from '../app/js/components/sceny-procesow.js';
+import { pasujeDoStrefy, rola } from '../app/js/components/przepis-logika.js';
+import * as F from '../app/js/components/fotosynteza-logika.js';
 
 const KORZEN = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const KATALOG_APP = path.join(KORZEN, 'app');
@@ -47,12 +49,13 @@ export const TYPY_ZADAN = [
   'wakuola',
   'przepis',
   'laboratorium',
+  'projektant',
   'sprint',
   'doba',
 ];
 
 // Typy zadań w formatach sprawdzianu (SPEC.md, sekcja 5); mechaniki to pozostałe.
-const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola', 'przepis', 'laboratorium', 'sprint', 'doba'];
+const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola', 'przepis', 'laboratorium', 'projektant', 'sprint', 'doba'];
 
 const OBECNOSC = ['tak', 'nie', 'czasem'];
 
@@ -704,6 +707,127 @@ export function walidujDane(dane, kontekst) {
       });
     },
 
+    przepis(z, gdzie) {
+      const procesyZ = (z.procesy || []).map((id) => procesPoId.get(id));
+      if (!(procesyZ.length === 1 || procesyZ.length === 2)) blad(gdzie, 'przepis ma jeden proces albo dwa (lustro)');
+      if (procesyZ.some((p) => !p)) {
+        blad(gdzie, 'nieznany proces');
+        return;
+      }
+      if ((z.garnki || []).length !== procesyZ.length) blad(gdzie, 'każdy proces potrzebuje garnka (rysunku)');
+      for (const g of z.garnki || []) {
+        karta(gdzie, g.karta);
+        if (!niepustyTekst(g.podpis)) blad(gdzie, 'garnek bez podpisu');
+      }
+      const strefy = procesyZ.length === 2 ? ['wejscie-lewe', 'gora', 'dol', 'wyjscie-prawe'] : ['wejscie', 'wyjscie'];
+      if (!['pole', 'strefa', undefined].includes(z.dopasowanie)) blad(gdzie, `dopasowanie „${z.dopasowanie}” spoza listy pole, strefa`);
+      const idPol = new Set();
+      const substancje = [];
+      for (const p of z.pola || []) {
+        const gp = `${gdzie}.pola[${p.id}]`;
+        if (idPol.has(p.id)) blad(gp, 'powtórzone id pola');
+        idPol.add(p.id);
+        karta(gp, p.substancja);
+        substancje.push(p.substancja);
+        if (!strefy.includes(p.strefa)) blad(gp, `strefa „${p.strefa}” spoza listy ${strefy.join(', ')}`);
+        else if (!pasujeDoStrefy(p.strefa, p.substancja, procesyZ)) blad(gp, `„${p.substancja}” nie pasuje do strefy „${p.strefa}” według data/procesy.js`);
+        if ((z.dopasowanie ?? 'pole') === 'pole' && procesyZ.length === 1 && !niepustyTekst(p.podpis)) blad(gp, 'pole bez podpisu (drogi substancji)');
+      }
+      if (new Set(substancje).size !== substancje.length) blad(gdzie, 'powtórzona substancja w polach');
+      // Przepis musi być kompletny: wszystkie substraty i produkty z zapisu słownego.
+      const zamien = (pr, id) => pr.rownowazne?.[id] ?? id;
+      for (const pr of procesyZ) {
+        const obecne = new Set(substancje.map((id) => zamien(pr, id)));
+        for (const id of [...pr.substraty, ...pr.produkty]) {
+          if (!obecne.has(id) && !(procesyZ.length === 2 && pr === procesyZ[0] && substancje.some((x) => pr.rownowazne?.[x] === id))) {
+            blad(gdzie, `przepis bez „${id}” (${pr.nazwa})`);
+          }
+        }
+      }
+      for (const d of z.dystraktory || []) {
+        karta(gdzie, d?.karta);
+        if (!niepustyTekst(d?.wyjasnienie)) blad(gdzie, `dystraktor „${d?.karta}” bez wyjaśnienia`);
+        if (procesyZ.some((pr) => rola(pr, d?.karta))) blad(gdzie, `dystraktor „${d?.karta}” bierze udział w procesie`);
+      }
+      if (z.scena) {
+        if (!ID_SCEN_PROCESOW.includes(z.scena.id)) blad(gdzie, `nieznana scena „${z.scena.id}”`);
+        if (!idPol.has(z.scena.pole)) blad(gdzie, `scena: nieznane pole „${z.scena.pole}”`);
+      }
+      ciekawostka(`${gdzie}.ciekawostka`, z.ciekawostka);
+    },
+
+    laboratorium(z, gdzie) {
+      if (!['badanie', 'ogniwo'].includes(z.tryb)) blad(gdzie, `tryb „${z.tryb}” spoza listy badanie, ogniwo`);
+      if (!['moczarka', 'szklarnia'].includes(z.roslina)) blad(gdzie, `roslina „${z.roslina}” spoza listy moczarka, szklarnia`);
+      const potrzebne = F.CZYNNIKI.map((c) => c.id).filter((id) => !(z.roslina === 'moczarka' && id === 'woda'));
+      const sprawdzUstawienia = (u, g) => {
+        for (const id of Object.keys(u || {})) {
+          if (!F.CZYNNIK[id]) blad(g, `nieznany czynnik „${id}”`);
+          else if (z.roslina === 'moczarka' && id === 'woda') blad(g, 'moczarka żyje w wodzie: poziom wody jest stały');
+        }
+        for (const id of potrzebne) {
+          const v = u?.[id];
+          if (!Number.isInteger(v) || v < 0 || v >= F.CZYNNIK[id].poziomy.length) blad(g, `czynnik „${id}”: poziom spoza zakresu`);
+        }
+      };
+      if (z.tryb === 'badanie') {
+        sprawdzUstawienia(z.start, `${gdzie}.start`);
+        if (!z.kroki?.length) blad(gdzie, 'brak kroków');
+        let u = { ...z.start };
+        (z.kroki || []).forEach((k, i) => {
+          const gk = `${gdzie}.kroki[${i}]`;
+          if (!potrzebne.includes(k.czynnik)) {
+            blad(gk, `czynnik „${k.czynnik}” niedostępny dla tej rośliny`);
+            return;
+          }
+          if (!(k.poziom >= 0 && k.poziom < F.CZYNNIK[k.czynnik].poziomy.length)) blad(gk, 'poziom spoza zakresu');
+          if (u[k.czynnik] === k.poziom) blad(gk, 'krok niczego nie zmienia');
+          u = { ...u, [k.czynnik]: k.poziom };
+        });
+        if (z.cel !== undefined && typeof z.cel !== 'boolean') blad(gdzie, 'cel musi być true albo false');
+      }
+      if (z.tryb === 'ogniwo') {
+        if (!z.przypadki?.length) blad(gdzie, 'brak przypadków');
+        (z.przypadki || []).forEach((p, i) => {
+          const gp = `${gdzie}.przypadki[${i}]`;
+          if (!niepustyTekst(p.opis)) blad(gp, 'brak opisu');
+          sprawdzUstawienia(p.ustawienia, gp);
+          const n = F.najslabsze(p.ustawienia || {});
+          if (n.length !== 1) blad(gp, `najsłabsze ogniwo musi być jedno, a jest: ${n.join(', ') || 'żadne'}`);
+        });
+      }
+    },
+
+    projektant(z, gdzie) {
+      if (!niepustyTekst(z.pytanie)) blad(gdzie, 'brak problemu badawczego (pytanie)');
+      const ids = (z.czynniki || []).map((c) => c.id);
+      if (!ids.includes(z.badany)) blad(gdzie, `badany czynnik „${z.badany}” nie jest wśród czynników do wyboru`);
+      for (const c of z.czynniki || []) {
+        if (!F.CZYNNIK[c.id] || c.id === 'woda') blad(gdzie, `czynnik „${c.id}” niedostępny (moczarka żyje w wodzie)`);
+        if (!(c.opcje?.length >= 2)) blad(gdzie, `czynnik „${c.id}”: co najmniej dwie opcje`);
+        for (const o of c.opcje || []) {
+          if (!niepustyTekst(o.id) || !niepustyTekst(o.nazwa)) blad(gdzie, `czynnik „${c.id}”: opcja bez id albo nazwy`);
+          if (!(o.poziom >= 0 && o.poziom < (F.CZYNNIK[c.id]?.poziomy.length ?? 0))) blad(gdzie, `czynnik „${c.id}”: poziom opcji „${o.id}” spoza zakresu`);
+        }
+      }
+      for (const p of ['A', 'B']) {
+        for (const c of z.czynniki || []) if (!c.opcje?.some((o) => o.id === z.start?.[p]?.[c.id])) blad(gdzie, `start.${p}: brak opcji dla czynnika „${c.id}”`);
+      }
+      if (z.start && F.ocenPlan(z.start.A, z.start.B, z.badany).dobry) blad(gdzie, 'plan początkowy nie może być od razu dobry');
+      // Każdy dobry plan musi dać różne wyniki prób (inaczej wniosek nie wynika z doświadczenia).
+      const kombinacje = (z.czynniki || []).reduce((acc, c) => acc.flatMap((k) => (c.opcje || []).map((o) => ({ ...k, [c.id]: o }))), [{}]);
+      const poziomy = (k) => ({ swiatlo: 3, dwutlenek: 2, temperatura: 2, sole: 2, ...Object.fromEntries(Object.entries(k).map(([id, o]) => [id, o.poziom])) });
+      for (const a of kombinacje) {
+        for (const b of kombinacje) {
+          const rozne = Object.keys(a).filter((id) => a[id].id !== b[id].id);
+          if (rozne.length === 1 && rozne[0] === z.badany && F.pecherzyki(poziomy(a)) === F.pecherzyki(poziomy(b))) {
+            blad(gdzie, `dobry plan (${Object.values(a).map((o) => o.id).join(', ')} / ${Object.values(b).map((o) => o.id).join(', ')}) daje taki sam wynik obu prób`);
+          }
+        }
+      }
+      WALIDATORY.doswiadczenie({ opis: z.pytanie, kroki: z.pytania }, gdzie);
+    },
+
     miasto(z, gdzie) {
       if (!['budowa', 'awarie'].includes(z.faza)) blad(gdzie, `faza „${z.faza}” spoza listy budowa, awarie`);
       if (!miasto) {
@@ -836,7 +960,11 @@ export function walidujDane(dane, kontekst) {
   unikalne(procesy, 'procesy');
   for (const pr of procesy) {
     const gdzie = `procesy[${pr.id}]`;
-    for (const pole of ['nazwa', 'miejscownik', 'zapis', 'miejsce']) if (!niepustyTekst(pr[pole])) blad(gdzie, `brak pola ${pole}`);
+    for (const pole of ['nazwa', 'miejscownik', 'dopelniacz', 'zapis', 'miejsce']) if (!niepustyTekst(pr[pole])) blad(gdzie, `brak pola ${pole}`);
+    for (const [id, cel] of Object.entries(pr.rownowazne || {})) {
+      karta(`${gdzie}.rownowazne`, id);
+      if (![...(pr.substraty || []), ...(pr.produkty || [])].includes(cel)) blad(`${gdzie}.rownowazne`, `„${cel}” nie jest substratem ani produktem procesu`);
+    }
     zrodlo(gdzie, pr);
     if (!katalog.has(pr.id)) blad(gdzie, 'brak karty atlasu o tym samym id');
     const nazwyKart = (lista) => (lista || []).map((id) => katalog.get(id)?.nazwa ?? `?${id}`);
@@ -848,7 +976,7 @@ export function walidujDane(dane, kontekst) {
       if (zbudowany !== pr.zapis) blad(gdzie, `substraty, warunki i produkty dają zapis „${zbudowany}”, a zapis to „${pr.zapis}”`);
     }
     if (pr.energia !== undefined && !['dużo', 'mało'].includes(pr.energia)) blad(gdzie, `energia „${pr.energia}” spoza listy dużo, mało`);
-    const uczestnicy = new Set([...(pr.substraty || []), ...(pr.warunki || []), ...(pr.produkty || [])]);
+    const uczestnicy = new Set([...(pr.substraty || []), ...(pr.warunki || []), ...(pr.produkty || []), ...Object.keys(pr.rownowazne || {})]);
     for (const [id, zd] of Object.entries(pr.opisy || {})) {
       if (!uczestnicy.has(id)) blad(`${gdzie}.opisy`, `„${id}” nie bierze udziału w tym procesie`);
       if (!/^[A-ZĄĆĘŁŃÓŚŹŻ].*\.$/u.test(zd ?? '')) blad(`${gdzie}.opisy.${id}`, 'opis musi być pełnym zdaniem');

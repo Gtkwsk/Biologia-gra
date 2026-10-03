@@ -280,6 +280,18 @@ const R = {
     <path d="M18 50 C18 42 26 40 30 46 C34 52 26 56 24 52" fill="none" stroke="#6B3FA0" stroke-width="3" stroke-linecap="round"/>
     <path d="M60 50 C60 42 68 40 72 46 C76 52 68 56 66 52" fill="none" stroke="#6B3FA0" stroke-width="3" stroke-linecap="round"/>`,
 
+  // ---------- Ikony czynników (laboratorium; nie są kartami atlasu) ----------
+  temperatura: `
+    <rect x="40" y="8" width="20" height="62" rx="10" fill="#FFFFFF" stroke="#11191B" stroke-width="4"/>
+    <rect x="46" y="34" width="8" height="40" rx="4" fill="#D7263D"/>
+    <circle cx="50" cy="78" r="15" fill="#D7263D" stroke="#11191B" stroke-width="4"/>
+    <g stroke="#11191B" stroke-width="3" stroke-linecap="round"><path d="M64 22h8M64 34h8M64 46h8"/></g>`,
+  'sole-mineralne': `
+    <rect x="18" y="30" width="64" height="56" rx="6" fill="#E7DDF5" stroke="#11191B" stroke-width="4"/>
+    <path d="M18 46 H82" stroke="#11191B" stroke-width="3"/>
+    <g fill="#6B4FA0"><circle cx="32" cy="60" r="5"/><circle cx="50" cy="56" r="5"/><circle cx="68" cy="62" r="5"/><circle cx="40" cy="74" r="5"/><circle cx="60" cy="76" r="5"/></g>
+    <path d="M30 30 L36 14 H64 L70 30" fill="#FFFFFF" stroke="#11191B" stroke-width="4" stroke-linejoin="round"/>`,
+
   // ---------- Organizmy ----------
   'moczarka-kanadyjska': `
     <path d="M50 96 C48 70 54 40 50 6" fill="none" stroke="#2E6B33" stroke-width="4" stroke-linecap="round"/>

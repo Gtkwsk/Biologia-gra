@@ -14,6 +14,24 @@ const DROGI = [
 export default [
   // ---------- Misja „Przepis kuchenny” ----------
   {
+    id: 's4-przepis-1',
+    swiat: 4,
+    typ: 'przepis',
+    tresc: 'Kuchnia w chloroplaście: ułóż przepis na fotosyntezę. Skąd biorą się składniki i dokąd trafia to, co powstaje?',
+    procesy: ['fotosynteza'],
+    garnki: [{ karta: 'chloroplast', podpis: 'chloroplast w komórce liścia' }],
+    pola: [
+      { id: 'co2', substancja: 'dwutlenek-wegla', strefa: 'wejscie', podpis: 'z powietrza przez aparaty szparkowe' },
+      { id: 'woda', substancja: 'woda', strefa: 'wejscie', podpis: 'z gleby przez korzenie i komórki przewodzące' },
+      { id: 'swiatlo', substancja: 'swiatlo', strefa: 'wejscie', podpis: 'pochłania je chlorofil' },
+      { id: 'pokarm', substancja: 'substancje-pokarmowe', strefa: 'wyjscie', podpis: 'do wszystkich komórek rośliny' },
+      { id: 'tlen', substancja: 'tlen', strefa: 'wyjscie', podpis: 'do atmosfery' },
+    ],
+    wyjasnienie:
+      'Fotosynteza zachodzi głównie w liściach, w chloroplastach. Z dwutlenku węgla i wody, z udziałem energii świetlnej pochłanianej przez chlorofil, powstają substancje pokarmowe i tlen.',
+    zrodlo: '2.4',
+  },
+  {
     id: 's4-podpis-roslina-1',
     swiat: 4,
     typ: 'podpisywanie',
@@ -92,6 +110,26 @@ export default [
 
   // ---------- Misja „Laboratorium fotosyntezy” ----------
   {
+    id: 's4-lab-1',
+    swiat: 4,
+    typ: 'laboratorium',
+    tresc: 'Laboratorium fotosyntezy: przewiduj, co stanie się z pęcherzykami tlenu, a potem sprawdź na suwakach.',
+    tryb: 'badanie',
+    roslina: 'moczarka',
+    start: { swiatlo: 0, dwutlenek: 2, temperatura: 2, sole: 2 },
+    kroki: [
+      { czynnik: 'swiatlo', poziom: 3 },
+      { czynnik: 'dwutlenek', poziom: 3 },
+      { czynnik: 'swiatlo', poziom: 4 },
+      { czynnik: 'temperatura', poziom: 4 },
+      { czynnik: 'sole', poziom: 3 },
+    ],
+    cel: true,
+    wyjasnienie:
+      'W ciemności fotosynteza nie zachodzi. Więcej dwutlenku węgla zwiększa jej intensywność, a nadmiar każdego czynnika ją zmniejsza. O intensywności decyduje czynnik najmniej korzystny.',
+    zrodlo: '2.4',
+  },
+  {
     id: 's4-pf-czynniki-1',
     swiat: 4,
     typ: 'prawda-falsz',
@@ -138,6 +176,24 @@ export default [
 
   // ---------- Misja „Najsłabsze ogniwo” ----------
   {
+    id: 's4-ogniwo-1',
+    swiat: 4,
+    typ: 'laboratorium',
+    tresc: 'Najsłabsze ogniwo: znajdź czynnik, który najbardziej hamuje fotosyntezę w szklarni, i popraw go.',
+    tryb: 'ogniwo',
+    roslina: 'szklarnia',
+    przypadki: [
+      { opis: 'Szklarnia zimą: lampy świecą jasno, gleba jest wilgotna, ale w środku jest zimno.', ustawienia: { swiatlo: 3, dwutlenek: 2, woda: 2, temperatura: 0, sole: 2 } },
+      { opis: 'Jest ciepło, jasno i wilgotno, ale w powietrzu szklarni jest mało dwutlenku węgla.', ustawienia: { swiatlo: 3, dwutlenek: 1, woda: 2, temperatura: 2, sole: 2 } },
+      { opis: 'Przez dwa tygodnie nikt nie podlewał roślin.', ustawienia: { swiatlo: 3, dwutlenek: 3, woda: 0, temperatura: 2, sole: 2 } },
+      { opis: 'Do gleby trafiło za dużo soli mineralnych.', ustawienia: { swiatlo: 3, dwutlenek: 3, woda: 2, temperatura: 2, sole: 4 } },
+      { opis: 'Pochmurny dzień, a lampy są zgaszone: w szklarni panuje półmrok.', ustawienia: { swiatlo: 1, dwutlenek: 3, woda: 2, temperatura: 2, sole: 2 } },
+    ],
+    wyjasnienie:
+      'Fotosyntezę hamuje czynnik najmniej korzystny, jak łańcuch, który jest tak mocny jak jego najsłabsze ogniwo. Niedobór i nadmiar każdego czynnika zmniejsza intensywność fotosyntezy.',
+    zrodlo: '2.4',
+  },
+  {
     id: 's4-szklarnia-1',
     swiat: 4,
     typ: 'doswiadczenie',
@@ -182,6 +238,66 @@ export default [
   },
 
   // ---------- Misja „Projektant doświadczeń” ----------
+  {
+    id: 's4-projektant-1',
+    swiat: 4,
+    typ: 'projektant',
+    tresc: 'Zaprojektuj doświadczenie z dwiema gałązkami moczarki.',
+    pytanie: 'Czy światło jest niezbędne do fotosyntezy?',
+    badany: 'swiatlo',
+    czynniki: [
+      {
+        id: 'swiatlo',
+        opcje: [
+          { id: 'swiatlo', nazwa: 'w świetle', poziom: 3 },
+          { id: 'ciemnosc', nazwa: 'w ciemnej szafce', poziom: 0 },
+        ],
+      },
+      {
+        id: 'dwutlenek',
+        opcje: [
+          { id: 'kran', nazwa: 'woda z kranu', poziom: 2 },
+          { id: 'gazowana', nazwa: 'woda gazowana', poziom: 3 },
+        ],
+      },
+      {
+        id: 'temperatura',
+        opcje: [
+          { id: 'cieplo', nazwa: 'ciepło', poziom: 2 },
+          { id: 'zimno', nazwa: 'zimno', poziom: 0 },
+        ],
+      },
+    ],
+    start: {
+      A: { swiatlo: 'swiatlo', dwutlenek: 'kran', temperatura: 'cieplo' },
+      B: { swiatlo: 'swiatlo', dwutlenek: 'gazowana', temperatura: 'zimno' },
+    },
+    pytania: [
+      {
+        pytanie: 'Co pokazały wyniki?',
+        opcje: [
+          { tekst: 'W świetle gałązka wydzielała pęcherzyki tlenu, a w ciemności nie wydzielała ich wcale.', poprawna: true },
+          { tekst: 'W obu próbach pęcherzyków było tyle samo.', wyjasnienie: 'Porównaj liczby w tabeli wyników.' },
+          { tekst: 'W ciemności pęcherzyków było więcej.', wyjasnienie: 'W ciemności nie było ani jednego pęcherzyka tlenu.' },
+        ],
+        wyjasnienie: 'W ciemności nie powstaje tlen, bo nie zachodzi fotosynteza.',
+        karta: 'swiatlo',
+      },
+      {
+        pytanie: 'Jaki wniosek wynika z doświadczenia?',
+        opcje: [
+          { tekst: 'Światło jest niezbędne do fotosyntezy.', poprawna: true },
+          { tekst: 'Woda gazowana zwiększa intensywność fotosyntezy.', wyjasnienie: 'To prawda, ale tego doświadczenie nie sprawdzało: w obu próbach była taka sama woda.' },
+          { tekst: 'Fotosynteza zachodzi tylko w ciemności.', wyjasnienie: 'Pęcherzyki tlenu pojawiły się tylko w próbie w świetle.' },
+        ],
+        wyjasnienie: 'Próby różniły się tylko światłem, więc to brak światła zatrzymał fotosyntezę.',
+        karta: 'fotosynteza',
+      },
+    ],
+    wyjasnienie:
+      'W dobrze zaplanowanym doświadczeniu próby różnią się tylko badanym czynnikiem: jedna gałązka stoi w świetle, druga w ciemności, a pozostałe warunki są identyczne. W ciemności nie ma pęcherzyków tlenu, więc światło jest niezbędne do fotosyntezy.',
+    zrodlo: '2.4',
+  },
   {
     id: 's4-dosw-co2-1',
     swiat: 4,

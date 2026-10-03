@@ -2,7 +2,7 @@
 // WERSJA i PLIKI uzupełnia narzędzie: node tools/wersja.js (nie edytować ręcznie).
 // Każda zmiana w app/ zmienia WERSJA, więc przeglądarka pobiera nową wersję gry.
 
-const WERSJA = '77b9cf639212';
+const WERSJA = '92cec2f6189f';
 const PLIKI = [
   './',
   'assets/fonts/OFL-lexend.txt',
@@ -50,10 +50,13 @@ const PLIKI = [
   'js/components/dopasowanie-logika.js',
   'js/components/doswiadczenie-logika.js',
   'js/components/doswiadczenie.js',
+  'js/components/fotosynteza-logika.js',
   'js/components/klasyfikacja.js',
   'js/components/komunikat.js',
   'js/components/konstruktor-logika.js',
   'js/components/konstruktor.js',
+  'js/components/laboratorium-sceny.js',
+  'js/components/laboratorium.js',
   'js/components/luki-logika.js',
   'js/components/luki.js',
   'js/components/miasto.js',
@@ -62,7 +65,10 @@ const PLIKI = [
   'js/components/podpisywanie.js',
   'js/components/prawda-falsz-logika.js',
   'js/components/prawda-falsz.js',
+  'js/components/projektant.js',
   'js/components/przeciaganie.js',
+  'js/components/przepis-logika.js',
+  'js/components/przepis.js',
   'js/components/przyporzadkowanie.js',
   'js/components/rysunki.js',
   'js/components/sceny-procesow.js',

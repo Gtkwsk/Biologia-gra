@@ -94,6 +94,10 @@
   opacity: 0;
 }
 
+.babelek--ukryty {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .babelek {
     animation: none;
@@ -612,4 +616,468 @@
     font-weight: 700;
     color: var(--atrament-jasny);
   }
+}
+
+.ciasto__masa {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform 1.6s ease-out;
+}
+
+.ciasto__pecherzyki {
+  opacity: 0;
+  transition: opacity 1.2s 0.6s;
+}
+
+.ciasto--wyrosniete .ciasto__masa {
+  transform: scale(1.18, 1.75);
+}
+
+.ciasto--wyrosniete .ciasto__pecherzyki {
+  opacity: 1;
+}
+
+/* ---------- Przepis procesu ---------- */
+
+.przepis__calosc {
+  display: grid;
+  gap: 12px;
+}
+
+.przepis__plansza {
+  display: grid;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+@media (min-width: 760px) {
+  .przepis__plansza {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+  .przepis__plansza--lustro {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) minmax(0, 0.8fr);
+  }
+}
+
+.przepis__naglowek {
+  margin: 0 0 6px;
+  font-size: var(--r-1);
+}
+
+.przepis__pola {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.przepis__miejsce {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 2px 8px;
+}
+
+.przepis__miejsce .przepis__podpis {
+  grid-column: 2;
+  font-size: 0.8rem;
+  color: var(--atrament-jasny);
+}
+
+.przepis__strzalka {
+  grid-row: span 2;
+  width: 26px;
+  height: 14px;
+  background: var(--okular);
+  clip-path: polygon(0 35%, 60% 35%, 60% 0, 100% 50%, 60% 100%, 60% 65%, 0 65%);
+}
+
+/* Na szerokim ekranie składniki wchodzą do garnka z lewej, produkty wychodzą w prawo. */
+@media (min-width: 760px) {
+  .przepis__strefa--wejscie .przepis__miejsce {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .przepis__strefa--wejscie .przepis__strzalka {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .przepis__strefa--wejscie .przepis__pole,
+  .przepis__strefa--wejscie .przepis__podpis {
+    grid-column: 1;
+  }
+}
+
+.przepis__strefa--dol .przepis__strzalka {
+  transform: scaleX(-1);
+}
+
+.przepis__garnek {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  margin: 0;
+  text-align: center;
+}
+
+.przepis__garnek figcaption {
+  font-size: var(--r-0);
+  font-weight: 700;
+}
+
+.przepis__naczynie {
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 150px;
+  background: #fffbe8;
+  border: 3px dashed var(--atrament-jasny);
+  border-radius: 50%;
+}
+
+.przepis__rysunek {
+  width: 120px;
+  height: 120px;
+}
+
+.przepis__plansza--gotowa .przepis__naczynie {
+  border-style: solid;
+  border-color: var(--chlorofil);
+  animation: ozywienie 0.9s ease-out;
+}
+
+.przepis__kolumna {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.przepis__srodek {
+  display: grid;
+  gap: 16px;
+}
+
+.przepis__plansza--lustro .przepis__strefa--gora,
+.przepis__plansza--lustro .przepis__strefa--dol {
+  padding: 8px;
+  background: rgba(17, 25, 27, 0.04);
+  border-radius: 10px;
+}
+
+.przepis__scena {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.przepis__zapis {
+  padding: 10px 14px;
+  background: var(--chlorofil-jasny);
+  border: var(--kontur) solid var(--chlorofil);
+  border-radius: 10px;
+}
+
+.przepis__zapis p {
+  max-width: none;
+  margin: 0;
+}
+
+.przepis__zapis-tytul {
+  font-weight: 800;
+}
+
+/* ---------- Laboratorium fotosyntezy ---------- */
+
+.lab__stol {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .lab__stol {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.lab__widok {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.lab__scena {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.lab__licznik {
+  max-width: none;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: var(--r-2);
+  text-align: center;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 10px;
+}
+
+.lab__licznik strong {
+  font-family: var(--font-tytul);
+  font-size: var(--r-4);
+  font-weight: 400;
+  color: var(--blekit);
+}
+
+.lab__miernik {
+  display: grid;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 10px;
+}
+
+.lab__miernik-napis {
+  font-weight: 800;
+}
+
+.lab__segmenty {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+}
+
+.lab__segment {
+  height: 22px;
+  background: var(--papier-ciemny);
+  border: 2px solid var(--okular);
+  border-radius: 4px;
+}
+
+.lab__segment[data-pelny='true'] {
+  background: var(--chlorofil);
+}
+
+.lab__czynniki {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  list-style: none;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.lab__czynnik {
+  display: grid;
+  grid-template-columns: 11.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 2px 10px;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.lab__czynnik .lab__poziom {
+  grid-column: 2;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.lab__czynnik--aktywny {
+  background: #fff7d6;
+  outline: 3px solid var(--blekit);
+}
+
+.lab__czynnik--podpowiedz {
+  background: #fff3c4;
+  animation: podpowiedz 1.1s ease-in-out infinite;
+}
+
+.lab__czynnik--staly .lab__poziom {
+  grid-column: 2;
+}
+
+.lab__nazwa {
+  display: inline-flex;
+  grid-row: span 2;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+}
+
+.lab__ikona {
+  flex: none;
+  width: 28px;
+  height: 28px;
+}
+
+.lab__suwak {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--blekit);
+}
+
+.lab__suwak:disabled {
+  opacity: 0.45;
+}
+
+.lab__panel {
+  display: grid;
+  gap: 10px;
+  padding: 1rem 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+.lab__krok {
+  margin: 0;
+  font-size: var(--r-0);
+  font-weight: 700;
+  color: var(--atrament-jasny);
+}
+
+.lab__polecenie {
+  max-width: none;
+  margin: 0;
+  font-size: var(--r-1);
+  line-height: 1.5;
+}
+
+.lab__opcje {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lab__opcja[data-stan='dobrze'] {
+  background: var(--chlorofil-jasny);
+  border-color: var(--chlorofil);
+}
+
+.lab__opcja[data-stan='zle'] {
+  background: var(--eozyna-jasna);
+  border-color: var(--eozyna);
+}
+
+.lab__roslina {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(var(--wzrost, 1));
+  transition: transform 0.6s;
+}
+
+@media (max-width: 599px) {
+  .lab__czynnik {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lab__nazwa {
+    grid-row: auto;
+  }
+  .lab__czynnik .lab__poziom,
+  .lab__czynnik--staly .lab__poziom {
+    grid-column: 1;
+  }
+}
+
+/* ---------- Projektant doświadczeń ---------- */
+
+.proj__pytanie {
+  max-width: none;
+  margin: 0;
+  padding: 10px 14px;
+  font-size: var(--r-2);
+  background: #fffbe8;
+  border: var(--kontur) solid var(--okular);
+  border-radius: 10px;
+}
+
+.proj__plan {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 12px;
+}
+
+.proj__proba {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.proj__naglowek {
+  margin: 0;
+  font-size: var(--r-2);
+}
+
+.proj__scena {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 0 auto;
+  border: 2px solid var(--okular);
+  border-radius: 10px;
+}
+
+.proj__czynniki {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proj__czynnik {
+  display: grid;
+  gap: 4px;
+}
+
+.proj__nazwa {
+  font-size: var(--r-0);
+  font-weight: 800;
+  color: var(--atrament-jasny);
+}
+
+.proj__opcje {
+  display: flex;
+  gap: 8px;
+}
+
+.proj__opcja {
+  flex: 1;
+  min-height: 46px;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--atrament);
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 8px;
+  box-shadow: 0 3px 0 var(--okular);
+  cursor: pointer;
+}
+
+.proj__opcja[aria-pressed='true'] {
+  background: var(--zolty-wybor);
+}
+
+.proj__opcja:disabled {
+  cursor: default;
+  opacity: 0.8;
 }

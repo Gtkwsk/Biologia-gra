@@ -8,13 +8,18 @@
 // miejsce:    gdzie zachodzi proces (fraza z TRESCI.md),
 // wKomorce:   elementy komórki, w których zachodzi proces (punkty schematów procesu),
 // energia:    ilość uwolnionej energii ('dużo' albo 'mało'; fotosynteza energii nie uwalnia),
-// miejscownik: „w fotosyntezie”, „w oddychaniu tlenowym” (zdania w tabelach).
+// miejscownik: „w fotosyntezie”, „w oddychaniu tlenowym” (zdania w tabelach),
+// dopelniacz:  „fotosyntezy”, „oddychania tlenowego” (informacja zwrotna),
+// rownowazne: karty, które w zadaniach mogą zastąpić substrat albo produkt (glukoza to główna
+//             substancja pokarmowa, TRESCI.md, sekcja 2.4).
 
 export default [
   {
     id: 'fotosynteza',
     nazwa: 'fotosynteza',
     miejscownik: 'w fotosyntezie',
+    dopelniacz: 'fotosyntezy',
+    rownowazne: { glukoza: 'substancje-pokarmowe' },
     substraty: ['dwutlenek-wegla', 'woda'],
     warunki: ['swiatlo', 'chlorofil'],
     produkty: ['substancje-pokarmowe', 'tlen'],
@@ -26,6 +31,7 @@ export default [
       woda: 'Wodę pobierają z gleby korzenie, a do liści doprowadzają ją komórki przewodzące.',
       swiatlo: 'Światło pochłania chlorofil w chloroplastach.',
       'substancje-pokarmowe': 'Substancje pokarmowe (głównie glukoza) są transportowane do wszystkich komórek rośliny.',
+      glukoza: 'Glukoza to główna substancja pokarmowa, która powstaje w fotosyntezie.',
       tlen: 'Tlen powstający w fotosyntezie trafia do atmosfery.',
     },
     zrodlo: '2.4',
@@ -34,6 +40,7 @@ export default [
     id: 'oddychanie-tlenowe',
     nazwa: 'oddychanie tlenowe',
     miejscownik: 'w oddychaniu tlenowym',
+    dopelniacz: 'oddychania tlenowego',
     substraty: ['glukoza', 'tlen'],
     warunki: [],
     produkty: ['dwutlenek-wegla', 'woda', 'energia'],
@@ -54,6 +61,7 @@ export default [
     id: 'fermentacja-alkoholowa',
     nazwa: 'fermentacja alkoholowa',
     miejscownik: 'w fermentacji alkoholowej',
+    dopelniacz: 'fermentacji alkoholowej',
     substraty: ['glukoza'],
     warunki: [],
     produkty: ['alkohol-etylowy', 'dwutlenek-wegla', 'energia'],
@@ -73,6 +81,7 @@ export default [
     id: 'fermentacja-mlekowa',
     nazwa: 'fermentacja mlekowa',
     miejscownik: 'w fermentacji mlekowej',
+    dopelniacz: 'fermentacji mlekowej',
     substraty: ['glukoza'],
     warunki: [],
     produkty: ['kwas-mlekowy', 'energia'],

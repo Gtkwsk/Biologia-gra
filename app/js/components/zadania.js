@@ -17,6 +17,9 @@ import { utworzWakuole } from './wakuola.js';
 import { utworzSorter } from './sorter.js';
 import { utworzDoswiadczenie } from './doswiadczenie.js';
 import { utworzTabeleWartosci } from './tabela-wartosci.js';
+import { utworzPrzepis } from './przepis.js';
+import { utworzLaboratorium } from './laboratorium.js';
+import { utworzProjektanta } from './projektant.js';
 import { obrazSceny } from './obrazy.js';
 
 const TYPY = {
@@ -73,6 +76,15 @@ const TYPY = {
   },
   async doswiadczenie(zadanie) {
     return (kontener, opcje) => utworzDoswiadczenie(kontener, { zadanie, ...opcje });
+  },
+  async laboratorium(zadanie) {
+    return (kontener, opcje) => utworzLaboratorium(kontener, { zadanie, ...opcje });
+  },
+  async projektant(zadanie) {
+    return (kontener, opcje) => utworzProjektanta(kontener, { zadanie, ...opcje });
+  },
+  async przepis(zadanie, dane) {
+    return (kontener, opcje) => utworzPrzepis(kontener, { zadanie, dane, ...opcje });
   },
   async porownanie(zadanie, dane) {
     return (kontener, opcje) => utworzTabeleWartosci(kontener, { zadanie, porownanie: dane.porownanie, katalog: dane.katalog, ...opcje });
