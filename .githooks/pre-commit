@@ -1,0 +1,6 @@
+#!/bin/sh
+# Przed każdym commitem: testy logiki i walidator danych (CLAUDE.md).
+# Włączenie w nowym klonie repozytorium: git config core.hooksPath .githooks
+set -e
+node --test --test-reporter=dot
+node tools/validate-data.js
