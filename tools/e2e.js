@@ -5,8 +5,9 @@
 // świat 1), wszystkie misje i bossa świata 1, przejście mapa → świat → misja → podsumowanie,
 // przeciąganie myszą i palcem, stuknięcia, zapis postępu, wszystkie misje świata 2 i jego bossa
 // (przegrana i wygrana), atlas, mikroskop, bramkę panelu rodzica, wszystkie misje i bossów
-// światów 3-6 (każdy świat otwiera się po bossie poprzedniego), pracę offline, układ na
-// telefonie oraz brak błędów w konsoli (w tym naruszeń CSP).
+// światów 3-6 (każdy świat otwiera się po bossie poprzedniego), próbny sprawdzian, domowe
+// laboratorium, raport w panelu rodzica, pracę offline, układ na telefonie oraz brak błędów
+// w konsoli (w tym naruszeń CSP).
 // Zadania rozwiązuje tools/rozwiazania.js na podstawie danych gry.
 // Każdy przebieg używa nowego, pustego profilu przeglądarki.
 
@@ -95,6 +96,22 @@ async function wejdzDoMisji(strona) {
   await strona.locator('.podpis__rysunek').waitFor();
 }
 
+// Otwiera panel rodzica: przytrzymanie logo na mapie i poprawny wynik działania.
+async function otworzPanel(strona) {
+  await strona.goto(adres);
+  await strona.locator('.mapa__swiaty').waitFor();
+  const logo = await srodek(strona.locator('.logo'));
+  await strona.mouse.move(logo.x, logo.y);
+  await strona.mouse.down();
+  await strona.waitForTimeout(3200);
+  await strona.mouse.up();
+  await strona.locator('.bramka').waitFor();
+  const [a, b] = (await strona.locator('.bramka__pytanie').textContent()).match(/\d+/g).map(Number);
+  await strona.locator('#bramka-pole').fill(String(a * b));
+  await strona.locator('.bramka button[type="submit"]').click();
+  await strona.locator('.tabela').first().waitFor();
+}
+
 // Rozwiązuje bieżące zadanie (misji albo bossa) i czeka na wynik.
 async function rozwiazBiezace(strona) {
   const obszar = strona.locator('.misja__obszar');
@@ -148,6 +165,7 @@ console.log('Tablet poziomo (mysz)');
     await strona.locator('.swiat-wstep').waitFor();
     sprawdz((await strona.locator('h1').textContent()) === 'Alfabet życia', 'wstęp świata 1');
     sprawdz((await strona.locator('.misja-karta').count()) === 6, 'świat 1 ma sześć misji');
+    sprawdz((await strona.locator('.sluchowisko').count()) === 0, 'bez nagrania nie ma odtwarzacza słuchowiska');
     await zrzut(strona, '01a-swiat-1');
     const zrzutyMisji1 = { 's1-sklad': '01b-sklad-ciala', 's1-ratuj': '01c-ratuj-organizm', 's1-sortownia': '01d-sortownia' };
     for (const m of sw.misje) {
@@ -413,6 +431,43 @@ console.log('Tablet poziomo (mysz)');
   await strona.locator('.ekran--mikroskop').waitFor();
   sprawdz(!(await strona.locator('.mikroskop__poziomy button', { hasText: '10 000' }).isDisabled()), 'mikroskop: 10 000 razy otwarte po bossie świata 3');
 
+  // Próbny sprawdzian: otwarty po bossach wszystkich światów; całe podejście bez błędu daje 29 punktów.
+  await strona.goto(`${adres}#/baza`);
+  await strona.locator('.ekran--baza').waitFor();
+  sprawdz(
+    (await strona.locator('.stanowisko[data-stanowisko="sprawdzian"] .stanowisko__stan').textContent()).includes('Gotowy'),
+    'baza: próbny sprawdzian gotowy po pokonaniu wszystkich bossów',
+  );
+  await strona.locator('.stanowisko[data-stanowisko="sprawdzian"] a').click();
+  await strona.locator('.ekran--sprawdzian .boss-karta button', { hasText: 'Zaczynamy' }).click();
+  for (let i = 0; i < 14; i++) {
+    await rozwiazBiezace(strona);
+    if (i === 0) await zrzut(strona, '16j-sprawdzian-zadanie');
+    await strona.locator('.misja__wynik .przycisk--dalej').click();
+  }
+  await strona.locator('.sprawdzian-wynik').waitFor();
+  sprawdz((await strona.locator('.sprawdzian-wynik h1').textContent()) === 'Wynik: 29 z 29 punktów', 'próbny sprawdzian: 29 z 29 punktów przy samych dobrych odpowiedziach');
+  await zrzut(strona, '16k-sprawdzian-wynik');
+
+  // Domowe laboratorium: oznaczenie doświadczenia
+  await strona.goto(`${adres}#/laboratorium`);
+  await strona.locator('[data-doswiadczenie="chleb"] summary').click();
+  sprawdz((await strona.locator('[data-doswiadczenie="chleb"] .lab-dom__bezpieczenstwo').isVisible()), 'laboratorium: uwaga o bezpieczeństwie przy doświadczeniu');
+  await strona.locator('[data-doswiadczenie="chleb"] button', { hasText: 'Zrobione z dorosłym' }).click();
+  sprawdz((await strona.locator('.lab-dom__licznik').textContent()) === 'Zrobione: 1 z 9.', 'laboratorium: doświadczenie oznaczone jako zrobione');
+  await zrzut(strona, '16l-laboratorium');
+
+  // Panel rodzica: wynik sprawdzianu, laboratorium i ustawienie dźwięku
+  await otworzPanel(strona);
+  const panelPoSprawdzianie = await strona.locator('.ekran--rodzic').textContent();
+  sprawdz(panelPoSprawdzianie.includes('29 z 29') && panelPoSprawdzianie.includes('Próbny sprawdzian'), 'panel: wynik próbnego sprawdzianu');
+  sprawdz(panelPoSprawdzianie.includes('Słodki chleb'), 'panel: zrobione doświadczenie z domowego laboratorium');
+  sprawdz(await strona.locator('#dzwiek').isChecked(), 'panel: dźwięki domyślnie włączone');
+  await strona.locator('#dzwiek').click();
+  sprawdz(!(await strona.locator('#dzwiek').isChecked()), 'panel: dźwięki można wyłączyć');
+  await strona.locator('#dzwiek').click();
+  await zrzut(strona, '16m-panel-po-sprawdzianie');
+
   // Praca offline
   await strona.goto(adres);
   await strona.evaluate(() => navigator.serviceWorker.ready.then(() => true));
@@ -431,6 +486,9 @@ console.log('Tablet poziomo (mysz)');
   await strona.goto(`${adres}#/swiat/5/misja/s5-lancuchy`);
   await strona.locator('.lancuch__plansza').waitFor();
   sprawdz((await strona.locator('.lancuch__opcja svg').count()) > 0, 'offline działają też łańcuchy pokarmowe z rysunkami');
+  await strona.goto(`${adres}#/laboratorium`);
+  await strona.locator('.lab-dom__lista').waitFor();
+  sprawdz((await strona.locator('.lab-dom__doswiadczenie').count()) === 9, 'offline działa też domowe laboratorium');
   await kontekst.setOffline(false);
   await kontekst.close();
 }
@@ -511,6 +569,8 @@ console.log('Telefon');
     ['#/swiat/6/misja/s6-tabela', 'tabela porównawcza'],
     ['#/swiat/6/misja/s6-woda-wapienna', 'woda wapienna'],
     ['#/atlas', 'atlas'],
+    ['#/laboratorium', 'domowe laboratorium'],
+    ['#/sprawdzian', 'próbny sprawdzian'],
     ['#/mikroskop', 'mikroskop'],
     ['#/baza', 'baza'],
   ]) {

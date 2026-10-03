@@ -252,3 +252,21 @@ test('wykrywa las, w którym szczątki nigdy się nie gromadzą', async () => {
   for (const e of dane.zadania.find((x) => x.id === 's5-las-1').etapy) e.sprzatacze = true;
   zawiera(walidujDane(dane, kontekst), 'żaden etap nie pokazuje gromadzenia się szczątków');
 });
+
+test('wykrywa w próbnym sprawdzianie złą sumę punktów i mechanikę w puli', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.sprawdzian[0].punkty += 1;
+  dane.sprawdzian[1].pula.push('s5-lancuchy-1');
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'suma punktów 30, a w TRESCI.md 29');
+  zawiera(bledy, '„s5-lancuchy-1” to mechanika');
+});
+
+test('wykrywa w domowym laboratorium ciekawostkę spoza TRESCI.md i krok bez kropki', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.laboratorium[0].ciekawostka = 'Chleb jest pyszny.';
+  dane.laboratorium[0].kroki.push('żuj dalej');
+  const bledy = walidujDane(dane, kontekst);
+  zawiera(bledy, 'laboratorium[chleb].ciekawostka');
+  zawiera(bledy, 'krok „żuj dalej” musi być pełnym zdaniem');
+});

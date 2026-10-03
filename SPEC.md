@@ -230,7 +230,7 @@ Wymagania wspólne: dotyk i mysz (Pointer Events); alternatywa dla przeciągania
 - **Dane:** `data/` jako moduły ES lub JSON: pojęcia, elementy komórek, typy komórek, organizmy, pytania dla światów 1-6, ciekawostki. Każde pytanie ma: `id`, `swiat`, `typ`, treść, poprawną odpowiedź, wyjaśnienie, odwołanie do sekcji `TRESCI.md`.
 - **Walidator danych** (`tools/validate-data.js`): unikalne id, kompletność pól, terminy zgodne ze słownikiem kanonicznym (`TRESCI.md`, sekcja 9), kategorie organizmów z dozwolonej listy.
 - **Testy** (`node --test`): logika powtórek (awanse, spadki, terminy, skracanie odstępów przed sprawdzianem; zawieszone decyzją z 2026-10-03, zob. sekcja 12), punktacja, model fotosyntezy (wynik maleje przy niedoborze i nadmiarze każdego czynnika), model sprintu.
-- **Struktura (stan po etapie 3):**
+- **Struktura (stan po etapie 4):**
 
 ```
 netlify.toml            publikacja katalogu app/, testy i walidator przed wdrożeniem
@@ -240,20 +240,23 @@ app/                    publikowana gra (tylko ten katalog trafia na stronę)
   sw.js                 service worker; WERSJA i PLIKI generuje tools/wersja.js
   css/                  tokeny, podstawy, ekrany, zadania, podpisywanie, mechaniki, procesy,
                         alfabet (świat 1), uczta (świat 5)
-  js/core/              stan, zapis, adresy ekranów, światy, boss, karty atlasu, DOM
+  js/core/              stan, zapis, adresy ekranów, światy, boss, próbny sprawdzian, karty
+                        atlasu, dźwięki, daty, DOM
   js/components/        typy zadań (sekcja 5) i mechaniki światów; logika (*-logika.js)
                         oddzielona od widoku; zadania.js wybiera komponent według typu
   js/ekrany/            mapa, świat, misja, boss, podsumowanie, baza, atlas, mikroskop,
-                        panel rodzica
+                        próbny sprawdzian, domowe laboratorium, panel rodzica
   data/                 moduły ES z treściami: światy (misje, bossowie), elementy i typy
                         komórek, pojęcia, organizmy, procesy (zapisy słowne), tabela
                         oddychania tlenowego i fermentacji, schematy, miasto, wskazówki
                         detektywa, części konstruktora, zależności pokarmowe do łańcuchów
-                        (pokarm.js), zadania/swiat-N.js
+                        (pokarm.js), próbny sprawdzian (sprawdzian.js), domowe
+                        laboratorium (laboratorium.js), zadania/swiat-N.js
   assets/svg/           schematy komórek i fotosyntezy rysowane od zera
   assets/fonts/         kroje OFL z licencjami
   assets/ikony/
-  audio/                opcjonalnie, poza pamięcią offline
+  audio/                opcjonalnie czesc-N.mp3, poza pamięcią offline; listę nagrań
+                        zapisuje tools/wersja.js w js/wersja.js
 tests/                  node --test
 tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, rozwiazania.js, ikony.js
 .githooks/pre-commit    testy i walidator przed commitem
@@ -283,7 +286,7 @@ tools/                  validate-data.js, wersja.js, serwer.js, e2e.js, rozwiaza
 1. **Wersja do pierwszego testu z Mikołajem:** świat 2 i świat 3 (komórki, najważniejsze dla sprawdzianu), mikroskop z dwoma poziomami, atlas elementów komórek, dwóch bossów. Po etapie: obserwacja gry Mikołaja i notatki. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 2 z pięcioma misjami, świat 3 z siedmioma, dwóch bossów, atlas, mikroskop, baza.
 2. **Świat 4 i świat 6:** procesy (fotosynteza, oddychanie, fermentacja), symulacje. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 4 z siedmioma misjami, świat 6 z ośmioma, dwóch bossów, karty procesów, substancji i organizmów w atlasie.
 3. **Świat 5 i świat 1:** atlas organizmów, łańcuchy pokarmowe, składniki chemiczne. Zrealizowany 2026-10-03 (zob. sekcja 12): świat 1 z sześcioma misjami, świat 5 z ośmioma, dwóch bossów, karty pierwiastków, związków chemicznych, sposobów zdobywania pokarmu i 47 nowych organizmów w atlasie.
-4. **Domknięcie:** próbny sprawdzian, domowe laboratorium, audio, dopracowanie oprawy i dźwięku.
+4. **Domknięcie:** próbny sprawdzian, domowe laboratorium, audio, dopracowanie oprawy i dźwięku. Zrealizowany 2026-10-03 (zob. sekcja 12): próbny sprawdzian (14 zadań, 29 punktów) z raportem w panelu rodzica, domowe laboratorium (9 doświadczeń), odtwarzacz nagrań słuchowiska, krótkie dźwięki, przewodnicy na wstępach światów 2, 3, 4 i 6.
 
 Po każdym etapie: wdrożenie, lista rzeczy do sprawdzenia przez Roberta, korekty treści. Kolejność może się zmienić po odpowiedzi na pytanie o termin sprawdzianu.
 
@@ -357,3 +360,9 @@ Odpowiedzi z 2026-10-03 są dopisane przy pytaniach; wynikające z nich decyzje 
 - 2026-10-03, oznaczenie autorstwa (prośba Roberta): „© 2026 Robert Gutkowski” w stopce mapy, w metadanych strony (author) i w README. Znak © informuje o autorstwie i nie wymaga rejestracji (prawo autorskie powstaje z chwilą stworzenia utworu); znak ® oznacza zarejestrowany znak towarowy, więc bez rejestracji w Urzędzie Patentowym nie jest używany. Kroje pisma mają własną licencję OFL.
 - 2026-10-03, etap 3, przegląd treści względem `TRESCI.md` (niezależny przegląd wszystkich tekstów światów 1 i 5): poprawione m.in. zdanie „Magnez buduje kości” oznaczone jako fałsz (w rzeczywistości część magnezu jest w kościach; zadanie pyta teraz o chlorofil) i opcja magnezu przy słabych kościach w diagnozie, dystraktor pasujący do półpasożyta („organizm, który sam wytwarza pokarm”), zdanie sortera prawdziwe dla obu sposobów trawienia, wyjaśnienia w łańcuchach sprzeczne z przyrodą (zięba, koliber i gil jedzą też owady; dystraktorami są teraz duzi roślinożercy), szyk zdań możliwy do odczytania na odwrót („Kości budują sole wapnia”), uogólnienia spoza `TRESCI.md`, dystraktory bliskie opisom w przyporządkowaniach, forma „Bieszczadów”, przykłady „np.” przy podmiocie w kartach. Pule bossa świata 1 mocniej ćwiczą punkty 1 i 2 (luka „usuwanie”, sole mineralne jako źródło wapnia i magnezu). Podpowiedzi luk wyjaśniają zamianę słów między lukami także w bossie. Przypadek ziemniaka w diagnozie pyta o fakt z sekcji 2.4 (rozwój nowych pędów), a mięknięcie bulwy zostaje ciekawostką w ramce.
 - 2026-10-03, otwarte (do decyzji Roberta): `TRESCI.md` nie opisuje łańcuchów pokarmowych (pojęcie i reguła „łańcuch zaczyna się od organizmu samożywnego” są tylko w SPEC 3.2), a gil, zięba i koliber są w tabeli organizmów roślinożercami, choć w przyrodzie jedzą też owady (zięba karmi pisklęta gąsienicami). Możliwość: dopisać oba uproszczenia do `TRESCI.md`, sekcja 5.
+- 2026-10-03, etap 4, próbny sprawdzian: czternaście zadań w kolejności punktów zakresu z `TRESCI.md`, sekcja 8; każde losowane z puli co najmniej pięciu wariantów (pule bossów; walidator sprawdza liczbę punktów zakresu, sumę punktów, formaty sprawdzianu i liczbę wariantów). Rozkład 29 punktów (1, 2, 3, 3, 2, 3, 2, 2, 1, 2, 2, 2, 3, 1) przyjęty bez treści podręcznikowego sprawdzianu, do zmiany w `data/sprawdzian.js`. Punkty za zadanie: część poprawnych odpowiedzi razy liczba punktów, w dół do pełnych punktów. Po każdym zadaniu punkty i wyjaśnienie (zasada 6), bez podpowiedzi i bez limitu czasu; na końcu wynik i tematy z brakami z odnośnikiem do misji, bez ocen szkolnych (nacisk na to, co poćwiczyć, a nie na stopień). Dostęp po pokonaniu bossów wszystkich światów albo po odblokowaniu wszystkich światów w panelu rodzica (wtedy sprawdzian można zrobić przed terminem sprawdzianu). Dobre odpowiedzi liczą się do złotych kart jak u bossa. Zapis pamięta 20 ostatnich wyników; panel rodzica pokazuje ostatnie wyniki, tematy ostatniego podejścia i najsłabsze tematy z trzech ostatnich podejść.
+- 2026-10-03, etap 4, domowe laboratorium: dziewięć doświadczeń z sekcji 4.5 (słodki chleb, jodyna na ziemniaku, komórki z policzka i liść moczarki pod mikroskopem, model komórki, roślina, która się prostuje, kolorowy seler, balonik nadmuchany przez drożdże, domowy jogurt), każde z uwagą o bezpieczeństwie przed krokami, obserwacją, wyjaśnieniem według `TRESCI.md` i ciekawostką dosłownie z sekcji 6. Obserwacja z jodyną (ciemnoniebieskie zabarwienie wskazuje skrobię) pochodzi z sekcji 4.5, nie z `TRESCI.md`: doświadczenia nie są zadaniami sprawdzianowymi. Zamiast Minecrafta „gra z budowaniem” (Mikołaj gra w Roblox). Oznaczenie „Zrobione z dorosłym” można cofnąć; za doświadczenia nie ma punktów.
+- 2026-10-03, etap 4, nagrania słuchowiska: odtwarzacz na wstępie świata pokazuje się tylko przy pliku `audio/czesc-N.mp3`; listę nagrań zapisuje `tools/wersja.js` w `js/wersja.js`, więc gra nie odpytuje serwera o brakujące pliki. Nagrania nie trafiają do pamięci offline (rozmiar, odtwarzanie fragmentami).
+- 2026-10-03, etap 4, dźwięki: cztery krótkie sygnały syntezowane w Web Audio (dobra odpowiedź, błąd, zadanie bez błędu, wygrana z bossem i koniec sprawdzianu), bez plików; dźwięk błędu jest cichy i niski, informuje, nie karze. Domyślnie włączone, przełącznik w panelu rodzica.
+- 2026-10-03, etap 4, przewodnicy: Robert Hooke (świat 2), Antoni van Leeuwenhoek (świat 3), Jan Baptysta van Helmont (świat 4) i Joseph Priestley (świat 6) na wstępach światów, z wizerunkiem rysowanym od zera i ciekawostką z `TRESCI.md`, sekcja 6; opisy postaci ze słuchowiska. Podpowiedzi przewodników z limitem na sesję (sekcja 4.4) nie weszły: po błędzie gra już podaje przyczynę, a od drugiej próby wskazuje poprawne miejsce; osobny przycisk podpowiedzi zmieniłby liczenie „od razu dobrze”. Do decyzji po obserwacji gry Mikołaja.
+- 2026-10-03, etap 4, zapis postępu w wersji 3 (wyniki sprawdzianów, domowe laboratorium, ustawienie dźwięku); starsze zapisy i kopie w plikach są przenoszone automatycznie.
