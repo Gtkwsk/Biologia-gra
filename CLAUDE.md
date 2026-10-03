@@ -27,8 +27,10 @@ Ten plik jest czytany na początku każdej sesji. Szczegóły są w dwóch dokum
 ## Technologia w skrócie
 
 - Statyczna PWA: HTML, CSS, JavaScript (moduły ES), domyślnie bez frameworka i bez kroku budowania. Praca offline (service worker), instalacja na ekranie głównym (manifest).
-- Treści w plikach danych w `data/`, oddzielonych od logiki. Dodanie pytania lub organizmu nie wymaga zmian w kodzie.
-- Testy logiki i walidator danych uruchamiane przed każdym commitem (`node --test`, `node tools/validate-data.js`).
+- Gra w katalogu `app/`: tylko on trafia na stronę. Treści w plikach danych w `app/data/`, oddzielonych od logiki. Dodanie pytania lub organizmu nie wymaga zmian w kodzie.
+- Testy logiki i walidator danych uruchamiane przed każdym commitem (`node --test`, `node tools/validate-data.js`). Hak: `git config core.hooksPath .githooks` (raz w każdym klonie).
+- Po każdej zmianie w `app/`: `node tools/wersja.js` (wersja gry i lista plików offline; test pilnuje aktualności).
+- Podgląd: `node tools/serwer.js`. Test całej gry w Chromium: `node tools/e2e.js [katalog-na-zrzuty]`.
 - Wdrożenie: Netlify z gałęzi `main`. Podpięcie repozytorium do Netlify wykonuje Robert.
 
 ## Sposób pracy
