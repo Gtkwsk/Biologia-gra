@@ -29,6 +29,9 @@ import { ID_SCEN } from '../app/js/components/obrazy.js';
 import { ID_SCEN_PROCESOW, KATEGORIE_SCEN } from '../app/js/components/sceny-procesow.js';
 import { pasujeDoStrefy, rola } from '../app/js/components/przepis-logika.js';
 import * as F from '../app/js/components/fotosynteza-logika.js';
+import * as SP from '../app/js/components/sprint-logika.js';
+import { PORY } from '../app/js/components/doba-logika.js';
+import { ID_RYSUNKOW } from '../app/js/components/rysunki.js';
 
 const KORZEN = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const KATALOG_APP = path.join(KORZEN, 'app');
@@ -657,7 +660,8 @@ export function walidujDane(dane, kontekst) {
         if (kat.has(k.id)) blad(gdzie, `powtórzona kategoria „${k.id}”`);
         kat.add(k.id);
         if (k.karta) karta(gdzie, k.karta);
-        if (!k.skrot && !k.karta) blad(gdzie, `kategoria „${k.id}” potrzebuje skrótu albo karty (rysunek na przycisku)`);
+        if (k.ikona !== undefined && !ID_RYSUNKOW.includes(k.ikona)) blad(gdzie, `kategoria „${k.id}”: nie ma rysunku „${k.ikona}”`);
+        if (!k.skrot && !k.karta && !k.ikona) blad(gdzie, `kategoria „${k.id}” potrzebuje skrótu, karty albo ikony (rysunek na przycisku)`);
       }
       if (!(z.zdania?.length >= 4)) blad(gdzie, 'co najmniej cztery zdania');
       const teksty = new Set();
@@ -751,7 +755,7 @@ export function walidujDane(dane, kontekst) {
       }
       if (z.scena) {
         if (!ID_SCEN_PROCESOW.includes(z.scena.id)) blad(gdzie, `nieznana scena „${z.scena.id}”`);
-        if (!idPol.has(z.scena.pole)) blad(gdzie, `scena: nieznane pole „${z.scena.pole}”`);
+        if (!substancje.includes(z.scena.substancja)) blad(gdzie, `scena: substancji „${z.scena.substancja}” nie ma w przepisie`);
       }
       ciekawostka(`${gdzie}.ciekawostka`, z.ciekawostka);
     },
@@ -826,6 +830,42 @@ export function walidujDane(dane, kontekst) {
         }
       }
       WALIDATORY.doswiadczenie({ opis: z.pytanie, kroki: z.pytania }, gdzie);
+    },
+
+    sprint(z, gdzie) {
+      if (!z.etapy?.length) {
+        blad(gdzie, 'brak etapów biegu');
+        return;
+      }
+      let stan = SP.nowyBieg();
+      let niedobor = false;
+      z.etapy.forEach((e, i) => {
+        const ge = `${gdzie}.etapy[${i}]`;
+        if (!SP.TEMPA[e.tempo]) {
+          blad(ge, `tempo „${e.tempo}” spoza listy ${Object.keys(SP.TEMPA).join(', ')}`);
+          return;
+        }
+        if (e.czas !== undefined && !SP.CZASY.includes(e.czas)) blad(ge, `czas „${e.czas}” spoza listy ${SP.CZASY.join(', ')}`);
+        if (e.czas === 'kilkadziesiat-minut' && e.tempo !== 'odpoczynek') blad(ge, 'kilkadziesiąt minut może trwać tylko odpoczynek');
+        if (!niepustyTekst(e.polecenie) || !niepustyTekst(e.akcja)) blad(ge, 'etap wymaga polecenia trenera i napisu na przycisku (akcja)');
+        if (!e.pytania?.length) blad(ge, 'etap bez pytań');
+        else WALIDATORY.doswiadczenie({ opis: e.polecenie, kroki: e.pytania }, ge);
+        const w = SP.etap(stan, e.tempo, e.czas);
+        niedobor ||= w.niedoborTlenu;
+        stan = { kwas: w.kwas, etap: w.etap };
+      });
+      // Bieg ma pokazać całą historię z TRESCI.md, sekcja 2.6: fermentację mlekową przy niedoborze
+      // tlenu i przeniesienie kwasu mlekowego do wątroby w czasie odpoczynku.
+      if (!niedobor) blad(gdzie, 'żaden etap nie pokazuje niedoboru tlenu (fermentacji mlekowej)');
+      else if (stan.kwas !== 0) blad(gdzie, 'na końcu biegu kwas mlekowy zostaje w mięśniach: brak odpoczynku przez kilkadziesiąt minut');
+    },
+
+    doba(z, gdzie) {
+      const pory = (z.etapy || []).map((e) => e.pora);
+      if (!pory.length) blad(gdzie, 'brak etapów (pór doby)');
+      for (const p of pory) if (!PORY[p]) blad(gdzie, `pora „${p}” spoza listy ${Object.keys(PORY).join(', ')}`);
+      if (new Set(pory).size !== pory.length) blad(gdzie, 'powtórzona pora doby');
+      ciekawostka(`${gdzie}.ciekawostka`, z.ciekawostka);
     },
 
     miasto(z, gdzie) {

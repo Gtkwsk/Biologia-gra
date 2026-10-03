@@ -47,17 +47,34 @@ export function pasujeDoStrefy(strefa, idKarty, [lewy, prawy = null]) {
   }
 }
 
+const NAZWY_ROL = { substrat: 'składnik', warunek: 'warunek', produkt: 'produkt' };
+
+// Lustro: rola substancji w obu procesach i jej droga między nimi, np. „Tlen to produkt
+// fotosyntezy i składnik oddychania tlenowego. Dlatego wędruje od fotosyntezy do oddychania
+// tlenowego.” Zdania bez form zależnych od rodzaju gramatycznego nazwy.
+export function drogaWLustrze(idKarty, nazwa, [lewy, prawy]) {
+  const role = [
+    [lewy, rola(lewy, idKarty)],
+    [prawy, rola(prawy, idKarty)],
+  ].filter(([, r]) => r);
+  role.sort(([, a], [, b]) => (a === 'produkt' ? 0 : 1) - (b === 'produkt' ? 0 : 1));
+  const Nazwa = `${nazwa.charAt(0).toUpperCase()}${nazwa.slice(1)}`;
+  if (!role.length) return `${Nazwa} nie bierze udziału w tych procesach.`;
+  const kim = `${Nazwa} to ${role.map(([p, r]) => `${NAZWY_ROL[r]} ${p.dopelniacz}`).join(' i ')}.`;
+  const zrodlo = role.find(([, r]) => r === 'produkt')?.[0];
+  const cel = role.find(([, r]) => r !== 'produkt')?.[0];
+  const drugi = (p) => (p === lewy ? prawy : lewy);
+  if (zrodlo && cel) return `${kim} Dlatego wędruje od ${zrodlo.dopelniacz} do ${cel.dopelniacz}.`;
+  if (zrodlo) return `${kim} Nie jest składnikiem ${drugi(zrodlo).dopelniacz}, więc nie wędruje między procesami.`;
+  return `${kim} Nie powstaje ${drugi(cel).miejscownik}, więc nie wędruje między procesami.`;
+}
+
 // Wyjaśnienie, dlaczego karta nie pasuje do pola (bez nazwy poprawnej odpowiedzi).
-// dystraktor: { wyjasnienie } albo null; procesy: [lewy, prawy?].
-export function powodBledu(pole, idKarty, procesy, dystraktor = null) {
+// dystraktor: { wyjasnienie } albo null; procesy: [lewy, prawy?]; nazwa: nazwa karty (lustro).
+export function powodBledu(pole, idKarty, procesy, dystraktor = null, nazwa = idKarty) {
   if (dystraktor) return dystraktor.wyjasnienie;
   const [lewy, prawy = null] = procesy;
-  if (prawy) {
-    return procesy
-      .map((p) => p.opisy?.[idKarty])
-      .filter(Boolean)
-      .join(' ');
-  }
+  if (prawy) return drogaWLustrze(idKarty, nazwa, procesy);
   const r = rola(lewy, idKarty);
   const opis = lewy.opisy?.[idKarty] ?? '';
   if (pole.strefa === 'wejscie' && r === 'produkt') return `To nie składnik ${lewy.dopelniacz}, tylko produkt. ${opis}`.trim();

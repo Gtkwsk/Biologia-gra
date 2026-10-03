@@ -603,6 +603,9 @@
     padding: 8px;
     border-bottom: 2px solid #d5dbd3;
   }
+  .porown__tabela tbody th {
+    width: auto;
+  }
   .porown__tabela th,
   .porown__tabela td {
     padding: 2px 0;
@@ -714,6 +717,35 @@
 
 .przepis__strefa--dol .przepis__strzalka {
   transform: scaleX(-1);
+}
+
+/* Na wąskim ekranie plansza układa się w kolumnę, więc strzałki wskazują w dół
+   (w lustrze droga powrotna, od oddychania do fotosyntezy, w górę). */
+@media (max-width: 759px) {
+  .przepis__strzalka {
+    transform: rotate(90deg);
+  }
+  .przepis__plansza--lustro .przepis__strefa--dol .przepis__strzalka {
+    transform: rotate(-90deg);
+  }
+}
+
+/* Lustro: światło wchodzi z góry do chloroplastu, energia wychodzi w dół z mitochondrium. */
+.przepis__strefa--wejscie-lewe .przepis__miejsce,
+.przepis__strefa--wyjscie-prawe .przepis__miejsce {
+  grid-template-columns: minmax(9rem, auto);
+  justify-items: center;
+}
+
+.przepis__strefa--wejscie-lewe .przepis__strzalka,
+.przepis__strefa--wyjscie-prawe .przepis__strzalka {
+  grid-row: auto;
+  margin: 6px 0;
+  transform: rotate(90deg);
+}
+
+.przepis__strefa--wejscie-lewe .przepis__strzalka {
+  order: 1;
 }
 
 .przepis__garnek {
@@ -1080,4 +1112,215 @@
 .proj__opcja:disabled {
   cursor: default;
   opacity: 0.8;
+}
+
+/* ---------- Sprint ---------- */
+
+.sprint__scena {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.sprint__bieznia {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.sprint__napis {
+  font-family: var(--font-tekst);
+  font-size: 20px;
+  font-weight: 700;
+  fill: var(--papier);
+}
+
+.sprint__biegacz {
+  transform: translate(var(--x, 24px), 66px);
+  transition: transform 1.1s ease-in-out;
+}
+
+.sprint__wskazniki {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sprint__wskaznik {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 10px;
+}
+
+.sprint__nazwa {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.sprint__komorki {
+  display: flex;
+  gap: 4px;
+}
+
+.sprint__komorka {
+  position: relative;
+  flex: 1;
+  max-width: 48px;
+  height: 22px;
+  background: var(--papier-ciemny);
+  border: 2px solid var(--okular);
+  border-radius: 4px;
+}
+
+.sprint__komorka[data-rodzaj='potrzeba'] {
+  background: #f5b800;
+}
+
+.sprint__komorka[data-rodzaj='tlenowe'],
+.sprint__probka[data-rodzaj='tlenowe'] {
+  background: var(--blekit);
+}
+
+.sprint__komorka[data-rodzaj='mlekowa'],
+.sprint__probka[data-rodzaj='mlekowa'] {
+  background: var(--eozyna);
+}
+
+.sprint__komorka[data-rodzaj='kwas'] {
+  background: #f3a6b8;
+}
+
+.sprint__komorka[data-granica='true']::after,
+.sprint__probka--granica {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: -5px;
+  bottom: -6px;
+  width: 4px;
+  background: var(--okular);
+  border-radius: 2px;
+}
+
+.sprint__legenda {
+  max-width: none;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--atrament-jasny);
+}
+
+.sprint__probka {
+  position: relative;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+  border: 2px solid var(--okular);
+  border-radius: 3px;
+}
+
+.sprint__probka--granica {
+  position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  border: 0;
+}
+
+.sprint__panel {
+  display: grid;
+  gap: 10px;
+  padding: 1rem 1.25rem;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+  box-shadow: 0 6px 0 var(--okular);
+}
+
+@media (max-width: 599px) {
+  .sprint__wskaznik {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sprint__biegacz {
+    transition: none;
+  }
+}
+
+/* ---------- Liść przez dobę ---------- */
+
+.doba__stol {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .doba__stol {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+.doba__widok {
+  margin: 0;
+}
+
+.doba__scena {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.doba__gaz {
+  font-family: var(--font-tekst);
+  font-size: 16px;
+  font-weight: 800;
+  fill: var(--atrament);
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-width: 4px;
+}
+
+.doba__opis {
+  font-family: var(--font-tekst);
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--atrament);
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-width: 3px;
+}
+
+.doba__sterowanie {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--bialy);
+  border: var(--kontur) solid var(--okular);
+  border-radius: 12px;
+}
+
+.doba__suwak {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--blekit);
+}
+
+.doba__czas {
+  font-family: var(--font-tytul);
+  font-size: var(--r-4);
+  text-align: center;
 }

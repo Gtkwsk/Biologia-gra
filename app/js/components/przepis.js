@@ -7,8 +7,8 @@
 // zadanie.pola:        [{ id, substancja, strefa, podpis? }] (przepis-logika.js),
 // zadanie.dopasowanie: 'pole' (domyślnie) albo 'strefa',
 // zadanie.dystraktory: [{ karta, wyjasnienie }],
-// zadanie.scena:       opcjonalna scena ożywiana dobrym polem (np. 'ciasto' rośnie, gdy na polu
-//                      pojawi się dwutlenek węgla): { id, pole },
+// zadanie.scena:       opcjonalna scena ożywiana dobrze położoną substancją (np. 'ciasto' rośnie,
+//                      gdy w przepisie pojawi się dwutlenek węgla): { id, substancja },
 // zadanie.ciekawostka: opcjonalnie, dosłownie z TRESCI.md, sekcja 6.
 // Po ułożeniu całego przepisu pojawia się zapis słowny procesu z TRESCI.md.
 
@@ -71,7 +71,7 @@ export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKon
     ? h('div', { class: 'przepis__plansza przepis__plansza--lustro' }, [
         h('div', { class: 'przepis__kolumna' }, [strefa('wejscie-lewe'), garnek(zadanie.garnki[0])]),
         h('div', { class: 'przepis__srodek' }, [strefa('gora'), strefa('dol')]),
-        h('div', { class: 'przepis__kolumna' }, [strefa('wyjscie-prawe'), garnek(zadanie.garnki[1])]),
+        h('div', { class: 'przepis__kolumna' }, [garnek(zadanie.garnki[1]), strefa('wyjscie-prawe')]),
       ])
     : h('div', { class: 'przepis__plansza' }, [strefa('wejscie'), garnek(zadanie.garnki[0]), strefa('wyjscie')]);
 
@@ -85,8 +85,10 @@ export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKon
   ]);
 
   const opisPola = (p) => p.podpis ?? NAGLOWKI[p.strefa];
-  const wyjasnienieEtykiety = (e, p) => P.powodBledu(p, e, procesy, dystraktory.get(e) ?? null);
-  const zdanieEtykiety = (e) => procesy.map((pr) => pr.opisy?.[e]).filter(Boolean).join(' ') || katalog.get(e).zdanie;
+  const wyjasnienieEtykiety = (e, p) => P.powodBledu(p, e, procesy, dystraktory.get(e) ?? null, nazwa(e));
+  // Po dobrym położeniu: w lustrze droga substancji między procesami, w przepisie jej opis.
+  const zdanieEtykiety = (e) =>
+    lustro ? P.drogaWLustrze(e, nazwa(e), procesy) : procesy.map((pr) => pr.opisy?.[e]).filter(Boolean).join(' ') || katalog.get(e).zdanie;
 
   return utworzZadanieEtykiet(kontener, {
     klasa: `przepis${lustro ? ' przepis--lustro' : ''}`,
@@ -109,7 +111,7 @@ export function utworzPrzepis(kontener, { zadanie, dane, tryb = 'trening', onKon
       wyczysc(stanIkona);
       if (stan === 'dobrze' || stan === 'zle') stanIkona.append(ikona(stan));
       pole.setAttribute('aria-label', `${opisPola(p)}: ${lezace[0]?.tekst ?? 'puste'}`);
-      if (scena && !scenaOzywiona && cel === zadanie.scena.pole && stan === 'dobrze') {
+      if (scena && !scenaOzywiona && lezace[0]?.id === zadanie.scena.substancja && stan === 'dobrze') {
         scenaOzywiona = true;
         scena.pokaz('wyrasta');
       }

@@ -292,6 +292,18 @@ const R = {
     <g fill="#6B4FA0"><circle cx="32" cy="60" r="5"/><circle cx="50" cy="56" r="5"/><circle cx="68" cy="62" r="5"/><circle cx="40" cy="74" r="5"/><circle cx="60" cy="76" r="5"/></g>
     <path d="M30 30 L36 14 H64 L70 30" fill="#FFFFFF" stroke="#11191B" stroke-width="4" stroke-linejoin="round"/>`,
 
+  // ---------- Ikony pór doby (sorter „dzień czy noc”; nie są kartami atlasu) ----------
+  ksiezyc: `
+    <circle cx="50" cy="50" r="44" fill="#1E2A4A"/>
+    <path d="M60 14 C38 18 26 36 28 56 C30 76 48 90 68 86 C52 80 42 66 42 50 C42 34 50 22 60 14Z" fill="#F4E8A6" stroke="#8C7A1E" stroke-width="3.5" stroke-linejoin="round"/>
+    <g fill="#F4E8A6"><circle cx="72" cy="30" r="3"/><circle cx="80" cy="54" r="2.5"/><circle cx="66" cy="68" r="2"/></g>`,
+  doba: `
+    <circle cx="50" cy="50" r="40" fill="#1E2A4A" stroke="#11191B" stroke-width="4"/>
+    <path d="M50 10 A40 40 0 0 0 50 90Z" fill="#FCE58C" stroke="#11191B" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="34" cy="50" r="9" fill="#F5B800" stroke="#9C6B00" stroke-width="3"/>
+    <g stroke="#9C6B00" stroke-width="3" stroke-linecap="round"><path d="M34 32v5M34 63v5M16 50h5M24 38l3 3M24 62l3 -3M44 38l-3 3M44 62l-3 -3"/></g>
+    <path d="M70 34 C61 37 57 45 58 53 C59 61 66 67 74 66 C67 62 64 57 64 50 C64 43 66 38 70 34Z" fill="#F4E8A6" stroke="#8C7A1E" stroke-width="2.5" stroke-linejoin="round"/>`,
+
   // ---------- Organizmy ----------
   'moczarka-kanadyjska': `
     <path d="M50 96 C48 70 54 40 50 6" fill="none" stroke="#2E6B33" stroke-width="4" stroke-linecap="round"/>

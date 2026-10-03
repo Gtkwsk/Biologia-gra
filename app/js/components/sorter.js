@@ -1,7 +1,8 @@
 // Zadanie „szybki sorter” (SPEC.md, sekcja 5, typ 8): zdania do 2-3 kategorii.
 // Logika: sorter-logika.js.
 //
-// zadanie.kategorie: [{ id, nazwa, skrot?, karta? }]
+// zadanie.kategorie: [{ id, nazwa, skrot?, karta?, ikona? }] – na przycisku skrót albo rysunek
+//                    (ikona: id rysunku spoza atlasu, np. 'ksiezyc'; bez niej rysunek karty)
 // zadanie.zdania:    [{ tekst, kategoria, wyjasnienie, karta? }]
 // zadanie.scena:     opcjonalna scena nad talią (sceny-procesow.js); dobra odpowiedź ożywia
 //                    część sceny przypisaną do kategorii (np. trzy drogi glukozy).
@@ -28,7 +29,7 @@ export function utworzSorter(kontener, { zadanie, tryb = 'trening', onKoniec }) 
 
   const przyciskKategorii = (k, onclick) =>
     h('button', { type: 'button', class: 'sorter__kategoria', 'data-kategoria': k.id, onclick }, [
-      k.skrot ? h('span', { class: 'sorter__skrot', 'aria-hidden': 'true' }, k.skrot) : rysunekKarty(k.karta, 'sorter__rysunek'),
+      k.skrot ? h('span', { class: 'sorter__skrot', 'aria-hidden': 'true' }, k.skrot) : rysunekKarty(k.ikona ?? k.karta, 'sorter__rysunek'),
       h('span', { class: 'sorter__nazwa' }, k.nazwa),
     ]);
 
@@ -96,7 +97,7 @@ export function utworzSorter(kontener, { zadanie, tryb = 'trening', onKoniec }) 
       for (const p of przyciski) p.disabled = true;
       komunikat.pokaz({
         rodzaj: 'zle',
-        tytul: `To nie ${katPoId.get(idKat).nazwa}.`,
+        tytul: `To zdanie nie pasuje do grupy „${katPoId.get(idKat).nazwa}”.`,
         tekst: `${z.wyjasnienie} To zdanie wróci na koniec talii.`,
       });
       dalej.hidden = false;
@@ -148,7 +149,7 @@ export function utworzSorter(kontener, { zadanie, tryb = 'trening', onKoniec }) 
     komunikat.pokaz({
       rodzaj: 'info',
       tytul: 'Przy każdym zdaniu wybierz grupę.',
-      tekst: `${kategorie.map((k) => (k.skrot ? `${k.skrot}: ${k.nazwa}` : k.nazwa)).join('; ')}. Potem stuknij „Sprawdź”.`,
+      tekst: `Grupy: ${kategorie.map((k) => (k.skrot ? `${k.nazwa} (${k.skrot})` : k.nazwa)).join('; ')}. Potem stuknij „Sprawdź”.`,
     });
 
     function sprawdz() {

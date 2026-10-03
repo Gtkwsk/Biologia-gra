@@ -20,6 +20,8 @@ import { utworzTabeleWartosci } from './tabela-wartosci.js';
 import { utworzPrzepis } from './przepis.js';
 import { utworzLaboratorium } from './laboratorium.js';
 import { utworzProjektanta } from './projektant.js';
+import { utworzSprint } from './sprint.js';
+import { utworzDobe } from './doba.js';
 import { obrazSceny } from './obrazy.js';
 
 const TYPY = {
@@ -79,6 +81,12 @@ const TYPY = {
   },
   async laboratorium(zadanie) {
     return (kontener, opcje) => utworzLaboratorium(kontener, { zadanie, ...opcje });
+  },
+  async sprint(zadanie) {
+    return (kontener, opcje) => utworzSprint(kontener, { zadanie, ...opcje });
+  },
+  async doba(zadanie) {
+    return (kontener, opcje) => utworzDobe(kontener, { zadanie, ...opcje });
   },
   async projektant(zadanie) {
     return (kontener, opcje) => utworzProjektanta(kontener, { zadanie, ...opcje });

@@ -7,6 +7,7 @@ import { potrzebneWskazowki } from '../app/js/components/detektyw-logika.js';
 import { wymagane } from '../app/js/components/konstruktor-logika.js';
 import * as F from '../app/js/components/fotosynteza-logika.js';
 import { kluczPola } from '../app/js/components/tabela-wartosci.js';
+import * as DB from '../app/js/components/doba-logika.js';
 
 async function stuknij(strona, etykieta, cel) {
   await strona.locator(etykieta).click();
@@ -176,6 +177,33 @@ const ROZWIAZANIA = {
     for (const krok of z.pytania) {
       await strona.locator(`.dosw__opcja[data-opcja="${krok.opcje.findIndex((o) => o.poprawna)}"]`).click();
       await dalej(strona, '.tacka');
+    }
+  },
+
+  async sprint(strona, z) {
+    for (const e of z.etapy) {
+      await strona.locator('.sprint__akcja').click();
+      for (const krok of e.pytania) {
+        await strona.locator(`.sprint .dosw__opcja[data-opcja="${krok.opcje.findIndex((o) => o.poprawna)}"]`).click();
+        await dalej(strona, '.sprint');
+      }
+    }
+  },
+
+  async doba(strona, z) {
+    const sprawdz = () => strona.locator('.doba .lab__opcje .przycisk', { hasText: 'Sprawdź' }).click();
+    for (const e of z.etapy) {
+      await strona.locator('.doba__suwak').evaluate((el, g) => {
+        el.value = String(g);
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      }, DB.PORY[e.pora].godzina);
+      for (const p of DB.procesy(e.pora)) await strona.locator(`.doba .proj__opcja[data-proces="${p}"]`).click();
+      await sprawdz();
+      const g = DB.gazy(e.pora);
+      await strona.locator(`.doba .proj__opcja[data-kierunek="pobiera"][data-gaz="${g.pobiera}"]`).click();
+      await strona.locator(`.doba .proj__opcja[data-kierunek="oddaje"][data-gaz="${g.oddaje}"]`).click();
+      await sprawdz();
+      await dalej(strona, '.doba');
     }
   },
 
