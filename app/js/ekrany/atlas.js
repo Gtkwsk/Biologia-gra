@@ -1,4 +1,5 @@
-// Atlas kart (SPEC.md, sekcja 4.2): elementy komórek, typy komórek, kształty komórek i pojęcia.
+// Atlas kart (SPEC.md, sekcja 4.2): elementy komórek, typy komórek, kształty komórek, pojęcia,
+// procesy, substancje i organizmy.
 // Poziom karty wynika z wyników zadań (core/karty.js). Złota karta odsłania ciekawostkę.
 
 import { h, ikona } from '../core/dom.js';
@@ -11,7 +12,10 @@ const GRUPY = [
   { rodzaj: 'element', nazwa: 'Elementy komórki' },
   { rodzaj: 'typ', nazwa: 'Rodzaje komórek' },
   { rodzaj: 'ksztalt', nazwa: 'Kształty komórek' },
+  { rodzaj: 'proces', nazwa: 'Procesy' },
+  { rodzaj: 'substancja', nazwa: 'Substancje' },
   { rodzaj: 'pojecie', nazwa: 'Pojęcia' },
+  { rodzaj: 'organizm', nazwa: 'Organizmy' },
 ];
 
 const OPIS_POZIOMU = {

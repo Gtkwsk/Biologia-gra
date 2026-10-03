@@ -1,4 +1,5 @@
-// Karty atlasu: elementy komórek, typy komórek (id: komorka-<typ>), pojęcia i kształty komórek.
+// Karty atlasu: elementy komórek, typy komórek (id: komorka-<typ>), pojęcia, procesy, substancje,
+// kształty komórek i organizmy.
 //
 // Poziom karty (bez harmonogramu powtórek, decyzja z 2026-10-03):
 // - nieodkryta: brak poprawnej odpowiedzi,
@@ -17,7 +18,7 @@ export function idKartyTypu(idTypu) {
   return `komorka-${idTypu}`;
 }
 
-export function katalogKart({ elementy = [], typyKomorek = [], pojecia = [] }) {
+export function katalogKart({ elementy = [], typyKomorek = [], pojecia = [], organizmy = [] }) {
   const katalog = new Map();
   for (const e of elementy) {
     katalog.set(e.id, {
@@ -36,6 +37,7 @@ export function katalogKart({ elementy = [], typyKomorek = [], pojecia = [] }) {
     katalog.set(id, { id, rodzaj: 'typ', typ: t.id, nazwa: t.nazwa, opis: t.opis, swiat: t.swiat, ciekawostka: t.ciekawostka, zrodlo: t.zrodlo });
   }
   for (const p of pojecia) katalog.set(p.id, { ...p });
+  for (const o of organizmy) katalog.set(o.id, { ...o, rodzaj: 'organizm' });
   return katalog;
 }
 

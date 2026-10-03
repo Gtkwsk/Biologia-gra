@@ -1,2 +1,2 @@
 // Plik generowany: node tools/wersja.js
-export const WERSJA = '5866a0608939';
+export const WERSJA = '25f40dfb0d9f';

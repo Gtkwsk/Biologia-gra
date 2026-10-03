@@ -18,7 +18,7 @@ export function render(kontener, ctx) {
     {
       id: 'atlas',
       nazwa: 'Atlas',
-      opis: 'Karty elementów komórek, rodzajów komórek i pojęć. Karta zmienia kolor, gdy ją opanujesz.',
+      opis: 'Karty elementów komórek, procesów, substancji, pojęć i organizmów. Karta zmienia kolor, gdy ją opanujesz.',
       stan: `Odkryte: ${odkryte} z ${karty.length}. Złote: ${zlote}.`,
       href: '#/atlas',
     },

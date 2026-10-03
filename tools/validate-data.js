@@ -13,7 +13,9 @@
 // - zadania każdego typu: odwołania do kart atlasu, jednoznaczność (np. dystraktor w lukach
 //   nie jest słowem z luki, sprawa detektywa rozstrzyga się wskazówkami), tabele tylko z ✓/✗,
 // - światy: misje, bossowie (co najmniej trzy typy zadań), co najmniej trzy mechaniki,
-// - kategorie organizmów z tabeli w TRESCI.md, sekcja 7 (gdy istnieje data/organizmy.js).
+// - organizmy: nazwy i kategorie z tabeli w TRESCI.md, sekcja 7,
+// - procesy: zapisy słowne dosłownie z TRESCI.md, substraty i produkty zgodne z zapisem,
+// - tabela porównawcza oddychania tlenowego i fermentacji zgodna z tabelą w TRESCI.md, sekcja 2.6.
 
 import { readFile, access } from 'node:fs/promises';
 import path from 'node:path';
@@ -47,6 +49,9 @@ export const TYPY_ZADAN = [
 const MECHANIKI = ['miasto', 'detektyw', 'konstruktor', 'wakuola'];
 
 const OBECNOSC = ['tak', 'nie', 'czasem'];
+
+// Rodzaje kart w data/pojecia.js (grupy w atlasie). Organizmy mają własny plik.
+const RODZAJE_POJEC = ['pojecie', 'ksztalt', 'proces', 'substancja'];
 
 // Elementy, których „nie ma” w tabeli TRESCI.md jest uproszczeniem: jako zdanie ogólne byłoby
 // fałszywe (rzęski mają np. komórki nabłonka dróg oddechowych). Nie mogą być dystraktorami,
@@ -111,6 +116,15 @@ export function tabelaKomorek(tekst) {
   return tabela(trescSekcji(tekst, '2.3'), '| Element |');
 }
 
+export function tabelaProcesow(tekst) {
+  return tabela(trescSekcji(tekst, '2.6'), '| Cecha |');
+}
+
+// Tekst TRESCI.md bez wyróżnień (**…**), do wyszukiwania zapisów słownych.
+export function tekstBezWyroznien(tekst) {
+  return tekst.replace(/\*\*/g, '');
+}
+
 export function ciekawostkiTresci(tekst) {
   return new Set(
     trescSekcji(tekst, '6')
@@ -125,6 +139,7 @@ export function organizmyTresci(tekst) {
   return {
     nazwy: new Set(t.wiersze.map((w) => w[0])),
     kategorie: new Set(t.wiersze.map((w) => w[1])),
+    kategoriaNazwy: new Map(t.wiersze.map((w) => [w[0], w[1]])),
   };
 }
 
@@ -185,11 +200,14 @@ export function walidujDane(dane, kontekst) {
     wskazowki = [],
     czesciKonstruktora = [],
     organizmy,
+    procesy = [],
+    porownanie = null,
   } = dane;
   const {
     sekcje,
     terminy,
     tabelaKomorek: tabelaTk,
+    tabelaProcesow: tabelaPr = null,
     organizmyTresci: orgT,
     ciekawostki = new Set(),
     tekstTresci = '',
@@ -222,10 +240,14 @@ export function walidujDane(dane, kontekst) {
   const schematPoId = new Map(schematy.map((s) => [s.id, s]));
   const zadaniePoId = new Map(zadania.map((z) => [z.id, z]));
   const wskazowkaPoId = new Map(wskazowki.map((w) => [w.id, w]));
-  const katalog = katalogKart({ elementy, typyKomorek, pojecia });
+  const katalog = katalogKart({ elementy, typyKomorek, pojecia, organizmy: organizmy || [] });
+  const zajete = new Set([...elementPoId.keys(), ...[...typPoId.keys()].map((t) => `komorka-${t}`)]);
   for (const p of pojecia) {
-    if (elementPoId.has(p.id) || [...typPoId.keys()].some((t) => `komorka-${t}` === p.id)) blad(`pojecia[${p.id}]`, 'id karty zajęte przez element albo typ komórki');
+    if (zajete.has(p.id)) blad(`pojecia[${p.id}]`, 'id karty zajęte przez element albo typ komórki');
+    zajete.add(p.id);
   }
+  for (const o of organizmy || []) if (zajete.has(o.id)) blad(`organizmy[${o.id}]`, 'id karty zajęte przez inną kartę');
+  const procesPoId = new Map(procesy.map((p) => [p.id, p]));
   const karta = (gdzie, id) => {
     if (id !== undefined && id !== null && !katalog.has(id)) blad(gdzie, `nieznana karta atlasu „${id}”`);
   };
@@ -337,7 +359,7 @@ export function walidujDane(dane, kontekst) {
   for (const p of pojecia) {
     const gdzie = `pojecia[${p.id}]`;
     for (const pole of ['nazwa', 'opis', 'zdanie']) if (!niepustyTekst(p[pole])) blad(gdzie, `brak pola ${pole}`);
-    if (!['pojecie', 'ksztalt'].includes(p.rodzaj)) blad(gdzie, `rodzaj „${p.rodzaj}” spoza listy pojecie, ksztalt`);
+    if (!RODZAJE_POJEC.includes(p.rodzaj)) blad(gdzie, `rodzaj „${p.rodzaj}” spoza listy ${RODZAJE_POJEC.join(', ')}`);
     if (p.rodzaj === 'ksztalt' && !niepustyTekst(p.funkcja)) blad(gdzie, 'kształt komórki bez pola funkcja');
     if (!Number.isInteger(p.swiat)) blad(gdzie, 'swiat musi być liczbą');
     zrodlo(gdzie, p);
@@ -651,13 +673,77 @@ export function walidujDane(dane, kontekst) {
     }
   }
 
-  // Organizmy (od etapu 3)
+  // Organizmy (karty atlasu)
   if (organizmy) {
     unikalne(organizmy, 'organizmy');
     for (const o of organizmy) {
       const gdzie = `organizmy[${o.id}]`;
       if (!orgT.nazwy.has(o.nazwa)) blad(gdzie, `organizm „${o.nazwa}” spoza tabeli w TRESCI.md, sekcja 7`);
       if (!orgT.kategorie.has(o.kategoria)) blad(gdzie, `kategoria „${o.kategoria}” spoza tabeli w TRESCI.md, sekcja 7`);
+      else if (orgT.kategoriaNazwy?.get(o.nazwa) && orgT.kategoriaNazwy.get(o.nazwa) !== o.kategoria) {
+        blad(gdzie, `kategoria „${o.kategoria}”, a według TRESCI.md, sekcja 7: „${orgT.kategoriaNazwy.get(o.nazwa)}”`);
+      }
+      if (o.opis !== undefined || o.zdanie !== undefined) {
+        for (const pole of ['opis', 'zdanie']) if (!niepustyTekst(o[pole])) blad(gdzie, `brak pola ${pole}`);
+        if (!Number.isInteger(o.swiat)) blad(gdzie, 'swiat musi być liczbą');
+        zrodlo(gdzie, o);
+      }
+      ciekawostka(`${gdzie}.ciekawostka`, o.ciekawostka);
+    }
+  }
+
+  // Procesy: zapisy słowne dosłownie z TRESCI.md
+  const tekstZapisow = tekstBezWyroznien(tekstTresci);
+  unikalne(procesy, 'procesy');
+  for (const pr of procesy) {
+    const gdzie = `procesy[${pr.id}]`;
+    for (const pole of ['nazwa', 'miejscownik', 'zapis', 'miejsce']) if (!niepustyTekst(pr[pole])) blad(gdzie, `brak pola ${pole}`);
+    zrodlo(gdzie, pr);
+    if (!katalog.has(pr.id)) blad(gdzie, 'brak karty atlasu o tym samym id');
+    const nazwyKart = (lista) => (lista || []).map((id) => katalog.get(id)?.nazwa ?? `?${id}`);
+    for (const id of [...(pr.substraty || []), ...(pr.warunki || []), ...(pr.produkty || [])]) karta(gdzie, id);
+    const warunki = pr.warunki?.length ? ` → (${nazwyKart(pr.warunki).join(', ')}) →` : ' →';
+    const zbudowany = `${nazwyKart(pr.substraty).join(' + ')}${warunki} ${nazwyKart(pr.produkty).join(' + ')}`;
+    if (niepustyTekst(pr.zapis)) {
+      if (!tekstZapisow.includes(pr.zapis)) blad(gdzie, `zapis „${pr.zapis}” nie występuje dosłownie w TRESCI.md`);
+      if (zbudowany !== pr.zapis) blad(gdzie, `substraty, warunki i produkty dają zapis „${zbudowany}”, a zapis to „${pr.zapis}”`);
+    }
+    if (pr.energia !== undefined && !['dużo', 'mało'].includes(pr.energia)) blad(gdzie, `energia „${pr.energia}” spoza listy dużo, mało`);
+    const uczestnicy = new Set([...(pr.substraty || []), ...(pr.warunki || []), ...(pr.produkty || [])]);
+    for (const id of Object.keys(pr.opisy || {})) if (!uczestnicy.has(id)) blad(`${gdzie}.opisy`, `„${id}” nie bierze udziału w tym procesie`);
+  }
+
+  // Tabela porównawcza oddychania tlenowego i fermentacji
+  if (porownanie) {
+    const gdzie = 'porownanie';
+    zrodlo(gdzie, porownanie);
+    for (const k of porownanie.kolumny || []) karta(`${gdzie}.kolumny`, k);
+    if (!tabelaPr) blad('TRESCI.md', 'nie znaleziono tabeli porównawczej oddychania tlenowego i fermentacji w sekcji 2.6');
+    else {
+      const kolumnyTresci = tabelaPr.kolumny.slice(1).map((k) => k.toLowerCase());
+      const kolumnyDanych = (porownanie.kolumny || []).map((k) => katalog.get(k)?.nazwa);
+      if (kolumnyTresci.join('|') !== kolumnyDanych.join('|')) blad(gdzie, `kolumny „${kolumnyDanych.join(', ')}”, a w TRESCI.md „${kolumnyTresci.join(', ')}”`);
+      const cechaPoNazwie = new Map((porownanie.cechy || []).map((c) => [c.cecha, c]));
+      for (const wiersz of tabelaPr.wiersze) {
+        const c = cechaPoNazwie.get(wiersz[0]);
+        if (!c) {
+          blad(gdzie, `brak cechy „${wiersz[0]}” z tabeli w TRESCI.md`);
+          continue;
+        }
+        (porownanie.kolumny || []).forEach((k, i) => {
+          if (c.wartosci?.[k] !== wiersz[i + 1]) blad(`${gdzie}.cechy[${c.id}].${k}`, `„${c.wartosci?.[k]}”, a w TRESCI.md „${wiersz[i + 1]}”`);
+        });
+      }
+      const etykiety = new Set();
+      for (const c of porownanie.cechy || []) {
+        if (!tabelaPr.wiersze.some((w) => w[0] === c.cecha)) blad(`${gdzie}.cechy[${c.id}]`, `cechy „${c.cecha}” nie ma w tabeli w TRESCI.md`);
+        for (const k of porownanie.kolumny || []) {
+          if (!niepustyTekst(c.zdania?.[k])) blad(`${gdzie}.cechy[${c.id}]`, `brak zdania dla kolumny „${k}”`);
+          const e = c.etykiety?.[k] ?? c.wartosci?.[k];
+          if (etykiety.has(e)) blad(`${gdzie}.cechy[${c.id}]`, `etykieta „${e}” powtarza się w tabeli`);
+          etykiety.add(e);
+        }
+      }
     }
   }
 
@@ -671,6 +757,8 @@ export function walidujDane(dane, kontekst) {
     ['miasto', miasto ? [miasto] : []],
     ['wskazowki', wskazowki],
     ['organizmy', organizmy || []],
+    ['procesy', procesy],
+    ['porownanie', porownanie ? [porownanie] : []],
   ];
   for (const [nazwa, lista] of doPrzeszukania) {
     for (const [sciezka, tekst] of teksty(lista, nazwa)) {
@@ -714,6 +802,8 @@ export async function wczytajWszystko() {
     wskazowki: await modul('wskazowki.js'),
     czesciKonstruktora: await modul('konstruktor.js'),
     organizmy: await modul('organizmy.js'),
+    procesy: await modul('procesy.js'),
+    porownanie: await modul('porownanie.js'),
   };
   const svg = new Map();
   const pliki = [...(dane.schematy || []).map((s) => s.plik), ...(dane.typyKomorek || []).map((t) => t.rysunek)].filter(Boolean);
@@ -725,6 +815,7 @@ export async function wczytajWszystko() {
     sekcje: sekcjeTresci(tresc),
     terminy: terminyKanoniczne(tresc),
     tabelaKomorek: tabelaKomorek(tresc),
+    tabelaProcesow: tabelaProcesow(tresc),
     organizmyTresci: organizmyTresci(tresc),
     ciekawostki: ciekawostkiTresci(tresc),
     tekstTresci: tresc,
@@ -744,6 +835,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const ile = (l) => (l ? l.length : 0);
   console.log(
     `Walidator danych: bez błędów (światy: ${ile(dane.swiaty)}, elementy: ${ile(dane.elementy)}, ` +
-      `schematy: ${ile(dane.schematy)}, karty pojęć: ${ile(dane.pojecia)}, zadania: ${ile(dane.zadania)}).`,
+      `schematy: ${ile(dane.schematy)}, karty pojęć: ${ile(dane.pojecia)}, organizmy: ${ile(dane.organizmy)}, ` +
+      `procesy: ${ile(dane.procesy)}, zadania: ${ile(dane.zadania)}).`,
   );
 }

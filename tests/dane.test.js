@@ -162,3 +162,24 @@ test('wykrywa rzęskę jako dystraktor przy schemacie komórki zwierzęcej', asy
   z.dystraktory = [...z.dystraktory, 'rzeska'];
   zawiera(walidujDane(dane, kontekst), '„rzeska” nie może być dystraktorem');
 });
+
+test('wykrywa zapis słowny procesu niezgodny z TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  const p = dane.procesy.find((x) => x.id === 'fermentacja-alkoholowa');
+  p.produkty = ['alkohol-etylowy', 'tlen', 'energia'];
+  zawiera(walidujDane(dane, kontekst), 'substraty, warunki i produkty dają zapis');
+  p.zapis = 'glukoza → alkohol etylowy + tlen + energia';
+  zawiera(walidujDane(dane, kontekst), 'nie występuje dosłownie w TRESCI.md');
+});
+
+test('wykrywa w tabeli oddychania tlenowego i fermentacji wartość niezgodną z TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.porownanie.cechy.find((c) => c.id === 'miejsce').wartosci.fermentacja = 'mitochondria';
+  zawiera(walidujDane(dane, kontekst), '„mitochondria”, a w TRESCI.md „cytozol”');
+});
+
+test('wykrywa organizm z kategorią inną niż w tabeli TRESCI.md', async () => {
+  const { dane, kontekst } = await zaladuj();
+  dane.organizmy.find((o) => o.id === 'sinice').kategoria = 'organizm samożywny (roślina)';
+  zawiera(walidujDane(dane, kontekst), 'według TRESCI.md, sekcja 7');
+});

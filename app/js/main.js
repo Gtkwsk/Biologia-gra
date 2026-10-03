@@ -9,6 +9,9 @@ import pojecia from '../data/pojecia.js';
 import miasto from '../data/miasto.js';
 import wskazowki from '../data/wskazowki.js';
 import czesciKonstruktora from '../data/konstruktor.js';
+import organizmy from '../data/organizmy.js';
+import procesy from '../data/procesy.js';
+import porownanie from '../data/porownanie.js';
 import { katalogKart } from './core/karty.js';
 import { utworzMagazyn } from './core/magazyn.js';
 import { nowyStan } from './core/stan.js';
@@ -62,7 +65,10 @@ const ctx = {
     miasto,
     wskazowki,
     czesciKonstruktora,
-    katalog: katalogKart({ elementy, typyKomorek, pojecia }),
+    organizmy,
+    procesy,
+    porownanie,
+    katalog: katalogKart({ elementy, typyKomorek, pojecia, organizmy }),
   },
   get stan() {
     return stan;
